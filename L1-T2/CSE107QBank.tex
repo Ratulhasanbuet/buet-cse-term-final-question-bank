@@ -1,0 +1,5115 @@
+\documentclass[12pt,a4paper]{article}
+
+%% ── Packages ──────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb}
+\usepackage{alphalph}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[hidelinks,colorlinks=true,linkcolor=blue!70!black]{hyperref}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{needspace}
+\usepackage[strings]{underscore}
+\usepackage{array,booktabs}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{tabularx}
+
+\usepackage{fontspec}
+\usepackage{polyglossia}
+
+\usetikzlibrary{shapes.geometric, arrows.meta, bending}
+
+\setmainlanguage{english}
+\setotherlanguage{bengali}
+
+\newfontfamily\bengalifont[Script=Bengali]{Kalpurush}
+
+
+\definecolor{nodeblue}{HTML}{4A7EBB}
+\definecolor{nodeorange}{HTML}{ED7D31}
+\definecolor{nodegreen}{HTML}{70AD47}
+\definecolor{bgorange}{HTML}{FCE4D6}
+\definecolor{lineblue}{HTML}{2E75B6}
+
+
+
+
+\tcbuselibrary{skins,breakable}
+% Fix: answer boxes full-width inside enumerate
+\tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
+\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+
+%% ── Colors ────────────────────────────────────────────────────────────
+\definecolor{pblue}{RGB}{13,71,161}
+\definecolor{dgray}{RGB}{66,66,66}
+\definecolor{cA}{RGB}{183,28,28}
+\definecolor{cB}{RGB}{1,87,155}
+\definecolor{cC}{RGB}{27,94,32}
+\definecolor{cD}{RGB}{106,27,154}
+\definecolor{cE}{RGB}{230,81,0}
+\definecolor{cF}{RGB}{0,96,100}
+\definecolor{cG}{RGB}{46,125,50}
+\definecolor{cH}{RGB}{0,77,64}
+
+\definecolor{gallbg}{RGB}{232,240,254}
+\definecolor{gallfr}{RGB}{13,71,161}
+
+%% ── Code listing style ────────────────────────────────────────────────
+% \lstset{
+%   basicstyle=\ttfamily\small,
+%   keywordstyle=\color{blue!70!black}\bfseries,
+%   commentstyle=\color{green!50!black},
+%   stringstyle=\color{red!60!black},
+%   breaklines=true,
+%   frame=single,
+%   rulecolor=\color{gray!40},
+%   backgroundcolor=\color{gray!5},
+%   numbers=left,
+%   numberstyle=\tiny\color{gray},
+%   xleftmargin=1.8em,
+%   framexleftmargin=1.5em,
+%   tabsize=4,
+%   showstringspaces=false
+% }
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue!70!black}\bfseries,
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{red!60!black},
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray!40},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  xleftmargin=1.8em,
+  framexleftmargin=1.5em,
+  tabsize=4,
+  showstringspaces=false
+}
+
+%% ── Section headings ──────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{pblue}}{}{0em}{}[\titlerule]
+
+%% ── Header / Footer ───────────────────────────────────────────────────
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\fancyhead[L]{\small\textcolor{pblue}{\textbf{BUET $|$ OOP Question Bank}}}
+\fancyhead[R]{\small\textcolor{dgray}{\textit{\nouppercase{\leftmark}}}}
+\fancyfoot[C]{\small\thepage}
+
+%% ── Utility macros ────────────────────────────────────────────────────
+\newcommand{\yr}[1]{\hfill\textcolor{gray}{\small\textbf{[#1]}}}
+\newcommand{\mk}[1]{\textcolor{orange!70!black}{\small\textbf{(#1 marks)}}}
+\newcommand{\variant}[1]{\par\vspace{1pt}\textcolor{blue!50!black}%
+  {\footnotesize\textit{$\hookrightarrow$ Similar: #1}}}
+
+%% ── Section divider page ──────────────────────────────────────────────
+\newcommand{\secdivider}[4]{%
+  \newpage\thispagestyle{empty}%
+  \vspace*{\fill}%
+  \begin{tcolorbox}[enhanced,colback=#4!7,colframe=#3,boxrule=1.5pt,arc=8pt,
+    left=20pt,right=20pt,top=22pt,bottom=22pt,
+    shadow={3pt}{-3pt}{0pt}{black!15}]
+    \centering
+    {\large\textcolor{gray}{\textbf{BUET $\cdot$ CSE 107 / CSE 201}}}\\[8pt]
+    {\fontsize{26}{32}\selectfont\bfseries\textcolor{#3}{Object Oriented Programming}}\\[6pt]
+    {\fontsize{15}{19}\selectfont\textcolor{dgray}{#1}}\\[12pt]
+    \textcolor{#3!60}{\rule{0.5\textwidth}{0.5pt}}\\[6pt]
+    {\small\textcolor{gray}{#2}}
+  \end{tcolorbox}%
+  \vspace*{\fill}\newpage%
+}
+
+%% ── List styles ───────────────────────────────────────────────────────
+\setlist[enumerate,1]{label=\textbf{Q\arabic*.},leftmargin=*,itemsep=14pt,parsep=2pt}
+\setlist[enumerate,2]{label=(\alph*),leftmargin=2em,itemsep=3pt}
+\setlist[enumerate,3]{label=(\roman*),leftmargin=2.5em,itemsep=2pt}
+
+%% ══════════════════════════════════════════════════════════════════════
+\begin{document}
+
+%% ── COVER ─────────────────────────────────────────────────────────────
+\thispagestyle{empty}
+\begin{tcolorbox}[enhanced,colback=cB!5,colframe=cB,boxrule=1.5pt,arc=6pt,
+  top=28pt,bottom=28pt,left=22pt,right=22pt,
+  shadow={4pt}{-4pt}{0pt}{black!20}]
+  \centering
+
+
+    \includegraphics[height=2.5cm]{images/buet_logo.png}\\[8pt]
+
+
+  {\Large\bfseries\textcolor{cB}{Bangladesh University of Engineering and Technology}}\\[4pt]
+  {\normalsize\textcolor{dgray}{Department of Computer Science \& Engineering}}\\[18pt]
+  \textcolor{cB}{\rule{\textwidth}{1pt}}\\[14pt]
+  {\fontsize{22}{28}\selectfont\bfseries\textcolor{cB}{OOP Question Bank }}\\[8pt]
+  {\fontsize{14}{18}\selectfont\textcolor{dgray}{Object Oriented Programming (C++ \& Java)}}\\[4pt]
+  {\normalsize\textcolor{dgray}{CSE 107 (L-1/T-2) \& CSE 201 (L-2/T-1)}}\\[18pt]
+  \textcolor{cB}{\rule{\textwidth}{0.5pt}}\\[14pt]
+  {\small\textcolor{dgray}{Year Coverage:\;2007--08 to 2023--24\\Topics:\;C++ OOP, Inheritance, Templates, Java OOP, Multithreading \& more}}\\[16pt]
+  \begin{tcolorbox}[colback=gray!6,colframe=gray!35,boxrule=0.6pt,arc=4pt,
+    left=12pt,right=12pt,top=8pt,bottom=8pt,width=0.95\textwidth]
+    \centering
+    {\small\bfseries\textcolor{dgray}{Authors \& Contributors}}\\[6pt]
+    \begin{tabular}{rl}
+      \textbf{Md Ratul Hasan} \textcolor{dgray}{\small(2405009)} & --- Question Curation \& Organisation\\
+      & --- \LaTeX\ Typesetting\\[3pt]
+      \textbf{NotebookLM} & --- Research \& Extraction\\[3pt]
+      \textbf{Claude AI}  & --- \LaTeX\ Typesetting\\[3pt]
+      \textbf{ChatGPT}    & --- Prompt\\\end{tabular}
+  \end{tcolorbox}
+\end{tcolorbox}
+\newpage
+
+%% ── TABLE OF CONTENTS ─────────────────────────────────────────────────
+\thispagestyle{fancy}\markboth{Table of Contents}{}
+\begin{center}
+  {\LARGE\bfseries\textcolor{pblue}{Table of Contents}}\\[6pt]
+  \textcolor{pblue}{\rule{0.6\textwidth}{0.8pt}}
+\end{center}
+\vspace{6pt}
+
+\begin{tcolorbox}[colback=cA!5,colframe=cA,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cA}{Part I --- C++ Object Oriented Programming}}\\[5pt]
+  \textcolor{cA!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cA}{$\triangleright$}}]
+    \item \hyperref[sec:S1]{\textbf{S1.} Philosophy \& Fundamentals of OOP}
+    \item \hyperref[sec:S2]{\textbf{S2.} Classes, Objects \& Access Specifiers}
+    \item \hyperref[sec:S3]{\textbf{S3.} Inline Functions, References \& Default Arguments}
+    \item \hyperref[sec:S4]{\textbf{S4.} Friend Functions }
+    \item \hyperref[sec:S5]{\textbf{S5.} Constructors, Destructors \& Copy Constructor}
+    \item \hyperref[sec:S6]{\textbf{S6.} Operator Overloading \& Type Conversion}
+    \item \hyperref[sec:S7]{\textbf{S7.} Inheritance \& Polymorphism}
+    \item \hyperref[sec:S8]{\textbf{S8.} Templates \& STL}
+    \item \hyperref[sec:S9]{\textbf{S9.} I/O Streams, Manipulators \& File I/O}
+  \end{itemize}
+\end{tcolorbox}
+
+\begin{tcolorbox}[colback=cB!5,colframe=cB,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cB}{Part II --- Java Object Oriented Programming}}\\[5pt]
+  \textcolor{cB!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cB}{$\triangleright$}}]
+    \item \hyperref[sec:S10]{\textbf{S10.} Java Basics, Arrays \& Strings}
+    \item \hyperref[sec:S11]{\textbf{S11.} Java OOP --- Classes, Inheritance \& Polymorphism}
+    \item \hyperref[sec:S12]{\textbf{S12.} Interfaces, Abstract Classes \& Nested Classes}
+    \item \hyperref[sec:S13]{\textbf{S13.} Exception Handling}
+    \item \hyperref[sec:S14]{\textbf{S14.} Multithreading \& Concurrency}
+    \item \hyperref[sec:S15]{\textbf{S15.} Generics \& Collections}
+    \item \hyperref[sec:S16]{\textbf{S16.} Stream API, Lambda \& Enums}
+    \item \hyperref[sec:S17]{\textbf{S17.} File I/O \& Serialization}
+    \item \hyperref[sec:S18]{\textbf{S18.} Networking}
+    \item \hyperref[sec:S19]{\textbf{S19.} Miscellaneous Java}
+  \end{itemize}
+\end{tcolorbox}
+
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S1 — Philosophy & Fundamentals
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S1}{Philosophy \& Fundamentals of OOP}{cA}{cA}
+\markboth{S1 --- Philosophy \& Fundamentals of OOP}{}
+\label{sec:S1}
+\titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
+\section{S1 --- Philosophy \& Fundamentals of OOP}
+
+\begin{enumerate}
+\item Explain the key features of object-oriented programming (OOP). How does a class differ from a structure in OOP? \mk{6+4}
+\yr{CSE 107 | 2023--24}
+
+
+
+
+\item Explain the importance of using constructors and destructors in C++. Why and how does Java drop writing destructors in programs? \mk{5+5}
+\yr{CSE 107 | 2023--24}
+
+%% ── Answer: Constructors/destructors; Java GC ───────────────────────
+
+
+
+\item Describe why constructor overloading is possible while destructor overloading is not allowed. \mk{11}
+\yr{CSE 107 | 2022--23}
+
+%% ── Answer: Constructor overloading vs destructor overloading ────────
+
+
+
+\item Discuss the difference between a class and an object. Describe how C++ supports inheritance. \mk{11}
+\yr{CSE 107 | 2021--22}
+
+%% ── Answer: Class vs object; inheritance in C++ ──────────────────────
+
+
+
+\item Explain abstraction with an appropriate example. Write down the properties of abstract class and abstract method. \mk{5+3+2}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: Abstraction; abstract class & method ────────────────────
+
+
+
+\item What is the purpose of constructors and destructors? Write three special properties of a constructor that make it distinct from other member functions. \mk{10}
+\yr{CSE 107 | 2016--17, 2020--21}
+
+%% ── Answer: Constructors and destructors ────────────────────────────
+
+
+
+\item Differentiate between early binding and late binding with appropriate examples. \mk{8}
+\yr{CSE 201 | 2014--15, 2013--14; CSE 107 | 2020--21}
+\variant{CSE 201 | 2015--16, 2012--13, 2009--10, 2008--09; CSE 107 | 2017--18}
+
+%% ── Answer: Early binding vs late binding ────────────────────────────
+
+
+
+\item Which feature of C++ programming language do you like most and why? The feature that you mention should not also be a feature of C programming language. \mk{10}
+\yr{CSE 107 | 2019--20}
+
+%% ── Answer: Favourite C++ feature not in C ──────────────────────────
+
+
+
+\item Write a short note on ``function overloading''. \mk{10}
+\yr{CSE 107 | 2019--20}
+
+%% ── Answer: Function overloading ────────────────────────────────────
+
+
+
+\item What does a default constructor (generated by the compiler) perform? What are the scenarios when a copy constructor is called? \mk{10}
+\yr{CSE 107 | 2019--20}
+
+%% ── Answer: Default constructor; copy constructor scenarios ──────────
+
+
+
+\item What are the syntactic differences between C and C++ programming? \mk{10}
+\yr{CSE 201 | 2014--15}
+
+%% ── Answer: Syntactic differences C vs C++ ──────────────────────────
+
+
+
+\item Define automatic in-line function. What are the advantages of using in-line function over parameterized macros? \mk{5}
+\yr{CSE 201 | 2013--14}
+
+%% ── Answer: Inline functions vs macros ───────────────────────────────
+
+
+
+\item What is an in-line function? What are its advantages and disadvantages? Why might the following function not be in-lined by your compiler?
+\begin{lstlisting}[language=C++]
+void f1() { for (int i = 0; i < 10; i++) cout << i; }
+\end{lstlisting}
+\mk{8}
+\yr{CSE 201 | 2011--12}
+
+%% ── Answer: Inline function details ─────────────────────────────────
+
+
+
+\item Differentiate between real-time polymorphism and run-time polymorphism with appropriate examples. \mk{10}
+\yr{CSE 201 | 2010--11}
+
+\item What is compile-time polymorphism and run-time polymorphism? Differentiate with examples. \mk{13}
+\yr{CSE 201 | 2009--10}
+\variant{CSE 201 | 2010--11; CSE 107 | 2019--20}
+
+%% ── Answer: Compile-time vs run-time polymorphism ───────────────────
+
+
+
+\item What is Object-Oriented programming? How are data and functions organized in an Object-Oriented program? \mk{6}
+\yr{CSE 201 | 2007--08}
+
+%% ── Answer: What is OOP; data and functions ─────────────────────────
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S2 — Classes, Objects & Access Specifiers
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S2}{Classes, Objects \& Access Specifiers}{cB}{cB}
+\markboth{S2 --- Classes, Objects \& Access Specifiers}{}
+\label{sec:S2}
+\titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
+\section{S2 --- Classes, Objects \& Access Specifiers}
+
+\begin{enumerate}
+\item A \texttt{Student} class has a private variable to store an ID, a constructor without parameters to initialize the ID, and a private static variable. Write the class definition for \texttt{Student} and write code in \texttt{main()} to create an array of 120 \texttt{Student} objects using the \texttt{new} operator, where the IDs are initialized as 1, 2, \ldots, 120 respectively in the constructor. \mk{10}
+\yr{CSE 107 | Jan 2021}
+
+%% ── Answer: Student class with static ID ────────────────────────────
+
+
+
+\item Imagine a tollbooth at a bridge. Cars passing by the booth are expected to pay a 50-cent toll. Mostly they do, but sometimes a car goes by without paying. The tollbooth keeps track of the number of cars that have gone by, and of the total amount of money collected.
+
+Model this tollbooth with a class called \texttt{tollbooth}. The three data items are a list of string to hold the registration numbers of the cars passing through the bridge, a type unsigned int to hold the total number of cars, and a type double to hold the total amount of money collected. A constructor initializes both of these to 0. A member function called \texttt{payingCar()} adds the car registration number in the list, increments the car total and adds 0.50 to the cash total. Another function, called \texttt{nopayCar()}, adds the car registration number, increments the car total but adds nothing to the cash total. Finally, a member function called \texttt{display()} displays the list of cars' registration numbers and the two totals. Make appropriate member functions const. Use proper naming convention and setter-getter functions. \mk{15}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: Tollbooth class ──────────────────────────────────────────
+
+
+
+\item What is the difference between class and structure? Why are both of them necessary in C++ programming? \mk{6}
+\yr{CSE 201 | 2015--16}
+
+%% ── Answer: Class vs structure in C++ ───────────────────────────────
+
+
+
+\item What is a static member? Why are they used? Write down the rules of using static variable and static method in a class. \mk{7}
+\yr{CSE 201 | 2015--16}
+\variant{CSE 201 | 2012--13}
+
+%% ── Answer: Static member variables and methods ─────────────────────
+
+
+
+\item Write a class named \texttt{MyClass} with a variable named \texttt{objectCount} that keeps track of the number of objects created. When the total number of objects is greater than 100, reinitialize \texttt{objectCount} to 0. \mk{5}
+\yr{CSE 201 | 2014--15}
+
+%% ── Answer: MyClass with objectCount ────────────────────────────────
+
+
+
+\item What are the properties of static variables and methods? Explain dynamic method dispatch with example. \mk{6+9}
+\yr{CSE 201 | 2013--14}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item Explain why the \texttt{protected} access specifier is needed in C++ programming. \mk{3}
+\yr{CSE 201 | 2013--14}
+
+%% ── Answer: protected access specifier ──────────────────────────────
+
+
+
+\item How can I call a member function of a class without creating any object of that class? Explain. \mk{5}
+\yr{CSE 201 | 2012--13}
+
+%% ── Answer: Call member function without object ──────────────────────
+
+
+
+\item Write the detail definition of a class \texttt{Pentagon} that will allow maximum five objects of the class to be created. After the fifth object, any attempt to create a new object will return the reference to the fifth object. \mk{12}
+\yr{CSE 201 | 2009--10}
+
+%% ── Answer: Pentagon class (max 5 objects) ──────────────────────────
+
+
+
+\item Can constructors/destructors be declared as \texttt{public}, \texttt{private}, or \texttt{protected}? What will be the problems if a constructor/destructor is declared as \texttt{private}? \mk{6}
+\yr{CSE 201 | 2009--10}
+
+%% ── Answer: Access specifiers for constructor/destructor ────────────
+
+
+
+\item Can a static method of a class use the \texttt{this} pointer? Why or why not? \mk{4}
+\yr{CSE 201 | 2009--10}
+
+%% ── Answer: Static method and this pointer ───────────────────────────
+
+
+
+\item Write a class named \texttt{SelfCounter} that can count the number of instances in a program. Include a member function \texttt{getObjectCount()} which returns the number of objects created. Also write a \texttt{main} function to illustrate its functionality. \mk{7}
+\yr{CSE 201 | 2008--09}
+
+%% ── Answer: SelfCounter class ───────────────────────────────────────
+
+
+
+\item Explain the usage of \texttt{const} and \texttt{mutable} keywords with examples. \mk{7}
+\yr{CSE 201 | 2008--09}
+
+%% ── Answer: const and mutable keywords ──────────────────────────────
+
+
+
+\item What are the applications of \texttt{bool} and \texttt{wchar\_t} data types? Explain with examples. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+%% ── Answer: bool and wchar_t data types ─────────────────────────────
+
+
+
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S3 — Inline Functions, References & Default Arguments
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S3}{Inline Functions, References \& Default Arguments}{cC}{cC}
+\markboth{S3 --- Inline Functions, References \& Default Arguments}{}
+\label{sec:S3}
+\titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
+\section{S3 --- Inline Functions, References \& Default Arguments}
+
+\begin{enumerate}
+\item What is inline function? How does it differ from automatic inline function? ``Inline specifier is a request, not a command'' --- explain. \mk{3+2+5}
+\yr{CSE 107 | 2020--21}
+\variant{CSE 107 | 2017--18}
+
+%% ── S3-Q1 ────────────────────────────────────────────────────────────
+
+
+
+\item Write three different ways to declare an object of the C++ \texttt{string} class with examples. \mk{8}
+\yr{CSE 107 | Jan 2021}
+
+
+%% ── S3-Q14 ───────────────────────────────────────────────────────────
+
+
+
+\item Two overloaded functions are declared as follows:
+\begin{lstlisting}[language=C++]
+void space(char ch) { }
+void space(char ch, int count) { }
+\end{lstlisting}
+Write down the \texttt{main()} function that declares two variables for storing the addresses of the above two functions and makes function calls using those variables. What problem arises if the second function is declared as \texttt{void space(char ch, int count = 0)}? \mk{7}
+\yr{CSE 107 | 2020--21; CSE 201 | 2014--15}
+
+
+%% ── S3-Q16 ───────────────────────────────────────────────────────────
+
+
+
+
+\item \texttt{"If a function returns a reference of any type, then it can be used both as an l-value and r-value"} --- explain with an example program. \mk{15}
+\yr{CSE 107 | 2019--20, 2022--23}
+
+%% ── S3-Q7 ────────────────────────────────────────────────────────────
+
+
+
+\item What is wrong with the following statement?
+\begin{lstlisting}[language=C++]
+void func(int x = 99, int y);
+\end{lstlisting}
+\mk{5}
+\yr{CSE 107 | 2019--20}
+
+
+%% ── S3-Q13 ───────────────────────────────────────────────────────────
+
+
+
+\item What is an in-line function? What are the advantages and disadvantages? When and why will you make a function inline? When may a compiler ignore this specifier? \mk{10}
+\yr{CSE 201 | 2016--17; CSE 107 | 2017--18}
+\variant{CSE 201 | 2007--08}
+
+%% ── S3-Q2 ────────────────────────────────────────────────────────────
+
+
+
+\item When can a function be used both as an l-value and r-value? Explain with an example. \mk{6}
+\yr{CSE 107 | 2017--18}
+
+
+
+\item What is the output of the following code segment?
+\begin{lstlisting}[language=C++]
+int& f();
+int x;
+int main() {
+    f() = 10;
+    int a = 10, b = 20;
+    int& ref = a;
+    ref = b;
+    cout << a << " " << b << " " << ref << " " << x;
+    return 0;
+}
+int& f() { return x; }
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2016--17}
+
+
+%% ── S3-Q8 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Explain why namespace is added to C++. \mk{5}
+\yr{CSE 107 | 2015--16}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item What is meant by ``independent reference'' in C++? How does an independent reference allow a function call to be written to the left side of an assignment operator? \mk{4+4}
+\yr{CSE 201 | 2014--15}
+\variant{CSE 201 | 2010--11}
+
+%% ── S3-Q5 ────────────────────────────────────────────────────────────
+
+
+
+\item What is a reference? Name three different scenarios when a reference can be used. Why does a reference use the dot (\texttt{.}) operator instead of the arrow (\texttt{->}) operator? \mk{10}
+\yr{CSE 201 | 2013--14}
+
+
+%% ── S3-Q4 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Explain why using a default argument is related to constructor overloading. What is wrong with the following function prototype?
+\begin{lstlisting}[language=C++]
+double area(double width = 0, double length);
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2013--14}
+
+%% ── S3-Q11 ───────────────────────────────────────────────────────────
+
+
+
+\item Write a function \texttt{Compute\_Volume} to compute the volume of a 3D box with height \texttt{h}, width \texttt{w}, and length \texttt{l}. Then write a new function \texttt{New\_Compute\_Volume} that computes the volume of a rectangular box as well as a cube using default arguments, such that all of the following calls work:
+\begin{lstlisting}[language=C++]
+New_Compute_Volume(30, 20, 10);
+New_Compute_Volume(10, 10, 10);
+New_Compute_Volume(10);
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2012--13}
+
+%% ── S3-Q15 ───────────────────────────────────────────────────────────
+
+
+
+
+\item What is a reference? Classify references used in C++ programming. Explain with examples how a returning reference can allow a function to be used on the left side of an assignment. \mk{10}
+\yr{CSE 201 | 2011--12}
+
+%% ── S3-Q3 ────────────────────────────────────────────────────────────
+
+
+
+\item With appropriate example, explain how a default argument produces constructor overloading ambiguity. \mk{6}
+\yr{CSE 201 | 2011--12}
+
+%% ── S3-Q12 ───────────────────────────────────────────────────────────
+
+
+
+\item What is namespace? Write down the problems of using global namespaces. \mk{5}
+\yr{CSE 201 | 2011--12}
+%% ── S3-Q19 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write a function called \texttt{neg()} that reverses the sign of its integer parameter in two ways --- using a pointer parameter and using a reference parameter. \mk{10}
+\yr{CSE 201 | 2010--11}
+
+
+%% ── S3-Q10 ───────────────────────────────────────────────────────────
+
+
+
+\item Explain some ways that ambiguity can be introduced when overloading functions. Why are the following two overloaded functions inherently ambiguous?
+\begin{lstlisting}[language=C++]
+int f(int a);
+int f(int &a);
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2010--11}
+
+
+%% ── S3-Q18 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Provide any two restrictions (with examples) while creating references. \mk{5}
+\yr{CSE 201 | 2007--08, 2008--09}
+
+%% ── S3-Q9 ────────────────────────────────────────────────────────────
+
+
+
+\item Write short notes on: (i) namespace, (ii) this pointer, (iii) inline function. \mk{15}
+\yr{CSE 201 | 2008--09}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item Explain the difference between binary and unary scope resolution operators with examples. \mk{5}
+\yr{CSE 201 | 2008--09, 2007--08}
+
+
+%% ── S3-Q21 ───────────────────────────────────────────────────────────
+
+
+
+
+\item \texttt{"A reference parameter fully automates the call-by-reference parameter passing mechanism"} --- explain with example. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+%% ── S3-Q6 ────────────────────────────────────────────────────────────
+
+
+
+\item The effect of a default argument can be alternatively achieved by overloading. Discuss with an example. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+
+%% ── S3-Q17 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Is there anything wrong with the following code? If yes, what should be done to correct it?
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+namespace A {
+    int i;
+    void dispI() { cout << i; }
+}
+void main() {
+    namespace Inside {
+        int insideI;
+        void dispInsideI() { cout << insideI; }
+    }
+    A::i = 10;
+    cout << A::i;
+    A::dispI();
+    Inside::insideI = 20;
+    cout << Inside::insideI;
+    Inside::dispInsideI();
+}
+\end{lstlisting}
+\mk{5}
+\yr{CSE 201 | 2007--08}
+
+%% ── S3-Q20 ───────────────────────────────────────────────────────────
+
+
+
+
+
+
+\item Can we use the same function name for a member function of a class and an outside function in the same program file? If yes, how are they distinguished? \mk{5}
+\yr{CSE 201 | 2007--08}
+
+
+%% ── S3-Q22 ───────────────────────────────────────────────────────────
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S4 — Friend Functions & Static Members
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S4}{Friend Functions }{cD}{cD}
+\markboth{S4 --- Friend Functions }{}
+\label{sec:S4}
+\titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
+\section{S4 --- Friend Functions }
+
+\begin{enumerate}
+\item Design a program that defines a friend function which can access and modify the private variables of two different classes. \mk{15}
+\yr{CSE 107 | 2022--23}
+
+%% ── S4-Q9 ────────────────────────────────────────────────────────────
+
+
+
+\item Write an example program to demonstrate the use of forward declaration of a class. \mk{11}
+\yr{CSE 107 | 2021--22}
+
+
+%% ── S4-Q10 ───────────────────────────────────────────────────────────
+
+
+
+
+\item \texttt{"A friend function can be a global function not related to any particular class. A friend function can also be a member of another class."} --- Explain this statement with appropriate examples. \mk{12}
+\yr{CSE 107 | 2017--18}
+
+
+%% ── S4-Q8 ────────────────────────────────────────────────────────────
+
+
+
+
+\item What is a friend function? Why is friend function used in C++ programming? \mk{7}
+\yr{CSE 201 | 2015--16}
+
+%% ════════════════════════════════════════════════════════════════════
+%% S4 — Friend Functions & Static Members — ANSWERS
+%% ════════════════════════════════════════════════════════════════════
+
+%% ── S4-Q1 ────────────────────────────────────────────────────────────
+
+
+
+
+\item What is a friend function? When is a friend function used? Give an example of forward class declaration. \mk{10}
+\yr{CSE 201 | 2013--14}
+
+
+%% ── S4-Q2 ────────────────────────────────────────────────────────────
+
+
+
+\item What is a friend function? Can a member function of a class be a friend function of another class? If yes, give a code example. \mk{10}
+\yr{CSE 201 | 2012--13}
+
+
+%% ── S4-Q3 ────────────────────────────────────────────────────────────
+
+
+
+\item How does a friend function differ from a member of a class? What are the advantages of using friend functions? \mk{6+6+15}
+\yr{CSE 201 | 2010--11, 2009--10}
+
+%% ── S4-Q4 ────────────────────────────────────────────────────────────
+
+
+
+\item Explain the following statements regarding friend functions with examples:
+\begin{enumerate}
+  \item A friend function is not a member of a class but still has access to its private members.
+  \item A friend function can be a global function not related to any particular class.
+  \item A friend function can be a member of another class.
+\end{enumerate}
+\mk{21}
+\yr{CSE 201 | 2008--09}
+
+
+%% ── S4-Q5 ────────────────────────────────────────────────────────────
+
+
+
+
+\item \texttt{"A friend function is not a member of a class but still has access to its private elements"} --- explain with an example. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+\item When is a friend function compulsory? Give an example. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+
+%% ── S4-Q6 ────────────────────────────────────────────────────────────
+
+
+
+
+\item \texttt{"A friend function can be used to overload the assignment operator `='."} --- True or False? Explain your answer. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+
+%% ── S4-Q7 ────────────────────────────────────────────────────────────
+
+
+
+\item Distinguish between static and non-static class members with examples. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+
+%% ── S4-Q11 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S5 — Constructors, Destructors & Copy Constructor
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S5}{Constructors, Destructors \& Copy Constructor}{cE}{cE}
+\markboth{S5 --- Constructors, Destructors \& Copy Constructor}{}
+\label{sec:S5}
+\titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
+\section{S5 --- Constructors, Destructors \& Copy Constructor}
+
+\begin{enumerate}
+\item Consider the following program and mention the line(s) where the copy constructor is called. What will be the output of this program?
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+class MyClass {
+public:
+    int val;
+    int multiplier;
+    MyClass(int n, int m = 2) { val = n; multiplier = m; }
+    MyClass(const MyClass& obj) {
+        val = obj.val;
+        multiplier = obj.multiplier;
+    }
+    void setValue(int v, int m = 5) { val = v; multiplier = m; }
+    int calculateValue() { return val * multiplier; }
+};
+void functionC(MyClass* arr, int size) {
+    for (int i = 0; i < size; ++i)
+        cout << arr[i].calculateValue() << endl;
+}
+int main() {
+    MyClass* arr = new MyClass[2]{MyClass(5, 2), MyClass(6)};
+    arr[0] = arr[1];
+    functionC(arr, 2);
+    arr[0].setValue(15, 4);
+    arr[1].setValue(30);
+    cout << arr[0].calculateValue() << endl;
+    cout << arr[1].calculateValue() << endl;
+    delete[] arr;
+    return 0;
+}
+\end{lstlisting}
+\mk{13}
+\yr{CSE 107 | 2022--23}
+
+
+%% ── S5-Q10 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item Write One C++ statement to implement each of the following:
+\begin{enumerate}
+  \item Using \texttt{new}, declare a pointer and allocate memory for a \texttt{char} variable initialized to \texttt{'E'}.
+  \item Using \texttt{new}, declare a pointer and allocate memory for an array of 5 \texttt{float} variables.
+  \item Using \texttt{delete}, delete the entire integer array pointed to by \texttt{a}.
+  \item Using \texttt{new}, declare a pointer and allocate memory for an object of class \texttt{A} (no constructor defined).
+\end{enumerate}
+\mk{12}
+\yr{CSE 107 | 2022--23}
+
+
+%% ── S5-Q18 ───────────────────────────────────────────────────────────
+
+
+
+\item What is the problem with the following code segment? Write a problem with \texttt{s1 = s2} and provide a solution:
+\begin{lstlisting}[language=C++]
+class strtype {
+    char *p; int len;
+public:
+    strtype(char *s) {
+        len = strlen(s) + 1;
+        p = new char[len];
+        strcpy(p, s);
+    }
+    ~strtype() { delete[] p; }
+};
+strtype s1("LEVEL"), s2("TERM");
+s1 = s2;
+\end{lstlisting}
+Without changing the constructor and destructor, write code to solve the problem. \mk{15}
+\yr{CSE 107 | 2021--22}
+
+%% ── S5-Q8 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Differentiate between the \texttt{new} operator and \texttt{malloc()} function. Design \texttt{Class A} so that the following code does not produce any error:
+\begin{lstlisting}[language=C++]
+int main() {
+    A obj(10);
+    A *array = new A[1];
+    return 0;
+}
+\end{lstlisting}
+\mk{13}
+\yr{CSE 107 | 2021--22}
+
+
+%% ── S5-Q19 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Consider the following overloaded functions and develop the equivalent function using default arguments:
+\begin{lstlisting}[language=C++]
+void f2() { int a = 0, b = 0; ... }
+void f2(int a) { int b = 0; ... }
+void f2(int a, int b) { ... }
+\end{lstlisting}
+\mk{6}
+\yr{CSE 107 | 2021--22}
+
+
+%% ── S5-Q20 ───────────────────────────────────────────────────────────
+
+
+
+\item Explain what a default copy constructor generated by the compiler does. Briefly describe a circumstance where this will cause a problem. \mk{10}
+\yr{CSE 107 | 2019--20}
+
+%% ── S5-Q7 ────────────────────────────────────────────────────────────
+
+
+
+\item What are the possible problems if we use ``call by value'' instead of ``call by reference'' for passing an object to a function? Explain with an example. How can we solve this problem? \mk{13}
+\yr{CSE 107 | 2017--18}
+\variant{CSE 201 | 2009--10}
+
+%% ── S5-Q5 ────────────────────────────────────────────────────────────
+
+
+
+\item What will be the output of the following program?
+\begin{lstlisting}[language=C++]
+class Point {
+private:
+    int x, y;
+public:
+    Point(int i = 0, int j = 0);
+    Point(const Point &t);
+};
+Point::Point(int i, int j) {
+    x = i; y = j;
+    cout << "Normal Constructor called\n";
+}
+Point::Point(const Point &t) {
+    x = t.x; y = t.y;
+    cout << "Copy Constructor called\n";
+}
+int main() {
+    Point *t1, *t2;
+    t1 = new Point(10, 15);
+    t2 = new Point(*t1);
+    Point t3 = *t1;
+    Point t4;
+    t4 = t3;
+    return 0;
+}
+\end{lstlisting}
+\mk{9}
+\yr{CSE 107 | 2017--18}
+
+
+%% ── S5-Q6 ────────────────────────────────────────────────────────────
+
+
+
+\item What is the difference between \texttt{delete} and \texttt{delete[]} operators? \mk{5}
+\yr{CSE 201 | 2007--08; CSE 107 | 2017--18}
+
+
+%% ── S5-Q14 ───────────────────────────────────────────────────────────
+
+
+
+\item Write the following: \texttt{myClass ob[] = \{-1, -2\};}. Is this valid? If yes, what does it mean? If no, what is the problem? \mk{5}
+\yr{CSE 107 | 2017--18}
+
+
+%% ── S5-Q16 ───────────────────────────────────────────────────────────
+
+
+
+
+\item How does the copy constructor differ from the assignment operator (\texttt{=})? \mk{5}
+\yr{CSE 107 | 2016--17}
+
+
+%% ── S5-Q13 ───────────────────────────────────────────────────────────
+
+
+
+
+\item What is the problem when an object of \texttt{Animal} is passed by value? What are the ways to solve it? Write a copy constructor to resolve it. \mk{15}
+\yr{CSE 107 | 2016--17}
+\begin{lstlisting}[language=C++]
+class Animal {
+    int *age;
+public:
+    Animal(int arg) { age = new int; *age = arg; }
+    ~Animal() { delete age; }
+};
+\end{lstlisting}
+
+
+
+%% ── S5-Q15 ───────────────────────────────────────────────────────────
+
+
+
+\item What is the output of the following code?
+\begin{lstlisting}[language=C++]
+class Animal {
+    int age;
+public:
+    Animal() { cout << "Constructing\n"; age = 0; }
+    ~Animal() { cout << "Destructing\n"; }
+};
+Animal process(Animal a) {
+    cout << "In process\n";
+    Animal b;
+    b = a;
+    return b;
+}
+int main() {
+    cout << "First line\n";
+    Animal a;
+    cout << "Second line\n";
+    Animal b = a;
+    cout << "Third line\n";
+    Animal c = process(b);
+    cout << "Return line\n";
+    return 0;
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2016--17}
+
+%% ── S5-Q17 ───────────────────────────────────────────────────────────
+
+
+
+\item Consider the following class definition:
+\begin{lstlisting}[language=C++]
+class myclass {
+    int *p;
+public:
+    myclass(int n) {
+        p = (int*)malloc(sizeof(int));
+        if (!p) { cout << "Allocation problem\n"; exit(1); }
+        *p = n;
+    }
+    ~myclass() { free(p); }
+};
+\end{lstlisting}
+Write down the problem associated with the class declaration. Write a copy constructor to solve the problem and explain how it works. \mk{5+5+5}
+\yr{CSE 201 | 2014--15}
+
+
+\item Consider the following class definition:
+\begin{lstlisting}[language=C++]
+class myclass {
+    int *p;
+public:
+    myclass(int i) { p = (int*)malloc(sizeof(int)); *p = i; }
+    ~myclass() { free(p); cout << "Freeing..\r"; }
+    int get() { return *p; }
+};
+\end{lstlisting}
+What is the problem when an object of the class type is passed to a regular function as a parameter? Write a copy constructor to resolve the problem. \mk{10}
+\yr{CSE 201 | 2013--14}
+
+%% ── S5-Q3 ────────────────────────────────────────────────────────────
+
+
+
+\item What is a copy constructor? What are the three cases when a copy constructor is invoked? Give examples using code. \mk{10}
+\yr{CSE 201 | 2012--13}
+
+
+%% ── S5-Q1 ────────────────────────────────────────────────────────────
+
+
+
+
+\item What is the output of the following code segment?
+\begin{lstlisting}[language=C++]
+class myclass {
+    int who;
+public:
+    myclass(int n) { who = n; cout << "Constructing" << who << "\n"; }
+    ~myclass() { cout << "Destructing" << who << "\n"; }
+    int id() { return who; }
+};
+void f(myclass &o) { cout << "Received" << o.id() << "\n"; }
+int main() {
+    myclass x(1);
+    f(x);
+    return 0;
+}
+\end{lstlisting}
+\mk{5}
+\yr{CSE 201 | 2012--13}
+
+
+%% ── S5-Q9 ────────────────────────────────────────────────────────────
+
+
+
+\item What is the problem with the following code segment?
+\begin{lstlisting}[language=C++]
+class array {
+    int *p; int size;
+public:
+    array(int sz) {
+        try { p = new int[sz]; }
+        catch (bad_alloc xa) { cout << "Allocation Failure\n"; exit(EXIT_FAILURE); }
+        size = sz;
+    }
+    ~array() { delete[] p; }
+    void put(int i, int j) { if (i >= 0 && i < size) p[i] = j; }
+    int get(int i) { return p[i]; }
+};
+void print(array &ob) {
+    array x = ob;
+    for (int i = 0; i < 10; i++) cout << x.get(i);
+}
+int main() {
+    array num(10);
+    for (int i = 0; i < 10; i++) num.put(i, i);
+    print(num);
+    for (int i = 9; i >= 0; i--) cout << num.get(i);
+    return 0;
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2012--13}
+
+%% ── S5-Q12 ───────────────────────────────────────────────────────────
+
+
+
+\item The class \texttt{dyna} is defined as follows:
+\begin{lstlisting}[language=C++]
+class dyna {
+    int *p;
+public:
+    dyna(int i);
+    ~dyna() { free(p); }
+    int get() { return *p; }
+};
+\end{lstlisting}
+Write the constructor \texttt{dyna(int i)}. Also write a function called \texttt{neg()} that reverses the sign of its integer parameter. What will be the problem if \texttt{cout << neg(ob);} is executed in \texttt{main()}? Write a copy constructor to solve the problem. \mk{13}
+\yr{CSE 201 | 2011--12}
+
+
+%% ── S5-Q11 ───────────────────────────────────────────────────────────
+
+
+
+\item What is a copy constructor? What types of problems are solved by using copy constructors? Explain with examples. \mk{15}
+\yr{CSE 201 | 2008--09}
+
+
+
+\item What type of problems are solved by using copy constructors? Explain with examples. \mk{10}
+\yr{CSE 201 | 2007--08}
+
+%% ── S5-Q2 ────────────────────────────────────────────────────────────
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S6 — Operator Overloading & Type Conversion
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S6}{Operator Overloading \& Type Conversion}{cF}{cF}
+\markboth{S6 --- Operator Overloading \& Type Conversion}{}
+\label{sec:S6}
+\titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
+\section{S6 --- Operator Overloading \& Type Conversion}
+
+\begin{enumerate}
+\item Differentiate between early binding and late binding. Demonstrate \texttt{const\_cast} in case of \texttt{const} method with example. \mk{4+4}
+\yr{CSE 107 | 2023--24}
+
+%% ── S6-Q25 ───────────────────────────────────────────────────────────
+
+
+
+\item Consider the following class declarations:
+
+\begin{lstlisting}[language=C++]
+class Coord {
+    int x, y;
+public:
+    //-----------------------
+    //-----------------------
+};
+\end{lstlisting}
+
+Create a \texttt{Rectangle} class that uses the \texttt{Coord} class as follows:
+
+\begin{lstlisting}[language=C++]
+class Rectangle {
+    Coord p1, p2, p3, p4;
+    char *name;
+public:
+    //-----------------------
+    //-----------------------
+};
+\end{lstlisting}
+
+Answer the following questions and write down methods as instructed below:
+\begin{enumerate}
+    \item Write down a constructor of \texttt{Coord} class accepts only positive values of $x$ and $y$ with no single $x$- or $y$-coordinate larger than 200.
+    \item Write down a constructor of \texttt{Rectangle} class that accepts four points and checks whether they form a rectangle or not. A rectangle has right angles at each of its corner (and checking of any three corners are sufficient). Write a \texttt{static} function \texttt{isRightAngle()} that accepts three points and checks whether a right angle is formed at the middle point or not?
+    \item Write down four member functions of \texttt{Rectangle} class for computing the length, the width, the perimeter and the area of the rectangle. The length is the larger of the two dimensions. Take care to reuse methods where possible.
+    \item Include a predicate function \texttt{square} that determines whether the rectangle is a square or not.
+    \item Write down a clone constructor that makes a clone of rectangle.
+    \item Write down necessary conversion methods for executing the following program codes:
+\begin{lstlisting}[language=C++]
+int value = rect; //returns the area of rect
+string name = rect;
+\end{lstlisting}
+    Where ``rect'' is a rectangle type object.
+    \item Briefly state the problem while executing the following code-
+\begin{lstlisting}[language=C++]
+r1 = r2;
+\end{lstlisting}
+    Where both \texttt{r1} and \texttt{r2} are rectangle type object. Overwrite the assignment operator to overcome the problem.
+\end{enumerate} \mk{35}
+\yr{CSE 107 | 2023--24}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item If you overload the assignment operator, should you return an object of the same type as the class it is overloaded for? Justify your answer. \mk{10}
+\yr{CSE 107 | 2022--23}
+
+
+%% ── S6-Q3 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Write a program to demonstrate a user-defined conversion function that converts a class object to a built-in data type. \mk{9}
+\yr{CSE 107 | 2022--23}
+
+
+\item Consider the following \texttt{Coordinator} class. You are not allowed to modify the given code. Add code to produce output: \texttt{x coordinate: 7} and \texttt{y coordinate: 10}.
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+class Coordinator {
+    int x, y;
+public:
+    Coordinator(int x_val = 0, int y_val = 0) { x = x_val; y = y_val; }
+    int getX() { return x; }
+    int getY() { return y; }
+    // add your code here
+};
+int main() {
+    Coordinator cObj(5, 8);
+    cObj += 2;
+    cout << "x coordinate : " << cObj.getX() << endl;
+    cout << "y coordinate : " << cObj.getY() << endl;
+    return 0;
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2022--23}
+
+
+%% ── S6-Q19 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Evaluate the output of the following program: \mk{6}
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+class circle {
+    int r;
+public:
+    circle(int a = 0) { 
+        r = a; 
+    }
+    void show() { 
+        cout << r << endl; 
+    }
+    friend circle operator++(circle &ob);
+};
+
+circle operator++(circle &ob) { 
+    ob.r++; 
+    return ob; 
+}
+
+int main() {
+    circle c1(10);
+    ++c1;
+    c1.show();
+    return 0;
+}
+\end{lstlisting}
+\yr{CSE 107 | 2021--22}
+
+%% ── S6-Q17 ───────────────────────────────────────────────────────────
+
+
+
+\item Let $xi+yj+zk$ be a vector where $x$, $y$ and $z$ are real numbers as well as $i$, $j$ and $k$ represent unique vectors along x-axis, y-axis and z-axis. There is a description for each point of the vector and hence each object has a pointer to point the description. Declare a class named ``Vector'' that has members and/or friends to fulfill the following requirements. Don't use friend function if it can be implemented using member function. \hfill \textbf{(7$\times$4=28)}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{|p{0.2\textwidth}|p{0.25\textwidth}|p{0.45\textwidth}|}
+\hline
+Requirement & Sample Code & Explanation \\
+\hline
+Creating instance & \texttt{Vector ob(12.0, 5.0, 2.0), ob1(3.0, 2.0, 5.0, "The peak point"), ob2;} & Use default arguments to set the vector point at the origin with null description when no parameter is given. Write appropriate constructor and copy constructor. \\
+\hline
+Addition of two complex number objects & \texttt{ob1 = ob2 + ob3;} & The values in each dimension will be added separately, i.e., the x values of ob2 and ob3 will be added together to give x value of ob1 and so on. Descriptions of ob2 and ob3 will be concatenated by adding a space between them to give the description of ob1. \\
+\hline
+Incrementing a complex number & \texttt{ob = ob1 += ob2;} & Overwrite \texttt{=} and \texttt{+=} operators. \\
+\hline
+Adding a real number to an object & \texttt{ob2 = ob1 + 100.0;} \newline \texttt{ob2 = 100.0 + ob1;} & The real number will be added to each value of the object, i.e., each value of x, y and z will be incremented by the amount of the real number. \\
+\hline
+\end{tabular}
+\end{center}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item If you overload \texttt{operator+}, must you return an object of the same type as your parameters? Justify your answer. \mk{7}
+\yr{CSE 107 | 2019--20}
+
+
+%% ── S6-Q2 ────────────────────────────────────────────────────────────
+
+
+
+\item \texttt{"There are scenarios when a friend function is very useful for operator overloading"} --- support this statement for the following class \texttt{Rational} by writing a program that must use friend function for operator overloading:
+\begin{lstlisting}[language=C++]
+class Rational {
+    int n, d;
+public:
+    Rational() { n = 0; d = 0; }
+    Rational(int a, int b) { n = a; d = b; }
+};
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2019--20}
+
+
+%% ── S6-Q13 ───────────────────────────────────────────────────────────
+
+
+
+\item Given a \texttt{Date} class with \texttt{day}, \texttt{month}, \texttt{year}: overload the binary minus operator so that \texttt{ob1 - ob2} gives the difference in number of days (assume 30 days/month). Also overload \texttt{<<} to print \texttt{day-month-year}. Include a \texttt{main()} function.
+\begin{lstlisting}[language=C++]
+class Date {
+    int day, month, year;
+public:
+    Date(int m, int d, int y) { day = d; month = m; year = y; }
+};
+\end{lstlisting}
+\mk{17}
+\yr{CSE 107 | 2019--20}
+
+
+%% ── S6-Q18 ───────────────────────────────────────────────────────────
+
+
+
+\item Consider the following \texttt{Photo} and \texttt{Frame} classes. Add necessary code to \texttt{Photo} and/or \texttt{Frame} class (without modifying existing code) so that \texttt{F = P + 2;} produces \texttt{Frame Width: 7} and \texttt{Frame Length: 10} when \texttt{P} is \texttt{Photo(5,8)}:
+\begin{lstlisting}[language=C++]
+class Photo { int width, length; public:
+    Photo() {width=0; length=0;}
+    Photo(int a, int b) {width=a; length=b;}
+    int getwidth() {return width;} int getlength() {return length;}
+};
+class Frame { int width, length; public:
+    Frame() {width=0; length=0;}
+    Frame(int a, int b) {width=a; length=b;}
+    int getwidth() {return width;} int getlength() {return length;}
+};
+\end{lstlisting}
+\mk{20}
+\yr{CSE 107 | 2019--20}
+
+
+%% ── S6-Q29 ───────────────────────────────────────────────────────────
+
+
+
+\item Consider the following \texttt{Fraction} class. Overload the prefix \texttt{++} operator using a friend function so that \texttt{++n} on \texttt{Fraction(3,7)} produces \texttt{x/y: 4/8}. Only write the overloaded function:
+\begin{lstlisting}[language=C++]
+class Fraction { int x, y; public:
+    Fraction(int a, int b) {x=a; y=b;}
+    int getx() {return x;} int gety() {return y;}
+};
+\end{lstlisting}
+\mk{13}
+\yr{CSE 107 | 2019--20}
+
+%% ── S6-Q30 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Why should the overloaded assignment operator (\texttt{=}) function return the \texttt{this} pointer? \mk{5}
+\yr{CSE 107 | 2017--18; CSE 201 | 2009--10}
+
+%% ── S6-Q4 ────────────────────────────────────────────────────────────
+
+
+
+\item Which of the operators can have default arguments when they are overloaded? \mk{3}
+\yr{CSE 107 | 2017--18}
+
+
+%% ── S6-Q5 ────────────────────────────────────────────────────────────
+
+
+
+\item Consider the class \texttt{Complex}. Write necessary functions so that the following statements execute correctly in \texttt{main}:
+\begin{lstlisting}[language=C++]
+class Complex {
+public:
+    int real, imag;
+    Complex(int r = 0, int i = 0);
+};
+\end{lstlisting}
+(i) \texttt{comp3 = comp1 + comp2;} \quad (ii) \texttt{comp3 = comp1 + 10;} \quad (iii) \texttt{comp3 = 10 + comp1;} \quad (iv) \texttt{comp1++;} \quad (v) \texttt{++comp1;} \quad (vi) \texttt{cout << comp1;} \quad (vii) \texttt{comp3 = comp1(5);}
+\mk{25}
+\yr{CSE 107 | 2017--18}
+
+
+%% ── S6-Q16 ───────────────────────────────────────────────────────────
+
+
+
+\item What is wrong with the following code segment?
+\begin{lstlisting}[language=C++]
+class myclass {
+    int i, j;
+public:
+    static void seti(int x) { this->i = x; }
+    int geti() { return i; }
+};
+\end{lstlisting}
+\mk{6}
+\yr{CSE 107 | 2017--18}
+
+
+%% ── S6-Q21 ───────────────────────────────────────────────────────────
+
+
+
+\item Consider the following \texttt{MyInt} class. Overload: (i) \texttt{+} for adding two \texttt{MyInt} objects, (ii) \texttt{*} so a \texttt{MyInt} can be multiplied by an integer from either side, (iii) \texttt{=} for safe assignment. Note: you cannot write a copy constructor.
+\begin{lstlisting}[language=C++]
+class MyInt {
+    int *x;
+public:
+    MyInt(int argx) { x = new int; *x = argx; }
+    int getX() const { return *x; }
+    void setX(int argx) { *x = argx; }
+    ~MyInt() { delete x; }
+};
+\end{lstlisting}
+\mk{20}
+\yr{CSE 107 | 2016--17}
+
+
+%% ── S6-Q20 ───────────────────────────────────────────────────────────
+
+
+
+
+\item How can you code \texttt{++ob1} and \texttt{ob1++} differently? \mk{3}
+\yr{CSE 107 | 2015--16}
+
+%% ── S6-Q6 ────────────────────────────────────────────────────────────
+
+
+
+\item Let $V = (x, y, z)$ be a vector. Define a class and include the minimum necessary members for solving: \texttt{v1 += (10 + v2);} \mk{12}
+\yr{CSE 201 | 2015--16}
+
+
+%% ── S6-Q14 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Explain different types of casting used in C++ with examples. \mk{10}
+\yr{CSE 201 | 2014--15; CSE 107 | 2015--16}
+
+%% ── S6-Q24 ───────────────────────────────────────────────────────────
+
+
+
+\item Why is RTTI a necessary feature of C++? \mk{5}
+\yr{CSE 107 | 2015--16}
+
+
+%% ── S6-Q26 ───────────────────────────────────────────────────────────
+
+
+
+\item Consider the following class declaration:
+\begin{lstlisting}[language=C++]
+class Coord {
+    int x, y;
+    char *pointname;
+public:
+    // your code
+};
+\end{lstlisting}
+(a) Create necessary constructors to support: \texttt{Coord ob1, ob2, ob3;} and \texttt{Coord ob4(0, 0, "origin");}
+(b) Explain why a copy constructor works for initialization but not for assignment. Create the required copy constructor.
+(c) Create necessary methods for: \texttt{ob1 = ob2 + ob3 + ob4;} and \texttt{ob1 = 100 + ob2;} (increases both x and y by 100) and \texttt{int value = 100 + ob4;} (value = $100 + \sqrt{ob4.x^2 + ob4.y^2}$, use a conversion function).
+(d) How can you code \texttt{++ob1} and \texttt{ob1++} differently?
+\mk{6+8+18+3}
+\yr{CSE 107 | 2015--16}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item Let $x+iy$ be a complex number. Declare a class named \texttt{Complex} with members/friends for:
+\begin{enumerate}
+  \item Creating instance: \texttt{Complex ob(12.0, 5.0);}
+  \item Addition: \texttt{ob1 = ob2 + ob3;}
+  \item Increment: \texttt{ob++;} and \texttt{++ob;}
+  \item Adding real number: \texttt{ob2 = ob1 + 100.0;} and \texttt{ob2 = 100.0 + ob1;}
+\end{enumerate}
+\mk{20}
+\yr{CSE 201 | 2014--15}
+
+
+%% ── S6-Q15 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Consider the following class:
+\begin{lstlisting}[language=C++]
+class coord {
+    int x, y;
+public:
+    coord(int i = 0, int j = 0) { x = i; y = j; }
+    void getxy(int &i, int &j) { i = x; j = y; }
+};
+\end{lstlisting}
+\begin{enumerate}
+  \item Write a function to overload \texttt{+} operator where both x and y are incremented by the amount passed through parameter.
+  \item Write a function that allows: \texttt{ob2 = 100 + ob1;}
+  \item Write inserter and extractor functions.
+  \item Rewrite the class definition incorporating the above four functions.
+\end{enumerate}
+\mk{20}
+\yr{CSE 201 | 2013--14}
+
+
+%% ── S6-Q7 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Consider the following \texttt{coord} class. Make necessary changes and overload the \texttt{+} operator so that it accepts both \texttt{ob + int} and \texttt{int + ob} without using unnecessary friend functions:
+\begin{lstlisting}[language=C++]
+class coord {
+    int x, y;
+public:
+    coord(int i = 0, int j = 0) { x = i; y = j; }
+    void getxy(int &i, int &j) { i = x; j = y; }
+};
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2011--12}
+
+%% ── S6-Q8 ────────────────────────────────────────────────────────────
+
+
+
+\item Consider the following declarations of \texttt{coord} class operators. Explain what happens when each statement is executed and why \texttt{o3 = 100 + o1;} will not work. Write a function to fix it.
+\begin{lstlisting}[language=C++]
+class coord {
+    int x, y;
+public:
+    coord(int i = 0, int j = 0) { x = i; y = j; }
+    void getxy(int &i, int &j) { i = x; j = y; }
+    coord operator+(coord ob2);
+    coord operator+(int i);
+    coord operator++();
+    bool operator==(coord ob2);
+    coord operator=(coord ob2);
+};
+coord o1(2, 4), o2, o3(3, 1);
+\end{lstlisting}
+(i) \texttt{(o1 + o2).getxy(p, q);} \quad (ii) \texttt{o3 = o3 + o2 + o1;}
+\mk{15}
+\yr{CSE 201 | 2010--11}
+
+
+%% ── S6-Q9 ────────────────────────────────────────────────────────────
+
+
+
+\item Overload the \texttt{<} and \texttt{>} operators relative to the \texttt{coord} class. \mk{10}
+\yr{CSE 201 | 2010--11}
+
+
+%% ── S6-Q10 ───────────────────────────────────────────────────────────
+
+
+
+\item Create a function \texttt{reverse()} that takes a pointer to a string and a count parameter. Give count a default value that, when absent, reverses the entire string. \mk{7}
+\yr{CSE 201 | 2010--11}
+
+%% ── S6-Q28 ───────────────────────────────────────────────────────────
+
+
+
+\item What is an operator function? Describe the syntax of operator overloading. List the restrictions imposed on operator overloading. \mk{5+4}
+\yr{CSE 201 | 2007--08, 2009--10}
+
+
+%% ── S6-Q1 ────────────────────────────────────────────────────────────
+
+
+
+\item What is a conversion function? Let a class \texttt{coord} be defined as:
+\begin{lstlisting}[language=C++]
+class coord {
+    int x, y;
+public:
+    coord(int i, int j) { x = i; y = j; }
+};
+\end{lstlisting}
+Write a conversion function that will automatically convert an object of \texttt{coord} to an integer. \mk{6}
+\yr{CSE 201 | 2009--10}
+
+
+%% ── S6-Q11 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write the necessary operator functions to allow: \texttt{c3 = 10 + c1 + c2;} where \texttt{c1}, \texttt{c2}, and \texttt{c3} are \texttt{coord} objects. \mk{14}
+\yr{CSE 201 | 2009--10}
+
+
+%% ── S6-Q12 ───────────────────────────────────────────────────────────
+
+
+
+\item Write a matrix class with default and parameterized constructors. Overload \texttt{+} for matrix addition (\texttt{m3 = m1 + m2}) and \texttt{*} for matrix multiplication (\texttt{m3 = m1 * m2}). \mk{20}
+\yr{CSE 201 | 2009--10}
+
+
+%% ── S6-Q23 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Show with an example how one can find the address of a particular overloaded member function of a class. \mk{5}
+\yr{CSE 201 | 2009--10}
+
+
+%% ── S6-Q27 ───────────────────────────────────────────────────────────
+
+
+
+\item Write a class named \texttt{MyString} with the following: (i) \texttt{char* data}, (ii) \texttt{int length}, (iii) default, parameterized, and copy constructors, (iv) \texttt{operator+} for concatenation, (v) \texttt{operator-} to remove all occurrences of substring, (vi) overload \texttt{=} and copy constructor if needed. \mk{22}
+\yr{CSE 201 | 2008--09}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item Create a class \texttt{Matrix} (of double values). Include member functions to: (i) create a matrix of size $m \times n$, (ii) print the matrix, (iii) overload the parenthesis operator \texttt{()} as follows:
+\begin{lstlisting}[language=C++]
+Matrix m(10, 20);
+m(1, 2) = 4.5;   // access an element
+m();              // erase matrix, set all to zero
+cout << m(1, 2); // print value at (1,2)
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2007--08}
+
+
+%% ── S6-Q22 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write a class to represent a vector. Include functions to: (i) create, (ii) modify an element, (iii) add two vectors, (iv) compute dot product, (v) print. \mk{10}
+\yr{CSE 201 | 2007--08}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S7 — Inheritance & Polymorphism
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S7}{Inheritance \& Polymorphism (C++)}{cG}{cG}
+\markboth{S7 --- Inheritance \& Polymorphism (C++)}{}
+\label{sec:S7}
+\titleformat{\section}{\large\bfseries\color{cG}}{}{0em}{}[\titlerule]
+\section{S7 --- Inheritance \& Polymorphism (C++)}
+
+\begin{enumerate}
+\item What is the diamond problem? State with example how the diamond problem can be solved using virtual inheritance. Differentiate between virtual function and virtual inheritance. \mk{4+3+3}
+\yr{CSE 107 | 2023--24}
+%% ── S7-Q1 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Demonstrate the access of private, public, and protected members of a base class in a derived class and in main, when the derived class inherits using \textbf{private} inheritance. \mk{12}
+\yr{CSE 107 | 2022--23}
+%% ── S7-Q17 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Design a program to show the use of virtual functions in achieving runtime polymorphism. \mk{12}
+\yr{CSE 107 | 2022--23}
+
+%% ── S7-Q20 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Describe the use of a virtual base class. Explain why it is not possible to create an object of an abstract class. \mk{12}
+\yr{CSE 107 | 2021--22}
+
+%% ── S7-Q7 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Describe the differences between function overloading and function overriding. \mk{10}
+\yr{CSE 107 | 2021--22}
+\variant{CSE 107 | 2019--20}
+%% ── S7-Q18 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Demonstrate the order of execution of constructor functions for multilevel inheritance with an example program. \mk{11}
+\yr{CSE 107 | 2021--22, 2019--20}
+%% ── S7-Q22 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Is it possible that a derived class inherits more than one copy of the base class? If yes, show the scenario; how can you avoid it? \mk{15}
+\yr{CSE 107 | 2019--20}
+
+%% ── S7-Q5 ────────────────────────────────────────────────────────────
+
+
+
+\item Differentiate between compile time polymorphism and run time polymorphism. \mk{8}
+\yr{CSE 107 | 2019--20}
+%% ── S7-Q19 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Describe a scenario when we cannot create an object of a class. \mk{7}
+\yr{CSE 107 | 2019--20}
+\variant{CSE 201 | 2007--08}
+%% ── S7-Q25 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Why virtual base classes are used? Give an example of a class hierarchy where virtual base class is necessary to avoid ambiguity. \mk{9}
+\yr{CSE 107 | 2017--18}
+
+%% ── S7-Q3 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Can constructor or destructor functions be declared as virtual? Explain briefly. \mk{5}
+\yr{CSE 107 | 2017--18}
+
+\item Explain what is wrong with the following code. Rewrite to solve the problem. What will be the output after fixing?
+\begin{lstlisting}[language=C++]
+class A {
+    int x;
+public:
+    void setX(int i) { x = i; }
+    void print() { cout << x; }
+};
+class B : public A { public: B() { setX(10); } };
+class C : public A { public: C() { setX(20); } };
+class D : public B, public C { };
+int main() { D d; d.print(); return 0; }
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2016--17}
+
+%% ── S7-Q6 ────────────────────────────────────────────────────────────
+
+
+
+\item Briefly explain the visibility of private, protected, and public members of a class in a derived class when the base class is inherited as private, protected, and public. \mk{15}
+\yr{CSE 107 | 2016--17}
+%% ── S7-Q15 ───────────────────────────────────────────────────────────
+%% ── S7-Q15 ───────────────────────────────────────────────────────────
+
+
+
+\item Suppose class A has virtual functions and class B publicly inherits from A. What happens if class B does not implement some virtual functions? What if they are pure virtual? \mk{10}
+\yr{CSE 107 | 2016--17}
+
+%% ── S7-Q16 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Implement a \texttt{Queue} class by inheriting from the \texttt{List} class. Your queue class should override the three functions as follows:
+\begin{itemize}
+    \item[(i)] \texttt{store} --- override this to add a new item at the end of the queue
+    \item[(ii)] \texttt{retrieve} --- override this to remove and return the value from the beginning of the queue
+    \item[(iii)] \texttt{print} --- displays the queue items as a comma separated list at the stdout
+\end{itemize}
+
+\begin{lstlisting}[language=C++]
+class ListItem
+{
+    int item;
+    ListItem * next;
+public:
+    ListItem(int arg){ item = arg; next = NULL; }
+    int getItem(){ return item; }
+    void setNext(ListItem * n){ next = n; }
+    ListItem * getNext() { return next; }
+};
+
+class List
+{
+private:
+    ListItem * head;
+    ListItem * tail;
+public:
+    List () { head = NULL; tail = NULL; }
+    virtual void store(int item)=0;
+    virtual int retrieve()=0;
+    virtual void print()=0;
+};
+\end{lstlisting}
+\mk{20}
+\yr{CSE 107 | 2016--17, 2013--14}
+%% ── S7-Q30 ───────────────────────────────────────────────────────────
+
+
+
+\item Assume the class \texttt{hand} is inherited by both \texttt{man} and \texttt{monkey}. The class \texttt{animal} inherits both. What type of inheritance is this? What is the problem? How to solve it? \mk{8}
+\yr{CSE 201 | 2015--16}
+%% ── S7-Q2 ────────────────────────────────────────────────────────────
+
+
+
+\item What are the differences between virtual function and pure virtual function? If a class contains a pure virtual function, what is it called and what restrictions apply? \mk{10}
+\yr{CSE 107 | 2015--16}
+
+%% ── S7-Q11 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Consider the bookshop example: \texttt{media} base class with \texttt{title} and \texttt{publication}; \texttt{book} subclass with number of pages; \texttt{tape} subclass with playing time. Each class has virtual \texttt{read()} and \texttt{show()}. Write a program modeling this hierarchy and processing objects using base class pointers. \mk{20}
+\yr{CSE 201 | 2015--16}
+%% ── S7-Q28 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Suppose there are three classes A, B and C. Class C wants to inherit both A and B simultaneously. Describe two ways with code examples. \mk{5}
+\yr{CSE 201 | 2012--13}
+%% ── S7-Q31 ───────────────────────────────────────────────────────────
+
+
+
+
+\item What is wrong with the following code segment?
+\begin{lstlisting}[language=C++]
+class base {
+    int x;
+public:
+    void setx(int n) { x = n; }
+    void showx() { cout << x << "\n"; }
+};
+class derived : private base {
+    int y;
+public:
+    void sety(int n) { y = n; }
+    void showy() { cout << y << "\n"; }
+};
+int main() {
+    derived ob;
+    ob.setx(10); ob.sety(20);
+    ob.showx(); ob.showy();
+    return 0;
+}
+\end{lstlisting}
+\mk{5}
+\yr{CSE 201 | 2012--13}
+%% ── S7-Q32 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Define virtual function and pure virtual function with appropriate examples. Differentiate between early binding and late binding. \mk{10}
+\yr{CSE 201 | 2011--12}
+
+%% ── S7-Q10 ───────────────────────────────────────────────────────────
+
+
+
+\item Define virtual base class with examples. Explain why a virtual base class might be necessary. \mk{4}
+\yr{CSE 201 | 2011--12}
+
+\item What happens when a public member is inherited as public, private, or protected? \mk{8+9}
+\yr{CSE 201 | 2011--12, 2010--11}
+
+%% ── S7-Q14 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item In what order are constructors called for \texttt{class myclass : public A, public B, public C \{ \}}? In what order are destructors called? \mk{3}
+\yr{CSE 201 | 2011--12}
+%% ── S7-Q24 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Define virtual function. Why is virtual function used in C++ programming? \mk{5}
+\yr{CSE 201 | 2010--11}
+\variant{CSE 201 | 2009--10; CSE 107 | 2017--18}
+
+%% ── S7-Q9 ────────────────────────────────────────────────────────────
+
+
+
+
+\item What is virtual base class? Why and when is it needed? Explain with an example. \mk{12}
+\yr{CSE 201 | 2009--10}
+\variant{CSE 201 | 2008--09; CSE 107 | 2017--18}
+
+\item Constructors cannot be virtual, but destructors can be virtual. Why? \mk{3}
+\yr{CSE 201 | 2009--10}
+%% ── S7-Q26 ───────────────────────────────────────────────────────────
+
+
+
+
+\item What are the implications of the following two definitions?
+\begin{enumerate}
+  \item \texttt{class A : public B, public C \{ \};}
+  \item \texttt{class A : public C, public B \{ \};}
+\end{enumerate}
+\mk{4}
+\yr{CSE 201 | 2007--08}
+%% ── S7-Q8 ────────────────────────────────────────────────────────────
+
+
+
+
+\item When do we make a virtual function ``pure''? What are the implications? Explain with example. \mk{6}
+\yr{CSE 201 | 2007--08}
+%% ── S7-Q12 ───────────────────────────────────────────────────────────
+
+
+
+
+
+%% ════════════════════════════════════════════════════════════════════
+%% S7 — Inheritance & Polymorphism (C++) — ANSWERS
+%% ════════════════════════════════════════════════════════════════════
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S8 — Templates & STL
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S8}{Templates \& STL}{cH}{cH}
+\markboth{S8 --- Templates \& STL}{}
+\label{sec:S8}
+\titleformat{\section}{\large\bfseries\color{cH}}{}{0em}{}[\titlerule]
+\section{S8 --- Templates \& STL}
+
+\begin{enumerate}
+
+
+\item What is erasure in terms of generic class? Consider the following \texttt{main} function and write down associated generic classes where \texttt{Gen} inherits \texttt{NonGen} and \texttt{Gen2D} inherits \texttt{Gen}:
+\begin{lstlisting}[language=C++]
+int main() {
+    NonGen ob(10);
+    Gen<char> ob1(20, 'A');
+    Gen2D<double, char *> ob2(40, 60.5, "Gen2Object");
+    
+    ob.show(); 
+    ob1.show(); 
+    ob2.show();
+    
+    cout << ob1.getob() << endl;
+    cout << ob2.getob() << endl;
+    
+    return 0;
+}
+/* Output: 
+  NonGen: 10 
+  Gen: A  
+  Gen2D: Gen2Object 
+  A 
+  Gen2Object
+*/
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2023--24}
+
+%% ── S8-Q1 ────────────────────────────────────────────────────────────
+
+
+
+\item What is STL? Explain different fundamental items of STL. \mk{5}
+\yr{CSE 107 | 2023--24}
+
+%% ── S8-Q2 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Consider that a list container contains: \texttt{20 16 12 8 4 3 6 9 12 15}. Using STL algorithms, write a C++ program that will:
+\begin{enumerate}
+  \item Count how many times 12 appears.
+  \item Count how many even numbers there are.
+  \item Remove all appearances of 12 and store the new list in a separate container.
+  \item Reverse the original list.
+  \item Replace all numbers with their squares using \texttt{transform} and iterator.
+\end{enumerate}
+\mk{10}
+\yr{CSE 107 | 2023--24}
+%% ── S8-Q3 ────────────────────────────────────────────────────────────
+
+
+
+
+\item What is a template class? Write down the hierarchy of template classes and associated 8-bit character-based classes used in C++. \mk{5}
+\yr{CSE 107 | 2023--24}
+%% ── S8-Q4 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Consider the following \texttt{main} function. Write the \texttt{myclass} template so the program produces: \texttt{1.1 2.2 3.3} and \texttt{20 25}:
+\begin{lstlisting}[language=C++]
+int main() {
+    myclass<double> d1(1.1);
+    myclass<double, 2> d2(1.1);
+    myclass<double, 3> d3(1.1);
+    cout << d1.getx() << " " << d2.getx() << " " << d3.getx() << "\n";
+    myclass<int, 4> i1(5);
+    myclass<int> i2(5);
+    cout << i1.getx() << " " << i2.getx();
+    return 0;
+}
+// Expected output:
+// 1.1 2.2 3.3
+// 20 25
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2022--23}
+%% ── S8-Q21 ───────────────────────────────────────────────────────────
+
+
+\item Write a program that demonstrates the use of the class \texttt{'map'} of C++ standard template library (STL) and fulfills the following requirements: \mk{16}
+\begin{enumerate}
+    \item Create a class \texttt{'st\_record'} that stores the name and cgpa of a student as types \texttt{string} and \texttt{double}, respectively. Add functions to the class as necessary to complete your code.
+    \item In the \texttt{'main'} function, create an object of STL class \texttt{'map'} named \texttt{'result'} to store the records of students against their student numbers (as \texttt{int}), i.e., the types of \texttt{<key,value>} pair for the map object will be \texttt{<int, st\_record>}.
+    \item Insert some dummy data (records of at least four students) in the map object \texttt{'result'}.
+    \item Traverse the map object \texttt{'result'}, find the student with the highest cgpa and print his information--student number, name and cgpa. Assume there will only be one student with the highest cgpa.
+\end{enumerate}
+\yr{CSE 107 | 2022--23}
+
+%% ── S8-Q25 ───────────────────────────────────────────────────────────
+
+
+
+\item \texttt{"Generic functions are similar to overloaded functions except that they are more restrictive"} --- do you agree? Justify your answer. \mk{5}
+\yr{CSE 107 | 2021--22}
+%% ── S8-Q9 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Design a template function \texttt{myfunc} which takes two numbers and an operator character (\texttt{`+'}, \texttt{`-'}, \texttt{`*'} or any other). Prints the result or \texttt{Invalid Input}:
+\begin{lstlisting}[language=C++]
+myfunc(10.5, 4.3, '+'); // Output: 14.8
+myfunc(4, 8, '*');      // Output: 32
+myfunc(10.5, 4.5, '-'); // Output: 6
+myfunc(3, 6, 'a');      // Output: Invalid Input
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2021--22}
+%% ── S8-Q11 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Discuss different types of containers available in C++ STL. Describe their differences with an example class for each type. \mk{12}
+\yr{CSE 107 | 2021--22}
+%% ── S8-Q12 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write a generic class named \texttt{queue} where all types of data can be stored. Support \texttt{pushQ()}, \texttt{pop()}, \texttt{size()} with exception handling. \mk{15}
+\yr{CSE 107 | 2020--21, 2014--15}
+
+
+
+
+\item Consider that the map \texttt{<stdId, student>} is used in an object-oriented programming to store the records of the students, where \texttt{stdID} (i.e., student identification number) is unique for each student. A object ``student'' contains student ID, student name, address, mobile number and CGPA. The class ``student'' contains three member functions -- a constructor, a getter for student ID and a \texttt{display()} function showing all of the above information about a student. Write down the class ``student''. Also write down a C++ program that (i) takes information about a student from the keyboard and inserts a pair into the map; and (ii) scan \texttt{stdId} from keyboard buffer and print all information abut that student from its associated object using map. Make necessary assumptions. \hfill \textbf{(6+7+7=20)}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: Map <stdId, student> ─────────────────────────────────────
+
+
+
+\item Write a class \texttt{myCalculator} using class templates to show addition, subtraction, multiplication, and division of two numbers (integer, float, or double):
+\begin{lstlisting}[language=C++]
+int main() {
+    myCalculator<int> intCalc(7, 4);
+    myCalculator<float> floatCalc(3.4, 6.2);
+    intCalc.displayResult();
+    floatCalc.displayResult();
+    return 0;
+}
+// Output: Addition: 11, Subtraction: 3, Product: 28, Division: 1
+//         Addition: 9.6, Subtraction: -2.8, Product: 21.08, Division: 0.548387
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2017--18}
+%% ── S8-Q10 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item Here is the prototype for a specific version of \texttt{find()}. Convert it to a generic function that searches an array and returns the index of matching object or -1:
+\begin{lstlisting}[language=C++]
+int find(int object, int *list, int size) { // ... }
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2015--16}
+%% ── S8-Q13 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write a generic class for implementing an extended stack supporting: \texttt{push}, \texttt{pop}, and \texttt{append} (concatenates with top element). Use RTTI for type decisions. \mk{20}
+\yr{CSE 201 | 2015--16}
+%% ── S8-Q16 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item Complete the list transformation program using \texttt{transform} and iterator to replace each element with its cubic value:
+\begin{lstlisting}[language=C++]
+int main() {
+    list<int> v;
+    for (int index = 0; index < 10; ++index)
+        v.push_back(index);
+    // complete here
+}
+\end{lstlisting}
+\mk{8}
+\yr{CSE 201 | 2015--16}
+%% ── S8-Q26 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Consider the mapping <stdID, student>. Write C++ program that scans stdId and prints student name using map . \mk{10}
+\yr{CSE 107 | 2014--15}
+%% ── S8-Q22 ───────────────────────────────────────────────────────────
+
+
+
+\item Write a interactive C++ program to maintain an employee database (ID , name , qualifiration , designation , salary) using map , supporting create, update , delete, and query opreations. \mk{20}
+\yr{CSE 107 | 2014--15, 2015--16}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item Create a generic class \texttt{input} that when constructed: prompts the user, inputs data, and reprompts if not within a predefined range. Objects declared as: \texttt{Input ob("prompt", min-val, max-val);} \mk{20}
+\yr{CSE 201 | 2013--14}
+%% ── S8-Q15 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item Write a key/value pair stored in a vector ``map''. Write a generic function that reads a key and returns the associated value. \mk{10}
+\yr{CSE 201 | 2013--14}
+%% ── S8-Q20 ───────────────────────────────────────────────────────────
+
+
+
+
+\item What do you mean by a generic class? Write C++ code to create a generic class \texttt{ARR} which can: (i) hold an array of any data type, (ii) apply bubble sort, (iii) implement \texttt{compact()} to remove elements by index range. \mk{5+20}
+\yr{CSE 201 | 2012--13}
+%% ── S8-Q5 ────────────────────────────────────────────────────────────
+
+
+
+
+
+\item What is function overloading? What is the basic difference between using an overloaded function and a generic function? \mk{5}
+\yr{CSE 201 | 2012--13}
+%% ── S8-Q7 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Write a generic class \texttt{stack} that produces instances for stack of integers, stack of doubles, and stack of characters. \mk{20}
+\yr{CSE 201 | 2011--12}
+%% ── S8-Q19 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write a generic function \texttt{min()} that returns the lesser of its two arguments. Demonstrate with a program. \mk{7}
+\yr{CSE 201 | 2008--09}
+%% ── S8-Q14 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Distinguish between overloaded functions and function templates with necessary code. \mk{5}
+\yr{CSE 201 | 2007--08}
+%% ── S8-Q8 ────────────────────────────────────────────────────────────
+
+
+
+
+
+%% ════════════════════════════════════════════════════════════════════
+%% S8 — Templates & STL — ANSWERS
+%% ════════════════════════════════════════════════════════════════════
+
+
+\end{enumerate}
+
+%%══════════════════════════════════════════════════════════════════════
+%% S9 — I/O Streams, Manipulators & File I/O
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S9}{I/O Streams, Manipulators \& File I/O}{cA}{cA}
+\markboth{S9 --- I/O Streams, Manipulators \& File I/O}{}
+\label{sec:S9}
+\titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
+\section{S9 --- I/O Streams, Manipulators \& File I/O}
+
+\begin{enumerate}
+\item Why is it important to write custom manipulators in C++ programming? Write a C++ program that generates the following output:
+\begin{verbatim}
+Enter a hexadecimal number: c2d
+You entered: *****0XC2D
+\end{verbatim}
+The program must contain two custom manipulators: \texttt{hex\_input} and \texttt{setup}. \mk{5+10}
+\yr{CSE 107 | 2023--24}
+
+%% ── S9-Q1 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Consider the following class declaration- \mk{7+3}
+
+\begin{lstlisting}[language=C++]
+class Complex {
+    int real;
+    int imaginary;
+public:
+    //-----------------------
+    //-----------------------
+};
+\end{lstlisting}
+
+\begin{enumerate}
+    \item Write down an extractor method that generates the following form of input patterns:
+\begin{verbatim}
+Enter real part: 3
+Enter imaginary part: 8
+\end{verbatim}
+    Assume that both the real and the imaginary parts accept only positive and negative integers. The extractor method checks whether the data entered is valid or not. For invalid data, the method sets failbit to indicate improper input.
+    \item Write down an inserter method that produces output like \texttt{3 + 8i}.
+\end{enumerate}
+\yr{CSE 107 | 2023--24}
+
+%% ── S9-Q14 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Design your custom inserter to generate the output: \texttt{x: 120, y: 130}
+\begin{lstlisting}[language=C++]
+class myclass {
+    int x, y;
+public:
+    myclass(int x, int y) { this->x = x; this->y = y; }
+};
+int main() { myclass ob(120, 130); cout << ob; return 0; }
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2021--22}
+%% ── S9-Q9 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Write down a manipulator named \texttt{setup} that generates the following output for \texttt{cout<<setup<<123.45678;}: \quad \texttt{123.456\%\%\%} \mk{8}
+\yr{CSE 201 | 2014--15; CSE 107 | 2020--21}
+
+%% ── S9-Q4 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Write the inserter and extractor for the \texttt{inventory} class. Modify the class as necessary:
+\begin{lstlisting}[language=C++]
+class inventory {
+    char item; int onhand; double cost;
+public:
+    inventory(char *i, int o, double c) {
+        strcpy(item, i); onhand = o; cost = c;
+    }
+};
+\end{lstlisting}
+\mk{12}
+\yr{CSE 201 | 2014--15; CSE 201 | 2011--12; CSE 107 | 2020--21}
+
+%% ── S9-Q12 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write a C++ program that emulates the DOS \texttt{filesize} command and returns the size in bytes of a file entered on the command line. Invoke as: \texttt{C>filesize program.ext}. Check that the correct number of command-line arguments is provided and that the specified file can be opened. \mk{7}
+\yr{CSE 107 | 2020--21}
+%% ── S9-Q18 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item Consider the \texttt{myclass} with an inserter using friend function:
+\begin{lstlisting}[language=C++]
+class myclass {
+    int x, y;
+public:
+    myclass(int x, int y) { this->x = x; this->y = y; }
+    friend ostream &operator<<(ostream &out, myclass ob);
+};
+ostream &operator<<(ostream &out, myclass ob) {
+    out << "x: " << ob.x << ", y: " << ob.y << endl;
+    return out;
+}
+\end{lstlisting}
+(i) Why is an inserter implemented using a friend function? (ii) What is the advantage of using \texttt{out} instead of \texttt{cout} inside the inserter? \mk{15}
+\yr{CSE 107 | 2019--20}
+
+%% ── S9-Q10 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item Write a function to check the status information of an I/O operation using \texttt{rdstate()} function. \mk{12}
+\yr{CSE 107 | 2019--20}
+%% ── S9-Q15 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\item Create a manipulator named \texttt{mystyle} that prints a number in right justified form within field width 10, precision 5. Integers in hexadecimal with \texttt{+} sign for positive values. Print 2 to 100 and corresponding natural log using this manipulator. \mk{7+7}
+\yr{CSE 107 | 2015--16}
+%% ── S9-Q2 ────────────────────────────────────────────────────────────
+
+
+
+
+
+\item A place on earth is represented by its latitude and longitude. The class \texttt{plate} is:
+\begin{lstlisting}[language=C++]
+class plate { char name; double latitude, longitude; };
+\end{lstlisting}
+Write inserter and extractor methods with the prompts/output shown below. Also write manipulator \texttt{setup} that converts decimal degrees to minutes (1 deg = 60 min). \mk{8+7+10}
+\yr{CSE 201 | 2015--16}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+\item Write down a program for checking a file I/O status. \mk{10}
+\yr{CSE 201 | 2015--16, 2011--12}
+%% ── S9-Q17 ───────────────────────────────────────────────────────────
+%% ── S9-Q17 ───────────────────────────────────────────────────────────
+
+
+
+
+\item A class \texttt{Date} contains three private variables: \texttt{day}, \texttt{month}, and \texttt{year}. Users enter the date in Bangladeshi form (e.g., \texttt{23/12/2016}) but output is in Chinese form (e.g., \texttt{2016/12/23}). (i) Define the class with a constructor; (ii) Write an extractor with prompt \texttt{"Enter a date in Bangladeshi form:"}; (iii) Write an inserter generating output: \texttt{"Date (Chinese form) is 2016/12/23"}. \mk{7+7+7}
+\yr{CSE 107 | 2015--16}
+%% ── S9-Q19 ───────────────────────────────────────────────────────────
+
+
+
+
+\item Write down a manipulator function named \texttt{setup} that sets width 10, precision 4, and fills blanks with \texttt{'*'}. \mk{10}
+\yr{CSE 201 | 2013--14}
+%% ── S9-Q3 ────────────────────────────────────────────────────────────
+
+
+
+\item Consider the variable \texttt{A = 10} (int), \texttt{B = 123.234567} (double), \texttt{S = "hello"} (string). Write a C++ program that generates the following output:
+\begin{verbatim}
+hello %%%%%hello hello%%%%%
+123.234567  123.235%%%
+\end{verbatim}
+\mk{10}
+\yr{CSE 201 | 2013--14}
+%% ── S9-Q7 ────────────────────────────────────────────────────────────
+
+
+
+
+\item What is the function of inserter and extractor in C++? What is the problem with the given \texttt{phonebook} code? Write a new class with inserter and extractor that draws a Circle object, taking radius and center as input using a \texttt{DrawPixel(x, y)} library function.
+\begin{lstlisting}[language=C++]
+class phonebook {
+    char name; int areacode, prefix, num;
+public:
+    phonebook(char *n, int a, int p, int nm) {
+        strcpy(name, n); areacode = a; prefix = p; num = nm;
+    }
+};
+void operator<<(ostream &stream, phonebook o) {
+    stream << o.name << " (" << o.areacode << ") "
+           << o.prefix << "-" << o.num << "\n";
+}
+\end{lstlisting}
+\mk{5+5+15}
+\yr{CSE 201 | 2012--13}
+
+%% ── S9-Q8 ────────────────────────────────────────────────────────────
+
+
+
+\item Explain two different formatted I/O handling techniques used in C++ programming. Write a manipulator that prints floating point output with width=10, precision=4, filling blanks with \texttt{'*'}. \mk{12}
+\yr{CSE 201 | 2011--12}
+%% ── S9-Q5 ────────────────────────────────────────────────────────────
+
+
+
+
+
+\item Create a program that prints the natural logarithm and base-10 logarithm of numbers from 2 to 100. Format: right justified within field width 10, precision 5. \mk{10}
+\yr{CSE 201 | 2010--11}
+%% ── S9-Q6 ────────────────────────────────────────────────────────────
+
+
+
+\item Create an inserter and extractor for this class:
+\begin{lstlisting}[language=C++]
+class pwr {
+    int base, exponent; double result;
+public:
+    pwr(int b, int e) {
+        base = b; exponent = e; result = 1;
+        for (; e; e--) result = result * base;
+    }
+};
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2010--11}
+%% ── S9-Q13 ───────────────────────────────────────────────────────────
+
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S10 — Java Basics, Arrays & Strings
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S10}{Java Basics, Arrays \& Strings}{cB}{cB}
+\markboth{S10 --- Java Basics, Arrays \& Strings}{}
+\label{sec:S10}
+\titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
+\section{S10 --- Java Basics, Arrays \& Strings}
+
+\begin{enumerate}
+\item What will be the output of the following code? What is the problem with the loop for efficiency? Rewrite for efficiency (single thread):
+\begin{lstlisting}[language=Java]
+class Q1 {
+    public static void main(String[] args) {
+        String s1 = "Hello";
+        String s2 = new String("Hello");
+        String s3 = "Hello";
+        s2.intern();
+        System.out.println(s1 == s2);
+        System.out.println(s1 == s3);
+        System.out.println(s2 == s3);
+        final String s0 = "Hello";
+        final String t0 = "World";
+        String t1 = s0 + t0;
+        String t2 = new String("HelloWorld");
+        String t3 = "HelloWorld";
+        t3.intern();
+        System.out.println(t1 == t2);
+        System.out.println(t1 == t3);
+        System.out.println(t2 == t3);
+    }
+}
+String result = "";
+for (int i = 0; i < 10000; i++) { result += i; }
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2023--24}
+
+%% ── Answer: String == + StringBuilder fix ───────────────────────────
+
+
+
+\item Write the Java function \texttt{minmax} (only one function):
+\begin{lstlisting}[language=Java]
+int a = minmax("min", 2, 1, 6, 4, 5); // a = 1
+int b = minmax("min", 3, 0, 6);       // b = 0
+int c = minmax("max", 1, -2, 6, 5);   // c = 6
+int d = minmax("max", 1, 3, 7);       // d = 7
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2022--23, 2019--20, 2016--17}
+\variant{CSE 107 | 2022--23 (as \texttt{maxmin})}
+
+%% ── Answer: minmax varargs ──────────────────────────────────────────
+
+
+
+
+\item What are the problems with the following Java code?
+\begin{lstlisting}[language=Java]
+public class TestStatic {
+    static int a = 3, b;
+    int c;
+    { c = 10; }
+    static { b = a * 4; c = b; }
+    int f2() { return a * b; }
+    static void f1(int x) {
+        System.out.println("x =" + x);
+        System.out.println("c =" + c);
+    }
+    public static void main(String[] args) {
+        f1(42);
+        System.out.println("Area = " + f2());
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2019--20}
+
+%% ── Answer: TestStatic errors ───────────────────────────────────────
+
+
+
+\item Identify all the problems in the following code segment:
+\begin{lstlisting}[language=Java]
+static class StaticTest {
+    static int x = 5, y;
+    int z;
+    { x = 5; z = 20; }
+    static { y = x * 4; z = y; }
+    int s1() { return x * y; }
+    static void s2() {
+        System.out.println("z = " + z);
+    }
+    public static void main(String[] args) {
+        s1();
+        System.out.println("z = " + z);
+        s2();
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2022--23}
+
+%% ── Answer: StaticTest errors ───────────────────────────────────────
+
+
+
+\item Describe 3 different ways to convert an int value to a String. \mk{10}
+\yr{CSE 107 | 2021--22}
+
+%% ── Answer: int to String conversion ───────────────────────────────
+
+
+
+\item Describe boxing and unboxing in Java. Give examples with primitive \texttt{int} and \texttt{Integer}. Explain the difference between boxing/unboxing and autoboxing/auto-unboxing with code. When should you not use autoboxing? \mk{10}
+\yr{CSE 107 | 2021--22}
+
+%% ── Answer: Type wrappers + autoboxing ──────────────────────────────
+
+
+
+\item What is the difference between the following two declarations?
+\begin{enumerate}
+  \item \texttt{int c[][], x;}
+  \item \texttt{int[][] c, x;}
+\end{enumerate}
+Write 2 different ways of creating a jagged array in Java. \mk{10}
+\yr{CSE 107 | 2019--20, 2020--21}
+
+%% ── Answer: 2-D array declaration + jagged arrays ───────────────────
+
+
+
+\item Consider the following code segment. List with explanation all the auto-boxing and auto-unboxing performed in the \texttt{main} method:
+\begin{lstlisting}[language=Java]
+public class AutoBoxingUnboxingDemo {
+    static int f(Integer v) { return v; }
+    public static void main(String args[]) {
+        Integer a = f(100);
+        Integer iOb, iOb2;
+        int i;
+        iOb = 100;
+        ++iOb;
+        iOb2 = iOb + (iOb / 3);
+        i = iOb + (iOb / 3);
+        Integer intOb = 100;
+        Double doubleOb = 98.6;
+        doubleOb = doubleOb + intOb;
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | Jan 2021}
+
+%% ── Answer: AutoBoxingUnboxingDemo analysis ─────────────────────────
+
+
+
+\item A singleton class is a class that can have only one object at a time. After the first
+time, if we try to instantiate a singleton class, the new variable also points to the first
+object created. Write a complete Java code to create a singleton class named
+MySingleton, where the single instance can be retrieved using a method called
+getlnstance. \mk{10}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: Singleton pattern ───────────────────────────────────────
+
+
+
+
+\item Consider the following code segment. How many of the 4 method calls will generate a compiler error and why?
+\begin{lstlisting}[language=Java]
+public class VarArgsTest {
+    static void f(int... v) { }
+    static void f(String msg, boolean... v) { }
+    static void f(String msg, int... v) { }
+    static void f(int n, int... v) { }
+    static void f(double... v) { }
+    public static void main(String[] args) {
+        f("Int", 10, 20, 30);
+        f("boolean", true, false, false);
+        f();
+        f(1, 2, 3);
+    }
+}
+\end{lstlisting}
+\mk{5}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: VarArgs ambiguity errors ────────────────────────────────
+
+
+
+\item Consider your own StringTokenizer class - \textbf{MyStringTokenizer} with the following methods:
+
+
+Write complete Java code for your \textbf{MyStringTokenizer} class. You can add necessary instance variables. You can't use the original \texttt{StringTokenizer} class. You can only use the \texttt{split} method of \texttt{String} class which works as follows:
+\begin{verbatim}
+String s = "what is your name?";
+String [] t = s.split(" ");
+t[0] = what, t[1] = is, t[2] = your, t[3] = name
+\end{verbatim}
+\mk{10}\yr{CSE 107 | 2020--21; CSE 201 | 2014--15}
+
+%% ── Answer: MyStringTokenizer ───────────────────────────────────────
+
+
+
+\item Identify the problems in the following code segment and write the complete corrected code:
+\begin{lstlisting}[language=Java]
+class A {
+    var x;
+    void getX() { return x; }
+    void setX(int x) { x = x; }
+}
+public static void main(String[] args) {
+    A[] a = new A[10];
+    for (int i = 0; i < a.length(); i++) { a[i].setX(i); }
+    for (int i = 0; i < a.length(); i++) { System.out.println(a[i].getX()); }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: Fix class A code ────────────────────────────────────────
+
+
+
+\item What do you mean by auto-boxing and auto-unboxing? When should you not use them? \mk{5+5}
+\yr{CSE 107 | 2016--17, 2019--20}
+
+\item What is the difference between the following two declarations in Java?
+\begin{enumerate}
+  \item \texttt{int c[], x;}
+  \item \texttt{int[] c, x;}
+\end{enumerate}
+\mk{6}
+\yr{CSE 201 | 2014--15, 2007--08; CSE 107 | 2017--18}
+
+%% ── Answer: int c[], x vs int[] c, x ───────────────────────────────
+
+
+
+\item Write a Java program that takes a String as input and prints the number of tokens (delimiter: space) and the tokens themselves. \mk{10}
+\yr{CSE 107 | 2017--18}
+
+%% ── Answer: StringTokenizer / split ────────────────────────────────
+
+
+
+\item What is a type wrapper? Name any three. Why are type wrappers needed? \mk{3+3+4}
+\yr{CSE 107 | 2017--18}
+
+\item What are boxing and unboxing? Give an example for each. \mk{10}
+\yr{CSE 107 | 2017--18}
+
+\item What is the full prototype of Java \texttt{main} method? Describe the significance of each term. \mk{5}
+\yr{CSE 201 | 2007--08; CSE 107 | 2016--17}
+
+%% ── Answer: Java main method prototype ──────────────────────────────
+
+
+
+\item What are type wrappers? Why are they used? Explain Autoboxing and Auto-unboxing with examples. \mk{10}
+\yr{CSE 107 | 2015--16}
+
+\item You need to write a method \texttt{editStudentDetails()} that takes name, age, and cgpa as input, modifies them inside the method, and makes changed values available outside. Show in \texttt{main()} how to call this method and access the changed values. \mk{10}
+\yr{CSE 201 | 2015--16}
+
+%% ── Answer: editStudentDetails wrapper object ───────────────────────
+
+
+
+\item Write Java code that takes $n$ integers from the command line and prints the maximum and minimum. \mk{10}
+\yr{CSE 201 | 2014--15; CSE 201 | 2007--08}
+
+%% ── Answer: Command-line max and min ────────────────────────────────
+
+
+
+\item Consider the following \texttt{main} method. Write the Java function \texttt{testf} (only one function allowed):
+\begin{lstlisting}[language=Java]
+public clas TestMain{
+    public static void main(String[]args){
+        int a = testf("sum", 1, 2, 4, 5, 6);  // a = 18
+        int b = testf("sum", 1, 3, 6);        // b = 10
+        int c = testf("mult", 1, 2, 4, 5, 6); // c = 240
+        int d = testf("mult", 1, 3, 6);       // d = 18
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2014--15}
+
+%% ── Answer: testf varargs ───────────────────────────────────────────
+
+
+
+\item Write down the differences between: (i) \texttt{String} and \texttt{StringBuffer} classes in Java; (ii) method overriding and method overloading. \mk{6}
+\yr{CSE 201 | 2013--14}
+
+\item Write a method that accepts an array of Strings \texttt{SearchList} and a search String \texttt{SearchKey}. The method determines and returns the number of occurrences of \texttt{SearchKey} in \texttt{SearchList}. \mk{8}
+\yr{CSE 201 | 2012--13}
+
+%% ── Answer: countOccurrences method ─────────────────────────────────
+
+
+
+\item Write a code segment to create a 2-D array of Integer class which will contain 4 rows. Each row will have 3, 1, 10, and 5 columns respectively. \mk{7}
+\yr{CSE 201 | 2012--13}
+
+%% ── Answer: 2-D Integer jagged array ───────────────────────────────
+
+
+
+\item Differentiate between primitive types and reference types in Java. \mk{5}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: Primitive vs reference types ────────────────────────────
+
+
+
+\item Write two differences between Java reference and C++ pointer. \mk{4}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: Java reference vs C++ pointer ───────────────────────────
+
+
+
+\item Create a jagged array having three rows with 2, 5, and 3 elements respectively. All elements initialized to default values. Write code to print the contents using Java's for-each statement only. \mk{4+4}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: Jagged array + for-each print ───────────────────────────
+
+
+
+\item What is the role of Garbage Collector in Java? Consider the following code snippet and answer: (i) What will be the output? (ii) How many String objects will be created? Show contents of each and which will be garbage collected.
+\begin{lstlisting}[language=Java]
+String s1 = "It";
+String s2 = "was";
+String s3 = s1 + " " + s2;
+s2 += " roses, ";
+s3 = s3 + s2 + "roses all the way.";
+System.out.println(s3);
+\end{lstlisting}
+\mk{2+8}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: GC + String object count ───────────────────────────────
+
+
+
+\item What do you understand by short-circuit evaluation related to operators in Java? Which operators show this behavior? Explain with an example. \mk{8}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: Short-circuit evaluation ───────────────────────────────
+
+
+
+\item Explain two usages of the keyword \texttt{static}. \mk{8}
+\yr{CSE 201 | 2010--11}
+
+\item What is the use of an \texttt{import} declaration in Java? What is the restriction? Mention two cases where import declarations are not required. \mk{6}
+\yr{CSE 201 | 2010--11}
+
+\item Write the names, byte size, and default values of the primitive data types in Java. \mk{15}
+\yr{CSE 201 | 2009--10}
+
+%% ── Answer: Primitive data types ────────────────────────────────────
+
+
+
+\item What are the five phases Java programs normally go through? Briefly describe them. \mk{10}
+\yr{CSE 201 | 2008--09}
+
+%% ── Answer: Five phases of a Java program ───────────────────────────
+
+
+
+
+
+
+\item Write two different usages with examples for each of the following Java keywords: (i) \texttt{this}, (ii) \texttt{final}, (iii) \texttt{super}, (iv) \texttt{extends}, (v) \texttt{static}. \mk{20}
+\yr{CSE 201 | 2009--10}
+
+%% ── Q26: Two usages each of this, final, super, extends, static ───────
+
+
+
+\item Write Java code to create the following multidimensional array:
+\yr{2007--2008}
+\begin{lstlisting}
+0 0 0 0
+0 0 0
+0 0
+0
+\end{lstlisting}
+
+%% ── Q8: Jagged multidimensional array ────────────────────────────────
+
+
+
+
+\item Write a Java code that takes $n$ integers from the command line and outputs the maximum. Example: \texttt{java Max 1 2 4 5 -3 6 10 -7} outputs \texttt{10}.
+\yr{2007--2008}
+
+%% ── Q9: Max from command-line args ───────────────────────────────────
+
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S11 — Java OOP: Classes, Inheritance & Polymorphism
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S11}{Java OOP: Classes, Inheritance \& Polymorphism}{cC}{cC}
+\markboth{S11 --- Java OOP: Classes, Inheritance \& Polymorphism}{}
+\label{sec:S11}
+\titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
+\section{S11 --- Java OOP: Classes, Inheritance \& Polymorphism}
+
+\begin{enumerate}
+\item What will be the output of the following code?
+\begin{lstlisting}[language=Java]
+abstract class X {
+    X() { System.out.println("X Constructor"); draw(); }
+    abstract void draw();
+    abstract void process(int x);
+    void process(Object o) { System.out.println("X process Object"); }
+}
+class Y extends X {
+    int y = 5;
+    Y() { System.out.println("Y Constructor"); }
+    void draw() { System.out.println("Y with y =" + y); }
+    void process(int x) { System.out.println("Y process int"); }
+    void process(String s) { System.out.println("Y process String"); }
+}
+class Test {
+    public static void main(String[] args) {
+        X obj = new Y();
+        obj.process(10);
+        obj.process("hello");
+        obj.process((Object)"hello");
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2023--24}
+
+%% -- Q17 -------------------------------------------------------------
+
+
+
+\item Write Java code for the following using a \texttt{Book} class to achieve the expected output:
+\begin{lstlisting}[language=Java]
+class Book {
+    private String title;
+    private String author;
+    private int year;
+    private int edition;
+
+    public Book(String title, String author, int year, int edition) {
+        this.title = title;
+        this.author = author;
+        this.year = year;
+        this.edition = edition;
+    }
+
+    public static void main(String[] args) {
+        Book b1 = new Book("1984", "George Orwell", 1949, 1);
+        Book b2 = new Book("1984", "George Orwell", 1949, 2);
+        
+        System.out.println(b1);            // Book (1984, George Orwell, 1949, 1)
+        System.out.println(b1 == b2);      // false
+        System.out.println(b1.equals(b2)); // true
+        
+        HashSet<Book> set = new HashSet<>();
+        set.add(b1);
+        set.add(b2);
+        System.out.println(set.size());    // 1
+    }
+}
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2023--24}
+
+%% -- Q20 -------------------------------------------------------------
+
+
+
+\item Consider the following \texttt{Point} and \texttt{Circle} classes. Complete them to achieve the expected output:
+\begin{lstlisting}[language=Java]
+import java.util.HashMap;
+
+class Point {
+    private int x, y;
+
+    Point(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Circle {
+    Point center;
+    int radius;
+
+    Circle(int x, int y, int r) {
+        center = new Point(x, y);
+        this.radius = r;
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        Circle c1 = new Circle(10, 20, 5);
+        Circle c2 = new Circle(10, 20, 5);
+        System.out.println(c1);
+        System.out.println(c2);
+        System.out.println(c1.equals(c2));
+        HashMap<Circle, String> m = new HashMap<>();
+        m.put(c1, "l am a Circle");
+        System.out.println(m.get(c2));
+    }
+}
+    
+// Expected output:
+// Circle: center (10, 20), radius: 5
+// Circle: center (10, 20), radius: 5
+// true
+// I am a Circle
+// Note: Point's getters for x and y are private
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2021--22}
+
+%% -- Q16 -------------------------------------------------------------
+
+
+
+\item Complete the \texttt{Movie} class (with \texttt{title}, \texttt{releaseYear}, \texttt{productionCompany}, \texttt{runningTime}) to achieve the expected output:
+\begin{lstlisting}[language=Java]
+Movie m1 = new Movie("The Lord of the Rings", 2001, "New Line Cinema", 178);
+Movie m2 = new Movie("The Lord of the Rings", 2001, "WingNut Films", 178);
+System.out.println(m1 == m2);        // false
+System.out.println(m1.equals(m2));   // true
+HashMap map = new HashMap();
+map.put(m1, 93);
+System.out.println(map.get(m2));     // 93
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2020--21}
+
+%% -- Q21 -------------------------------------------------------------
+
+
+
+\item Complete the \texttt{Institute}/\texttt{College}/\texttt{Movie} class to achieve the expected output (\texttt{equals} returns \texttt{true}, \texttt{HashMap.get} returns \texttt{100}):
+\begin{lstlisting}[language=Java]
+// Expected output: true, 100
+College c1 = new College(135790, 1, 1, 0);
+College c2 = new College(135790, 1, 1, 0);
+System.out.println(c1.equals(c2));
+HashMap map = new HashMap();
+map.put(c1, 100);
+System.out.println(map.get(c2));
+\end{lstlisting}
+\mk{8+10}
+\yr{CSE 107 | 2016--17, 2019--20, 2020--21}
+
+%% -- Q22 -------------------------------------------------------------
+
+
+
+\item Write Java code to fix the problems in the \texttt{main} method:
+\begin{lstlisting}[language=Java]
+class P { int x = 1;
+    class Q { int y = 2; }
+    static class R { int z = 3; }
+}
+public class NestedClassTest {
+    public static void main(String[] args) {
+        P p = new P(); p.print(); p.show();
+        Q q = new Q(); q.print();
+        R r = new R(); r.print();
+    }
+}
+\end{lstlisting}
+\mk{5}
+\yr{CSE 107 | 2020--21, 2017--18}
+
+%% -- Q26 -------------------------------------------------------------
+
+
+
+\item Write Java code for an \texttt{Animal} hierarchy where the \texttt{Animal} class cannot be instantiated:
+\begin{lstlisting}[language=Java]
+Bird alex = new Albatross("Alex", 39);
+Mammal spot = new Dog("Spot", 7);
+Mammal fred = new FruitBat("Fred", 10);
+Reptile steph = new EasternBrownSnake("Steph", 12);
+Fish bruce = new GreatWhiteShark("Bruce", 40);
+Arachnid charlotte = new RedBackSpider("Charlotte", 1);
+Animal[] animals = {alex, spot, fred, steph, bruce, charlotte};
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2020--21}
+
+%% -- Q27 -------------------------------------------------------------
+
+
+
+\item Explain briefly dynamic method dispatching. \mk{6}
+\yr{CSE 107 | 2017--18}
+
+%% -- Q19 -------------------------------------------------------------
+
+
+
+\item Write Java code to exchange two integer variables using a method named \texttt{swap}. The changes inside the method must be visible to the \texttt{main} method. Write the \texttt{main} method too. \mk{7}
+\yr{CSE 107 | 2016--17}
+
+%% -- Q13 -------------------------------------------------------------
+
+
+
+\item Write Java code for a \texttt{TwoDimMatrix} class: input, print, determinant, and \texttt{div(A)} methods. \mk{15}
+\yr{CSE 201 | 2015--16}
+
+%% -- Q23 -------------------------------------------------------------
+
+
+
+\item Write a Java program to store student records as a collection. \texttt{Student} contains Name, Age, CGPA. Sort by: descending CGPA first; if equal, ascending age; if equal, lexicographic order. \mk{20}
+\yr{CSE 201 | 2015--16}
+
+%% -- Q24 -------------------------------------------------------------
+
+
+
+\item Write a program to take input of 120 students, sort them as described above, and write all student information to a file named \texttt{Students.Info}. Write student objects directly to file and read them back as objects. \mk{15}
+\yr{CSE 201 | 2015--16}
+
+%% -- Q25 -------------------------------------------------------------
+
+
+
+\item What is the difference between declaring a variable with \texttt{protected} access modifier versus no modifier? \mk{5}
+\yr{CSE 201 | 2013--14}
+
+%% -- Q6 --------------------------------------------------------------
+
+
+
+\item How is multiple inheritance implemented in Java? Can an abstract class be final? Explain briefly. \mk{4+4}
+\yr{CSE 201 | 2013--14}
+
+%% -- Q7 --------------------------------------------------------------
+
+
+
+\item Write a class \texttt{Animal} that has name and age as member variables. Write another class that adds 3 animals to an ArrayList and removes the animal named ``Lion''. \mk{10}
+\yr{CSE 201 | 2012--13}
+
+%% -- Q1 --------------------------------------------------------------
+
+
+
+\item A movie club contains many movies. Each movie has a title and one or more directors. A movie may be borrowed and returned. Write \texttt{Movie} and \texttt{MovieClub} classes with a method to return current number of movies. \mk{16}
+\yr{CSE 201 | 2012--13}
+
+%% -- Q2 --------------------------------------------------------------
+
+
+
+\item Write a student class with: id, name, course, number of units completed. Write \texttt{inc()} to increment units by one. Write another class to create a student object, get units, call \texttt{inc()}, and display the object's state. \mk{14}
+\yr{CSE 201 | 2012--13}
+
+%% -- Q3 --------------------------------------------------------------
+
+
+
+\item Show two examples of using the \texttt{super} keyword. \mk{4}
+\yr{CSE 201 | 2012--13}
+
+%% -- Q4 --------------------------------------------------------------
+
+
+
+\item What are the properties of static variables and methods? Why is \texttt{main()} declared as static? \mk{6+5}
+\yr{CSE 201 | 2012--13}
+
+%% -- Q5 --------------------------------------------------------------
+
+
+
+\item Write a short note on the lifetime of an object in Java. \mk{6}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q8 --------------------------------------------------------------
+
+
+
+\item Discuss the access levels of a constructor method of a class in Java. \mk{8}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q10 -------------------------------------------------------------
+
+
+
+\item What is the purpose of the method \texttt{finalize} in \texttt{Object}? Why is its use discouraged? \mk{8}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q11 -------------------------------------------------------------
+
+
+
+\item Why does the \texttt{main} method not require an \texttt{argc}-type parameter for command line arguments? \mk{4}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q12 -------------------------------------------------------------
+
+
+
+\item What is run-time polymorphism? How does Java achieve run-time polymorphism? \mk{6}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q18 -------------------------------------------------------------
+
+
+
+\item Override the \texttt{equals(Object obj)} method in the following \texttt{Student} class so that two students are equal if they have the same \texttt{name} and \texttt{cgpa}:
+\begin{lstlisting}[language=Java]
+class Student {
+    private int id; private String name; private double cgpa;
+    public Student(int i, String n, double c) { id=i; name=n; cgpa=c; }
+}
+// s1.equals(s2) -> false (different name), s1.equals(s3) -> true (same name+cgpa)
+// s1.equals(s4) -> false (same name, different cgpa)
+\end{lstlisting}
+\mk{11}
+\yr{CSE 201 | 2010--11}
+
+%% -- Q9 --------------------------------------------------------------
+
+
+
+\item Suppose the following class is defined:
+\begin{lstlisting}[language=Java]
+class Point {
+    int x, y;
+    Point(int x1, int y1) { x = x1; y = y1; }
+}
+\end{lstlisting}
+State the values of Point objects after each statement:
+\begin{lstlisting}[language=Java]
+Point point1; Point point2;
+point1 = new Point(10, 20);
+point2 = point1;
+point1 = new Point(30, 60);
+point1 = point2;
+\end{lstlisting}
+\mk{6}
+\yr{CSE 201 | 2007--08}
+
+%% -- Q14 -------------------------------------------------------------
+
+
+
+\item Write Java code for the following regarding arrays of reference types vs primitive types. What is the difference between \texttt{int c[], x;} and \texttt{int[] c, x;}? \mk{6}
+\yr{CSE 201 | 2007--08}
+
+%% -- Q15 -------------------------------------------------------------
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S12 — Interfaces, Abstract Classes & Nested Classes
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S12}{Interfaces, Abstract Classes \& Nested Classes}{cD}{cD}
+\markboth{S12 --- Interfaces, Abstract Classes \& Nested Classes}{}
+\label{sec:S12}
+\titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
+\section{S12 --- Interfaces, Abstract Classes \& Nested Classes}
+
+\begin{enumerate}
+\item Also fix the following:
+\begin{lstlisting}[language=Java]
+interface X1 { void m1(); static void m2(); default void m3(); }
+interface X2 { private void m4(); void m5(); }
+abstract class A1 implements X1 { final void m6(); abstract void m7(); }
+class A2 extends A1 implements X2 { /* your code */ }
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2023--24}
+
+%% ── Answer: Fix X1/X2/A1 errors + write A2 ─────────────────────────
+
+
+
+\item What are two types of nested classes? What are the differences between them? List all problems in the following code. Write Java code to fix only the problems in the \texttt{main} method:
+\begin{lstlisting}[language=Java]
+class X {
+    int a = 1;
+    void display() { Y obY = new Y(); obY.display(); Z obZ = new Z(); obZ.display(); }
+    void showNested() { System.out.println(b); System.out.println(c); }
+    class Y { int b = 2; void display() { System.out.println(a); System.out.println(b); } }
+    static class Z { int c = 3; void display() { System.out.println(a); System.out.println(c); } }
+}
+class Test {
+    public static void main(String[] args) {
+        X obX = new X(); obX.display(); obX.showNested();
+        Y obY = new Y(); obY.display();
+        Z obZ = new Z(); obZ.display();
+    }
+}
+\end{lstlisting}
+\mk{20}
+\yr{CSE 107 | Jan 2021, 2023--24}
+
+%% ── Answer: Nested classes types + differences + fix main ───────────
+
+
+
+
+
+\item Outline the errors in the provided code and fix them without removing access modifiers. Then write the minimum code for class \texttt{c2} so it compiles:
+\begin{lstlisting}[language=Java]
+interface i1 { default void f1(); void f2(); static void f3(); }
+interface i2 { void f4(); private void f5(); }
+abstract class c1 implements i1 {
+    abstract void f6(); final void f7() { }
+}
+class c2 extends c1 implements i2 { /* your code */ }
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2022--23}
+
+%% ── Answer: Fix interface/abstract class errors + c2 ────────────────
+
+
+
+\item 7 methods: \texttt{f1()}--\texttt{f7()}, 3 interfaces \texttt{i1}--\texttt{i3}, 1 abstract class \texttt{A}. Constraints: (i) each interface $\leq$ 2 methods; (ii) abstract class \texttt{A} can only implement 1 interface and define $\leq$ 1 abstract method; (iii) \texttt{MyClass} cannot implement any interface. Write Java code. \mk{10}
+\yr{CSE 107 | 2022--23, 2020--21}
+
+%% ── Answer: 7 methods, 3 interfaces, abstract class, MyClass ────────
+
+
+
+\item Write minimum code in class \texttt{c2}/\texttt{B} for successful compilation. You cannot define it as abstract:
+\begin{lstlisting}[language=Java]
+interface i1 { default void f1() { } void f2(); }
+interface i2 { void f3(); void f4(); }
+abstract class c1 implements i1 {
+    abstract void f5();
+    final void f6() { }
+}
+class c2 extends c1 implements i2 { /* your code */ }
+\end{lstlisting}
+\mk{6+10}
+\yr{CSE 107 | 2016--17, 2019--20, 2021--22, Jan 2021}
+\variant{CSE 201 | 2014--15, 2008--09}
+
+%% ── Answer: Minimum code for c2 ─────────────────────────────────────
+
+
+
+\item Explain three uses of the \texttt{final} keyword with short examples. Describe the fundamental differences between an interface and an abstract class. \mk{10}
+\yr{CSE 107 | 2021--22}
+
+%% ── Answer: final keyword uses + interface vs abstract class ─────────
+
+
+
+
+
+\item What is the problem with the code below? Write two different ways to fix the problem:
+\begin{lstlisting}[language=Java]
+interface A { default void f() { System.out.println("A's f"); } }
+interface B { default void f() { System.out.println("B's f"); } }
+public class C implements A, B { }
+\end{lstlisting}
+\mk{7}
+\yr{CSE 107 | 2016--17, Jan 2021}
+
+%% ── Answer: Default method conflict in interfaces ────────────────────
+
+
+
+\item Suppose there are 7 methods: \texttt{f1()}--\texttt{f7()}, 4 interfaces \texttt{i1}--\texttt{i4}, and a class \texttt{MyClass}. Constraints: (i) each interface defines at most 2 methods; (ii) \texttt{MyClass} can only implement 1 interface. Write Java code for \texttt{MyClass}. \mk{10}
+\yr{CSE 107 | 2019--20, Jan 2021; CSE 201 | 2014--15, 2008--09}
+\variant{CSE 201 | 2007--08}
+
+%% ── Answer: 7 methods, 4 interfaces, MyClass implements 1 ───────────
+
+
+
+
+
+\item Write three uses of \texttt{final} keyword with examples. \mk{6}
+\yr{CSE 201 | 2007--08, 2008--09; CSE 107 | 2017--18}
+
+%% ── Answer: Three uses of final (6 marks) ───────────────────────────
+
+
+
+\item What is an inner class? Point out the problem in the following code segment (if any):
+\begin{lstlisting}[language=Java]
+class Outer {
+    int outer_x = 5;
+    void test() { Inner inner = new Inner(); inner.display(); }
+    class Inner { int z = 60; void display() { System.out.println(outer_x); } }
+    void showz() { System.out.println(z); }
+}
+\end{lstlisting}
+\mk{3+6}
+\yr{CSE 107 | 2017--18}
+
+%% ── Answer: Inner class + problem in code ───────────────────────────
+
+
+
+\item What is abstract class? Write the restrictions imposed on an abstract class. Point out and fix the problems in the following code:
+\begin{lstlisting}[language=Java]
+final class X { final void show() { System.out.println("Printed from a method"); } }
+class Y extends X { void show() { System.out.println("In subclass method"); } }
+\end{lstlisting}
+\mk{3+2+6}
+\yr{CSE 107 | 2017--18}
+
+%% ── Answer: Abstract class restrictions + fix final class code ───────
+
+
+
+\item Consider the following Java code and write minimum code for \texttt{myclass}:
+\begin{lstlisting}[language=Java]
+interface Intl { void f1(); void f2(); }
+interface Int2 extends Intl { void f3(); }
+class MyClass implements Int2 { /* Complete this class */ }
+public class Test {
+    public static void main(String[] args) {
+        MyClass my = new MyClass();
+        my.f1(); my.f2(); my.f3();
+    }
+}
+\end{lstlisting}
+\mk{9}
+\yr{CSE 107 | 2017--18}
+
+%% ── Answer: MyClass implementing Int2 ───────────────────────────────
+
+
+
+\item Write Java code to do the following: (i) Declare a static nested class \texttt{Inner1} of \texttt{Outer1} and create an object of \texttt{Inner1} in \texttt{NestedDemo.main()}. (ii) Declare an inner class \texttt{Inner2} of \texttt{Outer2} and create an object of \texttt{Inner2} in \texttt{NestedDemo.main()}. \mk{8}
+\yr{CSE 107 | 2016--17}
+
+%% ── Answer: Create static nested and inner class objects ─────────────
+
+
+
+\item What are the two uses of the \texttt{super} keyword? What is an abstract class? What are the restrictions? \mk{10}
+\yr{CSE 107 | 2016--17}
+
+%% ── Answer: super keyword + abstract class ───────────────────────────
+
+
+
+
+
+
+
+
+
+\item When we say ``a class is final'' or ``a method is final'' --- what does it mean? Show example codes. \mk{5}
+\yr{CSE 107 | 2015--16}
+
+%% ── Answer: final class and final method meaning ─────────────────────
+
+
+
+\item What is a static code block? When is it executed? Can there be multiple static code blocks? In what sequence? Show with example. \mk{10}
+\yr{CSE 107 | 2015--16}
+
+%% ── Answer: Static code block ────────────────────────────────────────
+
+
+
+\item What are the three uses of Java \texttt{final} keyword? \mk{5}
+\yr{CSE 201 | 2014--15}
+
+%% ── Answer: Three uses of final ─────────────────────────────────────
+
+
+
+
+
+\item Write an interface and a class that implements it. Show how objects can be created using an interface. \mk{10}
+\yr{CSE 201 | 2012--13}
+
+%% ── Answer: Interface and implementing class ─────────────────────────
+
+
+
+\item Write the differences between abstract class and interface. \mk{5}
+\yr{CSE 201 | 2012--13}
+
+%% ── Answer: Abstract class vs interface ─────────────────────────────
+
+
+
+\item Write the use of \texttt{abstract} and \texttt{final} keywords in Java with examples. \mk{7}
+\yr{CSE 201 | 2011--12}
+
+%% ── Answer: abstract and final keywords ─────────────────────────────
+
+
+
+\item What are the differences between static nested class and inner class? \mk{5}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: Static nested vs inner class differences ────────────────
+
+
+
+\item Do you agree or disagree: ``All interfaces are abstract classes but not all abstract classes are interfaces''? Give valid reasoning. \mk{4}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: Interface vs abstract class relationship ─────────────────
+
+
+
+\item What are the two types of nested classes in Java? Briefly describe them. What are the rules regarding access of nested class and outer class? \mk{6}
+\yr{CSE 201 | 2007--08}
+
+%% ── Answer: Two types of nested classes + access rules ──────────────
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S13 — Exception Handling
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S13}{Exception Handling}{cE}{cE}
+\markboth{S13 --- Exception Handling}{}
+\label{sec:S13}
+\titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
+\section{S13 --- Exception Handling}
+
+\begin{enumerate}
+\item What is the problem in the following C++ program? Rewrite using exception handling:
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+int divide() {
+    int d = 0;
+    int a = 10 / d;
+    return a;
+}
+int main() { cout << divide() << endl; return 0; }
+\end{lstlisting}
+\mk{2+5}
+\yr{CSE 107 | 2023--24}
+
+%% -- Q1 --------------------------------------------------------------
+
+
+
+
+
+
+\item Consider a class \texttt{BankAccount}. Write: (i) \texttt{InvalidAmountException};\\ (ii) \texttt{InsufficientBalanceException}; (iii) complete \texttt{BankAccount}/\texttt{Account} class: \mk{15}
+\yr{CSE 107 | 2022--23}
+
+%% -- Q13 -------------------------------------------------------------
+
+
+
+
+
+\item Write the name of the five keywords in Java dedicated to exception handling. \mk{15}
+
+Consider a class named \texttt{BankAccount} with the following information:
+\begin{itemize}
+    \item \texttt{double balance} -- the balance of the account
+    \item \texttt{void init(double amount)} -- this method sets the amount as the initial balance
+    \item \texttt{void debit(double amount)} -- this method subtracts the amount from the balance
+    \item \texttt{void credit(double amount)} -- this method adds the amount directly to the balance
+\end{itemize}
+The amount provided in the above methods can't be negative. The balance of the account can't also be negative.
+
+Write Java code for the following:
+\begin{enumerate}
+    \item A custom exception (\texttt{InvalidAmountException}) that triggers when the given amount is negative and shows the message `The given amount can't be negative' and the given amount.
+    \item A custom exception (\texttt{InsufficientBalanceException}) that triggers when the balance goes negative and shows the message `The account balance can't be negative' and the current balance.
+    \item The complete \texttt{Account} (or \texttt{BankAccount}) class to trigger these exceptions when needed.
+\end{enumerate}
+You don't need to write any main method.
+\yr{CSE 107 | 2016--17, 2022--23}
+
+%% -- Q12 -------------------------------------------------------------
+
+
+
+\item Consider a class named Inventory with the following information: \hfill \textbf{(10)}
+\begin{itemize}
+    \item \texttt{double stock} - the stock of the inventory
+    \item \texttt{double minStock} - the minimum stock of the inventory
+    \item \texttt{void setInitialStock(double amount)} - this method sets the amount as the initial stock
+    \item \texttt{void addToInventory(double amount)} - this method adds the amount to the stock
+    \item \texttt{void removeFromInventory(double amount)} - this method subtracts the amount from the stock
+\end{itemize}
+The amount provided in the above four methods can't be negative. The stock of the inventory can't also be below the minimum stock.
+
+Write Java code for the following:
+\begin{itemize}
+    \item[(i)] A custom exception named \texttt{InvalidStockAmountException} with appropriate parameters that triggers when the given amount is negative and shows the message 'The given stock amount can't be negative'.
+    \item[(ii)] A custom exception named \texttt{InvalidInventoryStockException} with appropriate parameters that triggers when the stock goes below the minimum stock and shows the message 'The stock can't be less than the minimum stock'.
+    \item[(iii)] The complete \texttt{Inventory} class to trigger these exceptions when needed. You don't need to write any main method.
+\end{itemize}
+\yr{CSE 107 | 2020--21}
+
+%% -- Q16 -------------------------------------------------------------
+
+
+
+\item Explain the use of \texttt{try} and \texttt{catch} in C++ with appropriate examples. \mk{10}
+\yr{CSE 107 | 2015--16}
+
+%% -- Q2 --------------------------------------------------------------
+
+
+
+
+
+\item Show the hierarchical relation among \texttt{Throwable}, \texttt{Exception}, \texttt{RuntimeException} and \texttt{Error} classes. Write a custom exception \texttt{AuthFailureException}. Also write an \texttt{Authenticate()} method that will throw \texttt{AuthFailureException} on failure. \mk{10}
+\yr{CSE 107 | 2015--16}
+
+%% -- Q7 --------------------------------------------------------------
+
+
+
+\item Write your own \texttt{TwoDimException} that is thrown when the determinant of a matrix is zero. \mk{10}
+\yr{CSE 201 | 2015--16}
+
+%% -- Q14 -------------------------------------------------------------
+
+
+
+
+
+\item Consider a \texttt{MyStack} class with \texttt{push(Object)}, \texttt{pop()}, \texttt{top()}, \texttt{isEmpty()}. \texttt{pop()} and \texttt{top()} throw \texttt{StackEmptyException}; \texttt{push()} throws \texttt{StackFullException}. Write the custom exceptions and the \texttt{MyStack} class. \mk{10}
+\yr{CSE 201 | 2014--15}
+
+%% -- Q15 -------------------------------------------------------------
+
+
+
+
+
+\item Write a program that throws and catches an exception when the value of a variable is greater than 1000. \mk{10}
+\yr{CSE 201 | 2012--13}
+
+%% -- Q3 --------------------------------------------------------------
+
+
+
+
+
+\item Write a program that illustrates re-throwing an exception. \mk{4}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q5 --------------------------------------------------------------
+
+
+
+
+
+\item What are the keywords associated with exception handling in Java? Write the use of each keyword. \mk{10}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q6 --------------------------------------------------------------
+
+
+
+
+
+\item In JVM, when is a \texttt{ClassCastException} thrown? How can we avoid it? \mk{5+2}
+\yr{CSE 201 | 2010--11}
+
+%% -- Q8 --------------------------------------------------------------
+
+
+
+
+
+\item Explain three different usages of the keyword \texttt{finally} with examples. \mk{9}
+\yr{CSE 201 | 2010--11}
+
+%% -- Q9 --------------------------------------------------------------
+
+
+
+
+
+\item Write down the syntax used for Java's `catch or declare' strategy of exception handling. \mk{7}
+\yr{CSE 201 | 2010--11}
+
+%% -- Q10 -------------------------------------------------------------
+
+
+
+
+
+\item How can we create a user-defined exception type? Give an example. \mk{4}
+\yr{CSE 201 | 2010--11}
+
+%% -- Q11 -------------------------------------------------------------
+
+
+
+
+
+\item Write a program that illustrates the application of multiple \texttt{catch} statements. \mk{5}
+\yr{CSE 201 | 2007--08}
+
+%% -- Q4 --------------------------------------------------------------
+
+
+
+
+
+\item Suppose you are asked to write \texttt{MyException} that takes a String parameter. When displayed, it shows the String. Write necessary code. \mk{8}
+\yr{CSE 201 | 2007--08}
+
+%% -- Q17 -------------------------------------------------------------
+
+
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S14 — Multithreading & Concurrency
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S14}{Multithreading \& Concurrency}{cF}{cF}
+\markboth{S14 --- Multithreading \& Concurrency}{}
+\label{sec:S14}
+\titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
+\section{S14 --- Multithreading \& Concurrency}
+
+\begin{enumerate}
+
+\item Complete the following Java code that finds the summation of a 10000-element integer array using an array of 10 threads in parallel. You cannot write any more classes, but you can add variables, constructors, and other methods. \mk{15}
+\begin{lstlisting}[language=Java]
+class ParallelSum implements Runnable {
+    // your code here
+}
+
+public class Main {
+    public static void main(String[] args) {
+        java.util.Random random = new java.util.Random();
+        int[] numbers = new int[10000];
+        
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = random.nextInt(10000);
+        }
+        
+        ParallelSum[] parallelSum = new ParallelSum[10];
+        // your code here
+    }
+}
+\end{lstlisting}
+\yr{CSE 107 | 2023--24}
+
+%% ── Answer: ParallelSum skeleton completion ─────────────────────────
+
+
+
+\item Consider the following code. Determine all possible outputs assuming T1 starts first. If two threads execute f0 and f1, will they run in parallel? Why or why not?
+\begin{lstlisting}[language=Java]
+class TestClass {
+    public void f0() { synchronized(this) { for(int i=0;i<5;i++) System.out.println(Thread.currentThread().getName()+" "+i); } }
+    public void f1() { synchronized(TestClass.class) { for(int i=0;i<5;i++) System.out.println(Thread.currentThread().getName()+" "+i); } }
+    public synchronized static void f2() { for(int i=0;i<5;i++) System.out.println(Thread.currentThread().getName()+" "+i); }
+    public synchronized static void f3() { for(int i=0;i<5;i++) System.out.println(Thread.currentThread().getName()+" "+i); }
+}
+class SynchronizedTest {
+    public static void main(String[] args) {
+        new Thread(new TestClass()::f1, "T1").start();
+        new Thread(TestClass::f2, "T2").start();
+        new Thread(TestClass::f3, "T3").start();
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2023--24}
+
+%% ── Answer: synchronized lock analysis ──────────────────────────────
+
+
+
+\item What is the problem with the following code? Write 2 different ways to fix it:
+\begin{lstlisting}[language=Java]
+class MyThread implements Runnable {
+    List<String> list;
+    Thread t;
+    public MyThread(List<String> list) { this.list = list; t = new Thread(this); t.start(); }
+    public void run() { for(int i=1;i<=10000;i++) list.add(String.valueOf(i)); }
+}
+public class TestSyncArrayList {
+    public static void main(String[] args) throws Exception {
+        List<String> list = new ArrayList<>();
+        MyThread t1 = new MyThread(list), t2 = new MyThread(list);
+        t1.t.join(); t2.t.join();
+        System.out.println(list.size());
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2023--24}
+
+%% ── Answer: ArrayList race condition fix ────────────────────────────
+
+
+
+\item You are given a task to find the total count of prime numbers in a randomly generated array of 10{,}000 integers (values 1--5000). Divide work equally among 5 threads. Main thread waits and prints final count. \mk{15}
+\yr{CSE 107 | 2022--23}
+
+%% ── Answer: Parallel prime count ────────────────────────────────────
+
+
+
+\item You are given the following class. Create threads T1--T5 from main to execute f1, f2, f0, fs1, and fs2. (i) Which threads run in parallel and why? (ii) Which do not? Can restriction R2 be relaxed?
+\begin{lstlisting}[language=Java]
+class ThreadTest {
+    public void f0() { for(int i=1;i<500;i++) System.out.println(Thread.currentThread().getName()+" "+i); }
+    public synchronized void f1() { for(int i=1;i<1000;i++) System.out.println(Thread.currentThread().getName()+" "+i); }
+    public synchronized void f2() { for(int i=1;i<1500;i++) System.out.println(Thread.currentThread().getName()+" "+i); }
+    public synchronized static void fs1() { for(int i=1;i<2000;i++) System.out.println(Thread.currentThread().getName()+" "+i); }
+    public synchronized static void fs2() { for(int i=1;i<2500;i++) System.out.println(Thread.currentThread().getName()+" "+i); }
+}
+\end{lstlisting}
+R1: Cannot change \texttt{ThreadTest}. R2: Can create only one object. \mk{15}
+\yr{CSE 107 | 2022--23}
+
+%% ── Answer: ThreadTest parallel analysis ────────────────────────────
+
+
+
+\item Describe two different ways of creating threads in Java. Which one is better and why? Explain the difference between a synchronized method and a synchronized statement. \mk{10}
+\yr{CSE 107 | 2021--22}
+
+%% ── Answer: Two ways + which is better + synchronization ────────────
+
+
+
+\item Find the minimum of a 1000-integer array using 5 threads in parallel:
+\begin{lstlisting}[language=Java]
+class ParallelMin implements Runnable { /* your code */ }
+class Main {
+    public static void main(String[] args) {
+        int[] numbers = new int[1000];
+        ParallelMin[] parallelMin = new ParallelMin[5];
+        // your code
+    }
+}
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2021--22}
+
+%% ── Answer: ParallelMin skeleton completion ─────────────────────────
+
+
+
+\item What are the two common ways to achieve synchronization between Threads? Which one gives more control? \mk{5}
+\yr{CSE 107 | Jan 2021}
+
+%% ── Answer: Two ways to achieve synchronisation ─────────────────────
+
+
+
+\item Write complete Java code to compute the summation of 1 to 10{,}000 by dividing work equally among 5 different threads. Main thread waits and only prints the final summation. \mk{10}
+\yr{CSE 107 | 2020--21}
+\variant{CSE 201 | 2014--15}
+
+%% ── Answer: Parallel summation with 5 threads ───────────────────────
+
+
+
+\item Write Java code to compute the summation of 1 to 10{,}000{,}000 by dividing the work equally among 10 threads (no formula allowed, only loops). The main thread waits for all threads to finish and prints the final summation. \mk{10}
+\yr{CSE 107 | Jan 2021}
+
+%% ── Answer: Sum 1..10,000,000 loops only ────────────────────────────
+
+
+
+\item Write Java code to compute the summation of 1 to 10{,}000 by dividing the work equally among 5 threads (no formula allowed, only loops). The main thread waits for all threads to finish and prints the final summation. \mk{10}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: Sum 1..10,000 with 5 threads, loops only ───────────────
+
+
+
+\item Consider the Producer-Consumer problem with buffer of size 1. The producer generates letters A--Z circularly. The reader reads and displays them. Use wait/notifyAll or \texttt{ArrayBlockingQueue}. \mk{15}
+\yr{CSE 107 | 2019--20, Jan 2021}
+\variant{CSE 201 | 2013--14}
+
+%% ── Answer: Producer-Consumer A-Z circular ─────────────────────────
+
+
+
+\item Mr. Chandler and Ms. Phoebe worked in the same place. Their work is to put and get
+product in a shared inventory array of size 3. Ms. Phoebe puts a single product in the
+inventory and Mr. Chandler gets a single product from the inventory at a time. Ms.
+Phoebe cannot put a product to the inventory if the inventory array is full with 4
+products. Mr. Chandler cannot get a product from a inventory if the inventory array
+contains no product. Ms. Phoebe can put a product to the inventory if any one of the
+place of the inventory array is empty. Mr. Chandler can get a product from the inventory
+if any one of the place of the inventory array is full with a product. Write a java code to
+solve the above mentioned problem using the concepts of inter thread communication.
+You can use \textbf{wait/notifyAll} or \textbf{ArrayBlockingQueue}. \mk{10}\yr{CSE 107 | Jan 2021, 2019--20}
+\variant{CSE 201 | 2014--15, 2008--09, 2009--10}
+
+%% ── Answer: Chandler-Phoebe inventory (both solutions) ─────────────
+
+
+
+
+\item Mr. P puts products and Mr. C gets products from a shared inventory of size 4. P cannot put if full (4 products); C cannot get if empty. Write complete Java code using \textbf{wait and notifyAll only} --- you are not allowed to use \texttt{BlockingQueue}. \mk{20}
+\yr{CSE 107 | Jan 2021}
+
+%% ── Answer: P/C inventory, wait/notifyAll only ──────────────────────
+
+
+
+\item Consider the \texttt{TestClass} with \texttt{f1()} (1s sleep) and \texttt{f2()} (2s sleep). Create two threads without changing \texttt{TestClass} or extending/implementing any class:
+\begin{lstlisting}[language=Java]
+class TestClass {
+    public void f1() { for(int i=0;i<5;i++) { System.out.println(i); try { Thread.sleep(1000); } catch(InterruptedException e){} } }
+    public static void f2() { for(int i=0;i<5;i++) { System.out.println(i); try { Thread.sleep(2000); } catch(InterruptedException e){} } }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | Jan 2021}
+
+%% ── Answer: Lambda threads for f1 and f2 ────────────────────────────
+
+
+
+\item Explain with code how to fix the \texttt{SharedCounter} class so that multiple threads can correctly operate on it:
+\begin{lstlisting}[language=Java]
+class SharedCounter {
+    private int counter;
+    SharedCounter() { this.counter = 0; }
+    private void increment() { this.counter++; }
+    public int get() { return this.counter; }
+    public void count() { for(int i=1;i<=1000;i++) increment(); }
+}
+\end{lstlisting}
+\mk{5}
+\yr{CSE 107 | 2020--21}
+
+%% ── Answer: Fix SharedCounter ───────────────────────────────────────
+
+
+
+\item Write three different ways to create Threads in Java with short code examples. What is the difference between synchronized method and synchronized statement? \mk{10}
+\yr{CSE 107 | 2019--20}
+
+%% ── Answer: Three ways to create threads + synchronization ──────────
+
+
+
+\item Divide summation of 1 to 10{,}000{,}000 equally among 10 different threads. Main thread waits and prints final sum. \mk{10}
+\yr{CSE 107 | 2019--20}
+
+%% ── Answer: Sum 1..10,000,000 with 10 threads ──────────────────────
+
+
+
+\item What are the advantages of multithreading over process-based multitasking? \mk{6}
+\yr{CSE 107 | 2017--18; CSE 201 | 2012--13}
+
+%% ── Answer: Multithreading vs process-based multitasking ────────────
+
+
+
+\item Describe the methods Java uses for inter-thread communication. \mk{9}
+\yr{CSE 107 | 2017--18}
+
+%% ── Answer: Inter-thread communication ──────────────────────────────
+
+
+
+\item What are the two ways of creating a thread? Give an example for each kind. Which one is better and why? \mk{8+5}
+\yr{CSE 201 | 2011--12; CSE 107 | 2016--17}
+\variant{CSE 201 | 2009--10, 2012--13}
+
+%% ── Answer: Two ways to create a thread ─────────────────────────────
+
+
+
+\item Find the minimum of a 500-integer array using 5 threads in parallel. You are not allowed to write any more classes or arrays, but you can add normal variables, constructors, and other methods:
+\begin{lstlisting}[language=Java]
+class ParallelMin implements Runnable { /* your code */ }
+class Main {
+    public static void main(String[] args) {
+        Random random = new Random();
+        int[] numbers = new int[500];
+        for (int i = 0; i < numbers.length; i++)
+            numbers[i] = random.nextInt();
+        // your code
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2016--17}
+
+%% ── Answer: ParallelMin 500 elements, no extra classes/arrays ───────
+
+
+
+\item You need to simulate the traffic behavior of different vehicles moving inside BUET
+campus. There are four types, i.e., Car, Microbus, AutoRickshaw, and Rickshaw, of
+vehicles run in the campus. Each vehicle type should have necessary properties, e.g.,
+number of wheels, maximum speed, etc., which represent real vehicles that you see in
+real life. In the simulated environment you need to instantiate 10 vehicles of each type,
+where each vehicle has its current position and speed. Their initial positions and speeds
+will be randomly generated while you instantiate these vehicles. Vehicles will run along
+the road segments which are represented as a fixed set of rectangles. In every second,
+each vehicle updates its position based on the previous position and current speed. You
+need to make sure that a vehicle does not go outside the road segments at any point of
+time. Two vehicles must not collide with each other, i.e., if during a position update a
+vehicle finds another vehicle within a threshold range it cannot move and must need to
+decrease its speed.
+
+Write a Java program to implement the above simulator. You have to run each vehicle
+as a thread. Please make your own assumption to build the whole scenario as realistic as
+possible to reflect the real-world scenario. \mk{35}
+\yr{CSE 201 | 2015--16}
+
+%% ── Answer: BUET Traffic Simulation ────────────────────────────────
+
+
+
+\item Why are \texttt{suspend()}, \texttt{resume()} and \texttt{stop()} methods of \texttt{Thread} class deprecated? Demonstrate how you can achieve suspend, resume and stop behaviors in a thread that you have implemented, without using the deprecated methods. Write necessary code and provide explanations where appropriate. Do not use unnecessary/redundant \texttt{sleep}, \texttt{wait} or \texttt{notify} method calls. \mk{5+10}
+\yr{CSE 107 | 2015--16}
+
+%% ── Answer: Deprecated thread methods ───────────────────────────────
+
+
+
+\item ``Oracle recommends that calls to \texttt{wait()} should take place within a loop that checks the conditions'' --- Why? \mk{5}
+\yr{CSE 107 | 2015--16}
+
+%% ── Answer: wait() inside a loop ────────────────────────────────────
+
+
+
+\item You are using a 3rd party package called \texttt{Sophisticated} that defines the following classes:
+\begin{itemize}
+    \item \texttt{SophisticatedProblemsSolver}
+    \item \texttt{SophisticatedProblem}
+    \item \texttt{SimpleResult}
+\end{itemize}
+\texttt{SophisticatedProblemsSolver} has a public method with the following signature:
+\begin{center}
+    \texttt{public SimpleResult Solve(SophisticatedProblem problem)}
+\centerline{}
+\end{center}
+Your scenario is multi-threaded but you are unsure if \texttt{Solve()} is thread-safe. The following classes written by you need to use this method:
+\begin{itemize}
+    \item \texttt{CompetativeProgrammingProblemsSolver}
+    \item \texttt{SoftwareDevelopmentProblemSolver}
+    \item \texttt{PassInTheExamsProblemSolver}
+\end{itemize}
+Each of the above classes needs to interact with the same instance of \texttt{SophisticatedProblemsSolver}. The constructors of these classes are passed in a reference of \texttt{SophisticatedProblemsSolver} type. Demonstrate a solution to guarantee that your program will be thread-safe. Write necessary code and provide explanations where appropriate. (Do not use static variables in your solution. Note: You do not have source code for the package \texttt{Sophisticated}) \mk{15}
+\yr{CSE 107 | 2015--16}
+
+%% ── Answer: Thread-Safe Synchronization on Shared Object Instance ───
+
+
+
+\item Draw the life-cycle / schematic diagram of different states of a Thread. \mk{9}
+\yr{CSE 201 | 2013--14, 2008--09, 2007--08}
+
+%% ── Answer: Thread Life-Cycle ───────────────────────────────────────
+
+
+
+\item Discuss ``runnable'' and ``waiting'' states of Thread briefly. \mk{10}
+\yr{CSE 201 | 2013--14}
+
+%% ── Answer: Runnable and Waiting states ─────────────────────────────
+
+
+
+\item Why may deadlocks occur while developing a user interface? Write a program to show how this can be mitigated. \mk{4+7}
+\yr{CSE 201 | 2013--14}
+
+%% ── Answer: UI deadlock ─────────────────────────────────────────────
+
+
+
+\item Write a Java code to solve the Producer-Consumer problem where two threads share a common buffer of size 1. Use inter-thread communication with synchronized monitor. \mk{18}
+\yr{CSE 201 | 2011--12}
+\variant{CSE 201 | 2007--08}
+
+%% ── Answer: Producer-Consumer buffer size 1 ─────────────────────────
+
+
+
+\item Give an example of a multithreaded Java program using the \texttt{Runnable} interface. You must ensure that the main thread terminates last. Mention two different ways to achieve synchronization among threads in Java. \mk{6+4}
+\yr{CSE 201 | 2010--11}
+
+%% ── Answer: Runnable example + main terminates last ─────────────────
+
+
+
+\item When is it a must to implement multithreading with the \texttt{Runnable} interface instead of extending the \texttt{Thread} class? Give a simple example of a multithreaded Java program using the \texttt{Runnable} interface. \mk{15}
+\yr{CSE 201 | 2009--10}
+
+%% ── Answer: Must use Runnable + example ─────────────────────────────
+
+
+
+\item Define a circular \texttt{Queue} class that can be safely shared by multiple threads. Define \texttt{Producer} and \texttt{Consumer} classes extending Thread. Write a \texttt{Test} class with one Queue but several producers and consumers. \mk{20}
+\yr{CSE 201 | 2009--10}
+
+%% ── Answer: Thread-safe circular Queue with producers & consumers ────
+
+
+
+\item What do you know about Thread Synchronization? What are the two ways to achieve synchronization? \mk{8}
+\yr{CSE 201 | 2008--09}
+
+%% ── Answer: Thread Synchronisation (detailed) ───────────────────────
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S15 — Generics & Collections
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S15}{Generics \& Collections}{cG}{cG}
+\markboth{S15 --- Generics \& Collections}{}
+\label{sec:S15}
+\titleformat{\section}{\large\bfseries\color{cG}}{}{0em}{}[\titlerule]
+\section{S15 --- Generics \& Collections}
+
+\begin{enumerate}
+\item Implement the \texttt{MyMax} class to achieve the provided output for the main method with the following restrictions:
+\begin{enumerate}
+    \item \texttt{MyMax} class can only be created for Java number classes.
+    \item The implementation of methods \texttt{sameMax1} and \texttt{sameMax2} will be different.
+\end{enumerate}
+
+\begin{lstlisting}[language=Java]
+public class MyMaxTest {
+    public static void main(String[] args) {
+        Long[] n1 = {10L, 20L, 30L, 40L, 50L};
+        MyMax<Long> mx1 = new MyMax<>(n1);
+        System.out.println(mx1.max()); // 50.0
+
+        Float[] n2 = {50.0f, 20.0f, 40.0f, 10.0f, 30.0f};
+        MyMax<Float> mx2 = new MyMax<>(n2);
+        System.out.println(mx2.max()); // 50.0
+
+        Double[] n3 = {50.0, 20.0, 40.0, 10.0, 30.0};
+        MyMax<Double> mx3 = new MyMax<>(n3);
+        System.out.println(mx3.max()); // 50.0
+
+        System.out.println(mx1.sameMax1(mx2)); // true
+        System.out.println(mx2.sameMax2(mx3)); // true
+    }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2023--24}
+
+%% -- Q15 -------------------------------------------------------------
+
+
+
+\item Write two/three differences between \texttt{ArrayList} and \texttt{Vector}. \mk{10}
+\yr{CSE 107 | 2016--17, 2021--22, 2022--23}
+\variant{CSE 107 | Jan 2021, 2020--21}
+
+%% -- Q1 --------------------------------------------------------------
+
+
+
+
+
+\item Write three differences between \texttt{Hashtable} and \texttt{HashMap}. \mk{10}
+\yr{CSE 107 | 2016--17, 2017--18, 2019--20, 2022--23}
+
+%% -- Q2 --------------------------------------------------------------
+
+
+
+
+
+\item Create an appropriate Hash-based collection to store IPL players (Pat Cummins: 17{,}300{,}000, Kane Williamson: 16{,}000{,}000, MS Dhoni: null). Iterate and print values. Increase Pat Cummins's salary by 500{,}000. \mk{10}
+\yr{CSE 107 | 2022--23}
+\variant{CSE 107 | 2016--17, 2017--18}
+
+
+%% -- Q4 --------------------------------------------------------------
+
+
+
+
+\item Write a generic interface \texttt{iQueue} with \texttt{enqueue}, \texttt{dequeue}, \texttt{isEmpty}. Write a generic class \texttt{Queue} implementing \texttt{iQueue}. The interface only supports numeric types. \mk{10}
+\yr{CSE 107 | 2019--20, 2022--23}
+
+%% -- Q9 --------------------------------------------------------------
+
+
+
+
+
+
+\item Implement the \texttt{MyStats} class taking \texttt{List} as input. Can only be created for Java number classes. \texttt{sameAvg1} and \texttt{sameAvg2} must have different implementations:
+\begin{lstlisting}[language=Java]
+Integer[] n1 = {1, 2, 3, 4, 5};
+List<Integer> list1 = Arrays.asList(n1);
+MyStats<Integer> s1 = new MyStats<>(list1);
+System.out.println(s1.average()); // 3.0
+Long[] n2 = {5L, 2L, 4L, 1L, 3L};
+List<Long> list2 = Arrays.asList(n2);
+MyStats<Long> s2 = new MyStats<>(list2);
+System.out.println(s2.average()); // 3.0
+Double[] n3 = {5.0, 4.0, 3.0, 2.0, 1.0};
+List<Double> list3 = Arrays.asList(n3);
+MyStats<Double> s3 = new MyStats<>(list3);
+System.out.println(s1.sameAvg1(s2)); // true
+System.out.println(s2.sameAvg2(s3)); // true
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | Jan 2021, 2022--23}
+
+%% -- Q13 -------------------------------------------------------------
+
+
+
+\item Write two differences between \texttt{ArrayList} and \texttt{Vector}. Consider \texttt{Employee} (attributes: id, name, age). Write necessary Java code so that \texttt{Collections.sort(listEmployees)} sorts by ascending id; if equal, by lexicographic name; if both equal, by ascending age. \mk{10}
+\yr{CSE 107 | 2022--23}
+
+%% -- Q18 -------------------------------------------------------------
+
+
+
+\item Implement the \texttt{MyAvg} class. Can only be created for Java number classes. It must support \texttt{average()}, \texttt{sameAvg()} (comparing two same-type objects), and \texttt{sameAvgAny()} (comparing two different-type objects):
+\begin{lstlisting}[language=Java]
+Integer[] n1 = {10, 20, 30, 40, 50};
+MyAvg<Integer> s1 = new MyAvg<>(n1);
+System.out.println(s1.average()); // 30.0
+Integer[] n2 = {50, 20, 40, 10, 30};
+MyAvg<Integer> s2 = new MyAvg<>(n2);
+System.out.println(s2.average()); // 30.0
+System.out.println(s1.sameAvg(s2)); // true
+Double[] n3 = {50.0, 40.0, 30.0, 20.0, 10.0};
+MyAvg<Double> s3 = new MyAvg<>(n3);
+System.out.println(s3.average()); // 30.0
+System.out.println(s2.sameAvgAny(s3)); // true
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2021--22}
+
+%% -- Q14 -------------------------------------------------------------
+
+
+
+\item Given the following \texttt{Product} class, write Java code to: (i) define \texttt{ArrayList<Product> myProducts}, (ii) generate 4 Products with names \texttt{'A'} to \texttt{'D'} and random prices, (iii) sort \texttt{myProducts} by name in ascending order (you may modify the \texttt{Product} class if necessary):
+\begin{lstlisting}[language=Java]
+class Product {
+    private String name; private double price;
+    Product(String name, double price) { this.name = name; this.price = price; }
+    public String getName() { return this.name; }
+    public double getPrice() { return this.price; }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | Jan 2021}
+
+%% -- Q8 --------------------------------------------------------------
+
+
+
+
+\item Write a generic interface \texttt{iStack} with \texttt{push}, \texttt{pop}, \texttt{isEmpty}. Write a generic class \texttt{Stack} implementing \texttt{iStack}. Interface only supports numeric types. \mk{10}
+\yr{CSE 107 | 2020--21, 2016--17}
+\variant{CSE 107 | 2022--23}
+
+%% -- Q11 -------------------------------------------------------------
+
+
+
+
+
+\item What can you say about the following statement?
+\begin{lstlisting}[language=Java]
+public class ABC<S extends Z & Y & X> { }
+\end{lstlisting}
+\mk{5}
+\yr{CSE 107 | 2020--21, 2016--17}
+
+%% -- Q16 -------------------------------------------------------------
+
+
+
+\item Write three differences between \texttt{HashMap} and \texttt{Hashtable}. Create an appropriate Hash-based collection to store the following monthly salaries: Sakib Al Hasan: 3{,}00{,}000; Mashrafe Bin Mortaza: null; Mushfiqur Rahim: 2{,}50{,}000. Then increase Sakib Al Hasan's salary by 50{,}000. \mk{3+10}
+\yr{CSE 107 | 2017--18}
+
+%% -- Q5 --------------------------------------------------------------
+
+
+
+
+
+\item Write the general syntax for: (i) declaring a generic class in Java, (ii) declaring a reference to a generic class and creating an instance. \mk{10}
+\yr{CSE 107 | 2017--18}
+%% ── S8-Q6 ────────────────────────────────────────────────────────────
+
+
+
+
+\item Write two differences between \texttt{ArrayList} and \texttt{Vector}. Write three differences between \texttt{Hashtable} and \texttt{HashMap}. Create an appropriate Hash-based collection to store the following weekly salaries: Lionel Messi: 350{,}000; Cristiano Ronaldo: 365{,}000; Neymar: null. Then increase Lionel Messi's balance by 100{,}000. \mk{10}
+\yr{CSE 107 | 2016--17}
+
+%% -- Q6 --------------------------------------------------------------
+
+
+
+
+
+\item Write a Java program to store student records as a collection of \texttt{Student} objects. The \texttt{Student} class contains \texttt{Name}, \texttt{Age}, and \texttt{CGPA}. Write the class so that the collection can be sorted using Java Collection's \texttt{sort()} method with the following priority: (i) descending CGPA; (ii) if CGPAs are equal, ascending age; (iii) if ages are also equal, lexicographic order of name. \mk{20}
+\yr{CSE 201 | 2015--16}
+
+%% -- Q21 -------------------------------------------------------------
+
+
+
+
+
+\item Write five differences between \texttt{Hashtable} and \texttt{HashMap}. Consider the following bank account information. Write Java code to: (i) create a Hashtable, (ii) store the five entries, (iii) increase John Doe's balance by 100:
+\begin{center}
+\begin{tabular}{lr} \toprule \textbf{Name} & \textbf{Balance} \\ \midrule John Doe & 3434.34 \\ Tom Smith & 123.22 \\ Jane Baker & 1378.00 \\ Tod Hall & 99.22 \\ Ralph Smith & 19.08 \\ \bottomrule \end{tabular}
+\end{center}
+\mk{10}
+\yr{CSE 201 | 2014--15}
+
+%% -- Q3 --------------------------------------------------------------
+
+
+
+
+
+\item Consider the following class. Write Java code to: (i) define \texttt{ArrayList<Product> myProducts}, (ii) generate 5 Products A--E with random prices, (iii) add Product F with price 1000 at index 1, (iv) sort by price ascending:
+\begin{lstlisting}[language=Java]
+class Product {
+    private String name; private double price;
+    Product(String name, double price) { this.name = name; this.price = price; }
+    public String getName() { return this.name; }
+    public double getPrice() { return this.price; }
+}
+\end{lstlisting}
+\mk{10}
+\yr{CSE 201 | 2014--15}
+
+%% -- Q7 --------------------------------------------------------------
+
+
+
+
+
+\item A class \texttt{Employee} has two member variables: name (\texttt{String}) and age (\texttt{int}). Write the class so an \texttt{ArrayList} of \texttt{Employee} objects can be sorted by either variable. \mk{14}
+\yr{CSE 201 | 2013--14}
+
+%% -- Q17 -------------------------------------------------------------
+
+
+
+\item Write a class \texttt{Student} containing a \texttt{HashMap} with Integer key and List of String as values. Add 3 studentIds as keys with [firstname, lastname] values. Write a method to print all. \mk{13}
+\yr{CSE 201 | 2013--14}
+
+%% -- Q19 -------------------------------------------------------------
+
+
+
+\item Consider a file named `products.txt' containing following information.
+
+\begin{center}
+\begin{verbatim}
+1,   P1,   T1,   10
+2,   P2,   T2,   20
+3,   P3,   T1,   30
+4,   P4,   T2,   20
+5,   P5,   T1,   30
+\end{verbatim}
+\end{center}
+
+This file represents information of products where the attributes are (id, name, type, price). A single product's information is contained in a single line. You need to do the following.
+
+\begin{itemize}
+    \item[(i)] Write a class in Java named Product with necessary attributes.
+    \item[(ii)] Write a function in Java to store the products information from this `products.txt' file to an ArrayList of Product named `myProducts'.
+    \item[(iii)] Write a function in Java to store the contents of an ArrayList of Product named `myProducts' to a file named `products2.txt' in the same format as given in the `products.txt' file.
+\end{itemize}
+
+\mk{4+8+8} \yr{CSE 201 | 2008--09}
+%% -- Q20 -------------------------------------------------------------
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S16 — Stream API, Lambda & Enums
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S16}{Stream API, Lambda \& Enums}{cH}{cH}
+\markboth{S16 --- Stream API, Lambda \& Enums}{}
+\label{sec:S16}
+\titleformat{\section}{\large\bfseries\color{cH}}{}{0em}{}[\titlerule]
+\section{S16 --- Stream API, Lambda \& Enums}
+
+\begin{enumerate}
+\item Write Java code for the following: (i) Declare an ArrayList of \texttt{Employee}, add 6 employees; (ii) Rewrite two code segments using Java Stream; (iii) Sort by ascending age; if equal, by ascending name:
+\begin{lstlisting}[language=Java]
+// Segment 1
+List<String> names = new ArrayList<>();
+for (Employee e : list) names.add(e.getName());
+// Segment 2
+List<Employee> employees = new ArrayList<>();
+for (Employee e : list) if (e.getAge() <= 20) employees.add(e);
+\end{lstlisting}
+\mk{15}
+\yr{CSE 107 | 2023--24}
+
+%% ── Q3: Employee Stream rewrite ──────────────────────────────────────
+
+
+
+
+\item Develop Java code for the following using an \texttt{Employee} class (id, name, age): (i) Declare \texttt{ArrayList<Employee>} and add 6 employees; (ii) Store names of employees aged $> 15$ in \texttt{nameList}; (iii) Sort by ascending age; if equal, by ascending name. \mk{15}
+\yr{CSE 107 | 2021--22}
+
+%% ── Q2: Employee ArrayList + Stream + Sort ───────────────────────────
+
+
+
+
+\item Create a Java enum named \texttt{HttpStatus} to represent the following HTTP status codes: \mk{10}
+
+\begin{verbatim}
+OK (200, "OK"), NOT_FOUND (404, "Not Found"),
+\end{verbatim}
+\begin{verbatim}
+ INTERNAL_ERROR (500, "Internal Server Error")
+\end{verbatim}
+
+Each enum constant should store two fields: an \texttt{int} status code and a \texttt{String} message.
+
+Your enum should also implement the following methods:
+\begin{enumerate}
+    \item \texttt{isError()}: Returns false for \texttt{OK}, and true for both \texttt{NOT\_FOUND} and \texttt{INTERNAL\_ERROR}
+    \item \texttt{toString()}: Returns a string in the format "200 OK", "404 Not Found", "500 Internal Server Error"
+    \item \texttt{fromCode(int code)} (static method): Takes an \texttt{int} code and returns the corresponding \texttt{HttpStatus} constant. If the code doesn't match any defined status, return \texttt{null}.
+\end{enumerate}
+\yr{CSE 107 | 2023--24}
+
+%% ── Answer: HttpStatus enum ─────────────────────────────────────────
+
+
+
+
+\item Consider the following \texttt{Person} class. Write Java code for the following: (i) Declare \texttt{ArrayList<Person> list} and add 6 persons; (ii) Rewrite the two segments using Java Stream; (iii) Sort the list by ascending age, then ascending name if age is equal:
+\begin{lstlisting}[language=Java]
+// Segment 1
+List<String> names = new ArrayList<>();
+for (int i = 0; i < list.size(); i++) { Person mc = list.get(i); names.add(mc.getName()); }
+// Segment 2
+List<Person> persons = new ArrayList<>();
+for (int i = 0; i < list.size(); i++) { Person mc = list.get(i); if (mc.getAge() <= 20) persons.add(mc); }
+\end{lstlisting}
+\mk{20}
+\yr{CSE 107 | Jan 2021}
+\variant{CSE 107 | 2021--22, 2022--23, 2023--24}
+
+%% ── Q1: Person Stream + Sort ─────────────────────────────────────────
+
+
+
+
+\item Consider the \texttt{Fruit} class with \texttt{name} and \texttt{quantity}. Write Java code \\so that \texttt{Collections.sort(listFruits)} sorts by descending quantity; if equal, by lexicographic name. \mk{7}
+\yr{CSE 107 | 2016--17, 2020--21}
+
+%% ── Q4: Fruit Comparable sort ────────────────────────────────────────
+
+
+
+\item Consider the following FIFA World Cup data. Declare Enumeration \texttt{FWCWinners}. Print all countries. Print the most recent winner (cannot simply write Argentina):
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Country} & \textbf{Titles} & \textbf{Last Title}\\
+\midrule
+Argentina & 3 & 2022 \\
+France & 2 & 2018 \\
+Uruguay & 2 & 1950 \\
+England & 1 & 1966 \\
+Spain & 1 & 2010 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\mk{10}
+\yr{CSE 107 | 2021--22}
+
+%% ── Answer: FWCWinners enum ─────────────────────────────────────────
+
+
+
+\item Consider the following EPL data. Write Java code to: (i) Declare a single Enumeration named \texttt{EPL}; (ii) Print all clubs with points and position:
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Club} & \textbf{Point} & \textbf{Position}\\
+\midrule
+Manchester United & 90 & 1 \\
+Chelsea & 80 & 2 \\
+Arsenal & 75 & 4 \\
+Manchester City & 30 & 19 \\
+Liverpool & 25 & 20 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\mk{5}
+\yr{CSE 107 | Jan 2021}
+
+%% ── Answer: EPL enum ─────────────────────────────────────────────────
+
+
+
+
+\item Declare Enumeration \texttt{GOT} for Game of Thrones characters. Find the character active for the least number of seasons (cannot simply write Ned Stark):
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+\textbf{Name} & \textbf{Status} & \textbf{NoOfSeasons}\\
+\midrule
+Jon Snow & Alive & 7 \\
+Daenerys Targaryen & Alive & 7 \\
+Ned Stark & Dead & 1 \\
+Joffrey Baratheon & Dead & 4 \\
+Tyrion Lannister & Alive & 7 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\mk{7}
+\yr{CSE 107 | 2016--17}
+
+%% ── Answer: GOT enum + min seasons character ─────────────────────────
+
+
+
+
+\item What is a functional interface in Java? Give an example to implement the functional interface as an Anonymous Inner class. \mk{10}
+\yr{CSE 201 | 2015--16}
+
+%% ── Q5: Functional interface + Anonymous Inner Class ─────────────────
+
+
+
+\item What is a functional interface? Using lambda expression, implement the following interface to compute factorial:
+\begin{lstlisting}[language=Java]
+interface SomeFunc<T> { T func(T t); }
+\end{lstlisting}
+\mk{10}
+\yr{CSE 107 | 2015--16}
+
+%% ── Answer: Functional interface + lambda factorial ─────────────────
+
+
+
+
+\item Declare a single Enumeration named \texttt{EPL}. Find out the difference between league position of ManUnited and Liverpool (cannot simply write 18). Also declare Enumeration for football clubs from EPL table. \mk{5}
+\yr{CSE 201 | 2014--15}
+
+%% ── Answer: EPL enum position difference ────────────────────────────
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S17 — File I/O & Serialization
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S17}{File I/O \& Serialization}{cA}{cA}
+\markboth{S17 --- File I/O \& Serialization}{}
+\label{sec:S17}
+\titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
+\section{S17 --- File I/O \& Serialization}
+
+\begin{enumerate}
+
+
+
+
+\item Consider a Java program that copies \texttt{src.txt} to \texttt{dst.txt} line by line. Implement using try-with-resources. You are not allowed to throw Exception anywhere. \mk{10}
+\yr{CSE 107 | 2023--24}
+
+%% -- Q18 -------------------------------------------------------------
+
+
+
+
+\item Consider a Java program that copies binary file \texttt{src.mkv} to \texttt{dst.mkv} using chunks of 8 KB. Implement using try-with-resources. Not allowed to throw Exception anywhere. \mk{10}
+\yr{CSE 107 | 2021--22}
+
+%% -- Q19 -------------------------------------------------------------
+
+
+
+
+\item Write necessary Java code to write \texttt{object1} to a file named \texttt{serial}/\texttt{test} and read the object from the same file and assign it to \texttt{object2}. \mk{8+9}
+
+\begin{center}
+\begin{tabular}{|p{0.45\textwidth}|p{0.5\textwidth}|}
+\hline
+\begin{minipage}[t]{0.45\textwidth}
+\begin{lstlisting}[language=Java, basicstyle=\ttfamily\small, tabsize=4]
+class MyClass {
+    String s;
+    int i;
+    public MyClass(String s, int i) {
+        this.s = s;
+        this.i = i;
+    }
+}
+\end{lstlisting}
+\end{minipage} & 
+\begin{minipage}[t]{0.5\textwidth}
+\begin{lstlisting}[language=Java, basicstyle=\ttfamily\small, tabsize=4]
+public class FileDemo {
+    public static void main(String args[]) {
+        MyClass object1 = new MyClass("James Bond", 7);
+        // your code
+        MyClass object2;
+        // your code
+    }
+}
+\end{lstlisting}
+\end{minipage} \\
+\hline
+\end{tabular}
+\end{center}
+
+\yr{CSE 107 | 2016--17, 2017--18}
+
+%% -- Q4 --------------------------11------------------------------------
+
+
+
+\item You are given a text file called \texttt{MyAnalysisOfStudentsPerformance.txt}. Write necessary code to read each line from the file and print out to the console. However, in your output each line should be prefixed with the line number. Your I/O operations should be efficient. Once you have run your code, you observe (to your surprise) that the first line in the console output is:
+\begin{center}
+    {\bengalifont 1. আমার ভয় হচ্ছে তোমরা হয়তো পাস করতে পারবে না!}
+\end{center}
+Here, the ``1.'' is the line number you added from your code, and the remaining part was the line read from the file. How were you able to read the Bangla text? (Hint: By opening the text file in Notepad program, you have noticed that the encoding of the file is \texttt{UTF-8}). \mk{10+5}
+\yr{CSE 107 | 2015--16}
+
+%% -- Q8 --------------------------------------------------------------
+
+
+
+\item Now, instead of writing each line to the console, you need to write to another file. There is no need to prefix the lines with line number. Modify your code written in 8(a) so that it reads the destination file name from command line and copies the content of \texttt{MyAnalysisOfStudentsPerformance.txt} line by line. Keep in mind that the input file uses \texttt{UTF-8} encoding. Identify what additional code you had to write to account for \texttt{UTF-8} encoding and why? If you did not write any additional code, then explain why. \mk{10}
+\yr{CSE 107 | 2015--16}
+
+%% -- Q8b -------------------------------------------------------------
+
+
+
+\item You are writing a networked 2-person shooter game. Here, a bullet is modeled by a class containing positional coordinates:
+\begin{lstlisting}[language=Java]
+class Bullet implements Serializable, Cloneable {
+    int _posX, _posY;
+    public Bullet(int x, int y) { _posX = x; _posY = y; }
+    public Object Clone() { return new Bullet(_posX, _posY); }
+}
+\end{lstlisting}
+When one person shoots, the bullet leaves his weapon and follows a certain calculation model to traverse through the scene. You do not need to worry about the calculation model. During animation, the model continually updates the position of the bullet and sends the updated coordinates to the other person's machine over the network. This is done by calling the \texttt{updateBullet()} method of the \texttt{TwoPersonShooterGame} class:
+\begin{lstlisting}[language=Java]
+public class TwoPersonShooterGame {
+    ObjectOutputStream _oos; 
+    ObjectInputStream _ois;
+
+    public void updateBullet(Bullet bullet, int x, int y) throws IOException {
+        bullet._posX = x; 
+        bullet._posY = y;
+        _oos.writeObject(bullet);
+    }
+}
+\end{lstlisting}
+On the other player's machine, the bullet is rendered accordingly.
+\begin{enumerate}
+    \item Why does \texttt{Bullet} implement \texttt{Serializable}?
+    \item Write a constructor for \texttt{TwoPersonShooterGame}. It should have a \texttt{Socket} as a parameter and hook up the \texttt{\_ois} and \texttt{\_oos} variables to the socket's input and output streams respectively. The signature of the constructor should not have a \texttt{throws} clause.
+    \item Add a method in \texttt{TwoPersonShooterGame} class to read a bullet object from the network. The method should have the following signature:
+    \begin{center}
+        \texttt{public Bullet receiveBulletFromNetwork()}
+    \end{center}
+    \item Once you have completed the tasks of (i) and (ii), the project is complete. However, you observe that in the first person's machine the bullet is moving through the screen, yet it remains stationary on the second person's machine. Why is this happening? Show three different solutions for the problem (with code and explanation).
+    \item Finally, notice that \texttt{\_posX} and \texttt{\_posY} are not encapsulated. If you make them \texttt{private}, \texttt{Bullet} objects can no longer be cloned as the \texttt{Clone()} method is currently written. Why? Correct the \texttt{Clone()} method so that \texttt{Bullet} objects can still be cloned.
+\end{enumerate} \mk{3+3+3+11+4}
+\yr{CSE 107 | 2015--16}
+
+%% -- Q9 --------------------------------------------------------------
+
+
+
+\item Write Java code to copy a file \texttt{src.txt} to \texttt{dst.txt} line by line using \texttt{BufferedReader} and \texttt{BufferedWriter}. What are the Java classes and methods that can read/write objects of a class to I/O stream? \mk{10}
+\yr{CSE 201 | 2014--15}
+
+%% -- Q2 --------------------------------------------------------------
+
+
+
+\item What do you understand by serialization in Java I/O? What are the uses of serialization and how is it implemented? \mk{6}
+\yr{CSE 201 | 2013--14}
+
+%% -- Q6 --------------------------------------------------------------
+
+
+
+\item There is a file named \texttt{text.txt}. Write a Java program that reads each line of the file one at a time and prints the line number of the first occurrence of the word ``Bangladesh''. \mk{10}
+\yr{CSE 201 | 2013--14}
+
+%% -- Q10 -------------------------------------------------------------
+
+
+
+
+\item Why is \texttt{BufferedReader} a preferred reader? Write a program that appends a string in an existing file named \texttt{a.txt}. \mk{3+8}
+\yr{CSE 201 | 2012--13}
+
+
+%% -- Q1 --------------------------------------------------------------
+
+
+
+\item The members of class \texttt{Record} are a String \texttt{id}, String \texttt{recordDate}, and double \texttt{amount}. Give the class definition. Assume \texttt{recordList.dat} contains 10 instances. Write code to read them into a \texttt{Record} array. \mk{11}
+\yr{CSE 201 | 2011--12}
+
+%% -- Q5 --------------------------------------------------------------
+
+
+
+\item Explain Object Serialization-Deserialization with an example. \mk{8}
+\yr{CSE 201 | 2010--11}
+
+%% -- Q7 --------------------------------------------------------------
+
+
+
+\item Write Java code to copy a binary file \texttt{src.dat} to \texttt{dest.dat} using byte stream technique. \mk{7}
+\yr{CSE 201 | 2008--09}
+
+%% -- Q3 --------------------------------------------------------------
+
+
+
+
+
+\item Write a Java program that counts the total number of characters of the alternating lines of a file named \texttt{input.txt} (starting from the 1st line). Use Character Streams.
+\yr{CSE 201 | 2007--2008}
+
+%% ── Q12: Alternating lines character count ───────────────────────────
+
+
+
+
+\end{enumerate}
+\newpage
+
+%%══════════════════════════════════════════════════════════════════════
+%% S18 — Networking
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S18}{Networking}{cB}{cB}
+\markboth{S18 --- Networking}{}
+\label{sec:S18}
+\titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
+\section{S18 --- Networking}
+
+\begin{enumerate}
+\item A Fibonacci server accepts multiple clients. Client sends two integers; server calculates count of Fibonacci numbers between them and sends result. Communicate only through objects. Write complete Java client-server program. \mk{15}
+\yr{CSE 107 | 2022--23}
+
+%% ── Q5 ──────────────────────────────────────────────────────────────
+
+
+
+\item A server program accepts multiple clients. Client sends two integers; server calculates count of prime numbers between them and sends result. Write complete Java server-client program. \mk{15}
+\yr{CSE 107 | 2021--22}
+
+%% ── Q6 ──────────────────────────────────────────────────────────────
+
+
+
+\item Suppose a client connects to a server at 192.168.1.1, port 44444. Draw the scenario of connection and data transfer. What classes are used to read and write objects in networking? What restriction do they impose? \mk{10}
+\yr{CSE 107 | 2020--21}
+%% ── Q7 ──────────────────────────────────────────────────────────────
+
+
+
+\item Briefly describe the types of TCP Sockets. Write a Java Program that opens a connection to the ``whois'' port (port 43) on the InterNIC server, sends a website address, and prints the returned data. \mk{4+15}
+\yr{CSE 107 | 2017--18}
+
+%% ── Q8 ──────────────────────────────────────────────────────────────
+
+
+
+\item Develop a chat application where a server can handle maximum 100 clients. Clients can talk to any other client through the server. A client can form a group of maximum 5. Write using Java TCP/IP socket programming. \mk{25}
+\yr{CSE 201 | 2015--16}
+
+%% ── Q1 ──────────────────────────────────────────────────────────────
+
+
+
+\item Write a Java program to establish a connection to \texttt{www.google.com} using \\\texttt{HttpURLConnection}. Output: (i) request method, (ii) response code, (iii) response message, (iv) keys and values in the response header. \mk{10}
+\yr{CSE 107 | 2015--16}
+
+%% ── Q9 ──────────────────────────────────────────────────────────────
+
+
+
+\item Why does \texttt{Socket} implement \texttt{AutoCloseable}? Explain with a sample code snippet. \mk{5}
+\yr{CSE 107 | 2015--16}
+
+
+
+
+
+
+\item Which protocol uses Datagram packet? Write a client program that receives a Datagram packet using port 1111. \mk{10}
+\yr{CSE 201 | 2012--13}
+
+%% ── Q2 ──────────────────────────────────────────────────────────────
+
+
+
+\item Write a Java program to exchange messages between two peer computers using byte stream with stream socket. \mk{20}
+\yr{CSE 201 | 2009--10}
+
+%% ── Q4 ──────────────────────────────────────────────────────────────
+
+
+
+\item What do you know about Socket and ServerSocket? Draw the scenario of operations for connection and data transfer between a client (IP 192.168.0.63, port 55555) and a server. No code needed. \mk{8}
+\yr{CSE 201 | 2008--09}
+
+%% ── Q3 ──────────────────────────────────────────────────────────────
+
+
+
+\item A multithreaded server at IP 172.20.0.3, port 33333 handles multiple clients. Client sends a String; server returns its reverse. Client displays both strings. Write Java code for the complete scenario. \mk{15}
+\yr{CSE 201 | 2007--08}
+
+%% ── Q11 ─────────────────────────────────────────────────────────────
+
+
+
+
+\end{enumerate}
+\newpage
+%%══════════════════════════════════════════════════════════════════════
+%% S19 — Miscellaneous Java
+%%══════════════════════════════════════════════════════════════════════
+\secdivider{Section S19}{Miscellaneous Java}{cC}{cC}
+\markboth{S19 --- Miscellaneous Java}{}
+\label{sec:S19}
+\titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
+\section{S19 --- Miscellaneous Java}
+
+\begin{enumerate}
+
+
+
+
+
+\item What are the improvements in Swing over AWT? \mk{5}
+\yr{CSE 201 | 2013--14}
+
+%% ── Q15: Swing improvements over AWT ────────────────────────────────
+
+
+
+
+\item You have to develop a user interface where the user can save data or cancel using either two buttons or from a Menu. Each button and its corresponding menu item will have the same caption, mnemonic, tool-tip text, and event-handling code. Implement this requirement using the most appropriate feature of Java. \mk{15}
+\yr{CSE 201 | 2013--14}
+
+%% ── Q16: Save/Cancel with Action ─────────────────────────────────────
+
+
+
+
+\item Which one is preferred: semantic or low-level events? Mention two examples of each type. \mk{6}
+\yr{CSE 201 | 2013--14}
+
+%% ── Q17: Semantic vs low-level events ────────────────────────────────
+
+
+
+
+
+\item Design a user interface where a \texttt{TextArea} and a button are added using \texttt{FlowLayout}. Every key the user types will be added to the \texttt{TextArea} and the program will exit when \texttt{\textasciitilde{}1} is pressed. \mk{7}
+\yr{CSE 201 | 2012--13}
+
+%% ── Q14: TextArea + button with FlowLayout + KeyListener ─────────────
+
+
+
+
+\item What are the different ways of event handling in Java? \mk{5}
+\yr{CSE 201 | 2011--12}
+
+%% ── Q13: Ways of event handling ──────────────────────────────────────
+
+
+
+
+
+\item Explain the roles of the entities involved in Java's Delegation Event Handling model. \mk{5}
+\yr{CSE 201 | 2010--11}
+
+%% -- Q ------------------------------------------------------------------
+
+
+
+
+\item What is an adapter class? What are the advantages and disadvantages of using adapter classes? \mk{5}
+\yr{CSE 201 | 2010--11}
+
+%% ── Q19: Adapter class ───────────────────────────────────────────────
+
+
+
+
+\item Write Java and HTML code for an Applet that draws the string ``Welcome to Java''. \mk{6}
+\yr{CSE 201 | 2010--11}
+
+%% ── Q23: Welcome Applet ──────────────────────────────────────────────
+
+
+
+
+\item How do you specify a layout manager to a container object? Write the names of all layout managers. Describe any 3 layout managers with appropriate layout pictures. \mk{15}
+\yr{CSE 201 | 2009--10}
+
+%% ── Q20: Layout managers ─────────────────────────────────────────────
+
+
+
+
+\item Create a GUI using \texttt{JFrame} with specific dimensions. Add an input field with a label to take a number from the user and a button labelled ``Click on Me''. Display a click counter that increments at each click. Stop incrementing once the number of clicks exceeds the number entered by the user; show an appropriate message thereafter. \mk{20}
+\yr{CSE 201 | 2009--10}
+
+%% ── Q21: JFrame click counter ────────────────────────────────────────
+
+
+
+
+
+\item What does Java Applet not have that regular Java classes do? Which Applet method is the substitute for a constructor? Show the order of method calls from an Applet object by a web browser. What is the use of the \texttt{paint()} method? \mk{15}
+\yr{CSE 201 | 2009--10}
+
+%% ── Q22: Applet vs regular class; life-cycle; paint ──────────────────
+
+
+
+
+
+\item Write down the name of any six components of the Java Swing package. \mk{6}
+\yr{CSE 201 | 2008--09}
+
+
+%% ── Q24: Six Swing components ────────────────────────────────────────
+
+
+
+
+
+\item What do you know about Event Handling in Java? What is the name of the interface mainly used for this purpose? Write three different ways for a component to register itself to handle events using this interface, with necessary Java code. \mk{2+1+15}
+\yr{CSE 201 | 2008--09}
+
+
+%% ── Q25: Event Handling + three ways ─────────────────────────────────
+
+
+
+
+
+
+\item What are the differences between Java Applets and Java Applications?
+\yr{2007--2008}
+
+\item Draw the flow of control for a Java Applet. How can you pass parameters to a Java Applet?
+\yr{2007--2008}
+
+%% ── Q11: Applet flow of control + parameters ─────────────────────────
+
+
+
+
+
+
+
+
+\end{enumerate}
+
+
+
+
+
+
+\end{document}

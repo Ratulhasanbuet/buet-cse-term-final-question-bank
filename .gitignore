@@ -25,6 +25,6 @@
 .DS_Store
 Thumbs.db
 
-## Optional: If you want to ignore build directory (like 'build/' or 'out/')
-# build/
-# out/
+# Optional: If you want to ignore build directory (like 'build/' or 'out/')
+build/
+out/
