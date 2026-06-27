@@ -1,4 +1,5 @@
 \documentclass[12pt,a3paper]{article}
+\usepackage{pgfplots}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
@@ -18,15 +19,14 @@
 \usepackage{diagbox}
 \usepackage{circuitikz}[american]
 \usepackage{tikz}
-\usepackage{amsmath, amssymb}
+\usepackage{tikz-timing}
 \usepackage{multirow}
 \usepackage{cancel}
 \usepackage{booktabs}
 
-
-\usepackage[table]{xcolor} % টেবিলের সেল কালার করার জন্য
-\usepackage{tikz}
+\usepackage[table]{xcolor}
 \usetikzlibrary{circuits.logic.US, positioning, calc}
+\usetikzlibrary{calc, positioning, backgrounds, fit}
 
 
 \newcounter{myboxcount}
@@ -17975,59 +17975,76 @@ $\vdots$ & $\vdots$ & $\vdots$ & $\vdots$ & & $\vdots$ \\
 \subsection*{3. Logic Circuit Implementation}
 
 \begin{center}
-\begin{circuitikz}[scale=1.0, transform shape, thick]
+\begin{circuitikz}[scale=0.9, transform shape, thick]
     
-    % ================= First Stage: 8x1 MUX 1 =================
-    \draw[fill=white, rounded corners=2pt] (0, 2) rectangle (3, 8);
-    \node[align=center, font=\bfseries] at (1.5, 5) {8-to-1 \\ MUX 1};
+    % ================= First Stage: 8x1 MUX 1 (Top) =================
+    \draw[fill=white, rounded corners=2pt] (0, 3) rectangle (3, 9);
+    \node[align=center, font=\bfseries] at (1.5, 6) {8-to-1 \\ MUX 1};
     
     % MUX 1 Data Inputs
     \foreach \i in {0,...,7} {
-        \draw[<-] (0, 7.5 - \i*0.7) -- (-1.5, 7.5 - \i*0.7) node[left, font=\bfseries] {$I_{\i}$};
+        \pgfmathsetmacro{\y}{8.4 - \i*0.7}
+        \draw[<-] (0, \y) -- (-1.5, \y) node[left, font=\bfseries] {$I_{\i}$};
     }
     
-    % ================= First Stage: 8x1 MUX 2 =================
-    \draw[fill=white, rounded corners=2pt] (0, -6) rectangle (3, 0);
-    \node[align=center, font=\bfseries] at (1.5, -3) {8-to-1 \\ MUX 2};
+    % ================= First Stage: 8x1 MUX 2 (Bottom) =================
+    \draw[fill=white, rounded corners=2pt] (0, -5) rectangle (3, 1);
+    \node[align=center, font=\bfseries] at (1.5, -2) {8-to-1 \\ MUX 2};
 
     % MUX 2 Data Inputs
     \foreach \i in {8,...,15} {
         \pgfmathsetmacro{\idx}{\i - 8}
-        \draw[<-] (0, -0.5 - \idx*0.7) -- (-1.5, -0.5 - \idx*0.7) node[left, font=\bfseries] {$I_{\i}$};
+        \pgfmathsetmacro{\y}{0.4 - \idx*0.7}
+        \draw[<-] (0, \y) -- (-1.5, \y) node[left, font=\bfseries] {$I_{\i}$};
     }
 
-    % ================= Shared Selection Lines S2, S1, S0 =================
-    \draw (-1.5, -7.5) node[left, font=\bfseries] {$S_2$} -- (0.5, -7.5) -- (0.5, 2);
-    \fill (0.5, -6) circle (2pt);
-    \draw[<-] (0.5, -6) -- (0.5, -6); % Anchor indication
+    % ================= Second Stage: 2x1 MUX 3 (Right) =================
+    \draw[fill=white, rounded corners=2pt] (6, 0.5) rectangle (8.5, 3.5);
+    \node[align=center, font=\bfseries] at (7.25, 2) {2-to-1 \\ MUX 3};
     
-    \draw (-1.5, -8.2) node[left, font=\bfseries] {$S_1$} -- (1.5, -8.2) -- (1.5, 2);
-    \fill (1.5, -6) circle (2pt);
-    
-    \draw (-1.5, -8.9) node[left, font=\bfseries] {$S_0$} -- (2.5, -8.9) -- (2.5, 2);
-    \fill (2.5, -6) circle (2pt);
+    % MUX 3 Data Labels
+    \node[right, font=\small\bfseries] at (6, 2.5) {0};
+    \node[right, font=\small\bfseries] at (6, 1.5) {1};
 
-    \node[above, font=\small\bfseries] at (0.5, 2) {$S_2$};
-    \node[above, font=\small\bfseries] at (1.5, 2) {$S_1$};
-    \node[above, font=\small\bfseries] at (2.5, 2) {$S_0$};
-
-    \node[below, font=\small\bfseries] at (0.5, -6) {$S_2$};
-    \node[below, font=\small\bfseries] at (1.5, -6) {$S_1$};
-    \node[below, font=\small\bfseries] at (2.5, -6) {$S_0$};
-
-    % ================= Second Stage: 2x1 MUX 3 =================
-    \draw[fill=white, rounded corners=2pt] (6, -0.5) rectangle (8.5, 2.5);
-    \node[align=center, font=\bfseries] at (7.25, 1) {2-to-1 \\ MUX 3};
-
-    % Data connections from Stage 1 to Stage 2
-    \draw[->] (3, 5) -- (5, 5) |- (6, 1.7) node[right, font=\small\bfseries] {0 (Input 0)};
-    \draw[->] (3, -3) -- (5, -3) |- (6, 0.3) node[right, font=\small\bfseries] {1 (Input 1)};
-
-    % Selection line S3
-    \draw[<-] (7.25, -0.5) -- (7.25, -2) node[below, font=\bfseries] {$S_3$ (MSB)};
+    % ================= Data Routing =================
+    % MUX 1 to MUX 3 (Input 0)
+    \draw[->] (3, 6) -- (5.5, 6) |- (6, 2.5);
+    % MUX 2 to MUX 3 (Input 1)
+    \draw[->] (3, -2) -- (5.5, -2) |- (6, 1.5);
     
     % Final Output Y
-    \draw[->, thick, draw=cD] (8.5, 1) -- (10, 1) node[right, font=\bfseries, text=cD] {$Y$};
+    \draw[->, thick] (8.5, 2) -- (10, 2) node[right, font=\bfseries] {$Y$};
+
+    % ================= Shared Selection Lines Bus =================
+    % S3 Routing (MUX 3)
+    \draw (-1.5, -6) node[left, font=\bfseries] {$S_3$ (MSB)} -- (7.25, -6) -- (7.25, 0.5);
+    \node[above, font=\small\bfseries] at (7.25, 0.5) {$S_3$};
+
+    % S2 Routing
+    \draw (-1.5, -6.5) node[left, font=\bfseries] {$S_2$} -- (4.5, -6.5) -- (4.5, 2.5) -- (1, 2.5) -- (1, 3);
+    \draw (1, -6.5) -- (1, -5);
+    \fill (1, -6.5) circle (2pt);
+    
+    % S1 Routing
+    \draw (-1.5, -7) node[left, font=\bfseries] {$S_1$} -- (4.0, -7) -- (4.0, 2.0) -- (1.5, 2.0) -- (1.5, 3);
+    \draw (1.5, -7) -- (1.5, -5);
+    \fill (1.5, -7) circle (2pt);
+    
+    % S0 Routing
+    \draw (-1.5, -7.5) node[left, font=\bfseries] {$S_0$ (LSB)} -- (3.5, -7.5) -- (3.5, 1.5) -- (2, 1.5) -- (2, 3);
+    \draw (2, -7.5) -- (2, -5);
+    \fill (2, -7.5) circle (2pt);
+
+    % ================= Select Line Internal Labels =================
+    % MUX 1 Selection Labels
+    \node[above, font=\small\bfseries] at (1, 3) {$S_2$};
+    \node[above, font=\small\bfseries] at (1.5, 3) {$S_1$};
+    \node[above, font=\small\bfseries] at (2, 3) {$S_0$};
+
+    % MUX 2 Selection Labels
+    \node[above, font=\small\bfseries] at (1, -5) {$S_2$};
+    \node[above, font=\small\bfseries] at (1.5, -5) {$S_1$};
+    \node[above, font=\small\bfseries] at (2, -5) {$S_0$};
 
 \end{circuitikz}
 \end{center}
@@ -18085,8 +18102,9 @@ $m_{13}, m_{14}, m_{15}$ & \multicolumn{4}{c|}{Various combinations} & $I_{13}, 
     \node[align=center, font=\bfseries] at (1.5, 4.5) {16-to-1 \\ MUX};
 
     % Draw Logic 1 and Logic 0 buses
-    \draw (-2.5, 9) node[above, font=\bfseries, text=cD] {Logic 1 ($V_{cc}$)} -- (-2.5, 0.5);
-    \draw (-1.2, 9) node[above, font=\bfseries] {Logic 0 (GND)} -- (-1.2, 0.5);
+    \draw (-2.5, 9) node[above, font=\bfseries, text=cD, scale=0.5] {Logic 1 ($V_{cc}$)} -- (-2.5, 0.5);
+    \draw (-1.2, 9) -- (-1.2, 0.5);
+    \node[above, font=\bfseries, scale=0.5]  at (-0.5, 9) {Logic 0 (GND)};
 
     % Inputs mapped to Logic 1: {3, 5, 7, 10, 11, 13, 14, 15}
     \foreach \i in {3, 5, 7, 10, 11, 13, 14, 15} {
@@ -18246,70 +18264,138 @@ The following table maps the state of the select lines ($C, D$) to the correspon
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
 
-\textbf{Conclusion:} 
-The function $F(A,B,C,D) = \Sigma\,(1,3,4,11,12,13,14,15)$ is implemented using a $4 \times 1$ multiplexer. Variables $A$ and $B$ are assigned to select lines $S_1$ and $S_0$, while variables $C$ and $D$ generate the data inputs $I_0, I_1, I_2,$ and $I_3$.
+\textbf{1. Multiplexer Sizing and Variable Selection}
 
-\vspace{1em}
-\textbf{\large 1. Theoretical Foundation \& Expansion}
-
-The $4 \times 1$ MUX output is given by:
-\begin{align*}
-    Y &= \overline{A}\overline{B} I_0 + \overline{A}B I_1 + A\overline{B} I_2 + AB I_3
-\end{align*}
-
-Factoring the function $F(A,B,C,D)$ based on $A$ and $B$:
-\begin{align*}
-    F &= \overline{A}\overline{B}(m_1 + m_3) + \overline{A}B(m_4) + A\overline{B}(m_{11}) + AB(m_{12} + m_{13} + m_{14} + m_{15}) \\
-    F &= \overline{A}\overline{B}(\overline{C}D + CD) + \overline{A}B(\overline{C}D' \cdot 1) + A\overline{B}(CD \cdot 1) + AB(1)
-\end{align*}
-
-\vspace{1em}
-\textbf{\large 2. Derivation of Data Inputs}
-
+To implement a 4-variable Boolean function $F(A,B,C,D)$ using a $4 \times 1$ Multiplexer (MUX), we need to allocate the variables strategically. 
+A $4 \times 1$ MUX has:
 \begin{itemize}
-    \item \textbf{$I_0$ ($A=0, B=0$):} $I_0 = \overline{C}D + CD = D(\overline{C} + C) = D$
-    \item \textbf{$I_1$ ($A=0, B=1$):} $I_1 = \overline{C}D' = (C + D)'$ (NOR gate)
-    \item \textbf{$I_2$ ($A=1, B=0$):} $I_2 = CD$ (AND gate)
-    \item \textbf{$I_3$ ($A=1, B=1$):} $I_3 = 1$ (Tie to $V_{cc}$)
+    \item $4$ data inputs ($I_0, I_1, I_2, I_3$)
+    \item $2$ select lines ($S_1, S_0$)
 \end{itemize}
+We will connect the two most significant variables, $A$ and $B$, to the select lines:
+\[ S_1 = A, \quad S_0 = B \]
+The remaining variables, $C$ and $D$, will be used to generate the data inputs $I_0, I_1, I_2, \text{ and } I_3$.
 
-\vspace{1em}
-\textbf{\large 3. Logic Circuit Implementation}
+\vspace{0.5cm}
+\textbf{2. Implementation Table}
+
+We map the given minterms $\Sigma\,(1,3,4,11,12,13,14,15)$ into an implementation table based on the permutations of $C$ and $D$ for each combination of $A$ and $B$. Minterms present in the function are highlighted in \textbf{\textcolor{cD}{bold}}.
 
 \begin{center}
-\begin{circuitikz}[scale=0.8, transform shape, thick]
-    \draw[fill=cD!10] (0, 0) rectangle (2.5, 5);
-    \node[font=\bfseries] at (1.25, 4.5) {4-to-1 MUX};
-    \draw[->] (2.5, 2.5) -- (3.5, 2.5) node[right, font=\bfseries] {$F$};
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Data Variables} & $\mathbf{I_0}$ & $\mathbf{I_1}$ & $\mathbf{I_2}$ & $\mathbf{I_3}$ \\
+\textbf{Select ($AB$)} & \textbf{($00$)} & \textbf{($01$)} & \textbf{($10$)} & \textbf{($11$)} \\
+\midrule
+$\bar{C}\bar{D} \ (00)$ & $0$ & \textbf{\textcolor{cD}{4}} & $8$ & \textbf{\textcolor{cD}{12}} \\
+$\bar{C}D \ (01)$       & \textbf{\textcolor{cD}{1}} & $5$ & $9$ & \textbf{\textcolor{cD}{13}} \\
+$C\bar{D} \ (10)$       & $2$ & $6$ & $10$ & \textbf{\textcolor{cD}{14}} \\
+$CD \ (11)$             & \textbf{\textcolor{cD}{3}} & $7$ & \textbf{\textcolor{cD}{11}} & \textbf{\textcolor{cD}{15}} \\
+\midrule
+\textbf{Boolean Sum} & $I_0 = \bar{C}D + CD$ & $I_1 = \bar{C}\bar{D}$ & $I_2 = CD$ & $I_3 = \bar{C}\bar{D} + \bar{C}D + C\bar{D} + CD$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+\textbf{3. Mathematical Derivation of Data Inputs}
+
+We simplify the logic expressions for each data input using fundamental Boolean algebra laws:
+
+\begin{align*}
+I_0 &= \bar{C}D + CD \\
+    &= D(\bar{C} + C) && \text{(Distributive Law)} \\
+    &= D(1) && \text{(Complementarity Law: } X + \bar{X} = 1 \text{)} \\
+    &= D && \text{(Identity Law)} \\[10pt]
+I_1 &= \bar{C}\bar{D} && \text{(No further simplification needed)} \\[10pt]
+I_2 &= CD && \text{(No further simplification needed)} \\[10pt]
+I_3 &= \bar{C}\bar{D} + \bar{C}D + C\bar{D} + CD \\
+    &= \bar{C}(\bar{D} + D) + C(\bar{D} + D) && \text{(Distributive Law)} \\
+    &= \bar{C}(1) + C(1) && \text{(Complementarity Law)} \\
+    &= \bar{C} + C \\
+    &= 1 && \text{(Complementarity Law)}
+\end{align*}
+
+\vspace{0.2cm}
+\textbf{Summary of MUX Inputs:}
+\begin{itemize}
+    \item $I_0 = D$
+    \item $I_1 = \bar{C}\bar{D}$ (Implemented using an AND gate with inverted inputs)
+    \item $I_2 = CD$ (Implemented using an AND gate)
+    \item $I_3 = 1$ (Connected to Logic HIGH / $+V_{CC}$)
+\end{itemize}
+
+\vspace{0.5cm}
+\textbf{4. Logic Circuit Diagram}
+
+Below is the complete hardware implementation using standard basic logic gates and the $4 \times 1$ MUX block:
+
+\begin{center}
+\begin{circuitikz}[thick, scale=1.1, transform shape]
     
-    % Select lines
-    \draw[<-] (0.8, 0) -- (0.8, -0.7) node[below] {$A$};
-    \draw[<-] (1.7, 0) -- (1.7, -0.7) node[below] {$B$};
+    % MUX Box Outline
+    \draw[fill=white] (0,0) rectangle (3,6);
+    \node at (1.5, 3) {\large \textbf{4$\times$1 MUX}};
+
+    % Select Lines
+    \draw (1, -1) node[below, scale=0.5] {$S_1 = A$} -- (1, 0);
+    \draw (2, -1) node[below, scale=0.5] {$S_0 = B$} -- (2, 0);
+
+    % Output Line
+    \draw (3, 3) -- (4, 3) node[right] {\textbf{$F$}};
+
+    % MUX Input Pin Labels
+    \node[right] at (0, 5) {$I_0$};
+    \node[right] at (0, 3.8) {$I_1$};
+    \node[right] at (0, 2.2) {$I_2$};
+    \node[right] at (0, 1) {$I_3$};
+
+    % Small connecting wires to the MUX boundary
+    \draw (-0.5, 5) -- (0, 5);
+    \draw (-0.5, 3.8) -- (0, 3.8);
+    \draw (-0.5, 2.2) -- (0, 2.2);
+    \draw (-0.5, 1) -- (0, 1);
+
+    % Input Variable Rails (C and D)
+    \draw (-6.5, 6.5) -- (-6.5, 0) node[below] {$C$};
+    \draw (-5.5, 6.5) -- (-5.5, 0) node[below] {$D$};
+
+    % --- I0 = D ---
+    \draw (-5.5, 5) node[circ]{} -- (-0.5, 5);
+
+    % --- I1 = C'D' ---
+    % AND gate for I1
+    \node[and port, scale=0.8] (andI1) at (-2, 3.8) {};
+    \draw (andI1.out) -- (-0.5, 3.8);
     
-    % Gates
-    \node[nor port, scale=0.7] (nor1) at (-1.5, 3.5) {};
-    \node[and port, scale=0.7] (and1) at (-1.5, 1.5) {};
+    % NOT gates for I1 inputs
+    \node[not port, scale=0.4] (notC) at ([xshift=-1.5cm]andI1.in 1) {};
+    \node[not port, scale=0.4] (notD) at ([xshift=-1.5cm]andI1.in 2) {};
     
-    % Rails
-    \draw (-3.5, 4.5) node[above] {$C$} -- (-3.5, 0);
-    \draw (-3.0, 4.5) node[above] {$D$} -- (-3.0, 0);
+    \draw (notC.out) -- (andI1.in 1);
+    \draw (notD.out) -- (andI1.in 2);
     
-    % Wires
-    \draw (-3.0, 4) -- (0, 4) node[pos=1, left, font=\tiny] {$I_0$};
-    \draw (-3.5, 3.75) -| (nor1.in 1); \draw (-3.0, 3.25) -| (nor1.in 2);
-    \draw (nor1.out) -- (0, 3) node[pos=1, left, font=\tiny] {$I_1$};
-    \draw (-3.5, 1.75) -| (and1.in 1); \draw (-3.0, 1.25) -| (and1.in 2);
-    \draw (and1.out) -- (0, 2) node[pos=1, left, font=\tiny] {$I_2$};
-    \draw (-1, 1) node[left] {$1$} -- (0, 1) node[pos=1, left, font=\tiny] {$I_3$};
-    
-    \fill (-3.5, 3.75) circle (2pt); \fill (-3.0, 3.75) circle (2pt);
-    \fill (-3.5, 1.75) circle (2pt); \fill (-3.0, 1.75) circle (2pt);
-    \fill (-3.0, 4) circle (2pt);
+    % Connections from Rails to NOT gates
+    \draw (-6.5, 0 |- notC.in) node[circ]{} -- (notC.in);
+    \draw (-5.5, 0 |- notD.in) node[circ]{} -- (notD.in);
+
+    % --- I2 = CD ---
+    % AND gate for I2
+    \node[and port, scale=0.8] (andI2) at (-2, 2.2) {};
+    \draw (andI2.out) -- (-0.5, 2.2);
+
+    % Connections from Rails directly to AND gate
+    \draw (-6.5, 0 |- andI2.in 1) node[circ]{} -- (andI2.in 1);
+    \draw (-5.5, 0 |- andI2.in 2) node[circ]{} -- (andI2.in 2);
+
+    % --- I3 = 1 ---
+    \node[left] at (-0.5, 1) {\textbf{Logic 1} ($+V_{CC}$)};
+
 \end{circuitikz}
 \end{center}
 
 \end{tcolorbox}
-
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -18318,9 +18404,160 @@ Factoring the function $F(A,B,C,D)$ based on $A$ and $B$:
 
 \begin{enumerate}
 
-%% -- Q1: 3-input 3-output circuit (input 0-3: output+2, input 4-7: output-3) --
 \item Using a 4-bit binary adder and XOR gates, design a circuit which takes two 4-bit BCD inputs $A$ and $B$ and returns: $A+1$ if input is 00; $A'$ if input is 01; $A'+1$ if input is 10; $A$ if input is 11.
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Problem Analysis \& Interpretation}
+
+The problem requires designing an arithmetic logic circuit using only a \textbf{4-bit binary adder} and \textbf{XOR gates}. We are given a 4-bit data input $A$. 
+\textit{Note on Input B:} While the problem description mentions $B$ as a 4-bit BCD input, the operational modes provided (00, 01, 10, 11) correspond to a 2-bit control space. Therefore, we interpret that the two least significant bits of $B$ (let us denote them as $B_1$ and $B_0$) act as the control inputs to select the operation performed on $A$. 
+
+A standard 4-bit binary adder computes the function:
+\[
+F = X + Y + C_{in}
+\]
+where $X$ and $Y$ are 4-bit data inputs, $C_{in}$ is the carry-in bit, and $F$ is the 4-bit sum. Our objective is to determine the appropriate signals for $X$, $Y$, and $C_{in}$ using only $A$, $B_1$, $B_0$, and XOR gates to satisfy the four conditions.
+
+\vspace{0.5cm}
+\textbf{2. Target Operations and Adder Input Mapping}
+
+Let us map the desired outputs to the adder's parameters. To either pass $A$ directly or invert it ($A'$), we can use the fundamental property of the XOR gate: 
+\[ A \oplus 0 = A \quad \text{and} \quad A \oplus 1 = A' \]
+We can fix the second adder input to zero ($Y = 0$). We introduce a control signal $C_X$ such that $X = A \oplus C_X$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{cc|c|ccc}
+\toprule
+\multicolumn{2}{c|}{\textbf{Control Input}} & \textbf{Desired} & \multicolumn{3}{c}{\textbf{Required Adder Inputs}} \\
+$\mathbf{B_1}$ & $\mathbf{B_0}$ & \textbf{Output ($F$)} & $\mathbf{X}$ (Data) & $\mathbf{Y}$ (Data) & $\mathbf{C_{in}}$ (Carry) \\
+\midrule
+0 & 0 & $A + 1$  & $A$  \ (\text{so } $C_X=0$) & 0 & 1 \\
+0 & 1 & $A'$     & $A'$ \ (\text{so } $C_X=1$) & 0 & 0 \\
+1 & 0 & $A' + 1$ & $A'$ \ (\text{so } $C_X=1$) & 0 & 1 \\
+1 & 1 & $A$      & $A$  \ (\text{so } $C_X=0$) & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5cm}
+\textbf{3. Boolean Derivation for Control Signals}
+
+From the table above, we extract the boolean expressions for $C_X$ and $C_{in}$ in terms of $B_1$ and $B_0$:
+
+\begin{itemize}
+    \item \textbf{Deriving $\mathbf{C_{in}}$:} 
+    Observing the $C_{in}$ column, the values are $\{1, 0, 1, 0\}$ corresponding to $B_0 = \{0, 1, 0, 1\}$. 
+    \[ C_{in} = \overline{B_0} \]
+    Since we are constrained to use \textit{only} XOR gates, we can synthesize a NOT gate by XORing with Logic 1 ($V_{CC}$):
+    \begin{align*}
+        C_{in} &= B_0 \oplus 1
+    \end{align*}
+
+    \item \textbf{Deriving $\mathbf{C_X}$:} 
+    Observing the required $C_X$ values, we have $C_X = \{0, 1, 1, 0\}$. This is the exact truth table for an XOR operation between $B_1$ and $B_0$.
+    \begin{align*}
+        C_X &= B_1 \oplus B_0
+    \end{align*}
+\end{itemize}
+
+Thus, the inputs to the 4-bit adder will be:
+\begin{align*}
+    X_i &= A_i \oplus C_X = A_i \oplus (B_1 \oplus B_0) \quad \text{for } i \in \{0,1,2,3\} \\
+    Y_i &= 0 \quad \text{(Grounded)} \\
+    C_{in} &= B_0 \oplus 1
+\end{align*}
+
+\vspace{0.5cm}
+\textbf{4. Circuit Implementation}
+
+The full schematic utilizes one 4-bit binary adder block and six XOR gates (four for the data path, two for the control logic). Net labels (\textcolor{cD}{\textbf{$C_X$}} and \textcolor{cD}{\textbf{$C_{in}$}}) are utilized for clean routing.
+
+\begin{center}
+\begin{circuitikz}[thick]
+    % ---------------------------------------------------------
+    % Main Adder Block
+    % ---------------------------------------------------------
+    \draw[fill=cD!5, rounded corners=2pt, draw=cD] (0, 0) rectangle (4, 6);
+    \node[align=center, font=\bfseries] at (2, 3) {4-bit \\ Binary \\ Adder};
+    
+    % Cin and Cout
+    \node[below, font=\small] at (2, 6) {$C_{in}$};
+    \draw[cD, thick] (2, 6) -- (2, 7) node[above, font=\bfseries] {$C_{in}$};
+    
+    \node[above, font=\small] at (2, 0) {$C_{out}$};
+    \draw (2, 0) -- (2, -1) node[below] {$C_{out}$};
+
+    % ---------------------------------------------------------
+    % Data Inputs and XOR Gates
+    % ---------------------------------------------------------
+    \foreach \i/\y in {3/4.8, 2/3.6, 1/2.4, 0/1.2} {
+        % Adder X_i input label
+        \node[right, font=\small] at (0, \y) {$X_\i$};
+        
+        % XOR gates for A_i
+        \node[xor port, scale=0.8] (xor\i) at (-2, \y) {};
+        
+        % Connect XOR to Adder X_i
+        \draw (xor\i.out) -- (0, \y);
+        
+        % A_i inputs
+        \draw (xor\i.in 1) -- ++(-2.5, 0) node[left] {$A_\i$};
+        
+        % C_X connection point (to vertical bus)
+        \draw (xor\i.in 2) -- ++(-0.5, 0) coordinate (cx\i);
+    }
+    
+    % Common C_X vertical bus
+    \draw[cD, thick] (cx3) -- (cx0);
+    \draw[cD, thick] (cx0) -- ++(0, -0.6) node[below, font=\bfseries] {$C_X$};
+    \fill[cD] (cx3) circle (1.5pt);
+    \fill[cD] (cx2) circle (1.5pt);
+    \fill[cD] (cx1) circle (1.5pt);
+    \fill[cD] (cx0) circle (1.5pt);
+
+    % Y Inputs (Grounded)
+    \node[right, font=\small] at (0, 0.5) {$Y_{3..0}$};
+    \draw (0, 0.5) -- (-1.5, 0.5) node[left, font=\bfseries, scale=0.5] {Logic 0 (GND)};
+
+    % Final Sum Outputs (F_i)
+    \foreach \i/\y in {3/4.8, 2/3.6, 1/2.4, 0/1.2} {
+        \node[left, font=\small] at (4, \y) {$\Sigma_\i$};
+        \draw (4, \y) -- (5, \y) node[right, font=\bfseries] {$F_\i$};
+    }
+
+    % ---------------------------------------------------------
+    % Control Logic Block
+    % ---------------------------------------------------------
+    \begin{scope}[yshift=-7.5cm, xshift=-1cm]
+        % Dashed bounding box
+        \draw[dashed, draw=gray, rounded corners=5pt] (1.5, 0) rectangle (7.5, 4);
+        \node[font=\bfseries, text=cD] at (4.5, 3.5) {Control Signal Generation};
+        
+        % Logic Gates
+        \node[xor port, scale=0.8] (xorCx) at (5, 2.5) {};
+        \node[xor port, scale=0.8] (xorCin) at (5, 1) {};
+        
+        % Input Connections
+        \draw (xorCx.in 1) -- (2.5, 2.724) node[left] {$B_1$};
+        \draw (xorCin.in 2) -- (2.5, 0.776) node[left] {Logic 1 ($V_{CC}$)};
+        
+        % B0 Split Routing (Placed precisely to avoid overlaps)
+        \draw (2.5, 1.75) node[left] {$B_0$} -- (3.5, 1.75) coordinate (b0_split);
+        \draw (b0_split) |- (xorCx.in 2);
+        \draw (b0_split) |- (xorCin.in 1);
+        \fill (b0_split) circle (1.5pt);
+        
+        % Outputs
+        \draw[cD, thick] (xorCx.out) -- ++(1,0) node[right, font=\bfseries] {$C_X$};
+        \draw[cD, thick] (xorCin.out) -- ++(1,0) node[right, font=\bfseries] {$C_{in}$};
+    \end{scope}
+
+\end{circuitikz}
+\end{center}
+\end{tcolorbox}
 
 \item Design a Binary-to-Excess-3 converter using a logic circuit block with inputs $A$, $B$, $C$, $D$, control lines $x_1$, $x_0$, and active-low $\overline{EN}$. Output~$Y$: if $x_1x_0=00$, $A \to Y$; if $01$, $B \to Y$; if $10$, $C \to Y$; if $11$, $D \to Y$.
 
@@ -18365,15 +18602,376 @@ Factoring the function $F(A,B,C,D)$ based on $A$ and $B$:
 
 \end{tikzpicture}
 \end{center}
-
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
-%% -- Q3: 4-bit adder + XOR gate: A+1, A', A'+1, A based on 2-bit input (2018-19) --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Component Analysis \& Problem Formulation}
+
+The given logic circuit block functions as a \textbf{4-to-1 Multiplexer (MUX)} with an active-low enable ($\overline{\text{EN}}$). 
+\begin{itemize}
+    \item \textbf{Data Inputs}: $A, B, C, D$ correspond to select line conditions $x_1x_0 = 00, 01, 10, 11$ respectively.
+    \item \textbf{Select Inputs}: $x_1, x_0$ determine which data input is routed to output $Y$.
+    \item \textbf{Enable Input}: $\overline{\text{EN}}$ must be tied to Logic 0 (Ground) for normal operation.
+\end{itemize}
+
+To design a \textbf{4-bit Binary-to-Excess-3 Converter}, we require four such blocks—one for each output bit of the Excess-3 code ($E_3, E_2, E_1, E_0$). We map the Binary Coded Decimal (BCD) input bits $B_3, B_2, B_1, B_0$ as follows:
+\begin{itemize}
+    \item We connect the two most significant bits to the select lines of all blocks: $x_1 = B_3$ and $x_0 = B_2$.
+    \item The block inputs $A, B, C, D$ for each bit will be derived as Boolean functions of the remaining least significant bits: $B_1$ and $B_0$.
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{2. Truth Table \& Input Derivation}
+
+Excess-3 is formed by adding 3 ($0011_2$) to a valid BCD input ($0$ to $9$). The input states $10$ to $15$ are invalid in BCD and are treated as \textbf{Don't Cares (X)} to simplify our hardware logic.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}cccc|cccc@{}}
+\toprule
+\multicolumn{4}{c|}{\textbf{BCD Input}} & \multicolumn{4}{c}{\textbf{Excess-3 Output}} \\
+$B_3 (x_1)$ & $B_2 (x_0)$ & $B_1$ & $B_0$ & $E_3$ & $E_2$ & $E_1$ & $E_0$ \\
+\midrule
+0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 \\
+0 & 0 & 0 & 1 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 1 & 0 & 1 \\
+0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 \\
+\midrule
+0 & 1 & 0 & 0 & 0 & 1 & 1 & 1 \\
+0 & 1 & 0 & 1 & 1 & 0 & 0 & 0 \\
+0 & 1 & 1 & 0 & 1 & 0 & 0 & 1 \\
+0 & 1 & 1 & 1 & 1 & 0 & 1 & 0 \\
+\midrule
+1 & 0 & 0 & 0 & 1 & 0 & 1 & 1 \\
+1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 \\
+1 & 0 & 1 & 0 & X & X & X & X \\
+1 & 0 & 1 & 1 & X & X & X & X \\
+\midrule
+1 & 1 & X & X & X & X & X & X \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+By grouping the truth table based on the select lines ($B_3 B_2$), we inspect the behavior of each output with respect to $B_1$ and $B_0$:
+
+\begin{itemize}
+    \item \textbf{For $\mathbf{E_0}$:} The pattern is alternating ($1, 0, 1, 0$) for all valid segments. This directly evaluates to the NOT function: \textcolor{cD}{$\mathbf{\overline{B_0}}$}.
+    \item \textbf{For $\mathbf{E_1}$:} The pattern is symmetric ($1, 0, 0, 1$) for valid segments. This matches the XNOR function: \textcolor{cD}{$\mathbf{\overline{B_1 \oplus B_0}}$}.
+    \item \textbf{For $\mathbf{E_2}$:} 
+    \begin{itemize}
+        \item When $00$, output is $(0, 1, 1, 1) \implies \text{OR function: } \textcolor{cD}{\mathbf{B_1 + B_0}}$
+        \item When $01$, output is $(1, 0, 0, 0) \implies \text{NOR function: } \textcolor{cD}{\mathbf{\overline{B_1 + B_0}}}$
+        \item When $10$, valid outputs are $(0, 1)$, matching directly to \textcolor{cD}{$\mathbf{B_0}$}. 
+    \end{itemize}
+    \item \textbf{For $\mathbf{E_3}$:} 
+    \begin{itemize}
+        \item When $00$, output is always $(0, 0, 0, 0) \implies \text{Logic } \textcolor{cD}{\mathbf{0}}$
+        \item When $01$, output is $(0, 1, 1, 1) \implies \text{OR function: } \textcolor{cD}{\mathbf{B_1 + B_0}}$
+        \item When $10$, valid outputs are $(1, 1) \implies \text{Logic } \textcolor{cD}{\mathbf{1}}$
+    \end{itemize}
+\end{itemize}
+
+Mapping the Don't Care states optimally to reuse existing signals, we formulate the final wiring table for our Logic Blocks:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}cc|cccc@{}}
+\toprule
+\textbf{MUX Input} & \textbf{Select ($B_3 B_2$)} & \textbf{$E_3$ Block} & \textbf{$E_2$ Block} & \textbf{$E_1$ Block} & \textbf{$E_0$ Block} \\
+\midrule
+$A$ & 00 & $0$ & $B_1+B_0$ & $\overline{B_1 \oplus B_0}$ & $\overline{B_0}$ \\
+$B$ & 01 & $B_1+B_0$ & $\overline{B_1+B_0}$ & $\overline{B_1 \oplus B_0}$ & $\overline{B_0}$ \\
+$C$ & 10 & $1$ & $B_0$ & $\overline{B_1 \oplus B_0}$ & $\overline{B_0}$ \\
+$D$ & 11 & $0$ & $0$ & $\overline{B_1 \oplus B_0}$ & $\overline{B_0}$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{3. Signal Generation Sub-circuit}
+
+To avoid clutter in the main routing, we independently generate the intermediate logic functions from $B_1$ and $B_0$ using standard gates.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.95, transform shape]
+    
+    % Input Buses
+    \draw (-1, 5) node[left, font=\bfseries] {$B_1$} -- (0, 5) -- (0, -2);
+    \draw (-1, 4.5) node[left, font=\bfseries] {$B_0$} -- (1, 4.5) -- (1, -2);
+    
+    % Gates Placement (Aligned vertically with spacing to avoid clutter)
+    \node[not port] (not1) at (4, 3.5) {};
+    \node[or port] (or1) at (4, 2) {};
+    \node[nor port] (nor1) at (4, 0.5) {};
+    \node[xnor port] (xnor1) at (4, -1) {};
+    
+    % Connections for NOT gate
+    \fill (1, 0 |- not1.in) circle (2pt);
+    \draw (1, 0 |- not1.in) -- (not1.in);
+    
+    % Connections for OR gate
+    \fill (0, 0 |- or1.in 1) circle (2pt);
+    \draw (0, 0 |- or1.in 1) -- (or1.in 1);
+    
+    \fill (1, 0 |- or1.in 2) circle (2pt);
+    \draw (1, 0 |- or1.in 2) -- (or1.in 2);
+    
+    % Connections for NOR gate
+    \fill (0, 0 |- nor1.in 1) circle (2pt);
+    \draw (0, 0 |- nor1.in 1) -- (nor1.in 1);
+    
+    \fill (1, 0 |- nor1.in 2) circle (2pt);
+    \draw (1, 0 |- nor1.in 2) -- (nor1.in 2);
+    
+    % Connections for XNOR gate
+    \fill (0, 0 |- xnor1.in 1) circle (2pt);
+    \draw (0, 0 |- xnor1.in 1) -- (xnor1.in 1);
+    
+    \fill (1, 0 |- xnor1.in 2) circle (2pt);
+    \draw (1, 0 |- xnor1.in 2) -- (xnor1.in 2);
+    
+    % Output Labels
+    \draw (not1.out) -- ++(1,0) node[right, font=\bfseries] {$\overline{B_0}$};
+    \draw (or1.out) -- ++(1,0) node[right, font=\bfseries] {$B_1 + B_0$};
+    \draw (nor1.out) -- ++(1,0) node[right, font=\bfseries] {$\overline{B_1 + B_0}$};
+    \draw (xnor1.out) -- ++(1,0) node[right, font=\bfseries] {$\overline{B_1 \oplus B_0}$};
+
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Complete System Diagram}
+
+The final implementation utilizing four instances of the given Logic Circuit block. The generated signals from the sub-circuit are applied directly to the $A,B,C,D$ input nodes.
+
+\begin{center}
+\begin{tikzpicture}[>=latex, font=\normalsize, scale=0.9, transform shape]
+
+    % Loop to create the 4 identically structured MUX blocks
+    \foreach \i/\y/\inA/\inB/\inC/\inD in {
+        3/0/0/{B_1+B_0}/1/0,
+        2/-4.5/{B_1+B_0}/{\overline{B_1+B_0}}/{B_0}/0,
+        1/-9.0/{\overline{B_1 \oplus B_0}}/{\overline{B_1 \oplus B_0}}/{\overline{B_1 \oplus B_0}}/{\overline{B_1 \oplus B_0}},
+        0/-13.5/{\overline{B_0}}/{\overline{B_0}}/{\overline{B_0}}/{\overline{B_0}}
+    } {
+        \begin{scope}[yshift=\y cm]
+            % Main Logic Box
+            \node [draw=cD, fill=cD!4, rectangle, minimum height=3.5cm, minimum width=2.8cm, align=center, thick] (box\i) {\textbf{Logic Circuit} \\ (Bit $E_\i$)};
+            
+            % Input coordinate anchors on the left face
+            \coordinate (inA) at ([yshift=1.2cm]box\i.west);
+            \coordinate (inB) at ([yshift=0.4cm]box\i.west);
+            \coordinate (inC) at ([yshift=-0.4cm]box\i.west);
+            \coordinate (inD) at ([yshift=-1.2cm]box\i.west);
+            
+            % Drawing inputs and applying labels
+            \draw [thick] (inA) -- ++(-1.5cm, 0) node[left] {$\inA$};
+            \node[right=2pt, font=\scriptsize] at (inA) {A};
+            
+            \draw [thick] (inB) -- ++(-1.5cm, 0) node[left] {$\inB$};
+            \node[right=2pt, font=\scriptsize] at (inB) {B};
+            
+            \draw [thick] (inC) -- ++(-1.5cm, 0) node[left] {$\inC$};
+            \node[right=2pt, font=\scriptsize] at (inC) {C};
+            
+            \draw [thick] (inD) -- ++(-1.5cm, 0) node[left] {$\inD$};
+            \node[right=2pt, font=\scriptsize] at (inD) {D};
+            
+            % Output Y on the right face
+            \coordinate (outY) at (box\i.east);
+            \draw [thick, draw=cD] (outY) -- ++(1cm, 0) node[right, font=\bfseries] {$E_\i$};
+            \node[left=2pt, font=\scriptsize] at (outY) {Y};
+            
+            % Control/Select lines on the bottom face
+            \coordinate (sel1) at ([xshift=-0.8cm]box\i.south);
+            \coordinate (sel0) at ([xshift=-0.2cm]box\i.south);
+            
+            \draw [thick] (sel1) -- ++(0, -0.6cm) node[below] {$B_3$};
+            \node[above=2pt, font=\scriptsize] at (sel1) {$x_1$};
+            
+            \draw [thick] (sel0) -- ++(0, -0.6cm) node[below] {$B_2$};
+            \node[above=2pt, font=\scriptsize] at (sel0) {$x_0$};
+            
+            % Enable Pin with active-low bubble
+            \node [draw, circle, inner sep=0pt, minimum size=4pt, fill=white] (bubble\i) at ([xshift=0.8cm]box\i.south) {};
+            \draw [thick] (bubble\i.south) |- ++(1.0cm, -0.4cm) node[right] {0 (GND)};
+            \node[above=4pt, font=\scriptsize] at (bubble\i) {$\overline{\text{EN}}$};
+        \end{scope}
+    }
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
 \item Design a combinational circuit with 3 inputs $x$, $y$, $z$ and 3 outputs $A$, $B$, $C$. When the binary input is 0, 1, 2, or 3, the binary output is two greater than the input. When the binary input is 4, 5, 6, or 7, the binary output is three less than the input.
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
 
-%% -- Q2: Binary-to-Excess-3 converter using MUX-like logic block (2016-17) --
+\textbf{1. Component Analysis \& Problem Formulation}
+
+We are tasked with designing a combinational circuit with 3 inputs ($x$, $y$, $z$) and 3 outputs ($A$, $B$, $C$). The input $x$ is the Most Significant Bit (MSB), and $z$ is the Least Significant Bit (LSB). The operational conditions are defined as follows:
+\begin{itemize}
+    \item \textbf{Condition 1:} If the input $\in \{0, 1, 2, 3\}$, the output is \textbf{Input + 2}.
+    \item \textbf{Condition 2:} If the input $\in \{4, 5, 6, 7\}$, the output is \textbf{Input - 3}.
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{2. Truth Table Derivation}
+
+We compute the expected decimal outputs and map them to their corresponding 3-bit binary equivalents to populate the truth table.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}c|ccc|c|c|ccc@{}}
+\toprule
+\textbf{Condition} & \multicolumn{3}{c|}{\textbf{Input}} & \textbf{Input} & \textbf{Output} & \multicolumn{3}{c}{\textbf{Output}} \\
+& $x$ & $y$ & $z$ & \textbf{(Decimal)} & \textbf{(Decimal)} & $A$ & $B$ & $C$ \\
+\midrule
+\multirow{4}{*}{Input $+ 2$} 
+& 0 & 0 & 0 & 0 & $0 + 2 = 2$ & 0 & 1 & 0 \\
+& 0 & 0 & 1 & 1 & $1 + 2 = 3$ & 0 & 1 & 1 \\
+& 0 & 1 & 0 & 2 & $2 + 2 = 4$ & 1 & 0 & 0 \\
+& 0 & 1 & 1 & 3 & $3 + 2 = 5$ & 1 & 0 & 1 \\
+\midrule
+\multirow{4}{*}{Input $- 3$} 
+& 1 & 0 & 0 & 4 & $4 - 3 = 1$ & 0 & 0 & 1 \\
+& 1 & 0 & 1 & 5 & $5 - 3 = 2$ & 0 & 1 & 0 \\
+& 1 & 1 & 0 & 6 & $6 - 3 = 3$ & 0 & 1 & 1 \\
+& 1 & 1 & 1 & 7 & $7 - 3 = 4$ & 1 & 0 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{3. Karnaugh Maps and Boolean Optimization}
+
+Using the truth table, we extract the minterms for each output variable and minimize the Boolean expressions using 3-variable Karnaugh Maps.
+
+\vspace{0.3cm}
+\textbf{Output $\mathbf{A}$:} Minterms $\sum m(2, 3, 7)$
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+    \minterms{2,3,7}
+    \autoterms[0]
+    \implicant{3}{2}
+    \implicant{3}{7}
+\end{karnaugh-map}
+\end{center}
+\begin{align*}
+    A &= \bar{x}y + yz \\
+      &= y(\bar{x} + z) \quad \text{(Optional factoring via Distributive Law)}
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{Output $\mathbf{B}$:} Minterms $\sum m(0, 1, 5, 6)$
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+    \minterms{0,1,5,6}
+    \autoterms[0]
+    \implicant{0}{1}
+    \implicant{1}{5}
+    \implicant{6}{6}
+\end{karnaugh-map}
+\end{center}
+\begin{align*}
+    B &= \bar{x}\bar{y} + \bar{y}z + xy\bar{z} 
+\end{align*}
+*(Note: Minterm $m_6$ forms an isolated cell, resulting in the 3-literal term $xy\bar{z}$).*
+
+\vspace{0.3cm}
+\textbf{Output $\mathbf{C}$:} Minterms $\sum m(1, 3, 4, 6)$
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+    \minterms{1,3,4,6}
+    \autoterms[0]
+    \implicant{1}{3}
+    \implicantedge{4}{4}{6}{6}
+\end{karnaugh-map}
+\end{center}
+\begin{align*}
+    C &= \bar{x}z + x\bar{z} \\
+      &= x \oplus z \quad \text{(Definition of XOR)}
+\end{align*}
+
+\vspace{0.5cm}
+\textbf{4. Logic Circuit Implementation}
+
+Based on the optimized expressions, the combinational logic circuit is constructed below using standard logic gates. Input buses for $x, y, z$ and their complements are provided for clean signal routing.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.9, transform shape, label distance=2mm]
+    % Input Buses
+    % X and X'
+    \draw (0, 8) node[above, font=\bfseries] {$x$} -- (0, -2.5);
+    \node[not port, rotate=-90, scale=0.5] (notx) at (1, 7.3) {};
+    \draw  (notx.in)--++(-1, 0) node[circ]{} ;
+    \draw (notx.out) -- (1, -2.5) node[below, font=\bfseries] {$\bar{x}$};
+    
+    % Y and Y'
+    \draw (2.5, 8) node[above, font=\bfseries] {$y$} -- (2.5, -2.5);
+    \node[not port, rotate=-90, scale=0.5] (noty) at (3.5, 7.3) {};
+    \draw  (noty.in)--++(-1, 0) node[circ]{} ;
+    \draw (noty.out) -- (3.5, -2.5) node[below, font=\bfseries] {$\bar{y}$};
+    
+    % Z and Z'
+    \draw (5, 8) node[above, font=\bfseries] {$z$} -- (5, -2.5);
+    \node[not port, rotate=-90, scale=0.5] (notz) at (6, 7.3) {};
+    \draw  (notz.in)--++(-1, 0) node[circ]{} ;
+    \draw (notz.out) -- (6, -2.5) node[below, font=\bfseries] {$\bar{z}$};
+
+    % ==============================================
+    % Logic for Output A: \bar{x}y + yz
+    % ==============================================
+    \node[and port] (andA1) at (9, 6.5) {};
+    \draw (1, 0 |- andA1.in 1) node[circ]{} -- (andA1.in 1); % \bar{x}
+    \draw (2.5, 0 |- andA1.in 2) node[circ]{} -- (andA1.in 2); % y
+    
+    \node[and port] (andA2) at (9, 5) {};
+    \draw (2.5, 0 |- andA2.in 1) node[circ]{} -- (andA2.in 1); % y
+    \draw (5, 0 |- andA2.in 2) node[circ]{} -- (andA2.in 2); % z
+    
+    \node[or port] (orA) at (11, 5.75) {};
+    \draw (andA1.out) |- (orA.in 1);
+    \draw (andA2.out) |- (orA.in 2);
+    \draw (orA.out) -- ++(1,0) node[right, font=\bfseries\Large, text=cD] {$A$};
+
+    % ==============================================
+    % Logic for Output B: \bar{x}\bar{y} + \bar{y}z + xy\bar{z}
+    % ==============================================
+    \node[and port] (andB1) at (9, 3.5) {};
+    \draw (1, 0 |- andB1.in 1) node[circ]{} -- (andB1.in 1); % \bar{x}
+    \draw (3.5, 0 |- andB1.in 2) node[circ]{} -- (andB1.in 2); % \bar{y}
+    
+    \node[and port] (andB2) at (9, 2) {};
+    \draw (3.5, 0 |- andB2.in 1) node[circ]{} -- (andB2.in 1); % \bar{y}
+    \draw (5, 0 |- andB2.in 2) node[circ]{} -- (andB2.in 2); % z
+    
+    \node[and port, number inputs=3] (andB3) at (9, 0.5) {};
+    \draw (0, 0 |- andB3.in 1) node[circ]{} -- (andB3.in 1); % x
+    \draw (2.5, 0 |- andB3.in 2) node[circ]{} -- (andB3.in 2); % y
+    \draw (6, 0 |- andB3.in 3) node[circ]{} -- (andB3.in 3); % \bar{z}
+    
+    \node[or port, number inputs=3] (orB) at (11, 2) {};
+    \draw (andB1.out) |- (orB.in 1);
+    \draw (andB2.out) |- (orB.in 2);
+    \draw (andB3.out) |- (orB.in 3);
+    \draw (orB.out) -- ++(1,0) node[right, font=\bfseries\Large, text=cD] {$B$};
+
+    % ==============================================
+    % Logic for Output C: x XOR z
+    % ==============================================
+    \node[xor port] (xorC) at (9, -1.5) {};
+    \draw (0, 0 |- xorC.in 1) node[circ]{} -- (xorC.in 1); % x
+    \draw (5, 0 |- xorC.in 2) node[circ]{} -- (xorC.in 2); % z
+    \draw (xorC.out) -- ++(3.1,0) node[right, font=\bfseries\Large, text=cD] {$C$};
+
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -18382,24 +18980,532 @@ Factoring the function $F(A,B,C,D)$ based on $A$ and $B$:
 
 \begin{enumerate}
 
-%% -- Q1: 2-bit magnitude comparator (2016-17) --
 \item Design a logic circuit which finds the maximum value between two 3-bit numbers. Explain the operation using the two numbers 7 and 3.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Strategy}
+
+To construct a logic circuit that finds the maximum value between two 3-bit numbers, $A$ ($A_2A_1A_0$) and $B$ ($B_2B_1B_0$), we utilize a Register Transfer Level (RTL) datapath approach. 
+The core components are:
+\begin{itemize}
+    \item \textbf{A 3-Bit Magnitude Comparator:} Evaluates whether $A > B$. It outputs a boolean signal $G$.
+    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Three multiplexers map each bit of the output $M_i$. The select pin of each MUX is driven by the comparator's output $G$.
+\end{itemize}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}c|c|l@{}}
+\toprule
+\textbf{Magnitude Condition} & \textbf{Select Signal ($G$)} & \textbf{Routed Output ($M$)} \\
+\midrule
+$A > B$ & 1 & $M = A$ (Input $A$ is routed) \\
+$A = B$ & 0 & $M = B$ (Since $A=B$, both are valid max values) \\
+$A < B$ & 0 & $M = B$ (Input $B$ is routed) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+\textbf{Step 2.1: Comparator Logic ($A > B$)} \\
+First, we define the bitwise equality signal (XNOR) for each bit position $i \in \{0,1,2\}$:
+\begin{align*}
+    E_i &= A_i \odot B_i = A_i B_i + \overline{A_i}\cdot \overline{B_i}
+\end{align*}
+The Greater-Than output $G$ (where $A > B$) becomes True if $A_2 > B_2$, or if they are equal but $A_1 > B_1$, and so on. The exact Boolean expression is:
+\begin{align*}
+    G &= A_2 \overline{B_2} + E_2 A_1 \overline{B_1} + E_2 E_1 A_0 \overline{B_0}
+\end{align*}
+
+\textbf{Step 2.2: Multiplexer Logic ($M_i$)} \\
+For each bit $i \in \{0, 1, 2\}$, the 2-to-1 MUX selects between $A_i$ and $B_i$ based on $G$. If $G=1$, $M_i = A_i$. If $G=0$, $M_i = B_i$.
+\begin{align*}
+    M_i &= G \cdot A_i + \overline{G} \cdot B_i
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. RTL Datapath Diagram}
+
+Given the complexity of drawing dozens of intersecting gate-level primitives for a 3-bit comparator and multiplexer array, the design is clearly presented using standard structural MSI blocks.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.95, transform shape, x=1.3cm]
+    % ==============================================
+    % 3-Bit Magnitude Comparator
+    % ==============================================
+    \draw[fill=cD!5, rounded corners] (0, 0.5) rectangle (4, 7.5);
+    \node[align=center, font=\bfseries] at (2, 4) {3-Bit\\Magnitude\\Comparator};
+    
+    % Comparator Inputs
+    \draw (0, 6) -- (-1.5, 6) node[left, font=\bfseries] {$A[2:0]$};
+    \draw (0, 2) -- (-1.5, 2) node[left, font=\bfseries] {$B[2:0]$};
+    
+    % Comparator Output
+    \draw (4, 4) node[above right, font=\bfseries] {$G \ (A>B)$} -- (6, 4);
+    \fill (6, 4) circle (2pt);
+    
+    % Vertical Select Bus
+    \draw (6, -0.25) -- (6, 5.75);
+
+    % ==============================================
+    % 2-to-1 Multiplexer Array
+    % ==============================================
+    \foreach \y/\i in {7/2, 4/1, 1/0} {
+        % Draw MUX Trapezoid
+        \draw[fill=cD!5] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
+        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
+        
+        % Data Inputs to MUX
+        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$A_\i$};
+        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$B_\i$};
+        
+        % Internal Pin Labels
+        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
+        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
+        
+        % Data Output
+        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$M_\i$};
+        
+        % Select Input Routing from Bus
+        \draw (8.25, \y-0.75) -- (8.25, \y-1.25) -- (6, \y-1.25);
+        \fill (6, \y-1.25) circle (2pt);
+    }
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Example: A = 7 and B = 3}
+
+We evaluate the system behavior when the inputs are initialized to decimal values $7$ and $3$. 
+First, we convert the operands to 3-bit binary notation:
+\begin{itemize}
+    \item $A = 7_{10} \implies A_2A_1A_0 = 111_2$
+    \item $B = 3_{10} \implies B_2B_1B_0 = 011_2$
+\end{itemize}
+
+\textbf{Step 4.1: Compute the Comparator Output ($G$)}
+Calculate the bitwise equality signals ($E_i = A_i \odot B_i$):
+\begin{align*}
+    E_2 &= 1 \odot 0 = (1\cdot0) + (0\cdot1) = 0 \\
+    E_1 &= 1 \odot 1 = (1\cdot1) + (0\cdot0) = 1 \\
+    E_0 &= 1 \odot 1 = (1\cdot1) + (0\cdot0) = 1 
+\end{align*}
+Substitute into the Greater-Than equation:
+\begin{align*}
+    G &= (A_2 \overline{B_2}) + (E_2 A_1 \overline{B_1}) + (E_2 E_1 A_0 \overline{B_0}) \\
+      &= (1 \cdot \overline{0}) + (0 \cdot 1 \cdot \overline{1}) + (0 \cdot 1 \cdot 1 \cdot \overline{1}) \\
+      &= (1 \cdot 1) + 0 + 0 \\
+      &= 1 \quad \text{(Confirming mathematically that } 7 > 3\text{)}
+\end{align*}
+
+\textbf{Step 4.2: Compute the Multiplexer Outputs ($M_i$)}
+Since the select signal $G = 1$, the logic maps to $M_i = (1 \cdot A_i) + (0 \cdot B_i) = A_i$. The circuit routes the bits of operand $A$ directly to the output:
+\begin{align*}
+    M_2 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
+    M_1 &= (1 \cdot 1) + (0 \cdot 1) = 1 \\
+    M_0 &= (1 \cdot 1) + (0 \cdot 1) = 1 
+\end{align*}
+
+\textbf{Conclusion:} 
+The final output is $M_2M_1M_0 = 111_2$, which converts to $7_{10}$. The hardware successfully identified and outputted the maximum value.
+
+\end{tcolorbox}
 
 \item Design a logic circuit which returns the smaller value between two 4-bit binary numbers $A$ and $B$. Show the operation with $A=7$, $B=9$.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
-%% -- Q3: Circuit returning maximum of two 3-bit numbers (2017-18) --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Strategy}
+
+To design a combinational circuit that returns the smaller (minimum) value between two 4-bit binary numbers, $A = A_3A_2A_1A_0$ and $B = B_3B_2B_1B_0$, we employ a Register Transfer Level (RTL) architecture. The design requires two primary functional blocks:
+\begin{itemize}
+    \item \textbf{A 4-Bit Magnitude Comparator:} This block compares the two numbers and generates a boolean signal $L$, which is true ($1$) if $A < B$.
+    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Four discrete 2-to-1 multiplexers route either the bits of $A$ or the bits of $B$ to the final output $S = S_3S_2S_1S_0$. The selection is controlled by the comparator's output $L$.
+\end{itemize}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}c|c|l@{}}
+\toprule
+\textbf{Magnitude Condition} & \textbf{Select Signal ($L$)} & \textbf{Routed Output ($S$)} \\
+\midrule
+$A < B$ & 1 & $S = A$ (Input $A$ is routed as it is smaller) \\
+$A = B$ & 0 & $S = B$ (Either is valid; $B$ is routed) \\
+$A > B$ & 0 & $S = B$ (Input $B$ is routed as it is smaller) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+\textbf{Step 2.1: Comparator Logic ($A < B$)} \\
+First, we define the bitwise equality signal (XNOR) for each bit position $i \in \{0,1,2,3\}$:
+\begin{align*}
+    E_i &= A_i \odot B_i = A_i B_i + \overline{A_i}\cdot \overline{B_i}
+\end{align*}
+The Less-Than output $L$ evaluates to $1$ if $A_3 < B_3$ (i.e., $A_3=0$ and $B_3=1$), or if they are equal ($E_3=1$) and $A_2 < B_2$, cascading down to the least significant bit. The exact Boolean expression is:
+\begin{align*}
+    L &= \overline{A_3} B_3 + E_3 \overline{A_2} B_2 + E_3 E_2 \overline{A_1} B_1 + E_3 E_2 E_1 \overline{A_0} B_0
+\end{align*}
+
+\textbf{Step 2.2: Multiplexer Logic ($S_i$)} \\
+For each bit $i \in \{0, 1, 2, 3\}$, the 2-to-1 MUX selects between $A_i$ and $B_i$ based on the signal $L$. Since we route $A_i$ when $L=1$ and $B_i$ when $L=0$, the MUX Boolean equation is:
+\begin{align*}
+    S_i &= L \cdot A_i + \overline{L} \cdot B_i
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. RTL Datapath Diagram}
+
+Given the significant gate count of a 4-bit comparator and four multiplexers, the circuit is structurally modeled using standard MSI blocks to maintain professional clarity and strict correctness.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.9, transform shape, x=1.3cm]
+    % ==============================================
+    % 4-Bit Magnitude Comparator
+    % ==============================================
+    \draw[fill=cD!5, rounded corners] (0, 0.5) rectangle (4, 9.5);
+    \node[align=center, font=\bfseries] at (2, 5) {4-Bit\\Magnitude\\Comparator};
+    
+    % Comparator Inputs
+    \draw (0, 7.5) -- (-1.5, 7.5) node[left, font=\bfseries] {$A[3:0]$};
+    \draw (0, 2.5) -- (-1.5, 2.5) node[left, font=\bfseries] {$B[3:0]$};
+    
+    % Comparator Output
+    \draw (4, 5) node[above right, font=\bfseries, scale=0.7] {$L \ (A<B)$} -- (5.5, 5);
+    \fill (5.5, 5) circle (2pt);
+    
+    % Vertical Select Bus
+    \draw (5.5, -0.50) -- (5.5, 8.75);
+
+    % ==============================================
+    % 2-to-1 Multiplexer Array
+    % ==============================================
+    \foreach \y/\i in {8/3, 5.5/2, 3/1, 0.5/0} {
+        % Draw MUX Trapezoid
+        \draw[fill=cD!5] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
+        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
+        
+        % Data Inputs to MUX
+        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$A_\i$};
+        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$B_\i$};
+        
+        % Internal Pin Labels
+        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
+        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
+        
+        % Data Output
+        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$S_\i$};
+        
+        % Select Input Routing from Bus
+        \draw (8.25, \y-0.75) -- (8.25, \y-1.25) -- (5.5, \y-1.25);
+        \fill (5.5, \y-1.25) circle (2pt);
+    }
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Trace: $A = 7$ and $B = 9$}
+
+We evaluate the system behavior when the inputs are initialized to decimal values $7$ and $9$. 
+First, we express the operands in 4-bit binary notation:
+\begin{itemize}
+    \item $A = 7_{10} \implies A_3A_2A_1A_0 = 0111_2$
+    \item $B = 9_{10} \implies B_3B_2B_1B_0 = 1001_2$
+\end{itemize}
+
+\textbf{Step 4.1: Compute the Comparator Output ($L$)} \\
+Evaluate the Most Significant Bit (MSB, index 3):
+\begin{itemize}
+    \item $A_3 = 0$, $B_3 = 1$
+\end{itemize}
+Applying this to the Less-Than Boolean equation:
+\begin{align*}
+    L &= (\overline{A_3} \cdot B_3) + (\text{lower-order terms}) \\
+    L &= (\overline{0} \cdot 1) + (\text{lower-order terms}) \\
+    L &= (1 \cdot 1) + (\text{lower-order terms}) \\
+    L &= 1
+\end{align*}
+Because the MSB of $A$ is strictly less than the MSB of $B$, the comparator immediately asserts $L = 1$ without needing to evaluate the lower-order bits (short-circuit logic property of cascading OR gates). This mathematically confirms $7 < 9$.
+
+\textbf{Step 4.2: Compute the Multiplexer Outputs ($S_i$)} \\
+Because the select signal $L = 1$, the logic maps to $S_i = (1 \cdot A_i) + (0 \cdot B_i) = A_i$. The circuit routes the bits of operand $A$ directly to the output bus:
+\begin{align*}
+    S_3 &= (1 \cdot 0) + (0 \cdot 1) = 0 \\
+    S_2 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
+    S_1 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
+    S_0 &= (1 \cdot 1) + (0 \cdot 1) = 1 
+\end{align*}
+
+\textbf{Conclusion:} 
+The final aggregated output is $S_3S_2S_1S_0 = 0111_2$, which converts to $7_{10}$. The hardware successfully identified and outputted the smaller value.
+
+\end{tcolorbox}
+
 \item Design a digital circuit with logic gates which takes two 3-bit binary numbers $X$ and $Y$ and returns a 3-bit binary number $Z$ equal to the maximum between $X$ and $Y$. 
 ($X$ can be expressed as $X_2X_1X_0$, $Y$ can be expressed as $Y_2XY_1Y_0$; and Z can be
 expressed as $Z_2Z_1Z_0$).
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
-%% -- Q4: Maximum of two 3-bit numbers, example 7 and 3 (2020-21) --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Design Strategy}
+
+To construct a digital circuit that determines the maximum value between two 3-bit binary numbers, $X = X_2X_1X_0$ and $Y = Y_2Y_1Y_0$, we utilize a modular Register Transfer Level (RTL) approach. The system requires two core functional blocks:
+\begin{itemize}
+    \item \textbf{A 3-Bit Magnitude Comparator:} Evaluates the logical condition $X > Y$. It generates a boolean control signal $G$.
+    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Three individual multiplexers are used to route the bits of either $X$ or $Y$ to the final output $Z = Z_2Z_1Z_0$. The selection is driven by the comparator's output $G$.
+\end{itemize}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}c|c|l@{}}
+\toprule
+\textbf{Magnitude Condition} & \textbf{Control Signal ($G$)} & \textbf{Selected Output ($Z$)} \\
+\midrule
+$X > Y$ & 1 & $Z = X$ (Since $X$ is the maximum) \\
+$X = Y$ & 0 & $Z = Y$ (Since $X=Y$, either is valid; $Y$ is routed) \\
+$X < Y$ & 0 & $Z = Y$ (Since $Y$ is the maximum) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+\textbf{Step 2.1: Comparator Logic ($X > Y$)} \\
+First, we define the bitwise equivalence signal (XNOR) for each bit position $i \in \{0,1,2\}$ to check if corresponding bits are identical:
+\begin{align*}
+    E_i &= X_i \odot Y_i \\
+        &= X_i Y_i + \overline{X_i} \cdot \overline{Y_i} \quad \text{(Definition of XNOR)}
+\end{align*}
+The Greater-Than output $G$ (asserting $X > Y$) becomes true if the most significant bit (MSB) of $X$ is greater than $Y$ ($X_2=1, Y_2=0$), or if they are equal ($E_2=1$) and the next bit $X_1 > Y_1$, and so on. The exact Boolean expression is expanded as:
+\begin{align*}
+    G &= X_2 \overline{Y_2} + E_2 (X_1 \overline{Y_1}) + E_2 E_1 (X_0 \overline{Y_0}) \quad \text{(Sum of Products logic for magnitude comparison)}
+\end{align*}
+
+\textbf{Step 2.2: Multiplexer Logic ($Z_i$)} \\
+For each bit $i \in \{0, 1, 2\}$, a 2-to-1 MUX selects between $X_i$ and $Y_i$ based on the control signal $G$. When $G=1$, $Z_i$ follows $X_i$. When $G=0$, $Z_i$ follows $Y_i$. We represent this behavior algebraically:
+\begin{align*}
+    Z_i &= G \cdot X_i + \overline{G} \cdot Y_i \quad \text{(Standard 2-to-1 Multiplexer Equation)}
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. Hardware Implementation (RTL Datapath)}
+
+Due to the combinatorial complexity of drawing individual primitive gates for a full comparator and multiplexer array, the schematic is modeled using highly readable, industry-standard structural Medium Scale Integration (MSI) blocks.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.95, transform shape]
+    % ==============================================
+    % 3-Bit Magnitude Comparator Block
+    % ==============================================
+    \draw[fill=cD!5, rounded corners, draw=cD] (0, 0.5) rectangle (4, 7.5);
+    \node[align=center, font=\bfseries] at (2, 4) {3-Bit\\Magnitude\\Comparator};
+    
+    % Comparator Inputs
+    \draw (0, 6) -- (-1.5, 6) node[left, font=\bfseries] {$X[2:0]$};
+    \draw (0, 2) -- (-1.5, 2) node[left, font=\bfseries] {$Y[2:0]$};
+    
+    % Comparator Output (G)
+    \draw (4, 4) node[above right, font=\bfseries, scale=0.7] {$G \ (X>Y)$} -- (6.25, 4);
+    \fill (6.25, 4) circle (2pt);
+    
+    % Vertical Select Control Bus
+    \draw[draw=cD] (6.25, -0.25) -- (6.25, 5.75);
+
+    % ==============================================
+    % 2-to-1 Multiplexer Array for Z_i
+    % ==============================================
+    \foreach \y/\i in {7/2, 4/1, 1/0} {
+        % Draw MUX Trapezoid
+        \draw[fill=cD!5, draw=cD] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
+        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
+        
+        % Data Inputs to MUX
+        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$X_\i$};
+        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$Y_\i$};
+        
+        % Internal Pin Labels (1 selected when G=1, 0 selected when G=0)
+        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
+        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
+        
+        % Data Output (Z_i)
+        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$Z_\i$};
+        
+        % Select Input Routing from Bus
+        \draw[draw=cD] (8.25, \y-0.75) -- (8.25, \y-1.25) -- (6.25, \y-1.25);
+        \fill[cD] (6.25, \y-1.25) circle (2pt);
+    }
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Summary}
+
+When the two 3-bit numbers are fed into the system:
+\begin{enumerate}
+    \item The \textbf{Magnitude Comparator} continuously monitors the bit patterns of $X$ and $Y$ starting from the Most Significant Bits ($X_2$ and $Y_2$). 
+    \item If $X$ is numerically greater than $Y$, the comparator asserts $G = 1$. The multiplexer array shifts its internal switches to pin `1`, bridging $X_2X_1X_0$ to the output bus $Z_2Z_1Z_0$.
+    \item If $X$ is less than or equal to $Y$, the comparator sets $G = 0$. The multiplexers switch to pin `0`, actively bridging $Y_2Y_1Y_0$ to the output bus $Z_2Z_1Z_0$.
+    \item The resulting 3-bit vector $Z$ consistently represents $\max(X, Y)$.
+\end{enumerate}
+
+\end{tcolorbox}
+
 \item Design and explain a 2-bit magnitude comparator.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
-%% -- Q2: Circuit returning smaller of two 4-bit numbers (2018-19) --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Overview}
+
+A \textbf{2-bit magnitude comparator} is a combinational logic circuit that compares two 2-bit binary numbers, $A = A_1 A_0$ and $B = B_1 B_0$. The circuit determines their relative magnitude and produces three distinct boolean outputs:
+\begin{itemize}
+    \item \textbf{Greater ($G$):} High (1) if $A > B$
+    \item \textbf{Equal ($E$):} High (1) if $A = B$
+    \item \textbf{Less ($L$):} High (1) if $A < B$
+\end{itemize}
+
+Instead of analyzing a cumbersome 16-row truth table, the operational logic can be efficiently mapped using a condensed conditional table based on bit-significance (evaluating the Most Significant Bit, $A_1$ and $B_1$, first):
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}ll|ccc@{}}
+\toprule
+\textbf{MSB Comparison} & \textbf{LSB Comparison} & \textbf{$G \ (A>B)$} & \textbf{$E \ (A=B)$} & \textbf{$L \ (A<B)$} \\
+\midrule
+$A_1 > B_1$ ($A_1=1, B_1=0$) & Don't Care (X)       & 1 & 0 & 0 \\
+$A_1 < B_1$ ($A_1=0, B_1=1$) & Don't Care (X)       & 0 & 0 & 1 \\
+$A_1 = B_1$                  & $A_0 > B_0$          & 1 & 0 & 0 \\
+$A_1 = B_1$                  & $A_0 < B_0$          & 0 & 0 & 1 \\
+$A_1 = B_1$                  & $A_0 = B_0$          & 0 & 1 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+To implement the circuit, we derive the Boolean expressions for each output using the properties of standard logic gates. 
+
+\textbf{Step 2.1: Equality ($E$)} \\
+Two bits are strictly equal if they are both $1$ or both $0$. This is mathematically represented by the XNOR operation. Let $x_i$ denote the equality of the bits at position $i$:
+\begin{align*}
+    x_1 &= A_1 \odot B_1 = A_1 B_1 + \overline{A_1}\cdot\overline{B_1} \\
+    x_0 &= A_0 \odot B_0 = A_0 B_0 + \overline{A_0}\cdot\overline{B_0}
+\end{align*}
+The numbers $A$ and $B$ are completely equal only if both the MSBs and LSBs are equal. Therefore:
+\begin{align*}
+    E &= x_1 \cdot x_0
+\end{align*}
+
+\textbf{Step 2.2: Greater Than ($G$)} \\
+The condition $A > B$ occurs if the MSB of $A$ is greater than the MSB of $B$, \textit{OR} if the MSBs are equal ($x_1=1$) but the LSB of $A$ is greater than the LSB of $B$.
+\begin{align*}
+    G &= (A_1 \cdot \overline{B_1}) + x_1 \cdot (A_0 \cdot \overline{B_0})
+\end{align*}
+
+\textbf{Step 2.3: Less Than ($L$)} \\
+Similarly, the condition $A < B$ occurs if the MSB of $A$ is less than the MSB of $B$, \textit{OR} if the MSBs are equal ($x_1=1$) but the LSB of $A$ is less than the LSB of $B$.
+\begin{align*}
+    L &= (\overline{A_1} \cdot B_1) + x_1 \cdot (\overline{A_0} \cdot B_0)
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. Logic Gate Schematic}
+
+To ensure optimal clarity and avoid tangled wiring, the circuit is drafted in three independent, modular functional blocks corresponding to the three derived equations.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.9, transform shape]
+    % ======================================
+    % Equality Block (E)
+    % ======================================
+    \node[xnor port] (xnor1) at (2, 8) {};
+    \node[left] at (xnor1.in 1) {$A_1$};
+    \node[left] at (xnor1.in 2) {$B_1$};
+    
+    \node[xnor port] (xnor0) at (2, 6) {};
+    \node[left] at (xnor0.in 1) {$A_0$};
+    \node[left] at (xnor0.in 2) {$B_0$};
+    
+    \node[and port] (andE) at (5, 7) {};
+    \draw (xnor1.out) |- (andE.in 1);
+    \draw (xnor0.out) |- (andE.in 2);
+    \draw (andE.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$E \ (A=B)$};
+    
+    % Label for the internal x_1 node to map to other blocks
+    \node[above] at (xnor1.out) {$x_1$};
+
+    % ======================================
+    % Greater Than Block (G)
+    % ======================================
+    \node[and port] (andG1) at (2, 4) {};
+    \node[left] at (andG1.in 1) {$A_1$};
+    \node[left] at (andG1.in 2) {$\overline{B_1}$};
+    
+    \node[and port] (andG0) at (2, 2) {};
+    \node[left] at (andG0.in 1) {$A_0$};
+    \node[left] at (andG0.in 2) {$\overline{B_0}$};
+    
+    \node[and port] (andG2) at (5, 2.5) {};
+    \node[left] at (andG2.in 1) {$x_1$}; % Connected conceptually from xnor1
+    \draw (andG0.out) |- (andG2.in 2);
+    
+    \node[or port] (orG) at (8, 3.25) {};
+    \draw (andG1.out) |- (orG.in 1);
+    \draw (andG2.out) |- (orG.in 2);
+    \draw (orG.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$G \ (A>B)$};
+
+    % ======================================
+    % Less Than Block (L)
+    % ======================================
+    \node[and port] (andL1) at (2, -1) {};
+    \node[left] at (andL1.in 1) {$\overline{A_1}$};
+    \node[left] at (andL1.in 2) {$B_1$};
+    
+    \node[and port] (andL0) at (2, -3) {};
+    \node[left] at (andL0.in 1) {$\overline{A_0}$};
+    \node[left] at (andL0.in 2) {$B_0$};
+    
+    \node[and port] (andL2) at (5, -2.5) {};
+    \node[left] at (andL2.in 1) {$x_1$}; % Connected conceptually from xnor1
+    \draw (andL0.out) |- (andL2.in 2);
+    
+    \node[or port] (orL) at (8, -1.75) {};
+    \draw (andL1.out) |- (orL.in 1);
+    \draw (andL2.out) |- (orL.in 2);
+    \draw (orL.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$L \ (A<B)$};
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Example}
+
+Let us assume $A = 2_{10}$ ($A_1A_0 = 10_2$) and $B = 1_{10}$ ($B_1B_0 = 01_2$). We trace this step-by-step:
+\begin{enumerate}
+    \item \textbf{Evaluate Equality Factors:} 
+    \begin{itemize}
+        \item $x_1 = A_1 \odot B_1 = 1 \odot 0 = 0$
+        \item $x_0 = A_0 \odot B_0 = 0 \odot 1 = 0$
+    \end{itemize}
+    \item \textbf{Evaluate Outputs:}
+    \begin{itemize}
+        \item $E = x_1 \cdot x_0 = 0 \cdot 0 = \mathbf{0}$
+        \item $G = (1 \cdot \overline{0}) + 0 \cdot (0 \cdot \overline{1}) = (1 \cdot 1) + 0 = \mathbf{1}$
+        \item $L = (\overline{1} \cdot 0) + 0 \cdot (\overline{0} \cdot 1) = (0 \cdot 0) + 0 = \mathbf{0}$
+    \end{itemize}
+\end{enumerate}
+The circuit asserts $G=1$ and leaves $E=0, L=0$, successfully proving mathematically that $2 > 1$.
+
+\end{tcolorbox}
+
 \end{enumerate}
 
 
@@ -18420,9 +19526,100 @@ expressed as $Z_2Z_1Z_0$).
 
 \begin{enumerate}
 
-%% -- Q1: SR latch logic diagram and function table --
 \item Discuss why the condition $S = R = 1$ leads to an unstable condition for an SR latch.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Introduction to the SR Latch}
+
+The most common implementation of an Active-High Set-Reset (SR) latch utilizes two cross-coupled NOR gates. The defining characteristic of any fundamental latch is the principle of \textbf{complementarity}: the two outputs, $Q$ and $\overline{Q}$, must always be logical inverses of each other. 
+
+Applying the input condition $S = 1$ and $R = 1$ is universally restricted (often labeled as "Forbidden" or "Invalid") because it violates this fundamental rule and sets up a catastrophic race condition if the inputs change simultaneously.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=1.1, transform shape]
+    % Upper NOR Gate
+    \node[nor port] (nor1) at (3, 1) {};
+    \node[nor port] (nor2) at (3, -1) {};
+    
+    % Inputs
+    \draw (nor1.in 1) -- ++(-1,0) node[left, font=\bfseries] {$R$};
+    \draw (nor2.in 2) -- ++(-1,0) node[left, font=\bfseries] {$S$};
+    
+    % Outputs
+    \draw (nor1.out) -- ++(1.5,0) node[right, font=\bfseries] {$Q$};
+    \draw (nor2.out) -- ++(1.5,0) node[right, font=\bfseries] {$\overline{Q}$};
+    
+    % Cross-Coupling Feedback Loops
+    \draw (nor1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0,-0.8) -- ++(-3,-0.4) -- (nor2.in 1);
+    \draw (nor2.out) ++(0.7,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0, 0.8) -- ++(-3.4, 0.4) -- (nor1.in 2);
+\end{circuitikz}
+\end{center}
+
+\vspace{0.2cm}
+\textbf{2. Mathematical Proof of the Complementarity Violation}
+
+Let us evaluate the Boolean logic of the cross-coupled NOR gates when $S = 1$ and $R = 1$. The standard characteristic equations for the NOR-based SR latch are:
+\begin{align*}
+    Q_{next} &= \overline{R + \overline{Q}_{prev}} \quad \text{(NOR operation on upper gate)} \\
+    \overline{Q}_{next} &= \overline{S + Q_{prev}} \quad \text{(NOR operation on lower gate)}
+\end{align*}
+
+Substituting $S = 1$ and $R = 1$ into the equations:
+\begin{align*}
+    Q_{next} &= \overline{1 + \overline{Q}_{prev}} \\
+    Q_{next} &= \overline{1} \quad \text{(Applying Boolean Annulment/Domination Law: $1 + x = 1$)} \\
+    Q_{next} &= 0
+\end{align*}
+
+Simultaneously, for the second gate:
+\begin{align*}
+    \overline{Q}_{next} &= \overline{1 + Q_{prev}} \\
+    \overline{Q}_{next} &= \overline{1} \quad \text{(Applying Boolean Annulment/Domination Law: $1 + x = 1$)} \\
+    \overline{Q}_{next} &= 0
+\end{align*}
+
+\textbf{Result:} Both outputs are forced to $0$ ($Q = 0$ and $\overline{Q} = 0$). This directly violates the rule that $Q$ and $\overline{Q}$ must be complements ($Q = \neg\overline{Q}$). 
+
+\vspace{0.3cm}
+\textbf{3. The Critical Race Condition (Instability)}
+
+While $Q = 0$ and $\overline{Q} = 0$ is a logic violation, the actual \textbf{instability} occurs when the inputs transition away from this state. Assume the circuit is in the $S = R = 1$ state (with $Q = \overline{Q} = 0$), and the user suddenly drops both inputs to $S = 0$ and $R = 0$ (the "Hold" state) simultaneously.
+
+Evaluating the transition logically:
+\begin{align*}
+    Q_{next} &= \overline{0 + \overline{Q}_{prev}} = \overline{0 + 0} = \overline{0} = 1 \\
+    \overline{Q}_{next} &= \overline{0 + Q_{prev}} = \overline{0 + 0} = \overline{0} = 1
+\end{align*}
+
+\begin{itemize}
+    \item Both NOR gates sense a $0$ on both of their inputs and thus both attempt to output a $1$ simultaneously.
+    \item As soon as the outputs begin to transition to $1$, the feedback loops cross-feed these $1$s into the opposite gates.
+    \item Because $1 + 0 = 1$, the outputs are immediately forced back to $0$. 
+\end{itemize}
+
+This creates a high-frequency oscillation or a \textbf{critical race condition}. Ultimately, because physical logic gates possess microscopic variations in propagation delay, one gate will switch slightly faster than the other. The faster gate will lock its output to $1$, forcing the slower gate to remain at $0$. 
+
+\vspace{0.2cm}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}cc|cc|l@{}}
+\toprule
+\textbf{$S$} & \textbf{$R$} & \textbf{$Q$} & \textbf{$\overline{Q}$} & \textbf{Operational State} \\
+\midrule
+0 & 0 & $Q_{prev}$ & $\overline{Q}_{prev}$ & Hold Memory \\
+0 & 1 & 0 & 1 & Reset \\
+1 & 0 & 1 & 0 & Set \\
+\rowcolor{cD!10} 1 & 1 & 0 & 0 & \textbf{Invalid / Unstable Race Condition} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Conclusion:} 
+The state is deemed unstable because the final latched state ($Q=1$ or $Q=0$) is physically unpredictable and entirely dependent on manufacturing imperfections and thermal noise (metastability). Consequently, digital design explicitly prohibits the $S=R=1$ condition.
+
+\end{tcolorbox}
 
 \item Consider the following transition table:
 
@@ -18441,25 +19638,585 @@ expressed as $Z_2Z_1Z_0$).
 Design the circuit with NAND SR latches and gates.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-%% -- Q5: Why S=R=1 leads to unstable condition for SR latch --
+\textbf{1. State Excitation Table Formulation}
+
+To design the sequential circuit, we first need to determine the required inputs for the SR latch to achieve the specified state transitions. The standard excitation table for an SR latch determines the required Set ($S$) and Reset ($R$) signals to transition from a present state $y(t)$ to a next state $y(t+1)$:
+\begin{itemize}
+    \item $0 \to 0 \implies S=0, R=\text{X}$ (Don't care)
+    \item $0 \to 1 \implies S=1, R=0$
+    \item $1 \to 0 \implies S=0, R=1$
+    \item $1 \to 1 \implies S=\text{X}, R=0$
+\end{itemize}
+
+Applying these rules to the given transition table, we formulate the combined excitation table:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}ccc|c|cc@{}}
+\toprule
+\multicolumn{3}{c|}{\textbf{Inputs \& Present State}} & \textbf{Next State} & \multicolumn{2}{c}{\textbf{Required Latch Inputs}} \\
+$y$ & $x_1$ & $x_2$ & $Y (y_{next})$ & $S$ & $R$ \\
+\midrule
+0 & 0 & 0 & 0 & 0 & X \\
+0 & 0 & 1 & 0 & 0 & X \\
+0 & 1 & 1 & 1 & 1 & 0 \\
+0 & 1 & 0 & 0 & 0 & X \\
+\midrule
+1 & 0 & 0 & 0 & 0 & 1 \\
+1 & 0 & 1 & 1 & X & 0 \\
+1 & 1 & 1 & 1 & X & 0 \\
+1 & 1 & 0 & 1 & X & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Karnaugh Map Minimization}
+
+We now plot the required values for $S$ and $R$ onto Karnaugh maps to extract the minimized Boolean expressions.
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\textbf{K-Map for $S$} \\
+\vspace{0.2cm}
+\begin{karnaugh-map}[4][2][1][$x_1x_2$][$y$]
+    \manualterms{0,0,0,1,0,X,X,X}
+    \implicant{3}{7}
+\end{karnaugh-map} \\
+$S = x_1 x_2$
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\textbf{K-Map for $R$} \\
+\vspace{0.2cm}
+\begin{karnaugh-map}[4][2][1][$x_1x_2$][$y$]
+    \manualterms{X,X,X,0,1,0,0,0}
+    \implicant{0}{4}
+\end{karnaugh-map} \\
+$R = \overline{x_1} \cdot \overline{x_2}$
+\end{minipage}
+
+\vspace{0.5cm}
+\textbf{3. Adaptation for NAND SR Latch}
+
+The problem specifically requests the use of \textbf{NAND SR latches}. A fundamental cross-coupled NAND latch operates with active-low excitation inputs, mathematically denoted as $\overline{S}$ and $\overline{R}$. 
+Therefore, we must invert the derived $S$ and $R$ Boolean equations to feed into the NAND latch:
+\begin{align*}
+    \overline{S} &= \overline{x_1 \cdot x_2} \quad &&\text{(Directly implementable with a 2-input NAND gate)} \\
+    \overline{R} &= \overline{\overline{x_1} \cdot \overline{x_2}} \quad &&\text{(Implementable with a 2-input NAND gate fed by inverted inputs)}
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{4. Hardware Implementation (Logic Circuit)}
+
+The synthesized sequential logic circuit uses standard logic gates for the combinatorial excitation logic and a cross-coupled dual-NAND gate configuration for the fundamental memory latch.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=1, transform shape]
+    
+    % Input Logic Gates
+    \node[nand port] (nandS) at (4, 4) {};
+    \node[nand port] (nandR) at (4, 1.7) {};
+    
+    \node[not port,scale =0.5] (not1) at (2, 1.98) {};
+    \node[not port, scale=0.5] (not2) at (2, 1.42) {};
+    
+    % Inputs and Splits
+    \draw (0, 4.28) node[left, font=\bfseries] {$x_1$} 
+          -- (1, 4.28) coordinate (X1_split) 
+          -- (nandS.in 1);
+          
+    \draw (0, 3.72) node[left, font=\bfseries] {$x_2$} 
+          -- (0.5, 3.72) coordinate (X2_split) 
+          -- (nandS.in 2);
+          
+    \fill (X1_split) circle(2pt);
+    \fill (X2_split) circle(2pt);
+    
+    % Routing to NOT gates and then to nandR
+    \draw (X1_split) |- (not1.in);
+    \draw (X2_split) |- (not2.in);
+    
+    \draw (not1.out) -- (nandR.in 1);
+    \draw (not2.out) -- (nandR.in 2);
+    
+    % Latch Gates
+    \node[nand port] (latchS) at (8, 3.5) {};
+    \node[nand port] (latchR) at (8, 1.5) {};
+    
+    % Excitation Signals
+    \draw (nandS.out) -- ++(1,0) node[above, font=\bfseries]{$\overline{S}$} |- (latchS.in 1);
+    \draw (nandR.out) -- ++(1,0) node[below, font=\bfseries]{$\overline{R}$} |- (latchR.in 2);
+    
+    % Outputs
+    \draw (latchS.out) -- ++(1.5,0) coordinate (outy) node[right, font=\bfseries]{$y \ (\text{Next State})$};
+    \draw (latchR.out) -- ++(1.5,0) coordinate (outybar) node[right, font=\bfseries]{$\overline{y}$};
+    
+    % Feedback Nodes
+    \path (latchS.out) -- ++(0.5, 0) coordinate (fb1);
+    \path (latchR.out) -- ++(0.7, 0) coordinate (fb2);
+    \fill (fb1) circle(2pt);
+    \fill (fb2) circle(2pt);
+    
+    % Feedback Routing (Cross-Coupled)
+    \draw (fb1) -- (fb1 |- 0, 2.75) 
+                -- ([xshift=-0.6cm]latchR.in 1 |- 0, 2.75) 
+                |- (latchR.in 1);
+                
+    \draw (fb2) -- (fb2 |- 0, 2.25) 
+                -- ([xshift=-0.4cm]latchS.in 2 |- 0, 2.25) 
+                |- (latchS.in 2);
+
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
 \item Write the excitation table for a SR latch constructed with NOR gates.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Overview of the NOR-Based SR Latch}
+
+An SR (Set-Reset) latch constructed with cross-coupled NOR gates is an active-high fundamental memory element. The excitation table of a sequential circuit specifies the required input values ($S$ and $R$) to cause a desired transition from a given Present State, $Q(t)$, to a desired Next State, $Q(t+1)$.
+
+To derive the excitation table, we first observe the standard truth table (characteristic table) for the NOR-based SR Latch:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}cc|c|l@{}}
+\toprule
+\textbf{$S$} & \textbf{$R$} & \textbf{$Q(t+1)$} & \textbf{Operation} \\
+\midrule
+0 & 0 & $Q(t)$ & Hold (No Change) \\
+0 & 1 & 0 & Reset \\
+1 & 0 & 1 & Set \\
+1 & 1 & X & Invalid / Restricted \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Derivation of the Excitation Table}
+
+We analyze each possible state transition from $Q(t)$ to $Q(t+1)$ to determine the necessary $S$ and $R$ conditions. We use "X" to denote a "Don't Care" condition (where the input can be either 0 or 1 without affecting the desired outcome).
+
+\begin{itemize}
+    \item \textbf{Transition $0 \rightarrow 0$:} 
+    The state must remain at 0. This can be achieved either by the "Hold" operation ($S=0, R=0$) or the "Reset" operation ($S=0, R=1$). 
+    \textbf{Result:} $S$ must be 0, and $R$ can be 0 or 1. Thus, $\mathbf{S=0, R=\text{X}}$.
+
+    \item \textbf{Transition $0 \rightarrow 1$:} 
+    The state must change from 0 to 1. This is explicitly the "Set" operation. 
+    \textbf{Result:} $\mathbf{S=1, R=0}$.
+
+    \item \textbf{Transition $1 \rightarrow 0$:} 
+    The state must change from 1 to 0. This is explicitly the "Reset" operation. 
+    \textbf{Result:} $\mathbf{S=0, R=1}$.
+
+    \item \textbf{Transition $1 \rightarrow 1$:} 
+    The state must remain at 1. This can be achieved either by the "Hold" operation ($S=0, R=0$) or the "Set" operation ($S=1, R=0$). 
+    \textbf{Result:} $S$ can be 0 or 1, and $R$ must be 0. Thus, $\mathbf{S=\text{X}, R=0}$.
+\end{itemize}
+
+\vspace{0.3cm}
+\textbf{3. Final Excitation Table}
+
+Summarizing the derivations above yields the formal excitation table for the SR latch:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{}cc|cc@{}}
+\toprule
+\multicolumn{2}{c|}{\textbf{State Transition}} & \multicolumn{2}{c}{\textbf{Required Inputs}} \\
+\textbf{Present State $Q(t)$} & \textbf{Next State $Q(t+1)$} & \textbf{$S$} & \textbf{$R$} \\
+\midrule
+0 & 0 & \textbf{0} & \textbf{X} \\
+0 & 1 & \textbf{1} & \textbf{0} \\
+1 & 0 & \textbf{0} & \textbf{1} \\
+1 & 1 & \textbf{X} & \textbf{0} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Reference Circuit Schematic}
+
+For completeness, the logic diagram of the active-high NOR SR Latch corresponding to this table is shown below:
+
+\begin{center}
+\begin{circuitikz}[thick, scale=1.1, transform shape]
+    % Upper NOR Gate
+    \node[nor port] (nor1) at (3, 1) {};
+    \node[nor port] (nor2) at (3, -1) {};
+    
+    % Inputs
+    \draw (nor1.in 1) -- ++(-1.5,0) node[left, font=\bfseries] {$R$};
+    \draw (nor2.in 2) -- ++(-1.5,0) node[left, font=\bfseries] {$S$};
+    
+    % Outputs
+    \draw (nor1.out) -- ++(1.5,0) node[right, font=\bfseries, text=cE] {$Q$};
+    \draw (nor2.out) -- ++(1.5,0) node[right, font=\bfseries] {$\overline{Q}$};
+    
+    % Cross-Coupling Feedback Loops
+    \draw (nor1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0,-0.8) -- ++(-3,-0.4) -- (nor2.in 1);
+    \draw (nor2.out) ++(0.7,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0, 0.8) -- ++(-3.4, 0.4) -- (nor1.in 2);
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
 
 \item What do you understand by mechanical switch contact bounce? Describe how the $\overline{S}\,\overline{R}$ latch can eliminate mechanical switch contact bounce.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-%% -- Q4: Excitation table for SR latch (NOR gates) --
+\textbf{1. Mechanical Switch Contact Bounce: Definition}
+
+\textbf{Mechanical contact bounce} (or switch chatter) is a physical phenomenon that occurs when mechanical switches, relays, or push-buttons are actuated. When the metal contacts of a switch are forced together, their inherent elasticity and momentum cause them to rebound or "bounce" against each other several times before coming to a complete rest. 
+
+In terms of electrical signals, instead of producing a single, clean step transition (e.g., from $0\text{ V}$ to $5\text{ V}$), the switch generates a rapid, chaotic series of high and low voltage spikes during the settling time (typically 1 to 20 milliseconds). Because high-speed digital logic circuits operate in the nanosecond range, they will erroneously register these microscopic bounces as multiple distinct button presses, leading to severe logical errors in sequential circuits (like counters or state machines).
+
+\vspace{0.4cm}
+\textbf{2. The $\overline{S}\,\overline{R}$ Latch Debouncing Circuit}
+
+To eliminate this hardware issue, an active-low Set-Reset ($\overline{S}\,\overline{R}$) latch constructed from two cross-coupled NAND gates is standardly used. A Single-Pole Double-Throw (SPDT) switch connects the logic circuit to ground, while pull-up resistors maintain a logical $1$ on unconnected inputs.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.9, transform shape]
+    
+    % VCC Supply Network
+    \draw (1.5, 3) -- (1.5, 3.5) node[vcc]{$V_{CC} \ (+5\text{V})$};
+    \draw (1, 3) -- (2, 3);
+    
+    % Pull-up Resistors
+    \draw (1, 3) to[R, l=$R_1$] (1, 1.5) coordinate(R1_in);
+    \draw (2, 3) to[R, l=$R_2$] (2, -1.5) coordinate(R2_in);
+    
+    % Contact Nodes for Resistors
+    \fill (R1_in) circle(2pt);
+    \fill (R2_in) circle(2pt);
+    
+    % SPDT Switch and GND Coordinates
+    \coordinate (SW_pole) at (-1.5, 0);
+    \coordinate (SW_A) at (0, 1.5);
+    \coordinate (SW_B) at (0, -1.5);
+    
+    % GND Connection
+    \draw (SW_pole) node[ocirc]{} -- ++(-1.5, 0) node[ground, label=below:GND (0V)]{};
+    \node[left, font=\itshape] at (-1.7, 0.5) {SPDT};
+    
+    % Switch Arm (pointing to Terminal A)
+    \draw[very thick, -latex] (SW_pole) ++(45:0.2) -- ++(45:1.7);
+    
+    % Switch Terminals A and B
+    \draw (SW_A) node[ocirc, label=above left:A]{} -- (R1_in);
+    \draw (SW_B) node[ocirc, label=below left:B]{} -- (R2_in);
+    
+    % NAND Gates (Placed further right to allow label clearance)
+    \node[nand port, anchor=in 1] (nand1) at (6, 1.5) {};
+    \node[nand port, anchor=in 2] (nand2) at (6, -1.5) {};
+    
+    % Connecting Lines to NAND inputs
+    \draw (R1_in) -- (nand1.in 1) node[midway, above, font=\bfseries]{$\overline{S}$};
+    \draw (R2_in) -- (nand2.in 2) node[midway, below, font=\bfseries]{$\overline{R}$};
+    
+    % Outputs
+    \draw (nand1.out) -- ++(1.5, 0) coordinate(out1) node[right, font=\bfseries]{$Q$};
+    \draw (nand2.out) -- ++(1.5, 0) coordinate(out2) node[right, font=\bfseries]{$\overline{Q}$};
+    
+    % Cross-coupling Feedback Logic (Routed neatly between the gates to avoid overlap)
+    \path (nand1.out) -- ++(0.8, 0) coordinate(fb1);
+    \fill (fb1) circle(2pt);
+    
+    \path (nand2.out) -- ++(0.5, 0) coordinate(fb2);
+    \fill (fb2) circle(2pt);
+    
+    \coordinate (fb1_drop) at ([xshift=-0.6cm]nand2.in 1);
+    \coordinate (fb2_drop) at ([xshift=-0.3cm]nand1.in 2);
+    
+    % Top-to-Bottom Cross Coupling (Q to R)
+    \draw (fb1) -- (fb1 |- 0, 0.2) 
+                -- (fb1_drop |- 0, 0.2) 
+                -- (fb1_drop |- nand2.in 1) 
+                -- (nand2.in 1);
+                
+    % Bottom-to-Top Cross Coupling (Q_bar to S)
+    \draw (fb2) -- (fb2 |- 0, -0.2) 
+                -- (fb2_drop |- 0, -0.2) 
+                -- (fb2_drop |- nand1.in 2) 
+                -- (nand1.in 2);
+
+\end{circuitikz}
+\end{center}
+
+\vspace{0.4cm}
+\textbf{3. Mathematical and Logical Operation}
+
+The fundamental principle of this debounce circuit relies on the \textbf{Memory (Hold) State} of the active-low $\overline{S}\,\overline{R}$ latch. The characteristic table of the NAND latch is:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}cc|c|l@{}}
+\toprule
+\textbf{$\overline{S}$} & \textbf{$\overline{R}$} & \textbf{$Q_{next}$} & \textbf{State Description} \\
+\midrule
+0 & 0 & Invalid & (Restricted / Not Used) \\
+0 & 1 & 1 & Set \\
+1 & 0 & 0 & Reset \\
+\rowcolor{cE!10} 1 & 1 & $Q_{prev}$ & \textbf{Hold (Memory) - Key to Debouncing} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Let us trace the physical state sequence as the switch is flipped from terminal A to terminal B:
+
+\begin{itemize}
+    \item \textbf{Initial Steady State (At A):} The switch arm rests securely on A. Terminal A is grounded ($\overline{S} = 0$). Terminal B is pulled up by $R_2$ to $V_{CC}$ ($\overline{R} = 1$). 
+    \newline \textbf{Result:} $Q = 1$ (Set State).
+    
+    \item \textbf{Break Bounce (Leaving A):} As the user pushes the switch, the arm begins to separate from A. However, micro-bouncing causes it to rapidly break and reconnect with A. $\overline{S}$ oscillates between $1$ (open) and $0$ (connected), while $\overline{R}$ remains stably at $1$.
+    \newline \textbf{Result:} The inputs alternate between $(\overline{S}=0, \overline{R}=1 \implies Q=1)$ and the \textbf{Hold State} $(\overline{S}=1, \overline{R}=1 \implies Q \text{ stays } 1)$. The output $Q$ remains a clean, uninterrupted $1$.
+    
+    \item \textbf{Intermediate Travel Time:} The switch arm is completely suspended between A and B. Both terminals are physically open and pulled up to $V_{CC}$ by their respective resistors. 
+    \newline \textbf{Result:} $\overline{S} = 1$ and $\overline{R} = 1$. The latch remains in the Hold State, ensuring $Q$ remains $1$.
+    
+    \item \textbf{Make Bounce (Arriving at B):} The switch arm finally makes its first microscopic contact with B. At this exact instant, $\overline{R}$ drops to $0$, while $\overline{S}$ is $1$. The latch immediately Resets ($Q = 0$). As the arm bounces off B slightly before settling, $\overline{R}$ bounces back to $1$. 
+    \newline \textbf{Result:} The inputs alternate between the Reset state $(\overline{S}=1, \overline{R}=0 \implies Q=0)$ and the Hold state $(\overline{S}=1, \overline{R}=1 \implies Q \text{ stays } 0)$. Once again, the output $Q$ is strictly locked to $0$ upon the very first contact.
+\end{itemize}
+
+\vspace{0.4cm}
+\textbf{4. Timing Diagram Verification}
+
+The timing diagram visualizes how the latch absorbs the high-frequency chatter. Notice that the latch output transitions cleanly precisely upon the \textit{first} contact with the destination terminal, completely ignoring all subsequent mechanical rebounds.
+
+\begin{center}
+\begin{tikztimingtable}[
+    timing/slope=0.05,
+    timing/name/.style={font=\bfseries}
+]
+    Switch Terminal A ($\overline{S}$) & 3L 1H 1L 1H 1L 17H \\
+    Switch Terminal B ($\overline{R}$) & 14H 1L 1H 1L 1H 6L \\
+    Latch Output ($Q$) & 14H 10L \\
+\extracode
+    % Drawing vertical guide lines
+    \begin{pgfonlayer}{background}
+        \draw[dashed, gray, ultra thin] (3, 1) -- (3, -5.5);
+        \node[font=\scriptsize\itshape, text=gray, align=left] at (5.5, -6) {Contact breaks\\and bounces at A};
+        
+        \draw[dashed, gray, ultra thin] (14, 1) -- (14, -5.5);
+        \node[font=\scriptsize\itshape, text=gray, align=left] at (16.5, -6) {First contact\\made at B};
+    \end{pgfonlayer}
+\end{tikztimingtable}
+\end{center}
+
+\textbf{Conclusion:} By capitalizing on the memory retention capability ($\overline{S}=\overline{R}=1$) of the cross-coupled logic gates, the SR latch perfectly masks mechanical uncertainties, guaranteeing a single, monolithic digital pulse per physical actuation.
+
+\end{tcolorbox}
+
 \item Explain the undefined condition in SR flip-flops. How is this problem solved in JK flip-flops?
 \mk{4+4} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-%% -- Q3: Contact bounce elimination with S'R' latch --
+\textbf{1. The Undefined Condition in SR Flip-Flops}
+
+The SR (Set-Reset) flip-flop is a fundamental sequential logic element. Its state transitions are controlled by the inputs $S$ and $R$. The characteristic equation for an SR flip-flop is given by:
+\begin{align*}
+    Q_{next} &= S + \overline{R}Q_{prev} \quad \text{with the constraint } S \cdot R = 0
+\end{align*}
+
+The constraint $S \cdot R = 0$ explicitly forbids the condition where $S = 1$ and $R = 1$ simultaneously. If both inputs are asserted ($S=R=1$), two severe problems occur:
+\begin{enumerate}
+    \item \textbf{Logical Violation:} In the internal cross-coupled gate structure (e.g., NOR-based latch), applying $1$ to both inputs forces both outputs $Q$ and $\overline{Q}$ to $0$. This violates the fundamental complementarity principle of memory elements, which mandates that $Q$ and $\overline{Q}$ must always be logical inverses.
+    \item \textbf{Metastability and Race Condition:} If the clock pulse ends or the inputs are simultaneously changed back to the holding state ($S=0, R=0$), the cross-coupled gates enter a critical race condition. Both gates simultaneously attempt to transition to $1$, driving each other back to $0$. The final resolved state becomes physically unpredictable (metastable), driven entirely by microscopic manufacturing variations and thermal noise.
+\end{enumerate}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}cc|c|l@{}}
+\toprule
+\textbf{$S$} & \textbf{$R$} & \textbf{$Q_{next}$} & \textbf{State Name} \\
+\midrule
+0 & 0 & $Q_{prev}$ & Hold / Memory \\
+0 & 1 & 0 & Reset \\
+1 & 0 & 1 & Set \\
+\rowcolor{cE!10} 1 & 1 & ? & \textbf{Undefined / Forbidden} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Resolution Using the JK Flip-Flop}
+
+The JK flip-flop was specifically designed to resolve the undefined state of the SR flip-flop without sacrificing any of its capabilities. It achieves this by introducing \textbf{cross-coupled feedback} from the outputs ($Q$ and $\overline{Q}$) back to the input gating logic.
+
+In a JK flip-flop, the $J$ input acts like $S$ (Set), and the $K$ input acts like $R$ (Reset). The internal logic dynamically masks the input that would attempt to drive the flip-flop into a state it is already in, thereby preventing the $S=R=1$ condition internally.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.9, transform shape]
+    % Input AND gates
+    \node[and port, number inputs=3] (andJ) at (0, 1.5) {};
+    \node[and port, number inputs=3] (andK) at (0, -1.5) {};
+    
+    % Input Labels
+    \draw (andJ.in 1) -- ++(-1,0) node[left, font=\bfseries] {$J$};
+    \draw (andK.in 3) -- ++(-1,0) node[left, font=\bfseries] {$K$};
+    
+    % Clock Routing
+    \draw (andJ.in 2) -- ++(-0.5,0) coordinate (clk_j);
+    \draw (andK.in 2) -- ++(-0.5,0) coordinate (clk_k);
+    \draw (clk_j) -- (clk_k) node[midway, left, font=\bfseries] {$CLK$};
+    \fill (clk_j |- clk_k) ++(0, 1.5) circle(2pt); % junction dot for clock
+    
+    % SR Core Latch Representation
+    \draw[thick, fill=white] (2, -2.5) rectangle (4, 2.5);
+    \node[font=\bfseries] at (3, 0) {SR Latch};
+    \node[right] at (2, 1.5) {$S$};
+    \node[right] at (2, -1.5) {$R$};
+    \node[left] at (4, 1.5) {$Q$};
+    \node[left] at (4, -1.5) {$\overline{Q}$};
+    
+    % Connections from AND to SR Latch
+    \draw (andJ.out) -- (2, 1.5);
+    \draw (andK.out) -- (2, -1.5);
+    
+    % Outputs
+    \draw (4, 1.5) -- (5, 1.5) coordinate (Qout) node[right, font=\bfseries, text=cE] {$Q$};
+    \draw (4, -1.5) -- (5, -1.5) coordinate (Qbarout) node[right, font=\bfseries] {$\overline{Q}$};
+    
+    % Feedback Loops
+    \fill (4.5, 1.5) coordinate (fb_Q) circle(2pt);
+    \fill (4.5, -1.5) coordinate (fb_Qbar) circle(2pt);
+    
+    % Q back to K's AND gate
+    \draw (fb_Q) -- (4.5, 3) -- (-1.5, 3) |- (andK.in 1);
+    % Q_bar back to J's AND gate
+    \draw (fb_Qbar) -- (4.5, -3) -- (-1.5, -3) |- (andJ.in 3);
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{3. Mathematical Derivation of the JK Characteristic Equation}
+
+From the logic diagram above, the internal SR inputs are governed by the outputs of the AND gates:
+\begin{align*}
+    S &= J \cdot \overline{Q}_{prev} \\
+    R &= K \cdot Q_{prev}
+\end{align*}
+
+We substitute these expressions into the characteristic equation of the underlying SR flip-flop ($Q_{next} = S + \overline{R}Q_{prev}$):
+\begin{align*}
+    Q_{next} &= (J \cdot \overline{Q}_{prev}) + \overline{(K \cdot Q_{prev})} \cdot Q_{prev} \quad &&\text{(Substitution)} \\
+    Q_{next} &= J \overline{Q}_{prev} + (\overline{K} + \overline{Q}_{prev}) \cdot Q_{prev} \quad &&\text{(De Morgan's Law applied to } \overline{K \cdot Q} \text{)} \\
+    Q_{next} &= J \overline{Q}_{prev} + \overline{K} Q_{prev} + \overline{Q}_{prev} Q_{prev} \quad &&\text{(Distributive Law)} \\
+    Q_{next} &= J \overline{Q}_{prev} + \overline{K} Q_{prev} + 0 \quad &&\text{(Complementarity Law: } X \cdot \overline{X} = 0 \text{)} \\
+    Q_{next} &= J \overline{Q}_{prev} + \overline{K} Q_{prev} \quad &&\text{(Identity Law)}
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{4. Behavior Under $J = 1, K = 1$}
+
+Let us evaluate the new characteristic equation, $Q_{next} = J\overline{Q} + \overline{K}Q$, for the previously problematic condition where both inputs are $1$ ($J = 1, K = 1$):
+\begin{align*}
+    Q_{next} &= (1 \cdot \overline{Q}_{prev}) + (\overline{1} \cdot Q_{prev}) \\
+    Q_{next} &= \overline{Q}_{prev} + (0 \cdot Q_{prev}) \\
+    Q_{next} &= \overline{Q}_{prev}
+\end{align*}
+
+\textbf{Conclusion:} 
+By implementing cross-coupled feedback, the undefined state is completely eliminated. When $J=1$ and $K=1$, the flip-flop simply inverts its current state (a behavior known as \textbf{Toggling}). 
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}cc|c|l@{}}
+\toprule
+\textbf{$J$} & \textbf{$K$} & \textbf{$Q_{next}$} & \textbf{State Name} \\
+\midrule
+0 & 0 & $Q_{prev}$ & Hold / Memory \\
+0 & 1 & 0 & Reset \\
+1 & 0 & 1 & Set \\
+\rowcolor{cE!10} 1 & 1 & $\overline{Q}_{prev}$ & \textbf{Toggle (Resolved)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{tcolorbox}
+
 \item Show the logic diagram and function table of an SR latch with NAND gates.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
-%% -- Q2: Undefined condition in SR and its JK solution --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Overview of the NAND-Based SR Latch}
+
+An SR (Set-Reset) latch constructed with cross-coupled NAND gates operates as an \textbf{active-low} device. This means that a logic \textbf{0} is required to assert either the Set or Reset action, whereas a logic \textbf{1} is the passive (holding) state. For this reason, the inputs are traditionally denoted as $\overline{S}$ and $\overline{R}$.
+
+\vspace{0.4cm}
+\textbf{2. Function Table (Truth Table)}
+
+The function table defines the next state ($Q_{next}$) based on the current inputs. Because it is an active-low latch, the quiescent (memory) state occurs when both inputs are driven high ($1$). Applying low ($0$) to both inputs simultaneously forces both outputs high, violating the complementarity rule ($Q \neq \overline{Q}$), making it an invalid or forbidden state.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}cc|cc|l@{}}
+\toprule
+\multicolumn{2}{c|}{\textbf{Inputs}} & \multicolumn{2}{c|}{\textbf{Outputs}} & \multirow{2}{*}{\textbf{State / Operation}} \\
+\textbf{$\overline{S}$} & \textbf{$\overline{R}$} & \textbf{$Q_{next}$} & \textbf{$\overline{Q}_{next}$} & \\
+\midrule
+1 & 1 & $Q_{prev}$ & $\overline{Q}_{prev}$ & \textbf{Hold} (Memory / No Change) \\
+0 & 1 & 1 & 0 & \textbf{Set} ($Q$ is forced to 1) \\
+1 & 0 & 0 & 1 & \textbf{Reset} ($Q$ is forced to 0) \\
+\rowcolor{cE!10} 0 & 0 & 1 & 1 & \textbf{Invalid} (Forbidden / Restricted) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.4cm}
+\textbf{3. Logic Diagram}
+
+The circuit consists of two 2-input NAND gates. The output of the top gate ($Q$) is cross-coupled to one of the inputs of the bottom gate, and the output of the bottom gate ($\overline{Q}$) is cross-coupled back to one of the inputs of the top gate.
+
+\vspace{0.3cm}
+\begin{center}
+\begin{circuitikz}[thick, scale=1.2, transform shape]
+    % NAND Gates
+    \node[nand port] (nand1) at (3, 1) {};
+    \node[nand port] (nand2) at (3, -1) {};
+    
+    % Input Terminals
+    \draw (nand1.in 1) -- ++(-1.5,0) node[left, font=\bfseries] {$\overline{S}$};
+    \draw (nand2.in 2) -- ++(-1.5,0) node[left, font=\bfseries] {$\overline{R}$};
+    
+    % Output Terminals
+    \draw (nand1.out) -- ++(1.5,0) node[right, font=\bfseries, text=cE] {$Q$};
+    \draw (nand2.out) -- ++(1.5,0) node[right, font=\bfseries] {$\overline{Q}$};
+    
+    % Cross-Coupling Feedback Loops
+    % Feedback from Q to bottom NAND
+    \draw (nand1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} 
+        -- ++(0,-0.8) -- ++(-3.0,-0.4) -- (nand2.in 1);
+        
+    % Feedback from Q-bar to top NAND
+    \draw (nand2.out) ++(0.7,0) node[circle,fill,inner sep=1.2pt]{} 
+        -- ++(0, 0.8) -- ++(-3.4, 0.4) -- (nand1.in 2);
+\end{circuitikz}
+\end{center}
+
+\vspace{0.2cm}
+\textbf{Boolean Equations for the Latch:}
+The outputs govern each other based on NAND logic (where $\overline{A \cdot B}$ is the NAND operation):
+\begin{align*}
+    Q &= \overline{\overline{S} \cdot \overline{Q}} \\
+    \overline{Q} &= \overline{\overline{R} \cdot Q}
+\end{align*}
+
+\end{tcolorbox}
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -18468,14 +20225,206 @@ Design the circuit with NAND SR latches and gates.
 
 \begin{enumerate}
 
-%% -- Q1: JK characteristic table and equation --
 \item What is the problem in the construction of a JK flip-flop? How can we overcome this problem?
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. The Problem: The Race-Around Condition}
+
+The primary problem encountered in the construction of a basic, level-triggered JK flip-flop is known as the \textbf{\textcolor{cE}{Race-Around Condition}}. 
+
+This anomaly occurs under a specific set of circumstances:
+\begin{enumerate}
+    \item The inputs are set to the toggle state: $J = 1$ and $K = 1$.
+    \item The clock signal ($CLK$) is HIGH (level-triggered active state).
+    \item The width of the clock pulse ($t_p$) is significantly longer than the propagation delay of the flip-flop ($\Delta t$).
+\end{enumerate}
+
+\textbf{Mechanism of the Problem:}
+When $J=1$ and $K=1$, the JK flip-flop is designed to toggle its output ($Q_{next} = \overline{Q}_{prev}$). However, because the flip-flop is level-sensitive and the clock pulse remains HIGH for a relatively long time ($t_p > \Delta t$), the output $Q$ will toggle, feed back to the input, and cause the flip-flop to toggle \textit{again} while the clock is still HIGH. 
+
+This creates a "race" between the input and the feedback. The output oscillates ($1 \rightarrow 0 \rightarrow 1 \rightarrow 0 \dots$) continuously as long as the clock remains HIGH. When the clock finally goes LOW, the final state of $Q$ is entirely unpredictable.
+
+\vspace{0.3cm}
+\textbf{Timing Diagram of the Race-Around Condition}
+
+\begin{center}
+\begin{tikztimingtable}[
+    timing/slope=0.05,
+    timing/name/.style={font=\bfseries}
+]
+    CLK ($t_p$) & 1L 8H 2L \\
+    $J, K$ Inputs & 11H \\
+    Output $Q$ ($\Delta t$) & 1L 1.5H 1.5L 1.5H 1.5L 1.5H 0.5H 2L \\
+\extracode
+    \begin{pgfonlayer}{background}
+        \draw[<->, thick, cE] (1, 2.5) -- (9, 2.5) node[midway, above, font=\small\bfseries] {$t_p \text{ (Clock Pulse Width)}$};
+        \draw[<->, thick, blue] (1, -1.5) -- (2.5, -1.5) node[midway, below, font=\small\bfseries] {$\Delta t$};
+    \end{pgfonlayer}
+\end{tikztimingtable}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Condition for Race-Around}
+
+For the race-around condition to occur, the timing relationship is:
+\begin{align*}
+    t_p > \Delta t
+\end{align*}
+Where:
+\begin{itemize}
+    \item $t_p$ = Clock pulse duration (HIGH time).
+    \item $\Delta t$ = Total propagation delay of the logic gates forming the flip-flop.
+\end{itemize}
+
+\rule{\textwidth}{0.4pt}
+\vspace{0.2cm}
+
+\textbf{3. Solutions to Overcome the Problem}
+
+To eliminate the race-around condition, we must ensure that the flip-flop can only change state \textbf{once} per clock cycle, regardless of how long the clock remains HIGH. There are three primary methods to achieve this:
+
+\textbf{Solution A: Using a Master-Slave JK Flip-Flop}
+The most robust solution is to construct a Master-Slave configuration. This involves cascading two flip-flops (a "Master" and a "Slave") and driving them with complementary clock signals.
+
+\begin{itemize}
+    \item When $CLK = 1$: The Master is active and captures the $J$ and $K$ inputs. The Slave is disabled (since it receives $\overline{CLK} = 0$), so the final output $Q$ remains completely isolated and unchanged.
+    \item When $CLK = 0$: The Master is disabled (locking its state). The Slave becomes active and transfers the Master's state to the final output $Q$.
+\end{itemize}
+Because the feedback to the Master comes from the Slave's output, and the Slave only updates when the Master is locked, feedback oscillation is physically impossible.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.85, transform shape]
+    % Master Block
+    \draw (1, 0) rectangle (3.5, 3);
+    \node[font=\bfseries, align=center] at (2.25, 1.5) {Master\\Latch};
+    \node[right] at (1, 2.5) {$J$};
+    \node[right] at (1, 0.5) {$K$};
+    
+    % Slave Block
+    \draw (6, 0) rectangle (8.5, 3);
+    \node[font=\bfseries, align=center] at (7.25, 1.5) {Slave\\Latch};
+    
+    % Interconnections
+    \draw (3.5, 2.5) -- (6, 2.5) node[midway, above] {$Q_M$};
+    \draw (3.5, 0.5) -- (6, 0.5) node[midway, below] {$\overline{Q}_M$};
+    
+    % Outputs
+    \draw (8.5, 2.5) -- (10, 2.5) node[right, font=\bfseries, text=cE] {$Q$};
+    \draw (8.5, 0.5) -- (10, 0.5) node[right, font=\bfseries] {$\overline{Q}$};
+    
+    % Clock Routing
+    \draw (-1, 1.5) node[left, font=\bfseries] {$CLK$} -- (1, 1.5);
+    \fill (0, 1.5) circle (2.5pt) coordinate (clk_split);
+    \draw (clk_split) -- (0, -1) -- (4, -1);
+    \node[not port, scale=0.6] (inv) at (4.5, -1) {};
+    \draw (4, -1) -- (inv.in);
+    \draw (inv.out) -- (5.5, -1) |- (6, 1.5);
+    
+    % Feedback Loops
+    \fill (9.5, 2.5) circle(2.5pt);
+    \draw (9.5, 2.5) -- (9.5, 4) -- (0.5, 4) |- (1, 0.5); % Q to K
+    
+    \fill (9.5, 0.5) circle(2.5pt);
+    \draw (9.5, 0.5) -- (9.5, -2) -- (0.2, -2) |- (1, 2.5); % Q_bar to J
+\end{circuitikz}
+\end{center}
+
+\textbf{Solution B: Edge-Triggered Flip-Flops}
+Instead of making the flip-flop sensitive to the \textit{level} of the clock (HIGH or LOW), edge-triggered flip-flops use specialized internal delay networks or edge-detector circuits (pulse transition detectors) to make the flip-flop active only during the microscopic transition of the clock (e.g., the positive edge from $0 \rightarrow 1$). Because the active window (transition time) is significantly shorter than the propagation delay ($\Delta t$), the flip-flop can only toggle once.
+
+\textbf{Solution C: Modifying Propagation Delay (Theoretical)}
+By modifying the circuitry such that the propagation delay of the flip-flop ($\Delta t$) is greater than the clock pulse width ($t_p$), but less than the total clock period ($T$), the race-around condition is mathematically prevented:
+\begin{align*}
+    t_p < \Delta t < T
+\end{align*}
+However, this is generally impractical in modern high-speed digital designs, as maintaining such precise analog timing constraints across varying temperatures and voltages is unreliable. Therefore, Master-Slave or Edge-Triggering architectures are the industry standards.
+
+\end{tcolorbox}
 
 \item Derive the characteristic table and the characteristic equation for a JK flip-flop.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
-%% -- Q2: Problem in construction of JK FF and its solution --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. The Characteristic Table}
+
+The characteristic table of a flip-flop describes its next state, $Q(t+1)$, as a function of its current inputs and its present state, $Q(t)$. 
+
+The JK flip-flop is a universal flip-flop that incorporates the behaviors of Set, Reset, and Hold, while resolving the undefined state of the SR flip-flop by introducing a Toggle state when both inputs are asserted ($J=1, K=1$).
+
+Based on its operational behavior, we construct the comprehensive characteristic table:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}ccc|c|l@{}}
+\toprule
+\multicolumn{2}{c}{\textbf{Inputs}} & \textbf{Present State} & \textbf{Next State} & \multirow{2}{*}{\textbf{Operation}} \\
+\textbf{$J$} & \textbf{$K$} & \textbf{$Q(t)$} & \textbf{$Q(t+1)$} & \\
+\midrule
+0 & 0 & 0 & 0 & \multirow{2}{*}{Hold / No Change ($Q(t+1) = Q(t)$)} \\
+0 & 0 & 1 & 1 & \\
+\midrule
+0 & 1 & 0 & 0 & \multirow{2}{*}{Reset ($Q(t+1) = 0$)} \\
+0 & 1 & 1 & 0 & \\
+\midrule
+1 & 0 & 0 & 1 & \multirow{2}{*}{Set ($Q(t+1) = 1$)} \\
+1 & 0 & 1 & 1 & \\
+\midrule
+1 & 1 & 0 & 1 & \multirow{2}{*}{Toggle ($Q(t+1) = \overline{Q}(t)$)} \\
+1 & 1 & 1 & 0 & \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.4cm}
+\textbf{2. Karnaugh Map Simplification}
+
+To derive the characteristic equation, we extract the minterms from the characteristic table where $Q(t+1) = 1$. 
+Treating $J, K,$ and $Q(t)$ as boolean variables (where $J$ is the MSB and $Q(t)$ is the LSB), the minterms where the output is HIGH are:
+\begin{align*}
+    m(J, K, Q(t)) = \sum m(1, 4, 5, 6)
+\end{align*}
+
+We plot these minterms onto a 3-variable Karnaugh Map:
+
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$K\,Q(t)$][$J$]
+    % Minterms for Q(t+1) = 1: 1 (001), 4 (100), 5 (101), 6 (110)
+    \minterms{1,4,5,6}
+    \maxterms{0,2,3,7}
+    
+    % Group 1: Minterms 4 and 6 (J=1, Q(t)=0)
+    \implicant{4}{6}
+    
+    % Group 2: Minterms 1 and 5 (K=0, Q(t)=1)
+    \implicant{1}{5}
+\end{karnaugh-map}
+\end{center}
+
+\vspace{0.2cm}
+\textbf{3. Derivation of the Characteristic Equation}
+
+From the Karnaugh Map, we can identify two prime implicants:
+\begin{itemize}
+    \item \textbf{Group 1 (Minterms 4, 6):} Spans the cells where $J=1$ and $Q(t)=0$. The variable $K$ changes (from $0$ to $1$) and is therefore eliminated. This yields the term: \textcolor{cE}{$\mathbf{J\overline{Q}(t)}$}.
+    \item \textbf{Group 2 (Minterms 1, 5):} Spans the cells where $K=0$ and $Q(t)=1$. The variable $J$ changes (from $0$ to $1$) and is therefore eliminated. This yields the term: \textcolor{cE}{$\mathbf{\overline{K}Q(t)}$}.
+\end{itemize}
+
+Summing these product terms provides the minimized Boolean expression for the Next State. 
+
+\vspace{0.2cm}
+\textbf{Final Characteristic Equation:}
+\begin{align*}
+    \textcolor{cE}{\mathbf{Q(t+1)}} &= \textcolor{cE}{\mathbf{J \overline{Q}(t) + \overline{K} Q(t)}}
+\end{align*}
+
+This mathematically confirms the structural behavior of the JK flip-flop: 
+When $J=1$ and $Q(t)=0$, the device sets. When $K=0$ and $Q(t)=1$, the device holds its HIGH state. The undefined SR condition is naturally resolved.
+
+\end{tcolorbox}
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -18484,7 +20433,6 @@ Design the circuit with NAND SR latches and gates.
 
 \begin{enumerate}
 
-%% -- Q1: Master-Slave D flip-flop operation --
 \item A clocked sequential circuit uses a master-slave configuration.
 \begin{enumerate}
   \item Explain how signal propagation through the master and slave stages affects the timing behavior of the circuit.
@@ -18492,33 +20440,838 @@ Design the circuit with NAND SR latches and gates.
 \end{enumerate}
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Timing Behavior and Signal Propagation in a Master-Slave Configuration}
+
+A master-slave sequential circuit is constructed by cascading two level-sensitive latches: the \textbf{Master} and the \textbf{Slave}. They are driven by complementary clock signals ($CLK$ for the master, and $\overline{CLK}$ for the slave, typically generated via an internal NOT gate). This configuration splits the clock cycle into two distinct propagation phases, effectively creating edge-triggered behavior and isolating the input from the output.
+
+\begin{itemize}
+    \item \textbf{Phase 1: Master Active (Clock HIGH)}
+    When $CLK = 1$, the Master latch is transparent (enabled). It samples the external inputs (e.g., $J$ and $K$, or $D$) and its output ($Q_{M}$) updates accordingly. Concurrently, the Slave receives $\overline{CLK} = 0$, rendering it opaque (disabled). The Slave holds its previous value, isolating the final output ($Q$) from any input variations during this phase.
+    
+    \item \textbf{Phase 2: Slave Active (Clock LOW)}
+    When $CLK = 0$, the Master latch is disabled, locking in the state it held just before the clock transitioned. The Slave now receives $\overline{CLK} = 1$, making it transparent. The signal propagates from the locked Master output ($Q_{M}$) through the Slave to the final output ($Q$). 
+\end{itemize}
+
+\textbf{Conclusion on Timing:} Signal propagation takes exactly one full clock cycle to reach the final output and stabilize. Because the master and slave are never transparent simultaneously under ideal conditions, direct signal shoot-through (and thus, race-around) is prevented. State changes strictly occur on the clock edge (e.g., the falling edge for a positive-high master).
+
+\vspace{0.4cm}
+\begin{center}
+\begin{tikztimingtable}[
+    timing/slope=0.05,
+    timing/name/.style={font=\bfseries}
+]
+    $CLK$ & 1L 4H 4L 4H 1L \\
+    Master ($Q_{M}$) & 1.5L 3.5H 4H 2.5L 2.5L \\
+    Slave ($Q$) & 5.5L 4H 4L 0.5L \\
+\extracode
+    \begin{pgfonlayer}{background}
+        % Draw guidelines for falling edges
+        \draw[dashed, gray, ultra thin] (5, 1) -- (5, -4);
+        \draw[dashed, gray, ultra thin] (13, 1) -- (13, -4);
+        \node[font=\scriptsize\itshape, text=gray, align=left] at (5, -4.5) {Output updates\\on falling edge};
+    \end{pgfonlayer}
+\end{tikztimingtable}
+\end{center}
+
+\vspace{0.4cm}
+\textbf{2. Race-Around Under Non-Ideal Clock Conditions}
+
+While the master-slave architecture mathematically prevents the race-around condition under ideal, zero-transition-time clocks, real physical circuits suffer from \textbf{finite rise ($t_r$) and fall ($t_f$) times}. A non-ideal clock can cause race-around due to a phenomenon known as \textbf{\textcolor{cE}{Clock Overlap}}.
+
+\textbf{Mechanism of Failure:}
+\begin{enumerate}
+    \item \textbf{Inverter Delay ($t_{pd,inv}$):} The Slave's clock ($\overline{CLK}$) is generated by passing $CLK$ through an inverter. This inverter has an inherent propagation delay.
+    \item \textbf{Finite Transition Time:} When $CLK$ is transitioning from HIGH to LOW (falling edge), the voltage drops gradually rather than instantaneously.
+    \item \textbf{Simultaneous Conduction (Overlap):} Because $CLK$ is falling slowly, there is a finite window where its voltage is still slightly above the logic threshold ($V_{th,L}$), keeping the Master partially enabled. Meanwhile, due to the inverter, $\overline{CLK}$ begins to rise and may cross the threshold ($V_{th,H}$), enabling the Slave.
+\end{enumerate}
+
+During this critical overlap window ($t_{overlap}$), both the Master and the Slave latches are transparent at the exact same time. The isolation barrier is broken.
+
+\vspace{0.3cm}
+\textbf{Mathematical Justification:}
+
+Let the propagation delay of the Master latch be $t_{pd(M)}$ and the Slave latch be $t_{pd(S)}$. 
+If the clock overlap duration exceeds the combined propagation delay of the internal latches, a race-around will occur:
+\begin{align*}
+    t_{overlap} > t_{pd(M)} + t_{pd(S)}
+\end{align*}
+
+If this condition is met (especially in JK flip-flops where the output is fed back to the input), the newly toggled state from the Slave will feed back into the transparent Master, traverse the Slave again, and toggle the output multiple times within the same overlap window. 
+
+\textbf{Resolution:}
+To mitigate this in practical IC design, non-overlapping multi-phase clocks are used, or threshold voltages of the latches are intentionally skewed so that the Master disables well before the Slave enables.
+
+\end{tcolorbox}
+
 \item Draw the block diagram of a negative edge triggered Master-Slave D flip-flop using D latches.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
-%% -- Q7: Master-slave configuration; signal propagation and race-around (2024-25) --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Architectural Overview}
+
+A \textbf{Negative Edge-Triggered Master-Slave D Flip-Flop} is constructed by cascading two level-sensitive D latches. The first latch is designated as the \textbf{Master}, and the second as the \textbf{Slave}. 
+
+To achieve negative edge-triggering (where the output only changes on the falling edge of the clock signal, $1 \rightarrow 0$), the clock routing is designed as follows:
+\begin{itemize}
+    \item The external $CLK$ signal is connected directly to the Enable ($EN$) pin of the Master latch.
+    \item The external $CLK$ signal is inverted (via a NOT gate) before connecting to the Enable ($EN$) pin of the Slave latch.
+\end{itemize}
+Because of this complementary clocking scheme, the Master and Slave latches are never transparent (enabled) at the same time, completely isolating the input $D_{in}$ from the final output $Q_{out}$ during static clock levels.
+
+\vspace{0.4cm}
+\textbf{2. Logic Block Diagram}
+
+\begin{center}
+\begin{circuitikz}[thick, scale=1.1, transform shape]
+    % Master Block
+    \draw[fill=cE!5, rounded corners=2pt] (0, 0) rectangle (3, 4);
+    \node[align=center, font=\bfseries] at (1.5, 2) {Master\\D Latch};
+    \node[right, font=\bfseries] at (0, 3) {$D$};
+    \node[right, font=\bfseries] at (0, 1) {$EN$};
+    \node[left, font=\bfseries] at (3, 3) {$Q$};
+
+    % Slave Block
+    \draw[fill=cE!5, rounded corners=2pt] (6, 0) rectangle (9, 4);
+    \node[align=center, font=\bfseries] at (7.5, 2) {Slave\\D Latch};
+    \node[right, font=\bfseries] at (6, 3) {$D$};
+    \node[right, font=\bfseries] at (6, 1) {$EN$};
+    \node[left, font=\bfseries] at (9, 3) {$Q$};
+    \node[left, font=\bfseries] at (9, 1) {$\overline{Q}$};
+
+    % Input and Output Terminals
+    \draw (-2, 3) node[left, font=\bfseries] {$D_{in}$} -- (0, 3);
+    \draw (-2, -1.5) node[left, font=\bfseries] {$CLK$} -- (-0.5, -1.5);
+    \draw (9, 3) -- (10.5, 3) node[right, font=\bfseries, text=cE] {$Q_{out}$};
+    \draw (9, 1) -- (10.5, 1) node[right, font=\bfseries] {$\overline{Q}_{out}$};
+
+    % Intermediate Connections
+    \draw (3, 3) -- (6, 3) node[midway, above, font=\bfseries] {$Q_M$};
+
+    % Clock Routing
+    \draw (-0.5, -1.5) node[circle, fill, inner sep=1.5pt] (clk_node) {};
+    \draw (clk_node) |- (0, 1);
+    \draw (clk_node) -- (3.5, -1.5);
+    \node[not port, scale=0.8] (inv) at (4.5, -1.5) {};
+    \draw (3.5, -1.5) -- (inv.in);
+    \draw (inv.out) |- (6, 1) node[pos=0.75, above, font=\scriptsize\bfseries] {$\overline{CLK}$};
+\end{circuitikz}
+\end{center}
+
+\vspace{0.4cm}
+\textbf{3. Operational Mechanism (State Analysis)}
+
+The operation can be broken down into two distinct phases of the clock cycle:
+
+\begin{itemize}
+    \item \textbf{Phase 1: $CLK = 1$ (Clock HIGH)}
+    \begin{itemize}
+        \item \textit{Master Latch:} $EN = 1$. The Master is \textbf{transparent}. The intermediate output $Q_M$ actively tracks the external input $D_{in}$.
+        \item \textit{Slave Latch:} $EN = 0$ (due to the inverter). The Slave is \textbf{opaque} (locked). It holds its previous value, ensuring $Q_{out}$ remains stable regardless of changes at $D_{in}$.
+    \end{itemize}
+    
+    \item \textbf{Phase 2: $CLK = 0$ (Clock LOW)}
+    \begin{itemize}
+        \item \textit{Master Latch:} $EN = 0$. The Master becomes \textbf{opaque}. It locks in the value of $D_{in}$ that was present at the exact moment the clock transitioned from $1$ to $0$.
+        \item \textit{Slave Latch:} $EN = 1$. The Slave becomes \textbf{transparent}. It reads the locked value from $Q_M$ and immediately transfers it to the final output $Q_{out}$.
+    \end{itemize}
+\end{itemize}
+\textbf{Conclusion:} The final output $Q_{out}$ is updated \textit{only} at the exact instant the clock falls (the negative edge).
+
+\vspace{0.4cm}
+\textbf{4. Timing Diagram Verification}
+
+The following timing diagram mathematically verifies the step-by-step logic. Notice how $Q_{out}$ remains completely unaffected by any variations in $D_{in}$ while the clock is steady, changing strictly at the designated negative edges (marked by dashed lines).
+
+\begin{center}
+\begin{tikztimingtable}[
+    timing/slope=0.05, 
+    timing/name/.style={font=\bfseries}
+]
+    $CLK$ & 1H 2L 2H 2L 1H \\
+    $D_{in}$ (Input) & 0.5L 2.5H 3L 2H \\
+    $Q_M$ (Master) & 0.5L 2.5H 4L 1H \\
+    $Q_{out}$ (Slave) & 1L 4H 3L \\
+\extracode
+    \begin{pgfonlayer}{background}
+        % Grid lines for falling edges
+        \draw[dashed, gray, ultra thin] (1, 1) -- (1, -6);
+        \draw[dashed, gray, ultra thin] (5, 1) -- (5, -6);
+        
+        % Edge labels
+        \node[font=\scriptsize\itshape, text=cE, align=center] at (1, -6.5) {Negative\\Edge 1};
+        \node[font=\scriptsize\itshape, text=cE, align=center] at (5, -6.5) {Negative\\Edge 2};
+        
+        % Arrow indicators
+        \draw[->, >=stealth, cE, thick] (1, 0.5) -- (1, -0.5);
+        \draw[->, >=stealth, cE, thick] (5, 0.5) -- (5, -0.5);
+    \end{pgfonlayer}
+\end{tikztimingtable}
+\end{center}
+
+\end{tcolorbox}
+
 \item Draw the circuit diagram of a master-slave JK flip-flop with asynchronous preset and clear using only NOR gates.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
-%% -- Q6: Negative edge triggered Master-Slave D FF using D latches (2022-23) --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Structural Logic and Design Principles}
+
+Designing a Master-Slave JK flip-flop with asynchronous Preset (PR) and Clear (CLR) entirely out of NOR gates requires mapping the standard AND-OR-Latch topology into a NOR-only equivalent. 
+
+\begin{itemize}
+    \item \textbf{Latches:} The Master and Slave memory cores are formed by cross-coupled NOR gates. Because NOR logic is active-high, a $1$ on the $S$ input resets $\overline{Q}$ to $0$ (which forces $Q$ to $1$). Asynchronous $PR$ and $CLR$ inputs are directly added to these latches by expanding them into 3-input NOR gates.
+    \item \textbf{Steering Logic:} To satisfy the characteristic JK equation using NOR gates, we must invert the $J$ and $K$ inputs. The Master steering gates are 3-input NORs receiving $\overline{CLK}$, feedback from the Slave, and the inverted external inputs ($\overline{J}$ and $\overline{K}$).
+    \item \textbf{Clock Isolation:} An inverter (created by tying the inputs of a NOR gate together) provides $\overline{CLK}$ to the Master, while the original $CLK$ drives the Slave. This guarantees that Master and Slave are never transparent simultaneously.
+\end{itemize}
+
+\vspace{0.4cm}
+\textbf{2. Circuit Diagram}
+
+\begin{center}
+\begin{circuitikz}[thick , transform shape]
+
+
+    \tikzset{every logic gate/.style={fill=blue!5, thick}}
+
+    % ==========================================
+    % GATE PLACEMENT
+    % ==========================================
+    % Input Steering (Master)
+    \node[nor port, number inputs=3] (IN_TOP) at (2, 2.5) {};
+    \node[nor port, number inputs=3] (IN_BOT) at (2, -2.5) {};
+    
+    % Master Latch (3-input NORs for PR/CLR)
+    \node[nor port, number inputs=3] (M_TOP) at (6, 2.5) {};
+    \node[nor port, number inputs=3] (M_BOT) at (6, -2.5) {};
+    
+    % Clock Inverter (NOR gate acting as NOT)
+    \node[nor port, number inputs=2] (CLK_INV) at (8.5, 0) {};
+    
+    % Slave Steering
+    \node[nor port] (MID_TOP) at (11, 2.5) {};
+    \node[nor port] (MID_BOT) at (11, -2.5) {};
+    
+    % Slave Latch (3-input NORs for PR/CLR)
+    \node[nor port, number inputs=3] (S_TOP) at (15, 2.5) {};
+    \node[nor port, number inputs=3] (S_BOT) at (15, -2.5) {};
+
+    % ==========================================
+    % INPUTS & CLOCK ROUTING
+    % ==========================================
+    \coordinate (in_start) at (-2.5, 0);
+    
+    % CLK Input and Splitting
+    \draw (in_start |- 0,0) node[ocirc]{} node[left, text=blue!80!black] {CLK} -- ++(2.5, 0) coordinate (clk_branch1);
+    \fill (clk_branch1) circle (2pt);
+    \draw (clk_branch1) |- (IN_TOP.in 3);
+    \draw (clk_branch1) |- (IN_BOT.in 1);
+    
+    % Route CLK to the Inverter
+    \draw (clk_branch1) -- ++(6.5, 0) coordinate (clk_branch2); 
+    \coordinate (clk_inv_split) at ($(CLK_INV.in 1) + (-0.4, -0.28)$); 
+    \draw (clk_branch2) -- (clk_inv_split);
+    \draw (clk_inv_split) |- (CLK_INV.in 1);
+    \draw (clk_inv_split) |- (CLK_INV.in 2);
+    \fill (clk_inv_split) circle (2pt);
+
+    % J & K Inputs
+    \draw (in_start |- IN_TOP.in 2) node[ocirc]{} node[left, text=blue!80!black] {J} -- (IN_TOP.in 2);
+    \draw (in_start |- IN_BOT.in 2) node[ocirc]{} node[left, text=blue!80!black] {K} -- (IN_BOT.in 2);
+
+    % ==========================================
+    % MASTER STAGE WIRING
+    % ==========================================
+    \draw (IN_TOP.out) |- (M_TOP.in 2);
+    \draw (IN_BOT.out) |- (M_BOT.in 2);
+    
+    % Master Latch Cross-Coupling (Orthogonal routing to avoid gate overlap)
+    \draw (M_TOP.out) -- ++(0.3, 0) coordinate (mt_out);
+    \fill (mt_out) circle (2pt);
+    \draw (M_BOT.out) -- ++(0.3, 0) coordinate (mb_out);
+    \fill (mb_out) circle (2pt);
+    
+    \coordinate (gap_m1) at ($(IN_TOP.out)!0.6!(M_TOP.in 2)$);
+    \coordinate (gap_m2) at ($(IN_TOP.out)!0.4!(M_TOP.in 2)$);
+    
+    \draw (mt_out) -- (mt_out |- 0, 0.5) -| (gap_m1) |- (M_BOT.in 1);
+    \draw (mb_out) -- (mb_out |- 0, -0.5) -| (gap_m2) |- (M_TOP.in 3);
+
+    % ==========================================
+    % SLAVE STAGE WIRING
+    % ==========================================
+    % Inverted Clock to Slave Steering
+    \draw (CLK_INV.out) -- ++(0.4, 0) coordinate (clk_inv_out);
+    \fill (clk_inv_out) circle (2pt);
+    \draw (clk_inv_out) |- (MID_TOP.in 2);
+    \draw (clk_inv_out) |- (MID_BOT.in 1);
+
+    % Master outputs to Slave Steering
+    \draw (mt_out) |- (MID_TOP.in 1);
+    \draw (mb_out) |- (MID_BOT.in 2);
+
+    % Slave Steering to Slave Latch
+    \draw (MID_TOP.out) |- (S_TOP.in 2);
+    \draw (MID_BOT.out) |- (S_BOT.in 2);
+
+    % Slave Latch Cross-Coupling
+    \draw (S_TOP.out) -- ++(0.3, 0) coordinate (st_out);
+    \fill (st_out) circle (2pt);
+    \draw (S_BOT.out) -- ++(0.3, 0) coordinate (sb_out);
+    \fill (sb_out) circle (2pt);
+    
+    \coordinate (gap_s1) at ($(MID_TOP.out)!0.6!(S_TOP.in 2)$);
+    \coordinate (gap_s2) at ($(MID_TOP.out)!0.4!(S_TOP.in 2)$);
+    
+    \draw (st_out) -- (st_out |- 0, 0.5) -| (gap_s1) |- (S_BOT.in 1);
+    \draw (sb_out) -- (sb_out |- 0, -0.5) -| (gap_s2) |- (S_TOP.in 3);
+
+    % ==========================================
+    % OUTPUTS & GLOBAL FEEDBACK
+    % ==========================================
+    \coordinate (out_end) at (17, 0);
+    
+    \draw (st_out) -- (out_end |- S_TOP.out) node[ocirc]{} node[right, text=blue!80!black] {$\overline{\mathsf{Q}}$};
+    \draw (sb_out) -- (out_end |- S_BOT.out) node[ocirc]{} node[right, text=blue!80!black] {\textsf{Q}};
+
+    % Q-bar Feedback (Loops over the top)
+    \draw (st_out) -- ++(0.8, 0) coordinate (st_drop);
+    \fill (st_drop) circle (2pt);
+    \draw (st_drop) -- (st_drop |- 0, 4.2) -- (-0.5, 4.2) |- (IN_TOP.in 1);
+
+    % Q Feedback (Loops under the bottom)
+    \draw (sb_out) -- ++(0.8, 0) coordinate (sb_drop);
+    \fill (sb_drop) circle (2pt);
+    \draw (sb_drop) -- (sb_drop |- 0, -4.2) -- (-0.5, -4.2) |- (IN_BOT.in 3);
+
+    % ==========================================
+    % ASYNCHRONOUS PRESET AND CLEAR
+    % ==========================================
+    \draw (-3, 5.5) node[ocirc]{} node[left, text=red!70!black] {\textsf{PR}} -- (13.2, 5.5);
+    \draw (-3, -5.5) node[ocirc]{} node[left, text=red!70!black] {\textsf{CLR}} -- (13.2, -5.5);
+
+    % Connect PR to Top Master and Slave Latches
+    \draw (M_TOP.in 1) -- ++(-0.4, 0) coordinate (m_pr) -- (m_pr |- 0, 5.5);
+    \fill (m_pr |- 0, 5.5) circle (2pt);
+    \draw (S_TOP.in 1) -- ++(-0.4, 0) coordinate (s_pr) -- (s_pr |- 0, 5.5);
+    \fill (s_pr |- 0, 5.5) circle (2pt);
+
+    % Connect CLR to Bottom Master and Slave Latches
+    \draw (M_BOT.in 3) -- ++(-0.4, 0) coordinate (m_clr) -- (m_clr |- 0, -5.5);
+    \fill (m_clr |- 0, -5.5) circle (2pt);
+    \draw (S_BOT.in 3) -- ++(-0.4, 0) coordinate (s_clr) -- (s_clr |- 0, -5.5);
+    \fill (s_clr |- 0, -5.5) circle (2pt);
+
+    % ==========================================
+    % BACKGROUND GROUPING BOXES
+    % ==========================================
+    \begin{scope}[on background layer]
+        \node[fit=(IN_TOP)(IN_BOT)(M_TOP)(M_BOT), fill=blue!3, draw=blue!40, dashed, thick, inner xsep=0.8cm, inner ysep=0.4cm] (master_box) {};
+        \node[fit=(MID_TOP)(MID_BOT)(S_TOP)(S_BOT), fill=red!3, draw=red!40, dashed, thick, inner xsep=0.8cm, inner ysep=0.4cm] (slave_box) {};
+    \end{scope}
+    
+    \node[above=0.1cm, text=blue!80!black, font=\bfseries] at (master_box.north) {Master Latch};
+    \node[above=0.1cm, text=red!80!black, font=\bfseries] at (slave_box.north) {Slave Latch};
+    
+\end{circuitikz}
+
+\end{center}
+
+\vspace{0.4cm}
+\textbf{3. Mathematical \& Operational Analysis}
+
+\textbf{Asynchronous Override (PR \& CLR):}
+In NOR logic, an input of $1$ forces the output to $0$ regardless of the other inputs. 
+\begin{itemize}
+    \item If \textcolor{cE}{$\mathbf{CLR = 1}$}: The top latch gates of both Master and Slave are forced to output $0$. Thus, $Q_M = 0$ and $Q = 0$. The flip-flop is unconditionally reset.
+    \item If \textcolor{cE}{$\mathbf{PR = 1}$}: The bottom latch gates are forced to output $0$. Thus, $\overline{Q}_M = 0$ and $\overline{Q} = 0$, logically forcing $Q_M = 1$ and $Q = 1$. The flip-flop is unconditionally set.
+\end{itemize}
+
+\textbf{Synchronous Operation (when PR = 0, CLR = 0):}
+The Master Steering gates control the Master Latch. A NOR gate outputs $1$ only when all of its inputs are $0$.
+\begin{align*}
+    S_M \text{ (Set Master)} &= \overline{\overline{J} + Q_{prev} + \overline{CLK}} &&\xrightarrow{\text{De Morgan's}} \quad J \cdot \overline{Q}_{prev} \cdot CLK \\
+    R_M \text{ (Reset Master)} &= \overline{\overline{K} + \overline{Q}_{prev} + \overline{CLK}} &&\xrightarrow{\text{De Morgan's}} \quad K \cdot Q_{prev} \cdot CLK
+\end{align*}
+
+This demonstrates mathematically that placing the NOR-based inverters on $J$ and $K$, combined with the Slave feedback loops ($Q$ to bottom, $\overline{Q}$ to top), perfectly reproduces the classical JK flip-flop behavior, updating the state strictly when the clock allows.
+
+\end{tcolorbox}
+
 \item Draw the circuit diagram of a master-slave JK Flip-Flop using only NAND gates.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
-%% -- Q5: Master-slave JK FF with async preset and clear using NOR gates (2021-22) --
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Circuit Diagram}
+
+The circuit diagram below shows a classic pulse-triggered (Master-Slave) JK flip-flop constructed entirely from standard NAND gates. The Master section consists of a 3-input steering stage followed by a cross-coupled NAND latch. The Slave section consists of a 2-input steering stage followed by another cross-coupled NAND latch. A single NAND gate with tied inputs serves as the clock inverter.
+
+\begin{center}
+\begin{circuitikz}[scale=1, transform shape, thick ]
+
+    % Set default font and gate fill color to match the schematic style
+    \tikzset{every logic gate/.style={fill=blue!10}}
+
+    % ==========================================
+    % GATE PLACEMENT
+    % ==========================================
+    % Master Latch Gates
+    \node[nand port] (NAND3) at (5, 1.5) {};
+    \node[nand port] (NAND4) at (5, -1.5) {};
+    
+    % Input Stage Gates (Anchored perfectly to Master inputs for straight lines)
+    \node[nand port, number inputs=3, anchor=out] (NAND1) at ($(NAND3.in 1) + (-1.5, 0)$) {};
+    \node[nand port, number inputs=3, anchor=out] (NAND2) at ($(NAND4.in 2) + (-1.5, 0)$) {};
+
+    % Slave Enable Gates (Middle)
+    \node[nand port, anchor=in 1] (NAND5) at ($(NAND3.out) + (1.5, 0)$) {};
+    \node[nand port, anchor=in 2] (NAND6) at ($(NAND4.out) + (1.5, 0)$) {};
+
+    % Slave Latch Gates
+    \node[nand port, anchor=in 1] (NAND7) at ($(NAND5.out) + (1.5, 0)$) {};
+    \node[nand port, anchor=in 2] (NAND8) at ($(NAND6.out) + (1.5, 0)$) {};
+
+    % Clock Inverter
+    \node[not port] (NOT) at (4.5, -3.5) {};
+
+    % ==========================================
+    % INPUT PINS & ROUTING
+    % ==========================================
+    \coordinate (in_x) at ($(NAND1.in 2) + (-2, 0)$);
+    
+    % J and K Inputs
+    \draw (in_x |- NAND1.in 2) node[ocirc]{} node[left, text=blue!80!black] {J} -- (NAND1.in 2);
+    \draw (in_x |- NAND2.in 2) node[ocirc]{} node[left, text=blue!80!black] {K} -- (NAND2.in 2);
+    
+    % Clock Input
+    \draw (in_x |- 0,0) node[ocirc]{} node[left, text=blue!80!black] {Clk} coordinate (clk_in);
+
+    % Small Pulse Symbol near Clock
+    \coordinate (pulse_c) at ($(clk_in) + (0.3, 0.2)$);
+    \draw[thick, red!70!black] (pulse_c) -- ++(0.2, 0) -- ++(0, 0.4) -- ++(0.2, 0);
+    \draw[-latex, thick, red!70!black] ($(pulse_c) + (0.2, 0)$) -- ++(0, 0.25);
+
+    % Main Clock Distribution Network
+    \coordinate (clk_split_x) at ($(in_x) + (1.4, 0)$);
+    \draw (clk_in) -- (clk_split_x |- 0,0) coordinate (clk_split1);
+    \fill (clk_split1) circle (2pt);
+    
+    \draw (clk_split1) |- (NAND1.in 3); % Up to top NAND
+    \draw (clk_split1) -- (clk_split_x |- NOT.in) coordinate (clk_down);
+    \draw (clk_down) -- (NOT.in);       % Down to NOT gate
+    
+    \fill (clk_split_x |- NAND2.in 1) circle (2pt) coordinate (clk_split2);
+    \draw (clk_split2) -- (NAND2.in 1); % Branch to bottom NAND
+
+    % Inverted Clock to Slave Enables
+    \draw (NOT.out) -- ++(0.5, 0) node[above right, inner sep=1pt, text=blue!80!black] {$\overline{\mathsf{Clk}}$} coordinate (not_out_dot);
+    \draw (not_out_dot) -| ($(NAND6.in 1) + (-0.5, 0)$) coordinate (clk_mid_up);
+    \fill (clk_mid_up) circle (2pt);
+    \draw (clk_mid_up) -- (NAND6.in 1);
+    \draw (clk_mid_up) |- (NAND5.in 2);
+
+    % ==========================================
+    % LATCH CROSS-COUPLINGS & STAGE WIRING
+    % ==========================================
+    % Input to Master connection
+    \draw (NAND1.out) -- (NAND3.in 1);
+    \draw (NAND2.out) -- (NAND4.in 2);
+
+    % Master Latch Cross-Coupling
+    \draw (NAND3.out) -- (NAND5.in 1) coordinate[pos=0.3] (m1);
+    \fill (m1) circle (2pt);
+    \draw (NAND4.out) -- (NAND6.in 2) coordinate[pos=0.3] (m3);
+    \fill (m3) circle (2pt);
+    
+    \draw (m1) -- ($(NAND4.in 1) + (-0.3, 0)$) -- (NAND4.in 1);
+    \draw (m3) -- ($(NAND3.in 2) + (-0.3, 0)$) -- (NAND3.in 2);
+
+    % Master to Slave connection
+    \draw (NAND5.out) -- (NAND7.in 1);
+    \draw (NAND6.out) -- (NAND8.in 2);
+
+    % Slave Latch Outputs
+    \draw (NAND7.out) -- ++(1,0) coordinate (q_dot) -- ++(0.5, 0) node[ocirc]{} node[right, text=blue!80!black] {Q};
+    \fill (q_dot) circle (2pt);
+    \draw (NAND8.out) -- ++(1,0) coordinate (qbar_dot) -- ++(0.5, 0) node[ocirc]{} node[right, text=blue!80!black] {$\overline{\mathsf{Q}}$};
+    \fill (qbar_dot) circle (2pt);
+
+    % Slave Latch Cross-Coupling
+    \coordinate (s1) at ($(NAND7.out) + (0.4, 0)$);
+    \coordinate (s3) at ($(NAND8.out) + (0.4, 0)$);
+    \fill (s1) circle (2pt);
+    \fill (s3) circle (2pt);
+    
+    \draw (s1) -- ($(NAND8.in 1) + (-0.3, 0)$) -- (NAND8.in 1);
+    \draw (s3) -- ($(NAND7.in 2) + (-0.3, 0)$) -- (NAND7.in 2);
+
+    % ==========================================
+    % EXTERNAL FEEDBACK LOOPS
+    % ==========================================
+    % Defined vertical channels to avoid intersection issues
+    \coordinate (Qbar_ret_x) at ($(in_x) + (0.6, 0)$);
+    \coordinate (Q_ret_x) at ($(in_x) + (1.0, 0)$);
+
+    % Q Return (Over the top)
+    \draw (q_dot) -- (q_dot |- 0, 4) -| (Q_ret_x |- NAND2.in 3) -- (NAND2.in 3);
+    
+    % Q-bar Return (Underneath everything)
+    \draw (qbar_dot) -- (qbar_dot |- 0, -4.5) -| (Qbar_ret_x |- NAND1.in 1) -- (NAND1.in 1);
+
+    % ==========================================
+    % BACKGROUND BOXES & LABELS
+    % ==========================================
+    \begin{scope}[on background layer]
+        % Master Box
+        \node[fit=(NAND3)(NAND4)(m1)(m3), fill=purple!5, draw=purple!60, dashed, thick, inner xsep=0.3cm, inner ysep=0.6cm] (master_box) {};
+        % Slave Box
+        \node[fit=(NAND7)(NAND8)(s1)(s3), fill=purple!5, draw=purple!60, dashed, thick, inner xsep=0.3cm, inner ysep=0.6cm] (slave_box) {};
+    \end{scope}
+
+    % Pointers and Labels for the boxes
+    \node[above=0.1cm, text=black] (m_label) at (master_box.north) {"Master Latch"};
+    \draw[-latex, thin, black] (m_label) -- (master_box.north);
+    
+    \node[above=0.1cm, text=black] (s_label) at (slave_box.north) {"Slave Latch"};
+    \draw[-latex, thin, black] (s_label) -- (slave_box.north);
+
+\end{circuitikz}
+
+\end{center}
+
+\vspace{0.4cm}
+\textbf{2. Mathematical Formulation and Operating Principles}
+
+The master-slave architecture separates state evaluation from state assignment by utilizing two distinct phases of the clock cycle, completely avoiding the classical race-around condition present in level-triggered JK latches.
+
+\subsection*{Phase 1: Charging the Master ($CLK = 1$)}
+When the clock signal goes high ($CLK = 1$), the inverted clock driving the slave stage goes low ($\overline{CLK} = 0$).
+\begin{itemize}
+    \item \textbf{Slave Behavior:} Since $\overline{CLK} = 0$, the outputs of the slave steering gates (`nand5` and `nand6`) are forced to a logic high state:
+    \begin{align*}
+        S_S &= \overline{Q_M \cdot \overline{CLK}} = \overline{Q_M \cdot 0} = 1 \\
+        R_S &= \overline{\overline{Q}_M \cdot \overline{CLK}} = \overline{\overline{Q}_M \cdot 0} = 1
+    \end{align*}
+    When both inputs to a cross-coupled NAND latch are $1$, the latch retains its current state. Hence, the final outputs $Q$ and $\overline{Q}$ remain locked.
+    
+    \item \textbf{Master Behavior:} Because $CLK = 1$, the master steering gates are enabled. Taking the global cross-coupled feedback loops into account, the intermediate excitation equations for the master latch inputs are evaluated as:
+    \begin{align*}
+        S_M &= \overline{J \cdot CLK \cdot \overline{Q}} = \overline{J \cdot 1 \cdot \overline{Q}} = \overline{J \cdot \overline{Q}} \\
+        R_M &= \overline{\cdot K \cdot CLK \cdot Q} = \overline{K \cdot 1 \cdot Q} = \overline{K \cdot Q}
+    \end{align*}
+    The master latch updates its state variables $Q_M$ and $\overline{Q}_M$ based on the current inputs $J, K$ and the existing feedback state of the device.
+\end{itemize}
+
+\subsection*{Phase 2: Transferring to the Slave ($CLK = 0$)}
+When the clock transitions to a low level ($CLK = 0$), the internal inverted clock switches high ($\overline{CLK} = 1$).
+\begin{itemize}
+    \item \textbf{Master Behavior:} With $CLK = 0$, the outputs of both master steering gates are immediately forced to a logic high state ($S_M = 1$, $R_M = 1$). This completely isolates the master latch from any transient changes occurring at the external $J$ and $K$ inputs, preserving the evaluated values of $Q_M$ and $\overline{Q}_M$.
+    
+    \item \textbf{Slave Behavior:} Since $\overline{CLK} = 1$, the slave steering gates act as transparent buffers tracking the state captured by the master:
+    \begin{align*}
+        S_S &= \overline{Q_M \cdot 1} = \overline{Q_M} \\
+        R_S &= \overline{\overline{Q}_M \cdot 1} = Q_M
+    \end{align*}
+    The slave cross-coupled latch updates its state according to these equations, allowing the final output terminal $Q$ to accept the value previously computed by the master latch during the high portion of the clock phase.
+\end{itemize}
+
+\vspace{0.4cm}
+\textbf{3. Truth Table and State Verification}
+
+The operational behavior described mathematically above perfectly matches the classic JK flip-flop functional profiles shown below.
+
+\begin{center}
+\begin{tabular}{ccccccl}
+    \toprule
+    \textbf{Clock Phase} & \textbf{J} & \textbf{K} & \textbf{$Q_M$} & \textbf{$\overline{Q}_M$} & \textbf{$Q_{next}$} & \textbf{Functional Operation} \\
+    \midrule
+    $CLK = 1$ & $0$ & $0$ & $Q$ & $\overline{Q}$ & $Q$ & \textbf{No Change} (Hold State) \\
+    $CLK = 1$ & $0$ & $1$ & $0$ & $1$ & $0$ & \textbf{Reset} State Condition \\
+    $CLK = 1$ & $1$ & $0$ & $1$ & $0$ & $1$ & \textbf{Set} State Condition \\
+    $CLK = 1$ & $1$ & $1$ & $\overline{Q}$ & $Q$ & $\overline{Q}$ & \textbf{Toggle} State Condition \\
+    \bottomrule
+\end{tabular}
+\end{center}
+
+\end{tcolorbox}
+
 \item Why do we use master-slave flip-flops?
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-%% -- Q4: Master-slave JK FF circuit using NAND gates only --
+The primary reason we use \textbf{Master-Slave Flip-Flops} is to eradicate the \textcolor{cE}{\textbf{race-around condition}} that inherently plagues standard level-triggered J-K flip-flops, thereby ensuring predictable and stable outputs.
+
+\vspace{1em}
+\textbf{\large 1. The Problem: The Race-Around Condition}
+\vspace{0.5em}
+
+In a standard level-triggered J-K flip-flop, the toggle operation is activated when both inputs are HIGH ($J=1, K=1$). Under these conditions, the characteristic equation dictates that the next state should be the complement of the present state:
+\begin{align*}
+    Q_{next} &= J\overline{Q} + \overline{K}Q \\
+             &= (1 \cdot \overline{Q}) + (0 \cdot Q) \\
+             &= \overline{Q} \quad \text{(Toggle State)}
+\end{align*}
+
+However, an issue arises due to timing. Let $t_p$ be the width (duration) of the HIGH clock pulse, and $t_{pd}$ be the propagation delay of the flip-flop. 
+If the clock pulse remains HIGH longer than the propagation delay (\textcolor{cE}{$t_p > t_{pd}$}), the flip-flop will toggle, feed the new inverted output back to its inputs, and toggle \textit{again} while the clock is still HIGH. 
+
+Because the flip-flop toggles continuously (e.g., $0 \rightarrow 1 \rightarrow 0 \rightarrow 1 \dots$) during a single clock pulse, the final state of $Q$ at the falling edge of the clock becomes completely unpredictable. This rapid, uncontrolled toggling is known as the \textbf{race-around condition}.
+
+\vspace{1em}
+\textbf{\large 2. The Solution: Master-Slave Architecture}
+\vspace{0.5em}
+
+To solve this, the master-slave configuration cascades two distinct latches—a \textbf{Master} and a \textbf{Slave}—driven by complementary clock signals. This design effectively converts a level-triggered device into a highly reliable \textbf{edge-triggered} device.
+
+\begin{center}
+\begin{circuitikz}[>=latex]
+    % Master and Slave Blocks
+    \node[draw, thick, fill=cE!10, minimum width=2.8cm, minimum height=3.5cm, rounded corners] (master) at (0,0) {\begin{tabular}{c}\textbf{Master} \\ (J-K Latch)\end{tabular}};
+    \node[draw, thick, fill=cE!10, minimum width=2.8cm, minimum height=3.5cm, rounded corners] (slave) at (6,0) {\begin{tabular}{c}\textbf{Slave} \\ (S-R Latch)\end{tabular}};
+
+    % Inputs J and K
+    \draw[thick, <-] ([yshift=1.2cm]master.west) -- ++(-1.5,0) node[left] {$J$};
+    \draw[thick, <-] ([yshift=-1.2cm]master.west) -- ++(-1.5,0) node[left] {$K$};
+
+    % Intermediate Connections (Master Output -> Slave Input)
+    \draw[thick, ->] ([yshift=1.2cm]master.east) -- ([yshift=1.2cm]slave.west) node[midway, above] {$Y$};
+    \draw[thick, ->] ([yshift=-1.2cm]master.east) -- ([yshift=-1.2cm]slave.west) node[midway, below] {$\overline{Y}$};
+
+    % Final Outputs Q and Q'
+    \draw[thick, ->] ([yshift=1.2cm]slave.east) -- ++(1.5,0) node[right] {$Q$};
+    \draw[thick, ->] ([yshift=-1.2cm]slave.east) -- ++(1.5,0) node[right] {$\overline{Q}$};
+
+    % Clock Routing with Inverter
+    \draw[thick] ([yshift=0cm]master.west) -- ++(-0.5,0) coordinate(clk_node) -- ++(-1,0) node[left] {\textbf{CLK}};
+    \fill (clk_node) circle (2pt);
+    \draw[thick] (clk_node) |- (2.0, -2.5) node[not port, right, scale=0.8] (not1) {};
+    \draw[thick, ->] (not1.out) -| ([yshift=0cm]slave.west);
+\end{circuitikz}
+\end{center}
+
+\vspace{1em}
+\textbf{\large 3. Mechanism of Action}
+\vspace{0.5em}
+
+The master-slave architecture successfully decouples the input sampling from the output transition through the following two-step phase:
+
+\begin{itemize}
+    \item \textbf{Positive Clock Phase (CLK = 1):} 
+    The un-inverted clock enables the Master latch. It responds to the external $J$ and $K$ inputs and updates its intermediate outputs ($Y$ and $\overline{Y}$). Simultaneously, the Slave latch receives an inverted clock ($\overline{\text{CLK}} = 0$) and is thereby disabled. The final outputs ($Q$ and $\overline{Q}$) remain completely isolated from the Master's transitions.
+    
+    \item \textbf{Negative Clock Phase (CLK = 0):} 
+    The un-inverted clock drops to 0, disabling the Master latch and locking its state. The Master is now deaf to any changes in $J$ and $K$. Concurrently, the Slave latch receives an inverted clock ($\overline{\text{CLK}} = 1$) and is enabled. The Slave transfers the stabilized intermediate outputs ($Y$ and $\overline{Y}$) to the final outputs ($Q$ and $\overline{Q}$).
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Conclusion:} By strictly ensuring that the Master and Slave are never active at the same time, the master-slave flip-flop guarantees that the output $Q$ can only change state \textit{once} per clock cycle (specifically at the falling edge of the clock). This provides strict data isolation and entirely eliminates the race-around condition.
+
+\end{tcolorbox}
+
 \item Draw the block diagram and explain the operation of a Master-Slave negative edge triggered D flip-flop.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-%% -- Q3: Why use master-slave flip-flops? --
+A \textbf{Master-Slave Negative Edge-Triggered D Flip-Flop} is constructed by cascading two level-sensitive D latches. The first latch is called the \textbf{Master}, and the second is the \textbf{Slave}. They are driven by complementary clock signals to ensure that they are never active at the same time.
+
+\vspace{1em}
+\textbf{\large 1. Block Diagram}
+\vspace{0.5em}
+
+In this configuration, the Master latch is enabled when the clock is HIGH, and the Slave latch is enabled when the clock is LOW (achieved via an inverter on the clock line).
+
+\begin{center}
+\begin{circuitikz}[>=latex]
+    % Master Latch Block
+    \node[draw, thick, fill=cE!10, minimum width=2.8cm, minimum height=3.5cm, rounded corners] (master) at (0,0) {\begin{tabular}{c}\textbf{Master} \\ (D Latch)\end{tabular}};
+    % Slave Latch Block
+    \node[draw, thick, fill=cE!10, minimum width=2.8cm, minimum height=3.5cm, rounded corners] (slave) at (6,0) {\begin{tabular}{c}\textbf{Slave} \\ (D Latch)\end{tabular}};
+
+    % Inputs to Master
+    \draw[thick, <-] ([yshift=0.8cm]master.west) -- ++(-1.5,0) node[left] {$D$};
+    
+    % Clock Routing
+    \draw[thick] ([yshift=-0.8cm]master.west) -- ++(-0.5,0) coordinate(clk_node) -- ++(-1,0) node[left] {\textbf{CLK}};
+    \fill (clk_node) circle (2pt);
+    
+    % Inverter for Slave Clock
+    \draw[thick] (clk_node) |- (2, -2.5) node[not port, anchor=in, scale=0.8] (not1) {};
+    \draw[thick, ->] (not1.out) -| ([yshift=-0.8cm]slave.west);
+
+    % Connection between Master and Slave
+    \draw[thick, ->] ([yshift=0.8cm]master.east) -- ([yshift=0.8cm]slave.west) node[midway, above] {$Y$};
+    
+    % Outputs from Slave
+    \draw[thick, ->] ([yshift=0.8cm]slave.east) -- ++(1.5,0) node[right] {$Q$};
+    \draw[thick, ->] ([yshift=-0.8cm]slave.east) -- ++(1.5,0) node[right] {$\overline{Q}$};
+
+    % Internal Pin Labels (Master)
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=0.8cm]master.west) {D};
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]master.west) {EN};
+    \node[left, font=\scriptsize, text=black!70] at ([yshift=0.8cm]master.east) {Q};
+    
+    % Internal Pin Labels (Slave)
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=0.8cm]slave.west) {D};
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]slave.west) {EN};
+    \node[left, font=\scriptsize, text=black!70] at ([yshift=0.8cm]slave.east) {Q};
+    \node[left, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]slave.east) {$\overline{Q}$};
+\end{circuitikz}
+\end{center}
+
+\vspace{1em}
+\textbf{\large 2. Principle of Operation}
+\vspace{0.5em}
+
+The operation of the flip-flop can be divided into three distinct phases based on the state of the \text{CLK} signal:
+
+\begin{itemize}
+    \item \textbf{Positive Phase ($\text{CLK} = 1$):} \\
+    The Master latch receives an Enable signal of $1$ and becomes \textbf{transparent}. The intermediate output $Y$ tracks the input $D$ ($Y = D$). Concurrently, the Slave latch receives an Enable signal of $0$ (due to the inverter) and becomes \textbf{opaque} (holds its state). The final outputs $Q$ and $\overline{Q}$ remain unchanged, entirely isolated from any variations in $D$.
+
+    \item \textbf{Negative Edge Transition ($\text{CLK}: 1 \rightarrow 0$):} \\
+    As the clock transitions from HIGH to LOW, the Master latch is disabled. It samples and \textbf{locks} the value of $D$ present exactly at the moment of the falling edge. Instantly, the Slave latch is enabled as its input becomes $1$.
+
+    \item \textbf{Negative Phase ($\text{CLK} = 0$):} \\
+    The Master is now opaque and ignores any further changes to the $D$ input. The Slave latch is \textbf{transparent} to its input $Y$. It passes the locked value of $Y$ to the final output $Q$ ($Q = Y = D_{\text{sampled}}$).
+\end{itemize}
+
+By enforcing this strict "handshake" between the two latches, the input is only sampled at the \textcolor{cE}{\textbf{falling edge}} of the clock, eliminating any transparency from input $D$ to output $Q$ during level phases.
+
+\vspace{1em}
+\textbf{\large 3. Truth Table \& Characteristic Equation}
+\vspace{0.5em}
+
+The behavior evaluates precisely to the definition of a D flip-flop, where the next state $Q_{next}$ follows the $D$ input, but strictly restricted to the negative clock edge.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+\textbf{Clock (CLK)} & \textbf{Data Input (D)} & \textbf{Next State ($Q_{next}$)} \\ 
+\midrule
+0                    & X                       & $Q$ (Hold)                       \\
+1                    & X                       & $Q$ (Hold)                       \\
+$\uparrow$ (Rising)  & X                       & $Q$ (Hold)                       \\
+$\downarrow$ (Falling)& 0                       & 0 (Reset)                        \\
+$\downarrow$ (Falling)& 1                       & 1 (Set)                          \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Characteristic Equation:}
+\begin{align*}
+    Q_{next} &= D \quad \text{(triggered exclusively on } \text{CLK} \downarrow)
+\end{align*}
+
+\end{tcolorbox}
+
 \item Draw and explain the operation of a Master-Slave D flip-flop.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-%% -- Q2: Block diagram and operation of master-slave negative-edge D FF --
+A \textbf{Master-Slave D Flip-Flop} is built by cascading two level-sensitive D latches. The first latch is called the \textbf{Master}, and the second is the \textbf{Slave}. By feeding them complementary clock signals, the circuit ensures that only one latch is active (transparent) at any given time, effectively creating an \textbf{edge-triggered} device that prevents transparency from input to output.
+
+\vspace{1em}
+\textbf{\large 1. Block Diagram (Positive Edge-Triggered)}
+\vspace{0.5em}
+
+In this configuration, the Master latch receives an \textit{inverted} clock signal, while the Slave latch receives the \textit{direct} clock signal. This makes the entire flip-flop \textcolor{cE}{\textbf{positive edge-triggered}}.
+
+\begin{center}
+\begin{circuitikz}[>=latex]
+    % Master Latch Block
+    \node[draw, thick, fill=cE!10, minimum width=2.8cm, minimum height=3.5cm, rounded corners] (master) at (0,0) {\begin{tabular}{c}\textbf{Master} \\ (D Latch)\end{tabular}};
+    % Slave Latch Block
+    \node[draw, thick, fill=cE!10, minimum width=2.8cm, minimum height=3.5cm, rounded corners] (slave) at (6,0) {\begin{tabular}{c}\textbf{Slave} \\ (D Latch)\end{tabular}};
+
+    % Input D to Master
+    \draw[thick, <-] ([yshift=0.8cm]master.west) -- ++(-1.5,0) node[left] {$D$};
+    
+    % Clock Line Routing
+    \draw[thick] (-1.5, -2.5) node[left] {\textbf{CLK}} -- (4.6, -2.5) coordinate(clk_end);
+    
+    % Master Clock Connection (Inverted)
+    \draw[thick] (-0.5, -2.5) coordinate(clk_m) |- ++(0.3, 0.5) node[not port, anchor=in, scale=0.6] (notm) {};
+    \fill (clk_m) circle (2pt);
+    \draw[thick, ->] (notm.out) |- ([yshift=-0.8cm]master.west);
+    
+    % Slave Clock Connection (Direct)
+    \draw[thick, ->] (clk_end) |- ([yshift=-0.8cm]slave.west);
+
+    % Connection between Master and Slave
+    \draw[thick, ->] ([yshift=0.8cm]master.east) -- ([yshift=0.8cm]slave.west) node[midway, above] {$Y$};
+    
+    % Outputs from Slave
+    \draw[thick, ->] ([yshift=0.8cm]slave.east) -- ++(1.5,0) node[right] {$Q$};
+    \draw[thick, ->] ([yshift=-0.8cm]slave.east) -- ++(1.5,0) node[right] {$\overline{Q}$};
+
+    % Internal Pin Labels (Master)
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=0.8cm]master.west) {D};
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]master.west) {EN};
+    \node[left, font=\scriptsize, text=black!70] at ([yshift=0.8cm]master.east) {Q};
+    
+    % Internal Pin Labels (Slave)
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=0.8cm]slave.west) {D};
+    \node[right, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]slave.west) {EN};
+    \node[left, font=\scriptsize, text=black!70] at ([yshift=0.8cm]slave.east) {Q};
+    \node[left, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]slave.east) {$\overline{Q}$};
+\end{circuitikz}
+\end{center}
+
+\vspace{1em}
+\textbf{\large 2. Principle of Operation}
+\vspace{0.5em}
+
+The circuit operates in three critical phases, decoupling the input reading from the output writing:
+
+\begin{itemize}
+    \item \textbf{Clock LOW Phase ($\text{CLK} = 0$):} \\
+    The clock signal is inverted, providing an Enable (EN) of $1$ to the Master latch. The Master becomes \textbf{transparent}, and its intermediate output tracks the input ($Y = D$). The Slave latch receives an Enable of $0$, placing it in \textbf{hold (opaque) mode}. The final outputs $Q$ and $\overline{Q}$ hold their previous states, completely isolated from any changes at the $D$ input.
+
+    \item \textbf{Positive Edge Transition ($\text{CLK}: 0 \rightarrow 1$):} \\
+    At the exact moment the clock transitions from LOW to HIGH, the inverted signal to the Master latch falls to $0$. The Master latch instantly becomes opaque, \textbf{sampling and locking} the value of $D$ present just before the edge. Simultaneously, the direct clock to the Slave latch rises to $1$.
+
+    \item \textbf{Clock HIGH Phase ($\text{CLK} = 1$):} \\
+    The Master remains locked and ignores all subsequent changes on the $D$ input. The Slave latch is now \textbf{transparent} and passes the locked intermediate signal $Y$ to the final output ($Q = Y = D_{\text{sampled}}$).
+\end{itemize}
+
+Through this mechanism, data is exclusively transferred from input to output on the rising edge of the clock pulse. 
+
+\vspace{1em}
+\textbf{\large 3. Truth Table \& Characteristic Equation}
+\vspace{0.5em}
+
+A Master-Slave D flip-flop functions equivalently to a standard edge-triggered D flip-flop, where the next state is purely dependent on the $D$ input sampled at the active clock edge.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+\textbf{Clock (CLK)} & \textbf{Data Input (D)} & \textbf{Next State ($Q_{next}$)} \\ 
+\midrule
+0                    & X                       & $Q$ (Hold)                       \\
+1                    & X                       & $Q$ (Hold)                       \\
+$\downarrow$ (Falling)& X                       & $Q$ (Hold)                       \\
+$\uparrow$ (Rising)  & 0                       & 0 (Reset)                        \\
+$\uparrow$ (Rising)  & 1                       & 1 (Set)                          \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Characteristic Equation:}
+\begin{align*}
+    Q_{next} &= D \quad \text{(triggered strictly on } \text{CLK} \uparrow)
+\end{align*}
+
+\end{tcolorbox}
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
