@@ -1,0 +1,4111 @@
+\documentclass[12pt,a3paper]{article}
+
+%% ── Packages ──────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[hidelinks,colorlinks=true,linkcolor=blue!70!black]{hyperref}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{needspace}
+\usepackage[strings]{underscore}
+\usepackage{array,booktabs}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{makecell}
+\usepackage{tabularx}
+\usepackage{algorithm}
+
+\usepackage{algpseudocode}
+
+\usetikzlibrary{matrix}
+
+\tcbuselibrary{listings}
+\usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
+
+\tcbuselibrary{skins,breakable}
+\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
+
+
+
+%% ── Colors ────────────────────────────────────────────────────────────
+\definecolor{pbbblue}{HTML}{005CC5}
+\definecolor{pcomment}{HTML}{6A737D}
+\definecolor{pstring}{HTML}{032F62}
+\definecolor{glassybg}{RGB}{245, 246, 250}
+
+\usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
+\usetikzlibrary{automata, positioning, arrows.meta}
+\usetikzlibrary{graphs, graphdrawing, positioning}
+
+
+\tcbuselibrary{skins,breakable}
+\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+
+\definecolor{pblue}{RGB}{13,71,161}
+\definecolor{dgray}{RGB}{66,66,66}
+\definecolor{cA}{RGB}{183,28,28}
+\definecolor{cB}{RGB}{1,87,155}
+\definecolor{cC}{RGB}{27,94,32}
+\definecolor{cD}{RGB}{106,27,154}
+\definecolor{cE}{RGB}{230,81,0}
+\definecolor{cF}{RGB}{0,96,100}
+\definecolor{cG}{RGB}{136,14,79}
+\definecolor{cH}{RGB}{0,77,64}
+\definecolor{cI}{RGB}{62,39,35}
+
+% %% ── Pseudocode listing style ──────────────────────────────────────────
+% \lstdefinestyle{pseudostyle}{
+%   basicstyle=\small\ttfamily,
+%   keywordstyle=\bfseries\color{pbbblue},
+%   commentstyle=\itshape\color{pcomment},
+%   numberstyle=\tiny\color{gray},
+%   numbers=left,
+%   stepnumber=1,
+%   numbersep=10pt,
+%   breaklines=true,
+%   frame=l,
+%   framesep=4.5mm,
+%   framexleftmargin=2.5mm,
+%   rulecolor=\color{pblue!50},
+%   backgroundcolor=\color{glassybg},
+%   aboveskip=15pt,
+%   belowskip=15pt,
+%   showstringspaces=false,
+%   tabsize=4
+% }
+% \lstset{style=pseudostyle}
+
+\lstdefinestyle{Cstyle}{
+  language=C,
+  basicstyle=\small\ttfamily,
+  keywordstyle=\bfseries\color{pbbblue},
+  commentstyle=\itshape\color{pcomment},
+  stringstyle=\color{pstring},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  stepnumber=1,
+  numbersep=10pt,
+  breaklines=true,
+  frame=l,                      % Shudhu left e border thakbe
+  framesep=4.5mm,
+  framexleftmargin=2.5mm,
+  rulecolor=\color{pblue!50},   % Left border er color
+  backgroundcolor=\color{glassybg}, % Soft background
+  fillcolor=\color{white},
+  aboveskip=15pt,
+  belowskip=15pt,
+  showstringspaces=false,
+  tabsize=4
+}
+
+\lstset{style=Cstyle}
+
+%% ── Section headings ──────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{pblue}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries}{}{0em}{}
+
+%% ── Header / Footer ───────────────────────────────────────────────────
+\pagestyle{fancy}\fancyhf{}
+\renewcommand{\headrulewidth}{0.5pt}
+\fancyhead[L]{\small\textcolor{pblue}{\textbf{BUET $|$ CSE 207 Question Bank}}}
+\fancyhead[R]{\small\textcolor{dgray}{\textit{\nouppercase{\leftmark}}}}
+\fancyfoot[C]{\small\thepage}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+%% ── Utility macros ────────────────────────────────────────────────────
+\newcommand{\yr}[1]{\hfill\textcolor{gray}{\small\textbf{[#1]}}}
+\newcommand{\mk}[1]{\textcolor{orange!70!black}{\small\textbf{(#1 marks)}}}
+\newcommand{\variant}[1]{\par\vspace{1pt}\textcolor{blue!50!black}%
+  {\footnotesize\textit{$\hookrightarrow$ Similar: #1}}}
+\newcommand{\visualnote}[1]{\par\vspace{2pt}%
+  {\footnotesize\textcolor{cG}{\textit{\textbf{[Visual:} #1\textbf{]}}}}}
+
+%% ── Subtopic heading macro ────────────────────────────────────────────
+\newcommand{\subtopic}[2]{%
+  \vspace{10pt}
+  \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
+    left=6pt,right=6pt,top=4pt,bottom=4pt]
+    \small\bfseries\textcolor{#1}{#2}
+  \end{tcolorbox}
+  \vspace{2pt}
+}
+
+%% ── Section divider page ──────────────────────────────────────────────
+\newcommand{\secdivider}[5]{%
+  \newpage\thispagestyle{empty}%
+  \vspace*{\fill}%
+  \begin{tcolorbox}[enhanced,colback=#4!7,colframe=#3,boxrule=1.5pt,arc=8pt,
+    left=20pt,right=20pt,top=22pt,bottom=22pt,
+    shadow={3pt}{-3pt}{0pt}{black!15}]
+    \centering
+    {\large\textcolor{gray}{\textbf{BUET $\cdot$ CSE 207 $\cdot$ Data Structures \& Algorithms II}}}\\[8pt]
+    {\fontsize{26}{32}\selectfont\bfseries\textcolor{#3}{#1}}\\[6pt]
+    {\fontsize{15}{19}\selectfont\textcolor{dgray}{#2}}\\[12pt]
+    \textcolor{#3!60}{\rule{0.5\textwidth}{0.5pt}}\\[6pt]
+    {\small\textcolor{gray}{#5}}
+  \end{tcolorbox}%
+  \vspace*{\fill}\newpage%
+}
+
+%% ── List styles ───────────────────────────────────────────────────────
+\setlist[enumerate,1]{label=\textbf{Q\arabic*.},leftmargin=*,itemsep=14pt,parsep=2pt}
+\setlist[enumerate,2]{label=(\alph*),leftmargin=2em,itemsep=3pt}
+\setlist[enumerate,3]{label=(\roman*),leftmargin=2.5em,itemsep=2pt}
+
+\begin{document}
+
+%% -- COVER -------------------------------------------------------------
+\thispagestyle{empty}
+\begin{tcolorbox}[enhanced,colback=pblue!5,colframe=pblue,boxrule=1.5pt,arc=6pt,
+  top=28pt,bottom=28pt,left=22pt,right=22pt,
+  shadow={4pt}{-4pt}{0pt}{black!20}]
+  \centering
+  
+  % --- BUET Logo Added Here ---
+  \includegraphics[height=2.5cm]{images/buet_logo.png}\\[8pt]
+  % ----------------------------
+  
+  {\Large\bfseries\textcolor{pblue}{Bangladesh University of Engineering and Technology}}\\[4pt]
+  {\normalsize\textcolor{dgray}{Department of Computer Science \& Engineering}}\\[18pt]
+  \textcolor{pblue}{\rule{\textwidth}{1pt}}\\[14pt]
+  
+  {\fontsize{22}{28}\selectfont\bfseries\textcolor{pblue}{CSE 207 Question Bank}}\\[8pt]
+  {\fontsize{14}{18}\selectfont\textcolor{dgray}{Data Structures \& Algorithms II}}\\[4pt]
+  
+  {\small\textcolor{dgray}{Topics:\;Graph Algorithms, Advanced Data Structures, Hashing,\\
+  NP-Completeness, Coping with Hardness, String Matching Algorithms, Randomized Algorithms}}\\[16pt]
+  
+  \textcolor{pblue}{\rule{\textwidth}{1pt}}\\[14pt]
+
+    {\small\bfseries\textcolor{dgray}{Authors \& Contributors}}\\[6pt]
+    \begin{tabular}{@{}r@{\;}l@{}}
+      \textbf{Md Ratul Hasan} \textcolor{dgray}{\small(2405009)} & --- Question Curation \& Organisation\\
+      & --- \LaTeX\ Typesetting\\[3pt]
+      \textbf{NotebookLM} & --- Research \& Extraction\\[3pt]
+      \textbf{Claude AI} & --- \LaTeX\ Typesetting\\[3pt]
+      \textbf{Gemini} & --- Diagram Generation\\[3pt]
+    \end{tabular}
+\end{tcolorbox}
+\newpage
+
+%% ══════════════════════════════════════════════════════════════════════
+%%  TABLE OF CONTENTS
+%% ══════════════════════════════════════════════════════════════════════
+\thispagestyle{fancy}\markboth{Table of Contents}{}
+\begin{center}
+  {\LARGE\bfseries\textcolor{pblue}{Table of Contents}}\\[6pt]
+  \textcolor{pblue}{\rule{0.6\textwidth}{0.8pt}}
+\end{center}
+\vspace{6pt}
+
+%% Part I
+\begin{tcolorbox}[breakable,colback=cA!5,colframe=cA,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cA}{Part I --- Graph Algorithms}}\\[5pt]
+  \textcolor{cA!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cA}{$\triangleright$}}]
+    \item \hyperref[sec:S1]{\textbf{S1.} Graph Algorithms}
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cA}{$\cdot$}}]
+        \item \hyperref[sub:s1-shortestpaths]{Shortest Paths}
+        \item \hyperref[sub:s1-mst]{Minimum Spanning Trees}
+        \item \hyperref[sub:s1-maxflow]{Maximum Flow}
+        \item \hyperref[sub:s1-bipartite]{Maximum Bipartite Matching}
+        \item \hyperref[sub:s1-stablematching]{Stable Matching (Gale-Shapley)}
+        \item \hyperref[sub:s1-traversal]{Graph Traversal \& Properties}
+      \end{itemize}
+  \end{itemize}
+\end{tcolorbox}
+
+%% Part II
+\begin{tcolorbox}[breakable,colback=cB!5,colframe=cB,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cB}{Part II --- Advanced Data Structures}}\\[5pt]
+  \textcolor{cB!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cB}{$\triangleright$}}]
+    \item \hyperref[sec:S2]{\textbf{S2.} Advanced Data Structures}
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cB}{$\cdot$}}]
+        \item \hyperref[sub:s2-avl]{Balanced Binary Search Trees (AVL Trees)}
+        \item \hyperref[sub:s2-rbt]{Red-Black Trees}
+        \item \hyperref[sub:s2-splay]{Splay Trees}
+        \item \hyperref[sub:s2-skip]{Skip Lists}
+        \item \hyperref[sub:s2-binheap]{Advanced Heaps (Binomial Heaps)}
+        \item \hyperref[sub:s2-fibheap]{Advanced Heaps (Fibonacci Heaps)}
+      \end{itemize}
+  \end{itemize}
+\end{tcolorbox}
+
+%% Part III
+\begin{tcolorbox}[breakable,colback=cC!5,colframe=cC,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cC}{Part III --- Hashing}}\\[5pt]
+  \textcolor{cC!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cC}{$\triangleright$}}]
+    \item \hyperref[sec:S3]{\textbf{S3.} Hashing}
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cC}{$\cdot$}}]
+        \item \hyperref[sub:s3-hash]{Hash Functions and Collision Resolution}
+      \end{itemize}
+  \end{itemize}
+\end{tcolorbox}
+
+%% Part IV
+\begin{tcolorbox}[breakable,colback=cD!5,colframe=cD,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cD}{Part IV --- NP-Completeness}}\\[5pt]
+  \textcolor{cD!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cD}{$\triangleright$}}]
+    \item \hyperref[sec:S4]{\textbf{S4.} NP-Completeness}
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cD}{$\cdot$}}]
+        \item \hyperref[sub:s4-pvsnp]{P vs NP Classes}
+        \item \hyperref[sub:s4-reductions]{Reductions}
+        \item \hyperref[sub:s4-nphard]{NP-hard and NP-complete Problems}
+      \end{itemize}
+  \end{itemize}
+\end{tcolorbox}
+
+%% Part V
+\begin{tcolorbox}[breakable,colback=cE!5,colframe=cE,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cE}{Part V --- Coping with Hardness}}\\[5pt]
+  \textcolor{cE!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cE}{$\triangleright$}}]
+    \item \hyperref[sec:S5]{\textbf{S5.} Coping with Hardness}
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cE}{$\cdot$}}]
+        \item \hyperref[sub:s5-approx]{Approximation Algorithms}
+        \item \hyperref[sub:s5-backtrack]{Backtracking}
+        \item \hyperref[sub:s5-branchbound]{Branch and Bound}
+      \end{itemize}
+  \end{itemize}
+\end{tcolorbox}
+
+%% Part VI
+\begin{tcolorbox}[breakable,colback=cF!5,colframe=cF,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cF}{Part VI --- String Matching Algorithms}}\\[5pt]
+  \textcolor{cF!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cF}{$\triangleright$}}]
+    \item \hyperref[sec:S6]{\textbf{S6.} String Matching Algorithms}
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cF}{$\cdot$}}]
+        \item \hyperref[sub:s6-kmp]{Knuth-Morris-Pratt (KMP) Algorithm}
+      \end{itemize}
+  \end{itemize}
+\end{tcolorbox}
+
+%% Part VII
+
+\begin{tcolorbox}[breakable,colback=cG!5,colframe=cG,boxrule=1pt,arc=5pt,
+  left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
+  {\large\bfseries\textcolor{cG}{Part VII --- Randomized Algorithms}}\\[5pt]
+  \textcolor{cG!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cG}{$\triangleright$}}]
+    \item \hyperref[sec:S7]{\textbf{S7.} Randomized Algorithms}
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cG}{$\cdot$}}]
+        \item \hyperref[sub:s7-montecarlo]{Monte Carlo Algorithms \& Probability Amplification}
+        \item \hyperref[sub:s7-lasvegas]{Las Vegas Algorithms \& Randomized Quick Sort}
+      \end{itemize}
+  \end{itemize}
+\end{tcolorbox}
+
+\newpage
+
+%% ══════════════════════════════════════════════════════════════════════
+%%  PART I — GRAPH ALGORITHMS
+%% ══════════════════════════════════════════════════════════════════════
+\secdivider{Part I}{Graph Algorithms}{cA}{cA}{Shortest Paths, Minimum Spanning Trees, Maximum Flow, Maximum Bipartite Matching, Stable Matching (Gale-Shapley), Graph Traversal \& Properties}
+\titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
+
+%% ── S1: Graph Algorithms ──────────────────────────────────────────────
+\section{S1 --- Graph Algorithms}
+\label{sec:S1}
+\markboth{S1 --- Graph Algorithms}{}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cA}{Shortest Paths}
+\label{sub:s1-shortestpaths}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Let $S$ be a source vertex in a directed graph with non-negative edge weights. Suppose that after applying Dijkstra's algorithm, the following shortest path distances from $S$ to all other vertices are obtained:
+
+\begin{center}
+\begin{tabular}{l|cccccccc}
+\textbf{Vertex}   & $S$ & $A$ & $B$ & $C$ & $D$ & $E$ & $F$ & $G$ \\ \hline
+\textbf{Distance} & 0   & 2   & 4   & 5   & 7   & 8   & 9   & 11  
+\end{tabular}
+\end{center}
+Construct a directed weighted graph with non-negative integer edge weights such that running Dijkstra's algorithm from source $S$ produces exactly the given distances, and justify that Dijkstra's algorithm produces those distances. The graph must satisfy: 
+
+\begin{enumerate}
+
+\item Every vertex must be reachable from $S$.
+\item The graph must contain at least two edges that are not part of any shortest path from $S$.
+\item The shortest path to each vertex must be uniquely determined.
+
+
+\end{enumerate}
+ \mk{15} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+%% Q — 2024-25
+\item Consider a directed weighted graph with vertices $\{A, B, C, D\}$ and edges $A \to B\ (3)$, $B \to C\ (2)$, $C \to D\ (2)$, $D \to B\ (-8)$, $A \to D\ (10)$, $B \to D\ (5)$. Determine whether the graph contains a negative weight cycle by applying the Floyd-Warshall algorithm. If a negative cycle exists, identify the vertex (or vertices) involved in the cycle.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Let $c_1, c_2, \dots, c_n$ be various currencies. For any two currencies $c_i$ and $c_j$, there is an 
+exchange rate $r_{ij}$ which means that you can purchase $r_{ij}$ units of currency $c_j$ in 
+exchange for one unit of $c_i$. These exchange rates usually satisfy the condition that 
+$r_{ij} \cdot r_{ji} < 1$, so that if you start with a unit of currency $c_i$, change it into currency $c_j$ and 
+then convert back to currency $c_i$, you end up with less than one unit of currency $c_i$.
+\begin{enumerate}
+  \item Design an efficient algorithm for the following problem: Given a set of exchange rates $r_{ij}$, and two currencies $s$ and $t$, find the most advantageous sequence of currency exchanges for converting currency $s$ into currency $t$.
+  \item Occasionally, there is a sequence of currencies $c_{i_1}, c_{i_2}, \ldots, c_{i_k}$ such that $r_{i_1 i_2} \cdot r_{i_2 i_3} \cdots r_{i_{k-1} i_k} \cdot r_{i_k i_1} > 1$. Give an efficient algorithm for detecting the presence of such an anomaly. (Hint: try formulating the problem using a graph.)
+\end{enumerate}
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2023-24
+\item Explain the Floyd-Warshall algorithm for the all-pairs shortest paths problem. In what context is Johnson's algorithm preferable to the Floyd-Warshall algorithm?
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2023-24
+\item Formulate a proof on the correctness of Dijkstra's algorithm.
+\mk{13} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Analyze the complexity of Johnson's algorithm for the all-pairs shortest paths problem.
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2022-23
+\item Develop an algorithm for finding the shortest path in a graph where all edge weights are equal.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2022-23
+\item Devise an efficient algorithm for finding the shortest path where edge weights of the graph are non-equal but positive.
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2022-23
+\item Develop an efficient algorithm for finding the shortest path when the edge weights can be negative and the graph can have negative edge-weight cycles.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+\item The Bangladesh government is deeply concerned about addressing the severe traffic congestion issues in Dhaka. Despite numerous attempts to alleviate the problem, it remains a persistent challenge. Recognizing the need for fresh perspectives and innovative solutions, the government has turned to experts like you in the field of computer science, seeking guidance on a novel approach.
+
+Your proposed solution is straightforward: the construction of new roads. However, the key challenge lies in ensuring the effective utilization of these newly built roads. This can only be achieved by reducing travel costs along specific routes. By doing so, the traffic will naturally redistribute throughout the network, alleviating congestion in critical areas.
+
+In this problem, a map of Dhaka is represented as an undirected graph, where each node represents a station and each edge represents a road between two stations. These nodes are depicted as simple 2-D geometric points, and the cost of traveling along a road is directly proportional to the Euclidean distance between two nodes.
+
+The proposed strategy involves temporarily constructing a single road, with a specific criterion for selecting the two nodes between which this new road will be built. To make the decision, whether a new road will be built between node $u$ and node $v$, the following formula is employed:
+\[
+C_{uv} = \sum \left( \text{PreCost}_{ij} - \text{CurCost}_{ij} \right)
+\]
+Here $\text{CurCost}_{ij}$ represents the shortest path cost from any node $i$ to any node $j$ if a road is built between node $u$ and node $v$. On the other hand, $\text{PreCost}_{ij}$ represents the shortest path cost before the road between $u$ and $v$ is constructed. The pair $(u,v)$ with the highest $C_{uv}$ value is selected as the optimal choice.
+
+In essence, this approach aims to identify the pair of nodes where the construction of a new road will result in the most significant improvement in the overall transportation network, effectively reducing travel costs and mitigating traffic congestion in Dhaka.
+
+From the above problem description, answer the following:
+
+
+\begin{enumerate}
+\item Define the input and output of the program for finding the most efficient route.
+\mk{8} 
+%% Q — 2021-22
+\item Sketch the pseudo-code of the solution for finding the most efficient route.
+ 
+\mk{12} 
+%% Q — 2021-22
+\item Develop the most efficient solution of the underlying algorithm that serves as the backbone of the solution.
+\mk{15} 
+\end{enumerate}
+\yr{CSE 207 | L-2/T-2 | 2021--22}
+%% Q — 2022-23
+\item Design an efficient algorithm for finding the length of the longest path in a dag (directed acyclic graph).
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2020-21
+\item \textbf{Minimum-sum descent:} Some positive integers are arranged in an equilateral triangle with $n$ numbers in its base. The problem is to find the smallest sum in a descent from the triangle apex to its base through a sequence of adjacent numbers. Explain how the Minimum-sum descent problem can be solved by Dijkstra's algorithm.
+\begin{center}
+   \begin{tikzpicture}[
+        scale=1.2, % Grid spacing scale
+        % Style for circled numbers
+        circled/.style={circle, draw=black, thick, minimum size=0.7cm, font=\large, inner sep=0pt},
+        % Style for plain numbers
+        plain/.style={minimum size=0.7cm, font=\large}
+    ]
+
+        % ==========================================
+        % TRIANGULAR GRID NODES (Row by Row)
+        % ==========================================
+        
+        % Row 1 (Top)
+        \node[circled] (r1_1) at (1.5, 3.6) {2};
+
+        % Row 2
+        \node[circled] (r2_1) at (1.0, 2.4) {5};
+        \node[plain]   (r2_2) at (2.0, 2.4) {4};
+
+        % Row 3
+        \node[circled] (r3_1) at (0.5, 1.2) {1};
+        \node[plain]   (r3_2) at (1.5, 1.2) {4};
+        \node[plain]   (r3_3) at (2.5, 1.2) {7};
+
+        % Row 4 (Bottom)
+        \node[plain]   (r4_1) at (0.0, 0.0) {8};
+        \node[circled] (r4_2) at (1.0, 0.0) {6};
+        \node[plain]   (r4_3) at (2.0, 0.0) {9};
+        \node[plain]   (r4_4) at (3.0, 0.0) {6};
+
+    \end{tikzpicture}
+\end{center}
+
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2020-21
+\item The shortest paths to a given vertex from each other vertex of a weighted digraph is called the single-destination shortest-paths problem. Solve the single-destination shortest-path problem in a graph with nonnegative numbers assigned to its vertices in addition to the edge weights.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2020-21
+\item Explain how to implement Warshall's algorithm without using extra memory for storing elements of the algorithm's intermediate matrices.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Given a graph with integer edge weights between 1 and 5 (inclusive), you want to find the shortest weighted path between a pair of vertices. How would you reduce this problem to the shortest unweighted path problem, which can be solved using a Breadth First Search?
+\mk{13} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item A new startup FastRoute wants to route information along a path in a network. Each vertex represents a router and each edge in the network has a bandwidth. Design an algorithm to find the path with maximum bandwidth from any source $s$ to any destination $t$. The bandwidth of a path is the minimum of the bandwidths of the edges on that path; the minimum edge is the bottleneck. Explain how to modify Dijkstra's algorithm to do this. Justify your answer.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item Show how to express the single-source shortest-paths problem as a product of matrices and a vector. Describe how evaluating this product corresponds to a Bellman-Ford-like algorithm.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item Give an efficient algorithm to find the length (number of edges) of a minimum-length negative-weight cycle in a graph.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item You are given a strongly connected directed graph $G = (V, E)$ with positive edge weights along with a particular node $v_0 \in V$. Give an efficient algorithm for finding shortest paths between all pairs of nodes, with the one restriction that these paths must all pass through $v_0$.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item Dijkstra's algorithm for the shortest path problem is shown below. What would be the time-complexity of the algorithm (show line by line analysis) for an input graph $G$ if adjacency list is used for graph representation and an ordinary array is used for storing $d[\,]$ values.
+ 
+\begin{lstlisting}
+Dijkstra (G)
+1  Q = V[G];
+2  for each u in Q
+3     d[v] = INF;
+4  d[s] = 0; S = {};
+5  while (Q != {})
+6     u = ExtractMin(Q);
+7     S = S U {u};
+8     for each v in u->Adj[]
+9        if (v in Q and d[v] > d[u] + w(u,v))
+10          d[v] = d[u] + w(u,v);
+\end{lstlisting}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item Johnson's Algorithm makes clever use of Bellman-Ford and Dijkstra's Algorithms to do All-Pairs-Shortest-Paths efficiently on sparse graphs. Explain the basic clever idea of Johnson's Algorithm.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item How can BFS be adapted to solve the single-source shortest path problem in an edge-weighted graph with unequal weights? Explain. 
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Explain the intuitive idea behind the Bellman-Ford algorithm. How can you detect a negative cycle using Bellman-Ford? \mk{6+2}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Write Dijkstra's algorithm for the single-source shortest path problem. Prove its correctness. Analyze the time complexity of the algorithm. What would be the running time if a Fibonacci heap is used instead of a binary heap? \mk{5+5+7+5}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Write the properties satisfied by shortest paths of a graph. Show by example that Dijkstra's algorithm gives wrong results for a graph with negative-weight edges. Write an algorithm that finds shortest paths in a DAG and analyze its time complexity. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item Prove that the Bellman-Ford algorithm returns TRUE if the input graph contains no negative-weight cycles reachable from the source, and FALSE otherwise. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item State and prove the convergence property of edge relaxation in the context of shortest paths. \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item Provide a correctness proof of Dijkstra's algorithm. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item Apply the Bellman-Ford algorithm to find the shortest paths. Show all relaxation steps. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{center}
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none, font=\normalfont\small},
+  every path/.style={->, line width=1pt},
+  ]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+
+  \node (A) at (0, 2)    {A};
+  \node (B) at (1, 0)    {B};
+  \node (C) at (3.5, -1) {C};
+  \node (D) at (3.5, 1)  {D};
+  \node (E) at (3.5, 3)  {E};
+  \node (F) at (6.5, 3)  {F};
+  \node (G) at (6, 1)    {G};
+  \node (H) at (6.5, -1) {H};
+
+  \draw (A) -> node[edge label, above] {6} (E);
+  \draw (A) -> node[edge label, left]  {8} (B);
+  \draw (E) -> node[edge label, above] {3} (F);
+  \draw (E) -> node[edge label, above] {2} (G);
+  \draw (F) -> node[edge label, right] {6} (G);
+  \draw (G) -> node[edge label, above] {1} (D);
+  \draw (H) -> node[edge label, right] {-2}(G);
+  \draw (G) -> node[edge label, right] {-1}(C);
+  \draw (D) -> node[edge label, above] {2} (B);
+  \draw (B) -> node[edge label, below] {6} (C);
+  \draw (C) -> node[edge label, below] {4} (H);
+
+  \end{tikzpicture}
+
+\end{center}
+
+\item Prove that the component graph of a directed graph is a DAG. \mk{6}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Assume that a breadth-first tree has already been computed with BFS on a graph $G$ with source vertex $s$. Write an algorithm to print the vertices on a shortest path from $s$ to $v$. \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item State and prove the convergence property of shortest paths. \mk{12}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Write the Bellman-Ford algorithm. Analyze the time complexity and correctness of the Bellman-Ford algorithm. \mk{20}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Does Dijkstra's algorithm terminate if it is applied on a graph $G$ that contains a negative-weight cycle? Why or why not? Justify your answer. \mk{6}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item What does $d[v]$ represent at the end of the execution of Algorithm 1, if the algorithm is applied on an unweighted directed acyclic graph (DAG) $G$ with a source $s$? What is the runtime complexity in terms of $|V|$ and $|E|$ of Algorithm 1? \mk{6+6}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\begin{algorithm}[H]
+\caption{\textsc{LongestPath-DAG}($G$)}
+\begin{algorithmic}[1]
+\State Compute a topological sorting of $G$
+\For{each $v \in V[G]$}
+    \State $d[v] \gets 0$
+\EndFor
+\For{each $u$ in topologically sorted order}
+    \For{each $v \in Adj[u]$}
+        \If{$d[v] < d[u] + 1$}
+            \State $d[v] \gets d[u] + 1$
+        \EndIf
+    \EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+ 
+\item In Figure 1, the shortest path estimate of each vertex appears within the vertex and the distance to traverse from a vertex to another appears as the weight of the corresponding directed edge. Show the updated shortest path estimates of vertices after relaxing the following edges. \mk{6}
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm, every node/.style={circle, draw, minimum size=0.8cm}]
+  \node (4)  {4};
+  \node (7)  [right of=4] {7};
+  \node (12) [below of=4] {12};
+  \node (17) [right of=12] {17};
+  \node (9)  [below of=12] {9};
+  \node (11) [right of=9] {11};
+  \draw[->] (4)  -- node[draw=none, above] {3} (7);
+  \draw[->] (12) -- node[draw=none, above] {4} (17);
+  \draw[->] (9)  -- node[draw=none, above] {5} (11);
+\end{tikzpicture}
+\end{center}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Explain how Dijkstra's algorithm can be implemented using a priority queue. Find the running time for this algorithm. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cA}{Minimum Spanning Trees}
+\label{sub:s1-mst}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Consider the following undirected weighted graph. Vertices: $\{A, B, C, D, E, F\}$. Edges: $A$--$B\ (1)$, $A$--$C\ (3)$, $A$--$D\ (4)$, $B$--$C\ (2)$, $B$--$D\ (6)$, $C$--$D\ (5)$, $C$--$E\ (7)$, $D$--$E\ (8)$, $E$--$F\ (9)$, $D$--$F\ (10)$, $C$--$F\ (11)$. Determine whether the minimum spanning tree (MST) of this graph is unique. Justify your answer rigorously using MST properties such as the cut property or cycle property. If the MST is not unique, construct at least two distinct MSTs with equal total cost. If it is unique, provide a formal justification explaining why no alternative MST with the same total weight can exist.
+\mk{20} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+%% Q — 2023-24
+\item Draw a minimum spanning tree of the graph shown in the figure using (i) Prim's algorithm, and (ii) Kruskal's algorithm. Write the order of the edges in each case (whenever there is a choice of vertices, always use alphabetical ordering).
+\begin{center}
+      \begin{tikzpicture}[
+        scale=1.5,
+        every node/.style={circle, draw, minimum size=0.8cm, font=\bfseries}
+    ]
+        % Nodes positioning
+        \node (a) at (0,1) {a};
+        \node (b) at (1,2) {b};
+        \node (c) at (1,0) {c};
+        \node (d) at (2.5,1) {d};
+        \node (e) at (4,2) {e};
+        \node (f) at (4,0) {f};
+        \node (g) at (5,1) {g};
+
+        % Edges with weights
+        \path[-] (a) edge node[above left, draw=none] {2} (b);
+        \path[-] (a) edge node[below left, draw=none] {8} (c);
+        
+        \path[-] (b) edge node[left, draw=none] {9} (c);
+        \path[-] (b) edge node[above, draw=none] {5} (d);
+        \path[-] (b) edge node[above, draw=none] {6} (e);
+        
+        \path[-] (c) edge node[below, draw=none] {4} (d);
+        \path[-] (c) edge node[below, draw=none] {3} (f);
+        
+        \path[-] (d) edge node[above, draw=none] {4} (e);
+        \path[-] (d) edge node[below, draw=none] {4} (f);
+        
+        \path[-] (e) edge node[right, draw=none] {3} (f);
+        \path[-] (e) edge node[above right, draw=none] {6} (g);
+        
+        \path[-] (f) edge node[below right, draw=none] {5} (g);
+
+    \end{tikzpicture}
+\end{center}
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+\item Prove (i) the optimal sub-structure property and (ii) the greedy choice property of the Minimum Spanning Tree (MST) problem.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Develop a solution of the MST problem using disjoint set / union-find data structure. Use the array implementation to maintain the union-find data structure.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2023-24
+\item Let $T$ be a minimum spanning tree of graph $G$ obtained by Prim's algorithm. Let $G_{\text{new}}$ be a graph obtained by adding to $G$ a new vertex and some edges, with weights, connecting the new vertex to some vertices in $G$. Can you construct a minimum spanning tree of $G_{\text{new}}$ by adding one of the new edges to $T$? If your answer is yes, explain how; if your answer is no, explain why not.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Prove that if all edge weights of a graph are positive, then any subset of edges that connects all vertices and has minimum total weight must be a tree. Give an example to show that the same conclusion does not follow if we allow some weights to be nonpositive.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item Show that for each minimum spanning tree $T$ of $G$, there is a way to sort the edges of $G$ in Kruskal's algorithm so that the algorithm returns $T$. (Kruskal's algorithm can return different spanning trees for the same input graph $G$, depending on how it breaks ties when the edges are sorted.)
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item Prove that an optimal minimum spanning tree is composed of optimal minimum spanning subtrees.
+ Draw a minimum spanning tree of the graph $G$ shown below such that the minimum spanning tree contains the edges with weights $x$ and $z$.
+\begin{center}
+  
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none, font=\normalfont\small},
+  ]
+
+  % Top row
+  \node (A) at (0, 4)  {A};
+  \node (B) at (3, 4)  {B};
+  \node (C) at (6, 4)  {C};
+  \node (D) at (9, 4)  {D};
+  \node (E) at (12, 4)  {E};
+
+  % Bottom row
+  \node (F) at (0, 0)  {F};
+  \node (G) at (3, 0)  {G};
+  \node (H) at (6, 0)  {H};
+  \node (I) at (9, 0)  {I};
+  \node (J) at (12, 0)  {J};
+
+  % Top row edges
+  \draw (A) -- node[edge label, above] {13} (B);
+  \draw (B) -- node[edge label, above] {z}  (C);
+  \draw (C) -- node[edge label, above] {2}  (D);
+  \draw (D) -- node[edge label, above] {6}  (E);
+
+  % Bottom row edges
+  \draw (F) -- node[edge label, below] {x}  (G);
+  \draw (G) -- node[edge label, below] {4}  (H);
+  \draw (H) -- node[edge label, below] {3}  (I);
+  \draw (I) -- node[edge label, below] {1}  (J);
+
+  % Vertical & diagonal edges
+  \draw (A) -- node[edge label, left]        {11} (F);
+  \draw (E) -- node[edge label, right]       {5}  (J);
+  \draw (A) -- node[edge label, right]       {1}  (G);
+  \draw (B) -- node[edge label, left]        {14} (G);
+  \draw (B) -- node[edge label, right]       {8}  (H);
+  \draw (C) -- node[edge label, right]       {12} (H);
+  \draw (D) -- node[edge label, right]       {9}  (H);
+  \draw (D) -- node[edge label, left]        {6}  (I);
+  \draw (D) -- node[edge label, right]       {7}  (J);
+
+  \end{tikzpicture}
+
+\end{center}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item Write down an algorithm for constructing a mincost arborescence in a digraph from a given root vertex $r$. Apply the algorithm to the following digraph, showing every step in separate diagraphs: $ra(7), rx(2), ax(1), xy(5), ya(3), xc(6), cb(4), bx(2), yb(2)$ (weights in parentheses). \mk{15}
+\yr{CSE 203 | L-2/T-1 | 2017--18}
+
+\item What is a spanning tree of a graph? Write Kruskal's algorithm for finding a minimum spanning tree of an edge-weighted graph. Analyze the time complexity of the algorithm by suggesting appropriate data structures. \mk{3+5+7}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+\item Find a minimum spanning tree using Prim's algorithm, showing every step. \mk{10}
+
+\begin{center}
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none, font=\normalfont\small},
+  ]
+
+  \node (a) at (2, 4)   {a};
+  \node (b) at (6, 4.5) {b};
+  \node (c) at (8, 2) {c};
+  \node (d) at (5, 0)   {d};
+  \node (e) at (0, 0.5) {e};
+  \node (f) at (4, 2)   {f};
+
+  \draw (a) -- node[edge label, above]       {5} (b);
+  \draw (a) -- node[edge label, below right] {2} (f);
+  \draw (a) -- node[edge label, left]        {6} (e);
+  \draw (a) -- node[edge label, pos=0.3]       {6} (c);
+  \draw (b) -- node[edge label, right]       {3} (c);
+  \draw (b) -- node[edge label, above right] {7} (f);
+  \draw (f) -- node[edge label, below]       {4} (c);
+  \draw (f) -- node[edge label, right]       {3} (d);
+  \draw (c) -- node[edge label, right]       {2} (d);
+  \draw (e) -- node[edge label, above]       {5} (f);
+  \draw (e) -- node[edge label, below]       {5} (d);
+  \draw (c) to[bend left=100] node[edge label, below] {9} (e);
+
+  \end{tikzpicture}
+
+\end{center}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Let $G$ be a weighted connected graph and let $V_1, V_2$ be a partition of its vertices into two disjoint non-empty sets. Let $e$ be an edge in $G$ with minimum weight among those with one endpoint in $V_1$ and the other in $V_2$. Show that there is a minimum spanning tree $T$ of $G$ containing $e$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Write Prim's algorithm that computes a minimum spanning tree of a graph. Analyze its time complexity. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item Write the correctness proof of Kruskal's algorithm for finding a minimum spanning tree. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item There is a network of roads $G = (V, E)$ connecting a set of cities $V$.
+Each road in $E$ has an associated length $l_e$. There is a proposal to add one
+new road to this network, and there is a list $E'$ of pairs of cities between
+which the new road can be built. Each such potential road $e' \in E'$ has an
+associated length. As a designer for the public works department you are asked
+to determine the road $e' \in E'$ whose addition to existing network $G$ would
+result in the maximum decrease in the driving distance between two fixed cities
+$s$ and $t$ in the network. Give an algorithm for solving this problem. Your
+algorithm should run in $O((V + E + E') \log V)$ time. \mk{15}\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item Find a minimum spanning tree by running (i) Kruskal's algorithm and (ii) Prim's algorithm. Show the order of edges selected in each case (use alphabetical ordering when there is a tie). \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\begin{center}
+
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none,  font=\normalfont\small},
+  ]
+
+  \node (a) at (0, 2)   {a};
+  \node (d) at (3, 2)   {d};
+  \node (g) at (7, 2)   {g};
+  \node (b) at (0, -3)   {b};
+  \node (c) at (3, -0.5) {c};
+  \node (f) at (7, -0.5) {f};
+  \node (e) at (7, -3)   {e};
+
+  \draw (a) -- node[edge label, above]       {3} (d);
+  \draw (a) -- node[edge label, left]        {2} (b);
+  \draw (a) -- node[edge label, above right] {3} (c);
+  \draw (d) -- node[edge label, right]       {5} (c);
+  \draw (d) -- node[edge label, above right] {7} (f);
+  \draw (g) -- node[edge label, right]       {9} (f);
+  \draw (b) -- node[edge label, below right] {4} (c);
+  \draw (b) -- node[edge label, below]       {3} (e);
+  \draw (c) -- node[edge label, below right] {1} (e);
+  \draw (f) -- node[edge label, right]       {8} (e);
+
+  \end{tikzpicture}
+\end{center}
+
+\item Let $G = (V, E)$ be a connected undirected graph with weight function $w$ on $E$. Let $A \subseteq E$ be included in some MST for $G$, let $(S, V-S)$ be any cut that respects $A$, and let $(u, v)$ be a light edge crossing $(S, V-S)$. Prove that $(u, v)$ is safe for $A$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item Find the light and respectful crossing edges for each step of Kruskal's method for building the MST. \mk{12}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{center}
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none, font=\normalfont\small},
+  ]
+
+  \node (a) at (0,   0)    {a};
+  \node (b) at (2,   3)    {b};
+  \node (c) at (1.5, -2)   {c};
+  \node (d) at (4,   0)    {d};
+  \node (e) at (4,  -2.5)  {e};
+  \node (f) at (6.5, -1)   {f};
+  \node (g) at (6.5,  2.5) {g};
+  \node (h) at (8.5,  1)   {h};
+
+  \draw (a) -- node[edge label, above left]  {3}  (b);
+  \draw (a) -- node[edge label, above]       {5}  (d);
+  \draw (a) -- node[edge label, below left]  {2}  (c);
+  \draw (b) -- node[edge label, right]       {2}  (d);
+  \draw (b) -- node[edge label, above]       {13} (g);
+  \draw (c) -- node[edge label, below] {2}  (d);
+  \draw (c) -- node[edge label, below]       {5}  (e);
+  \draw (d) -- node[edge label, above right] {6}  (g);
+  \draw (d) -- node[edge label, above]       {3}  (f);
+  \draw (d) -- node[edge label, right]       {4}  (e);
+  \draw (e) -- node[edge label, below right] {6}  (f);
+  \draw (g) -- node[edge label, right]       {2}  (f);
+  \draw (g) -- node[edge label, above right] {3}  (h);
+  \draw (h) -- node[edge label, right]       {6}  (f);
+
+  \end{tikzpicture}
+
+\end{center}
+
+\item What is the cost of finding and joining (union) of sets in Kruskal's method? \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item For the graph below, show the value of $u$, $v.key$, $Q$ for the following algorithm (show each step):  \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{algorithm}[H]
+\caption{\textsc{MST}($G,\, w,\, r$)}
+\begin{algorithmic}[1]
+\State $Q \gets V[G]$
+\For{each $u \in Q$}
+    \State $u.key \gets \infty$
+\EndFor
+\State $r.key \gets 0$;\quad $p[r] \gets \textbf{nil}$
+\While{$Q \neq \emptyset$}
+    \State $u \gets \textsc{Extract-Min}(Q)$
+    \For{each $v \in Adj[u]$}
+        \If{$v \in Q$ \textbf{and} $w(u,v) < v.key$}
+            \State $p[v] \gets u$
+            \State $v.key \gets w(u,v)$
+        \EndIf
+    \EndFor
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+\item  \textit{GreedyCell}, a mobile phone operator, wants to place cell towers 
+(base stations) along a long straight country road, to provide network coverage to $n$ 
+houses sparsely scattered along the road. The distance of these houses from the start 
+of the road are, in miles and in increasing order, $d_1, d_2, \ldots, d_n$. Each cell 
+tower has coverage of $R$ miles, i.e., if a house is within $R$ miles of a tower, it 
+would get service from that tower. Now give an efficient algorithm for finding a 
+placement of cell towers that uses as few cell towers as possible to provide coverage 
+to all the $n$ houses.\mk{12}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item Given a directed graph with edge list and weights $AB(5), BC(2), AC(4), AD(6),\\ CD(3), DB(1), DE(6), EB(3), EF(3), FB(4)$, construct a minimum-cost arborescence rooted at $A$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2013--14}
+
+\item Find a minimum spanning tree using both Kruskal's algorithm and Prim's algorithm (starting from $A$) for the graph with edges: $AB(5), BC(2), AC(4), AD(6), CD(3),\\ DB(1), DE(6), EB(3), EF(3), FB(4)$. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2013--14}
+
+\item  If Prim's algorithm is applied on a given graph, which will be the fifth edge added to the spanning tree? Start from vertex $a$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\begin{center}
+
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none,  font=\normalfont\small},
+  ]
+
+  % Nodes (a is filled black)
+  \node[fill=black, text=white] (a) at (0, 0)     {a};
+  \node (b) at (2,  2.5)  {b};
+  \node (c) at (5,  2.5)  {c};
+  \node (d) at (8,  2.5)  {d};
+  \node (e) at (9.5, 0)   {e};
+  \node (f) at (8, -2.5)  {f};
+  \node (g) at (5, -2.5)  {g};
+  \node (h) at (2, -2.5)  {h};
+  \node (i) at (3.5, 0)   {i};
+
+  % Edges
+  \draw (a) -- node[edge label, above left]  {4}  (b);
+  \draw (a) -- node[edge label, below left]  {8}  (h);
+  \draw (b) -- node[edge label, right]       {11} (h);
+  \draw (b) -- node[edge label, above]       {8}  (c);
+  \draw (c) -- node[edge label, above]       {7}  (d);
+  \draw (c) -- node[edge label, above right] {2}  (i);
+  \draw (d) -- node[edge label, right]       {9}  (e);
+  \draw (d) -- node[edge label, right]       {14} (f);
+  \draw (e) -- node[edge label, right]       {10} (f);
+  \draw (h) -- node[edge label, above]       {7}  (i);
+  \draw (h) -- node[edge label, below]       {1}  (g);
+  \draw (i) -- node[edge label, left]        {6}  (g);
+  \draw (c) -- node[edge label, above]       {4}  (f);
+  \draw (g) -- node[edge label, below]       {2}  (f);
+
+  \end{tikzpicture}
+
+\end{center}
+
+\item State and prove the ``cut property'' and the ``cycle property''. Explain with necessary examples how these properties are useful in solving the minimum spanning tree problem. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+
+\item How is the minimum cost arborescence problem different from the minimum spanning tree problem? Construct a minimum cost arborescence for the graph with edges $AB(7), AC(3), DA(4), EA(1), BC(91), CF(9), BD(7), EB(2), FB(5), CE(4), DE(6), \\FD(3)$, with edge orientations from the first vertex to the second. Assume source vertex is $A$. \mk{5+5}
+\yr{CSE 207 | L-2/T-2 | 2006--07}
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cA}{Maximum Flow}
+\label{sub:s1-maxflow}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item A central warehouse supplies relief packages to three depots $D_1, D_2, D_3$. The depots distribute packages to four affected zones $Z_1, Z_2, Z_3, Z_4$. Each depot has a daily sending capacity: $D_1 = 15$, $D_2 = 20$, $D_3 = 10$. Each zone has a receiving limit: $Z_1 = 10$, $Z_2 = 15$, $Z_3 = 10$, $Z_4 = 10$. Distribution routes: $D_1 \to \{Z_1, Z_2\}$, $D_2 \to \{Z_1, Z_3, Z_4\}$, $D_3 \to \{Z_2, Z_4\}$. The warehouse supply is unlimited. Determine the maximum number of relief packages that can be delivered per day. Model the situation as a flow network by clearly defining the source, sink, intermediate nodes, and edge capacities and apply Ford-Fulkerson's algorithm.
+\mk{20} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Derive a proof for the max-flow min-cut theorem.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Prove the max-flow min-cut theorem.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2022-23
+\item Develop a solution for the maximum bipartite matching problem. What is the Edmonds-Karp optimization for the Ford-Fulkerson algorithm?
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2023-24
+\item Define the Max-flow problem.
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+\item Consider a car parking problem scenario, where you need to match each of the cars with a parking spot. The cars and the available parking spots are located at different parts of the city and can only accessible through a road network graph, $G$. Let $A$ be the set of cars and $B$ be the set of parking slots. The cost of a car, $a \in A$ to reach to a parking slot, $b \in B$ is the shortest distance (on the graph $G$) between $a$ and $b$. If the spot is unreachable by a car, we can assign it an infinite cost.
+\begin{enumerate}
+%% Q — 2021-22
+\item \textbf{[Car parking matching problem]} Formulate the car parking assignment problem using the Max-flow/min-cut framework.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item \textbf{[Car parking matching problem]} Develop an efficient solution of the above problem to find a match for every car so that the overall cost is minimized.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
+\end{enumerate}
+
+\item You want to increase the maximum flow of a network as much as possible, but you are only allowed to increase the capacity of one edge. How do you find such an edge? (Give pseudocode). You may assume the existence of algorithms to compute max flow min cut. What's the running of your algorithm?
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2022-23
+\item You want to increase the maximum flow of a network as much as possible, but you are only allowed to increase the capacity of one edge. How do you find such an edge? (Give pseudocode.) You may assume the existence of algorithms to compute max flow min cut. What is the running time of your algorithm?
+ 
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2020-21
+\item The edge connectivity of an undirected graph is the minimum number $k$ of edges that must be removed to disconnect the graph. For example, the edge connectivity of a tree is 1, and the edge connectivity of a cyclic chain of vertices is 2. Show how to determine the edge connectivity of an undirected graph $G = (V, E)$ by running a maximum-flow algorithm on at most $|V|$ flow networks, each having $O(V)$ vertices and $O(E)$ edges.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Ad-hoc networks are made up of cheap, low-powered wireless devices, which can communicate within a limited range. Consider an ad-hoc wireless network where any two devices can communicate if and only if the distance between them is at most $D$. To improve reliability, we require each device $x$ to have $k$ potential backup devices, all within distance $D$ of $x$; we call these $k$ devices the backup set of $x$. Also, we do not want any device to be in the backup set of more than $b$ devices, say; otherwise, a single failure might affect a large fraction of the network.
+
+\medskip
+
+\noindent Suppose we are given the communication distance $D$, parameters $b$ and $k$, and an array $d[1 \dots n, 1 \dots n]$ of distances, where $d[i, j]$ is the distance between device $i$ and device $j$. The problem is to design and analyze an algorithm that either computes a backup set of size $k$ for each of the $n$ devices, such that no device appears in more than $b$ backup sets, or correctly reports that no good collection of backup sets exists. Now answer the following questions: \textbf{(10+7+3)}
+
+\begin{enumerate}
+    \item Reduce this problem to a max-flow problem. Describe a max-flow problem (a directed, capacitated graph $G$, a source and sink pair) such that a good collection of backup sets exist if and only if the max-flow in $G$ has a certain size. What is this size?
+    \item Prove the correctness of your reduction. Show that a good collection of backup sets exist if and only if the max-flow in $G$ has a certain size.
+    \item Give an algorithm to solve this max-flow problem. What is the running time of this algorithm as a function of $n$, $k$ and $b$?
+\end{enumerate}
+\mk{23} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item For the flow network shown in the following figure, find the value of the maximum flow by drawing residual networks in each step. Finally, draw the maximum flow network. Also, identify the min-cut of the maximum flow network.
+
+\begin{center}
+
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none, font=\normalfont\small},
+    every path/.style={->, line width=0.8pt},
+  ]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+  \node (S) at (-2, 0)    {S};
+  \node (1) at (1, 2)    {1};
+  \node (2) at (1, -2)   {2};
+  \node (3) at (5.5, 2)  {3};
+  \node (4) at (5.5, -2) {4};
+  \node (T) at (9, 0)    {T};
+
+  \draw (S) -> node[edge label, above left]  {10} (1);
+  \draw (S) -> node[edge label, below left]  {10} (2);
+  \draw (1) -> node[edge label, right]       {2}  (2);
+  \draw (1) -> node[edge label, above]       {4}  (3);
+  \draw (1) -> node[edge label, above right] {8}  (4);
+  \draw (2) -> node[edge label, below]       {9}  (4);
+  \draw (4) -> node[edge label, right]       {6}  (3);
+  \draw (3) -> node[edge label, above right] {10} (T);
+  \draw (4) -> node[edge label, below right] {10} (T);
+
+  \end{tikzpicture}
+
+\end{center}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item Define a flow network. What is an augmenting path in a flow network? Explain with illustrative examples. \mk{3+3}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item \textit{[Flow network given in figure]} Find the maximum flow and the minimum cut using the Ford-Fulkerson algorithm.The vertex s is the source and the vertex t is the sink
+of the flow network. Integers represent the flow capacities of the edges. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  edge label/.style={rectangle, draw=none,  font=\normalfont\small},
+  every path/.style={->, line width=0.7pt},
+]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+  \node (s) at (-1.5,  0)    {s};
+  \node (w) at (3,  0)    {w};
+  \node (x) at (5.5, 3) {x};
+  \node (y) at (5.5,-3) {y};
+  \node (z) at (7.5, 0)   {z};
+  \node (t) at (11, 0)   {t};
+
+  \draw (s) -> node[edge label, above left]  {4} (x);
+  \draw (s) -> node[edge label, above]       {6} (w);
+  \draw (s) -> node[edge label, below left]  {2} (y);
+  \draw (w) -> node[edge label, above]  {3} (x);
+  \draw (w) -> node[edge label, above]       {2} (z);
+  \draw (w) -> node[edge label, below]  {2} (y);
+  \draw (x) -> node[edge label, above] {3} (z);
+  \draw (x) -> node[edge label, above right] {5} (t);
+  \draw (z) -> node[edge label, below] {3} (y);
+  \draw (y) -> node[edge label, below right] {7} (t);
+  \draw (z) -> node[edge label, above]       {4} (t);
+\end{tikzpicture}
+\end{center}
+
+\item Describe the minimum path length augmentation method of Edmonds and Karp and explain how it improves the time complexity of the Ford-Fulkerson algorithm. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item \textit{[Flow network given in figure]} Find the value of the maximum flow by drawing residual networks at each step. Draw the maximum flow network and identify the min-cut. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  edge label/.style={rectangle, draw=none,  font=\normalfont\small},
+  every path/.style={->,  line width=0.7pt},
+]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+  \node (s) at (-2,-0.5)    {s};
+  \node (a) at (1, 1)   {};
+  \node (b) at (4, 1)   {};
+  \node (c) at (7, 1)   {};
+  \node (d) at (1,-2)   {};
+  \node (e) at (4,-2)   {};
+  \node (f) at (7,-2)   {};
+  \node (t) at (10, -0.5)   {t};
+
+  \draw (s) -> node[edge label, above left]  {10} (a);
+  \draw (s) -> node[edge label, below left]  {5}  (d);
+  \draw (a) -> node[edge label, above]       {8}  (b);
+  \draw (b) -> node[edge label, above]       {7}  (c);
+  \draw (c) -> node[edge label, above right] {5}  (t);
+  \draw (d) -> node[edge label, below]       {7}  (e);
+  \draw (a) -> node[edge label, right]       {5}  (e);
+  \draw (b) -> node[edge label, right] {5} (f);
+  \draw (e) -> node[edge label, right]       {8}  (f);
+  \draw (f) -> node[edge label, right]       {10}  (t);
+
+
+
+\end{tikzpicture}
+\end{center}
+
+\item What is a flow network? Explain how network flow algorithms allow us to find the maximum bipartite matching. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item Write the Edmonds-Karp algorithm that solves the maximum-flow problem. Analyze its time complexity for integral capacities. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item Explain how network flow algorithms allow us to find the maximum bipartite matching. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item  A traffic engineer needs to decide which roads to widen to allow maximum traffic from $A$ to $G$. Which roads are to be widened? \mk{12}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+
+\begin{center}
+
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none, font=\normalfont\small},
+    every path/.style={->, line width=0.8pt},
+  ]
+  \tikzset{>={Stealth[length=10pt, width=6pt]}}
+
+  \node (A) at (0, 0)    {A};
+  \node (B) at (2, 2)    {B};
+  \node (C) at (1, -2)   {C};
+  \node (D) at (4, 0)    {D};
+  \node (E) at (6, 2)    {E};
+  \node (F) at (5, -2)   {F};
+  \node (G) at (7, 0)    {G};
+
+  \draw (A) -> node[edge label, above left]  {5}  (B);
+  \draw (A) -> node[edge label, below left]  {4}  (C);
+  \draw (A) -> node[edge label, above]       {8}  (D);
+  \draw (B) -> node[edge label, right]       {1}  (D);
+  \draw (B) -> node[edge label, above]       {1}  (E);
+  \draw (D) -> node[edge label, below right] {3}  (C);
+  \draw (C) -> node[edge label, below]       {5}  (F);
+  \draw (D) -> node[edge label, above left]  {4}  (E);
+  \draw (D) -> node[edge label, right]       {5}  (F);
+  \draw (E) -> node[edge label, right]       {10} (G);
+  \draw (F) -> node[edge label, below right] {5}  (G);
+
+  \end{tikzpicture}
+
+\end{center}
+
+\item Define and explain the following terms in a network flow model: super sink node, augmented path, residual capacity, super source node. \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item What is the pitfall of Ford-Fulkerson's max-flow min-cut method? How can it be improved? \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item Find the maximum job assignment using a maximum flow algorithm. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  every path/.style={->, line width=0.7pt},
+]
+\tikzset{>={Stealth[length=20pt, width=10pt]}}
+
+  \node (a)  at (0,  3)   {a};
+  \node (b)  at (0,  1)   {b};
+  \node (c)  at (0, -1)   {c};
+  \node (d)  at (0, -3)   {d};
+  \node (j1) at (5,  3)   {j1};
+  \node (j2) at (5,  1)   {j2};
+  \node (j3) at (5, -1)   {j3};
+  \node (j4) at (5, -3)   {j4};
+
+  \draw (a) -> (j2);
+  \draw (a) -> (j4);
+  \draw (b) -> (j1);
+  \draw (c) -> (j3);
+  \draw (c) -> (j2);
+  \draw (c) -> (j4);
+  \draw (d) -> (j1);
+  \draw (d) -> (j4);
+\end{tikzpicture}
+\end{center}
+
+\item What is a flow network? What is the maximum-flow problem? Explain how one can convert a multiple-source, multiple-sink maximum-flow problem into a problem with a single source and a single sink. \mk{4+2+4=10}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+\item Write the Ford-Fulkerson algorithm for solving the maximum-flow problem, and analyze the time complexity of the algorithm. Explain how the Edmonds-Karp algorithm improves the bound of the Ford-Fulkerson algorithm. \mk{10+5=15}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+\item State the max-flow min-cut theorem in its simplest form. What is the main argument to prove the theorem? \textit{[Flow network given in figure]} Find a min-cut and its capacity. Find the flow in that cut and the maximum flow in the network. \mk{17}
+\yr{CSE 207 | L-2/T-2 | 2009--10}
+
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  edge label/.style={rectangle, draw=none, font=\normalfont\small},
+  every path/.style={->, line width=1pt},
+]
+
+\tikzset{>={Stealth[length=15pt, width=10pt, inset=3pt]}}
+
+  \node (s)  at (0, 0)    {s};
+  \node (v1) at (3, 2)    {$v_1$};
+  \node (v2) at (3, -1)   {$v_2$};
+  \node (v3) at (6, 2)    {$v_3$};
+  \node (v4) at (6, -1)   {$v_4$};
+  \node (t)  at (9, 0.5)  {t};
+
+  \draw (s)  -> node[edge label, above left]  {16} (v1);
+  \draw (s)  -> node[edge label, below left]  {13} (v2);
+  \draw (v2) -> node[edge label, right, pos=0.3] {4}  (v1);
+  \draw (v1) -> node[edge label, above]       {10} (v3);
+  \draw (v1) -> node[edge label, below right] {9}  (v4);
+  \draw (v2) -> node[edge label, below]       {14} (v4);
+  \draw (v4) -> node[edge label, right]       {7}  (v3);
+  \draw (v3) -> node[edge label, above right] {20} (t);
+  \draw (v4) -> node[edge label, below right] {4}  (t);
+\end{tikzpicture}
+\end{center}
+
+\item  Find the maximum flow and the minimum cut. Find also the maximum flow in the minimum cut. \mk{12}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  edge label/.style={rectangle, draw=none, font=\normalfont\small},
+  every path/.style={->, line width=0.7pt},
+]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+
+  \node (s)  at (0, 0)    {s};
+  \node (v1) at (3, 3)    {$v_1$};
+  \node (v2) at (3, -2)   {$v_2$};
+  \node (v3) at (6, 3)    {$v_3$};
+  \node (v4) at (6, -2)   {$v_4$};
+  \node (t)  at (9, 0.5)  {t};
+
+  \draw (s)  -> node[edge label, above left]  {16} (v1);
+  \draw (s)  -> node[edge label, below left]  {13} (v2);
+  \draw (v1) to [bend right=20pt] node[edge label, left, pos=0.3]  {10} (v2);
+  \draw (v2) to [bend right=20pt] node[edge label, right] {4}  (v1);
+  \draw (v1) -> node[edge label, above]       {12} (v3);
+  \draw (v3) -> node[edge label, below] {9}  (v2);
+  \draw (v2) -> node[edge label, below]       {14} (v4);
+  \draw (v4) -> node[edge label, right]       {7}  (v3);
+  \draw (v3) -> node[edge label, above right] {20} (t);
+  \draw (v4) -> node[edge label, below right] {4}  (t);
+\end{tikzpicture}
+\end{center}
+
+\item Discuss how a maximum flow algorithm can be used to determine the maximum number of disjoint paths in directed and undirected graphs. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2007--08}
+
+\item Figure 1 shows a flow network on which $s$-$t$ flow has been computed. The capacity of each edge appears as a label next to the edge, and the numbers in boxes give the amount of flow sent on each edge. Edges without boxed numbers have no flow on them. \mk{20}
+\begin{enumerate}
+  \item What is the value of this flow? Is this a maximum $(s, t)$ flow on this graph?
+  \item Find a minimum $s$-$t$ cut in the flow network pictured in Figure 1, and also say what its capacity is.
+\end{enumerate}
+\yr{CSE 207 | L-2/T-2 | 2007--08}
+
+\begin{center}
+
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    edge label/.style={rectangle, draw=none, font=\normalfont\small},
+  every path/.style={->, line width=1pt},
+  ]
+  \tikzset{>={Stealth[length=15pt, width=15pt, inset=10pt]}}
+
+  \node (s)  at (-2, 0)    {s};
+  \node (v1) at (3, 3)    {};
+  \node (v2) at (2, 0)    {};
+  \node (d)  at (5, -3)   {d};
+  \node (v3) at (6, 0)    {};
+  \node (t)  at (10, 0)    {t};
+
+  \draw (s)  -> node[edge label, above left]  {10|5} (v1);
+  \draw (s)  -> node[edge label, above]       {8|8}  (v2);
+  \draw (s)  -> node[edge label, below left]  {5|5}  (d);
+  \draw (v1) -> node[edge label, above] {3}    (v3);
+  \draw (v1) -> node[edge label, above]       {5|5}  (t);
+  \draw (v2) -> (v1);
+  \draw (v2) -> node[edge label, above]       {10|8} (v3);
+  \draw (v2) -> node[edge label, right]       {3}    (d);
+  \draw (v3) -> node[edge label, above]       {8|8}  (t);
+  \draw (d)  -> (v3);
+  \draw (d)  -> node[edge label, below right] {10|5} (t);
+
+  \end{tikzpicture}
+\end{center}
+
+\item There is a wireless network of nodes $A$, $B$, $C$, $D$, $E$, $F$, $G$ and $H$. Capacity of the wireless links are given in the following format: ``-'' indicates there is no link between those nodes. What is the maximum data flow, if node $A$ sends data to node $H$? What is the capacity of the optimal cut? (Use Ford-Fulkerson method and show the steps.) \mk{10+5=15}
+
+\begin{center}
+\begin{tabular}{ccccccccc}
+\toprule
+  & A  & B  & C & D & E  & F  & G  & H \\
+\midrule
+A & -  & 10 & 5 & 15 & - & -  & -  & - \\
+B & -  & -  & 4 & -  & 9 & 15 & -  & - \\
+C & -  & -  & - & 4  & - & 8  & -  & - \\
+D & -  & -  & - & -  & - & -  & 30 & - \\
+E & -  & -  & - & -  & - & 15 & -  & 10 \\
+F & -  & -  & - & -  & - & -  & 15 & 10 \\
+G & -  & -  & 6 & -  & - & -  & -  & 10 \\
+H & -  & -  & - & -  & - & -  & -  & - \\
+\bottomrule
+\end{tabular}
+\end{center}
+\yr{CSE 207 | L-2/T-2 | 2006--07}
+
+\item How can the Ford--Fulkerson method be used to find a maximum matching? Explain with a simple example. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2006--07}
+
+
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cA}{Maximum Bipartite Matching}
+\label{sub:s1-bipartite}
+
+\begin{enumerate}
+
+%% Q — 2022-23
+\item Formulate the problem of maximum bipartite matching. Give two examples of real-life problems that can be solved using maximum bipartite matching.
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+
+\item Explain with an example how to convert a bipartite graph $G$ to a flow network $G'$ such that a maximum bipartite matching $M$ in $G$ can be computed by finding a maximum flow $f$ in $G'$. Prove that there is a maximum matching $M$ in $G$ if and only if there is a maximum flow $f$ in $G'$. \mk{17}
+\yr{CSE 207 | L-2/T-2 | 2009--10}
+
+\item Explain with an example how to convert a bipartite graph $G$ to a flow network
+$G'$ such that a maximum bipartite matching $M$ in $G$ can be computed by finding
+a maximum flow $f$ in $G'$. Prove that there is a maximum matching $M$ in $G$
+if and only if there is a maximum flow $f$ in $G'$. \mk{17.5}
+
+
+
+\end{enumerate}
+
+
+\subtopic{cA}{Stable Matching (Gale-Shapley)}
+\label{sub:s1-stablematching}
+
+\begin{enumerate}
+  \item In a stable matching problem (\textbf{Gale-Shapley algorithm}) each participant has a true preference order. Now consider a woman $w$. Suppose $w$ prefers man $m$ to $m'$, but both $m$ and $m'$ are low on her list of preferences. Can it be the case that by switching the order of $m$ and $m'$ on her list of preferences (i.e., by falsely claiming that she prefers $m'$ to $m$) and running the algorithm with this false preference list, $w$ will end up with a man $m''$ that she truly prefers to both $m$ and $m'$? Give proof to support your answer.
+  \mk{10}  \yr{CSE 207 | L-2/T-1 | 2020--21}
+\end{enumerate}
+
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cA}{Graph Traversal \& Properties}
+\label{sub:s1-traversal}
+
+\begin{enumerate}
+
+%% Q — 2021-22
+\item Classify the edges of the given graph after performing a Depth-First Search (DFS). If multiple nodes are available to explore at any point, always choose the node that comes first in alphabetical ordering. Start the DFS traversal from node $a$. (Possible classes: tree-edge, forward edge, back edge, and cross edge.)
+\begin{center}
+      \begin{tikzpicture}[
+        scale=1.5,
+        every node/.style={circle, draw, minimum size=0.8cm, font=\bfseries},
+        >=stealth, % তীরের মাথার স্টাইল সুন্দর করার জন্য
+        thick
+    ]
+        % Nodes positioning
+        \node (b) at (0,2) {b};
+        \node (a) at (1.5,2) {a};
+        \node (e) at (3,2) {e};
+        
+        \node (c) at (0,0) {c};
+        \node (d) at (1.5,0) {d};
+        \node (f) at (3,0) {f};
+
+        % Directed Edges
+        \path[->] (b) edge (a);
+        \path[->] (b) edge (c);
+        \path[->] (c) edge (a);
+        \path[->] (a) edge (d);
+        \path[->] (d) edge (c);
+        \path[->] (e) edge (d);
+        \path[->] (e) edge (f);
+
+    \end{tikzpicture}
+\end{center}
+\mk{10} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2023-24
+\item Gotham city is in grave danger. Batman must suit up with the following constraints:
+\begin{enumerate}
+\item  He must wear the bodysuit first. 
+\item  Both utility belt and armor plate can be worn in any order on top of the bodysuit. 
+\item  The grappling gun and smoke bombs can be attached only after the utility belt is worn.
+\item  The cape has to be mounted on top of the armor plate. 
+\item  The glider wing must be attached to both the armor plate and the utility belt. 
+\end{enumerate}
+  First, draw a dependency graph of all items. Then, recommend a valid ordering of the items to help Batman get ready quickly but properly.
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2023-24
+\item Mention the runtimes of the following algorithms:
+\begin{enumerate}
+\item  Kruskal's algorithm without Disjoint Set Union (DSU), 
+\item  Kruskal's algorithm with DSU, 
+\item  Ford-Fulkerson algorithm, 
+\item  Edmonds-Karp algorithm.
+\end{enumerate}
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+\item Consider a peculiar city with N towns and M bidirectional roads (connecting towns) 
+    classified into three types. This city is peculiar due to unconventional regulations 
+    regarding road usage: men are permitted to travel only on roads of types 1 and 3, while 
+    women are permitted to travel only on roads of types 2 and 3 exclusively. The Mayor 
+    of the city intends to renovate the city by reconstructing some roads, with the condition 
+    that the normal routine of the citizens should not be hampered.
+    
+    Now, you are hired as a computer scientist to answer an important question: What is 
+    the maximum number of roads that can be renovated (remain closed for traffic during 
+    renovation) while ensuring that the city remains connected for both men and women? 
+    The city is said to be connected if it is still possible to travel form any town X to any 
+    town Y using the existing roads.
+\begin{enumerate}
+  \item Formulate the problem as a graph problem.
+  \item Develop the solution using a well-known graph algorithm.
+  \item Write the pseudo-code of the solution.
+\end{enumerate}
+\mk{23} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2023-24
+\item Define and distinguish the two basic properties of the greedy algorithm.
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+\item \textbf{Jack Straws:} In the game of Jack Straws, a number of plastic or wooden ``straws'' are dumped on the table and players try to remove them one by one without disturbing the other straws. Here, we are only concerned with whether various pairs of straws are connected by a path of touching straws. Given a list of the endpoints for $n > 1$ straws (as if they were dumped on a large piece of graph paper), determine all the pairs of straws that are connected. Note that touching is connecting, but also that two straws can be connected indirectly via other connected straws.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+
+\item \textbf{Rumor spreading:} There are $n$ people, each in possession of a different rumor. They want to share all the rumors with each other by sending electronic messages. Assume that a sender includes all the rumors he or she knows at the time the message is sent and that a message may only have one addressee. Design a greedy algorithm that always yields the minimum number of messages they need to send to guarantee that every one of them gets all the rumors.
+\mk{13} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+
+\item The reverse of a directed graph $G = (V, E)$ is another directed graph $G_R = (V, E_R)$ on the same vertex set, but with all edges reversed; that is, $E_R = \{(v, u) : (u, v) \in E\}$. Give a linear-time algorithm for computing the reverse of a graph in adjacency list format.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+
+\item The strength of a path in an edge-weighted graph $G$ is the minimum weight among its edges. The all-pairs strongest path problem asks to find the strongest path between every pair of vertices. Design an algorithm to solve this problem. \mk{5}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Given an undirected graph $G = (V, E)$, give a linear-time algorithm to check whether there is a cycle of odd length in the graph. Briefly justify its correctness. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item Suppose a CS curriculum consists of $n$ mandatory courses. The prerequisite directed graph $G$ has a node for each course and an edge from $v$ to $w$ if $v$ is a prerequisite for $w$. Give a linear-time algorithm that computes the minimum number of semesters necessary to complete the curriculum (a student may take any number of courses per semester). \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item Find the transitive closure. Show the matrices computed at each step. What is the cost to find the transitive closure? \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{center}
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  every path/.style={->, line width=1pt},
+  ]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+
+  \node (a) at (0, 2)  {a};
+  \node (b) at (0, 0)  {b};
+  \node (c) at (3, 0)  {c};
+  \node (d) at (3, 2)  {d};
+
+  \draw (b) -> (a);
+  \draw (b) -> (c);
+  \draw (d) -> (b);
+  \draw (d) to[bend left=15] (c);
+  \draw (c) to[bend left=15] (d);
+
+  \end{tikzpicture}
+
+\end{center}
+
+\item Find the transitive closure. Show the matrices computed at each step. What is the cost to find the transitive closure? \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{center}
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  every path/.style={->, line width=1pt},
+  ]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+
+  \node (a) at (0, 2)  {a};
+  \node (b) at (0, 0)  {b};
+  \node (c) at (3, 0)  {c};
+  \node (d) at (3, 2)  {d};
+
+  \draw (b) -> (a);
+  \draw (b) -> (c);
+  \draw (d) -> (b);
+  \draw (d) to[bend left=15] (c);
+  \draw (c) to[bend left=15] (d);
+
+  \end{tikzpicture}
+
+\end{center}
+
+\item Let $C$ and $C'$ be distinct strongly connected components in a directed graph $G = (V, E)$. Suppose there is an edge $(u, v) \in E$ where $u \in C$ and $v \in C'$. Prove that $f(C) > f(C')$, where $f(U)$ denotes the latest finishing time of any vertex in $U$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item Find the different types of edges if DFS is applied from vertex $A$. Discuss the edges' properties with respect to the graph. \mk{6}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  every path/.style={->, line width=1pt},
+]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+
+  % Nodes
+  \node (A) at (0, 4)   {A};
+  \node (B) at (3, 4)   {B};
+  \node (G) at (6, 4)   {G};
+  \node (C) at (0, 2)   {C};
+  \node (D) at (3, 2)   {D};
+  \node (H) at (6, 2)   {H};
+  \node (E) at (0, 0)   {E};
+  \node (F) at (3, 0)   {F};
+
+  % Edges
+  \draw (A) -> (B);
+  \draw (A) -> (C);
+  \draw (A) -> (F);
+  \draw (E) to[bend left=40] (A);
+  \draw (A) -> (D);
+  \draw (B) -> (D);
+  \draw (G) -> (H);
+  \draw (H) -> (D);
+  \draw (C) -> (D);
+  \draw (C) -> (E);
+  \draw (D) -> (E);
+  \draw (D) -> (F);
+  \draw (E) -> (F);
+  \draw (G) -> (B);
+   \end{tikzpicture}
+\end{center}
+
+\item Show the topological sorting order of a given graph with explanation of discovery and finishing times of node exploration. \mk{6}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  every path/.style={->, line width=1pt},
+]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+
+  % Nodes
+  \node (A) at (0, 4)   {A};
+  \node (B) at (3, 4)   {B};
+  \node (G) at (6, 4)   {G};
+  \node (C) at (0, 2)   {C};
+  \node (D) at (3, 2)   {D};
+  \node (H) at (6, 2)   {H};
+  \node (E) at (0, 0)   {E};
+  \node (F) at (3, 0)   {F};
+
+  % Edges
+  \draw (A) -> (B);
+  \draw (A) -> (C);
+  \draw (A) -> (F);
+  \draw (E) to[bend left=40] (A);
+  \draw (A) -> (D);
+  \draw (B) -> (D);
+  \draw (G) -> (H);
+  \draw (H) -> (D);
+  \draw (C) -> (D);
+  \draw (C) -> (E);
+  \draw (D) -> (E);
+  \draw (D) -> (F);
+  \draw (E) -> (F);
+  \draw (G) -> (B);
+   \end{tikzpicture}
+\end{center}
+
+
+\item Apply the Transitive-Closure algorithm on the directed graph given. Show the matrices computed at all stages of execution. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\begin{center}
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    every path/.style={->, line width=0.8pt},
+  ]
+  \tikzset{>={Stealth[length=10pt, width=6pt, inset=2pt]}}
+
+  \node [fill=black](1) at (0, 2)  {};
+  \node [fill=black](2) at (3, 2)  {};
+  \node [fill=black](3) at (3, 0)  {};
+  \node [fill=black](4) at (0, 0)  {};
+
+  \draw (4) -> (1);
+  \draw (2) -> (4);
+  \draw (4) -> (3);
+  \draw (2) to [bend right=15] (3);
+  \draw (3) to [bend right=15] (2);
+
+  \end{tikzpicture}
+\end{center}
+
+
+\item Write the Bellman-Ford algorithm. Analyze the time complexity and correctness of the Bellman-Ford algorithm. \mk{20}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item State the parenthesis theorem for depth-first search. \mk{6}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Write a linear-time algorithm to compute the strongly connected components of a directed graph $G = (V, E)$ using two depth-first searches. Give an example to show every step of the algorithm. \mk{8+5}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Write an algorithm for DFS traversal of a given graph. Analyze the time
+complexity of the algorithm. \mk{10+5=15}
+\yr{CSE 203 | L-2/T-1 | 2011--12}
+
+\item Write the sequences of the vertices if you explore the given graph $G$ using BFS and DFS. Classify the edges of $G$ for your DFS traversal. \mk{4+6=10}
+\yr{CSE 203 | L-2/T-1 | 2011--12}
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  every path/.style={->, line width=1pt},
+]
+\tikzset{>={Stealth[length=12pt, width=8pt, inset=2pt]}}
+
+  % Nodes
+  \node (b) at (0, 0)    {b};
+  \node (a) at (2, 2)    {a};
+  \node (d) at (2, -2)   {d};
+  \node (c) at (5, 2)    {c};
+  \node (e) at (5, -2)   {e};
+  \node (f) at (7.5, 0.5){f};
+  \node (g) at (10, 2)   {g};
+  \node (h) at (10, -2)  {h};
+
+  % Edges
+  \draw (a) -> (b);
+  \draw (b) -> (d);
+  \draw (d) -> (a);
+  \draw (a) -> (e);
+  \draw (a)->(c);
+  \draw (g) -> (c);
+  \draw (h) -> (e);
+  \draw (b) -> (e);
+  \draw (e) -> (d);
+  \draw (c) -> (e);
+  \draw (c) -> (f);
+  \draw (f) -> (e);
+  \draw (g) -> (f);
+  \draw (h) -> (g);
+  \draw (f) -> (h);
+
+  \end{tikzpicture}
+\end{center}
+
+\item Derive with explanation the recursive equation for the Floyd-Warshall algorithm for all-pairs shortest-path estimates in a directed graph $G$. Based on this equation, write pseudocode for Floyd-Warshall. Convert this recursive equation to compute the transitive closure of $G$. \mk{17}
+\yr{CSE 207 | L-2/T-2 | 2009--10}
+
+\item For the given graph $G$, find the transitive closure using the Floyd-Warshall algorithm. Give the algorithm also. How can the complexity of Floyd-Warshall's all-pairs shortest paths be improved? \mk{10+5+10}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+\begin{center}
+  \begin{tikzpicture}[
+    every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+    every path/.style={->, line width=0.8pt},
+  ]
+  \tikzset{>={Stealth[length=10pt, width=6pt, inset=2pt]}}
+
+  \node (1) at (0, 2)  {1};
+  \node (2) at (3, 2)  {2};
+  \node (3) at (3, 0)  {3};
+  \node (4) at (0, 0)  {4};
+
+  \draw (4) -> (1);
+  \draw (2) -> (4);
+  \draw (4) -> (3);
+  \draw (2) to [bend right=10] (3);
+  \draw (3) to [bend right=10] (2);
+
+  \end{tikzpicture}
+\end{center}
+
+\item How can the complexity of Floyd-Warshall's algorithm for ``all pairs shortest paths'' be improved? \mk{10}
+
+\end{enumerate}
+
+%% ══════════════════════════════════════════════════════════════════════
+%%  PART II — ADVANCED DATA STRUCTURES
+%% ══════════════════════════════════════════════════════════════════════
+\secdivider{Part II}{Advanced Data Structures}{cB}{cB}{Balanced Binary Search Trees (AVL Trees), Red-Black Trees, Splay Trees, Skip Lists, Advanced Heaps (Binomial Heaps), Advanced Heaps (Fibonacci Heaps)}
+\titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
+
+%% ── S2: Advanced Data Structures ─────────────────────────────────────
+\section{S2 --- Advanced Data Structures}
+\label{sec:S2}
+\markboth{S2 --- Advanced Data Structures}{}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cB}{Balanced Binary Search Trees (AVL Trees)}
+\label{sub:s2-avl}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item After inserting a key into an AVL tree, a node $A$ becomes unbalanced such that its balance factor becomes $+2$, while its left child $B$ has a balance factor of $-1$. Based on this information, determine the exact type of imbalance that has occurred and describe the precise sequence of rotations required to restore balance. Your answer must include a clear transformation of the subtree rooted at $A$, showing its structure before and after applying the rotations, along with the final balance factors of all nodes involved.
+\mk{10} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+%% Q — 2024-25
+\item Construct an AVL tree with the minimum number of nodes when the tree height is 5.
+\mk{10} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Prove that the height of an AVL tree with $n$ elements is $O(\log n)$.
+\mk{10} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2023-24
+\item Perform the following operations sequentially on an initially empty AVL tree. Show the intermediate trees after each step: (i) insert 15, (ii) insert 22, (iii) insert 24, (iv) insert 7, (v) insert 9, (vi) delete 24.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Write down the properties of an AVL tree, and prove that it is a balanced binary search tree.
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2023-24
+\item Suppose you are inserting a node in an AVL tree, and $x$ is the lowest node violating AVL balance and $x$ is left-heavy. Demonstrate the balancing procedure using figures.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2022-23
+\item Insert a node with key $= 20$ to the given AVL tree. Then perform another insertion of a node with key $= 68$ on the resulting AVL tree. Show all the steps and the resulting AVL trees.
+\begin{center}
+\begin{tikzpicture}[
+        every node/.style={circle, draw=black, thick, minimum size=0.8cm, font=\large, inner sep=0pt},
+        edge/.style={thick, black}
+    ]
+
+        % ==========================================
+        % TREE STRUCTURE (Coordinates Layout)
+        % ==========================================
+        % Level 0: Root
+        \node (n60) at (0,0) {60};
+
+        % Level 1
+        \node (n40) at (-1.5,-1.3) {40};
+        \node (n70) at (1.5,-1.3) {70};
+
+        % Level 2
+        \node (n30) at (-2.5,-2.6) {30};
+        \node (n65) at (0.5,-2.6) {65};
+
+        % ==========================================
+        % EDGES / CONNECTIONS
+        % ==========================================
+        \draw[edge] (n60) -- (n40);
+        \draw[edge] (n60) -- (n70);
+
+        \draw[edge] (n40) -- (n30);
+        \draw[edge] (n70) -- (n65);
+
+    \end{tikzpicture}
+\end{center}
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Prove or disprove: 
+\begin{enumerate}
+\item In an AVL tree, the difference in length between the shortest and the longest paths from the root to the leaves is at most one.
+\item The minimum number of nodes in an AVL tree with height 5 is 20.
+\end{enumerate}
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item What are the rotations that are required to balance an AVL tree?
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item How does a rotation balance an AVL tree?
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item What is the maximum height of an AVL tree having 10 nodes?
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+
+\item Prove that a tree with $n$ nodes where the heights of the two children of any node differ by at most 1 has $O(\log n)$ height. \mk{12}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+\item Mention one advantage of AVL trees over red-black trees, and one advantage of red-black trees over AVL trees. \mk{4}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item If the $i$-th and $(i+2)$-th Fibonacci numbers are $x$ and $y$ respectively (where $i > 0$), what is the minimum number of nodes in an AVL tree of height $(i-1)$? \mk{4}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item What is an AVL tree? Draw the AVL tree that results after successively inserting the keys $11, 4, 15, 25, 36, 47, 61, 53, 75$ into an initially empty AVL tree. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2015--16}
+
+\item Explain, with examples, the single rotation and double rotation operations on AVL trees. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2014--15}
+
+\item What is a Multiway Search tree? How do we search a key in a Multiway Search tree? \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2014--15}
+
+
+\item What is an AVL tree? Show that the height of an AVL tree $T$ storing $n$ items is $O(\log n)$. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+\item Explain with examples the single rotation and double rotation operations on AVL trees. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+\item What is an AVL tree? Show that the height of an AVL tree $T$ storing $n$ items is $O(\log n)$. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+\item Write the properties of a B-tree. \mk{5}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+\item \textit{[AVL tree figure given]} Let $T$ be an AVL tree where $T_1$ has height $h-1$. Determine the heights of $T_2$, $T_3$, and $T_4$. Discuss what happens when you delete an element from $T_1$; cover all possible cases for deletion in an AVL tree. \mk{4+4+7=15}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+\begin{center}
+\begin{tikzpicture}[
+        % Define style for the circular tree nodes
+        tree node/.style={
+            circle, 
+            draw, 
+            minimum size=7mm, % Size increased slightly to fit both symbols smoothly
+            inner sep=0pt
+        },
+        % Define style for the triangular subtrees
+        subtree/.style={
+            isosceles triangle, 
+            draw, 
+            shape border rotate=90, 
+            minimum width=8mm, 
+            minimum height=10mm, 
+            inner sep=0pt, 
+            anchor=apex
+        },
+        % General settings for tree branching
+        level distance=1.5cm,
+        sibling distance=3.5cm
+    ]
+
+    % =========================================================================
+    % MAIN TREE (Left Side)
+    % ======================================================================
+
+    % Root node
+    \node(root) [tree node] at (0,0) {$\backslash$};
+    
+    % Level 1
+    \node(t1) [subtree] at ([xshift=-2cm, yshift=-1.5cm]root.center) {$T_1$};
+    \node(n1) [tree node] at ([xshift=2cm, yshift=-1.5cm]root.center) {$/$};
+    
+    % Level 2 (under n1)
+    \node(n2) [tree node] at ([xshift=-1cm, yshift=-1.5cm]n1.center) {$\backslash$};
+    \node(t4) [subtree] at ([xshift=1cm, yshift=-1.5cm]n1.center) {$T_4$};
+    
+    % Level 3 (under n2)
+    \node(t2) [subtree] at ([xshift=-0.7cm, yshift=-1.5cm]n2.center) {$T_2$};
+    \node(t3) [subtree] at ([xshift=0.7cm, yshift=-1.5cm]n2.center) {$T_3$};
+
+    % Connect nodes to subtrees / other nodes
+    \draw (root) -- (t1.apex);
+    \draw (root) -- (n1);
+    \draw (n1) -- (n2);
+    \draw (n1) -- (t4.apex);
+    \draw (n2) -- (t2.apex);
+    \draw (n2) -- (t3.apex);
+
+    % Height indicator label (h-1) next to T1
+    \node[left=0.2cm of t1, yshift=0.3cm] {$(h-1)$};
+    \draw[->] ([xshift=-0.6cm, yshift=0.3cm]t1.apex) -- ([xshift=-0.1cm, yshift=-0.2cm]t1.apex);
+
+    % =========================================================================
+    % SYMBOL MEANING KEY (Right Side)
+    % =========================================================================
+    
+    \begin{scope}[xshift=5.5cm, yshift=0.5cm]
+        % Title
+        \node[anchor=west] at (-1, 0) {\large\textit{symbol meaning:}};
+        
+        % First Rule: Contains both / and \ safely inside math mode
+        \node(k1) [tree node] at (0, -1) {$/$};
+        \node[anchor=west] at (-1.5, -1.8) {left subtree $>$ right subtree};
+        \draw (k1) -- (-1.2, -1.5);
+        \draw (k1) -- (1.5, -1.5);
+        
+        % Second Rule
+        \node(k2) [tree node] at (0, -3.2) {$\backslash$};
+        \node[anchor=west] at (-1.5, -4) {left subtree $<$ right subtree};
+        \draw (k2) -- (-1, -3.7);
+        \draw (k2) -- (1, -3.7);
+    \end{scope}
+
+    \end{tikzpicture}
+\end{center}
+
+\item Design an AVL tree by inserting the keys $5, 12, 3, -2, -5, -3, 1$ in order. Show all steps. \mk{15}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+
+\item What is the height of an AVL tree with $n$ internal nodes? \mk{5}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+\item Build a 2-3-4 tree with the keys $12, 5, 6, 10, 15, 8, 13, 17, 11, 14, 4$. Then delete elements in the following sequence: $4, 12, 13$. Show all steps. \mk{25}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cB}{Red-Black Trees}
+\label{sub:s2-rbt}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Starting from an empty red-black tree, perform the insertion operation of the keys 41, 38, 31, 12, 19, 8, 25, and 32 in the given order while maintaining all red-black properties. After completing all insertions, use the resulting tree and perform deletions of the keys 8, 12, and 19 in that order. During the insertion or deletion, you must show the tree after each operation, including the color of every node.
+\mk{25} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Delete the node 50 from the given Red-Black Tree. Note that doubly circled nodes represent Red and single circles represent Black.
+\begin{center}
+      \begin{tikzpicture}[
+        scale=1.4,
+        % ব্ল্যাক নোড: পুরো ব্যাকগ্রাউন্ড কালো, লেখা সাদা
+        blacknode/.style={circle, fill=black, minimum size=0.8cm, font=\bfseries\color{white}},
+        % রেড নোড: পুরো ব্যাকগ্রাউন্ড লাল, লেখা সাদা
+        rednode/.style={circle, fill=red, minimum size=0.8cm, font=\bfseries\color{white}},
+        thick
+    ]
+        
+        % ট্রি স্ট্রাকচার অনুযায়ী নোড পজিশনিং
+        \node[blacknode] (30) at (0,4) {30}
+            child {node[blacknode] {20}}
+            child {node[rednode] {45}
+                child {node[blacknode] {40}
+                    child {node[rednode] {35}}
+                    child {node[rednode] {42}}
+                }
+                child {node[blacknode] {50}}
+            };
+
+    \end{tikzpicture}
+\end{center}
+\mk{10} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Write the pseudo-code of an insertion operation in a Red-Black tree and explain (graphically) different forms of transformation necessary to maintain the RB property while inserting an item. Briefly compare RB-tree and AVL-tree.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2023-24
+\item What are the properties of a red-black tree? Derive that if a tree with $n$ keys follows the red-black properties, its height $h$ can be bounded as $h \leq 2\lg(n + 1)$.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2022-23
+\item Usually we have to fix a Red-Black tree after deleting a node when the properties of the Red-Black tree get violated because of node deletion. Explain whether it is possible to do so without performing any rotation. Delete the node with key $= 150$ from the given Red-Black tree. Show all the steps and the resulting Red-Black tree.
+\begin{center}
+  \begin{tikzpicture}[
+        scale=0.85, transform shape,
+        % Base styling for tree nodes
+        every node/.style={circle, draw=black, thick, font=\bfseries\small, inner sep=0pt, minimum size=0.75cm},
+        % Red Node style (Single-circled in original)
+        red node/.style={fill=red, text=white, draw=red!80!black},
+        % Black Node style (Double-circled in original)
+        black node/.style={fill=black, text=white, draw=black},
+        % NIL Leaf style (Rectangular and black)
+        nil leaf/.style={rectangle, fill=black, draw=black, minimum size=0.35cm, inner sep=0pt},
+        edge/.style={thick, black}
+    ]
+
+        % ==========================================
+        % TREE STRUCTURE (Coordinates Layout)
+        % ==========================================
+        
+        % Level 0: Root
+        \node[black node] (n240) at (0,0) {240};
+
+        % Level 1
+        \node[red node] (n150) at (-4.5,-1.2) {150};
+        \node[black node] (n390) at (4.5,-1.2) {390};
+
+        % Level 2
+        \node[black node] (n120) at (-6.5,-2.5) {120};
+        \node[black node] (n190) at (-2.5,-2.5) {190};
+        \node[red node] (n280) at (3.0,-2.5) {280};
+        \node[black node] (n450) at (6.0,-2.5) {450};
+
+        % Level 3
+        \node[red node] (n80) at (-7.5,-3.8) {80};
+        \node[black node] (n140) at (-5.5,-3.8) {140};
+        \node[black node] (n170) at (-3.5,-3.8) {170};
+        \node[red node] (n210) at (-1.5,-3.8) {210};
+        
+        \node[black node] (n260) at (2.0,-3.8) {260};
+        \node[black node] (n360) at (4.0,-3.8) {360};
+
+        % Level 4
+        \node[black node] (n50) at (-8.2,-5.1) {50};
+        \node[black node] (n100) at (-6.8,-5.1) {100};
+        \node[black node] (n200) at (-2.2,-5.1) {200};
+        \node[black node] (n220) at (-0.8,-5.1) {220};
+
+        % Level 5 (Deepest key)
+        \node[red node] (n195) at (-2.7,-6.4) {195};
+
+        % ==========================================
+        % NIL LEAF NODES (Rectangles)
+        % ==========================================
+        % Under 50
+        \node[nil leaf] (L50_1) at (-8.6,-6.0) {};
+        \node[nil leaf] (L50_2) at (-7.8,-6.0) {};
+        % Under 100
+        \node[nil leaf] (L100_1) at (-7.2,-6.0) {};
+        \node[nil leaf] (L100_2) at (-6.4,-6.0) {};
+        % Under 140
+        \node[nil leaf] (L140_1) at (-5.9,-4.8) {};
+        \node[nil leaf] (L140_2) at (-5.1,-4.8) {};
+        % Under 170
+        \node[nil leaf] (L170_1) at (-3.9,-4.8) {};
+        \node[nil leaf] (L170_2) at (-3.1,-4.8) {};
+        % Under 195
+        \node[nil leaf] (L195_1) at (-3.1,-7.3) {};
+        \node[nil leaf] (L195_2) at (-2.3,-7.3) {};
+        % Under 220
+        \node[nil leaf] (L220_1) at (-1.2,-6.0) {};
+        \node[nil leaf] (L220_2) at (-0.4,-6.0) {};
+        % Under 260
+        \node[nil leaf] (L260_1) at (1.6,-4.8) {};
+        \node[nil leaf] (L260_2) at (2.4,-4.8) {};
+        % Under 360
+        \node[nil leaf] (L360_1) at (3.6,-4.8) {};
+        \node[nil leaf] (L360_2) at (4.4,-4.8) {};
+        % Under 450
+        \node[nil leaf] (L450_1) at (5.6,-3.5) {};
+        \node[nil leaf] (L450_2) at (6.4,-3.5) {};
+
+        % ==========================================
+        % EDGES / CONNECTIONS
+        % ==========================================
+        \draw[edge] (n240) -- (n150); \draw[edge] (n240) -- (n390);
+        
+        \draw[edge] (n150) -- (n120); \draw[edge] (n150) -- (n190);
+        \draw[edge] (n390) -- (n280); \draw[edge] (n390) -- (n450);
+        
+        \draw[edge] (n120) -- (n80);  \draw[edge] (n120) -- (n140);
+        \draw[edge] (n190) -- (n170); \draw[edge] (n190) -- (n210);
+        \draw[edge] (n280) -- (n260); \draw[edge] (n280) -- (n360);
+        
+        \draw[edge] (n80) -- (n50);   \draw[edge] (n80) -- (n100);
+        \draw[edge] (n210) -- (n200); \draw[edge] (n210) -- (n220);
+        
+        \draw[edge] (n200) -- (n195);
+
+        % Edges to NIL Leaves
+        \draw[edge] (n50) -- (L50_1);   \draw[edge] (n50) -- (L50_2);
+        \draw[edge] (n100) -- (L100_1); \draw[edge] (n100) -- (L100_2);
+        \draw[edge] (n140) -- (L140_1); \draw[edge] (n140) -- (L140_2);
+        \draw[edge] (n170) -- (L170_1); \draw[edge] (n170) -- (L170_2);
+        \draw[edge] (n195) -- (L195_1); \draw[edge] (n195) -- (L195_2);
+        \draw[edge] (n220) -- (L220_1); \draw[edge] (n220) -- (L220_2);
+        \draw[edge] (n260) -- (L260_1); \draw[edge] (n260) -- (L260_2);
+        \draw[edge] (n360) -- (L360_1); \draw[edge] (n360) -- (L360_2);
+        \draw[edge] (n450) -- (L450_1); \draw[edge] (n450) -- (L450_2);
+
+    \end{tikzpicture}
+\end{center}
+
+\mk{20} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2020-21
+\item Mr.\ X has proposed a new algorithm for insertion to a Red-Black tree, where the color of the newly inserted node is set to black by default. Discuss the advantages and disadvantages of this algorithm over the traditional algorithm followed for insertion to a Red-Black tree.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Insert 11 into the Red-Black tree shown in the figure. You have to show the intermediate steps. The red and black nodes are indicated by `r' and `b', respectively.
+\begin{center}
+  \begin{tikzpicture}[
+        every node/.style={circle, draw=black, thick, minimum size=0.7cm, font=\bfseries, inner sep=0pt},
+        % Red node styling (Red background with white text)
+        red node/.style={fill=red, text=white, draw=red!70!black},
+        % Black node styling (Black background with white text)
+        black node/.style={fill=black, text=white, draw=black},
+        edge/.style={thick, black}
+    ]
+
+        % ==========================================
+        % TREE STRUCTURE
+        % ==========================================
+        % Level 0: Root
+        \node[black node] (n23) at (0,0) {23};
+
+        % Level 1
+        \node[red node] (n8) at (-1.8,-1.2) {8};
+        \node[black node] (n27) at (1.8,-1.2) {27};
+
+        % Level 2
+        \node[black node] (n6) at (-2.8,-2.4) {6};
+        \node[black node] (n15) at (-0.8,-2.4) {15};
+        \node[red node] (n29) at (2.8,-2.4) {29};
+
+        % Level 3
+        \node[red node] (n13) at (-1.5,-3.6) {13};
+        \node[red node] (n19) at (-0.1,-3.6) {19};
+
+        % ==========================================
+        % EDGES / CONNECTIONS
+        % ==========================================
+        \draw[edge] (n23) -- (n8);
+        \draw[edge] (n23) -- (n27);
+
+        \draw[edge] (n8) -- (n6);
+        \draw[edge] (n8) -- (n15);
+        \draw[edge] (n27) -- (n29);
+
+        \draw[edge] (n15) -- (n13);
+        \draw[edge] (n15) -- (n19);
+
+    \end{tikzpicture}
+\end{center}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item When we insert a node into a red-black tree, we initially set the color of the new node to red. Why don't we choose to set the color to black?
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item Would inserting a new node to a red-black tree and then immediately deleting it change the tree? Explain with an example.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item What is the ratio between the lengths of the longest path and the shortest path in a red-black tree?
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item \textit{[Red-Black tree given]} Insert 11 into the given Red-Black tree, showing each operation (red nodes marked R, black nodes marked B). \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  B/.style={fill=black, text=white},
+  R/.style={fill=white, draw=red, text=red},
+]
+  \node[B] (23) at (4,0)   {23};
+  \node[R] (8)  at (2,-2)  {8};
+  \node[B] (27) at (6,-2)  {27};
+  \node[B] (6)  at (0,-4)  {6};
+  \node[B] (15) at (3.5,-4){15};
+  \node[R] (29) at (7,-4)  {29};
+  \node[R] (13) at (2.5,-6){13};
+  \node[R] (19) at (4.5,-6){19};
+
+  \draw (23)--(8); \draw (23)--(27);
+  \draw (8)--(6);  \draw (8)--(15);
+  \draw (27)--(29);
+  \draw (15)--(13); \draw (15)--(19);
+\end{tikzpicture}
+\end{center}
+
+
+\item Show that the height of a red-black tree $T$ storing $n$ items is $O(\log n)$. Explain, with examples, the three cases that may arise for inserting a node in a red-black tree. \mk{15}
+\yr{CSE 203 | L-2/T-1 | 2015--16}
+
+
+\item Write the properties of a red-black tree. Show that the height of a red-black tree $T$ storing $n$ items is $O(\log n)$. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2014--15}
+
+\item Explain, with examples, the four cases that may arise for deleting a node from a red-black tree. \mk{15}
+\yr{CSE 203 | L-2/T-1 | 2014--15}
+
+
+\item Write the properties of a red-black tree. Show the red-black trees that result after successively inserting the keys $51, 46, 41, 22, 29, 18$ into an initially empty red-black tree. \mk{15}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+\item Write down the properties of a red-black tree. With an example, show the insertion and deletion operations and their costs in a red-black tree. \mk{5+15=20}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cB}{Splay Trees}
+\label{sub:s2-splay}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Complete the following operations on the given splay tree: (i) Insert 30, (ii) Delete 35. Show all the steps.
+\begin{center}
+     \begin{tikzpicture}[
+        scale=1.4,
+        every node/.style={circle, draw=black, ultra thick, minimum size=0.8cm, font=\bfseries},
+        thick
+    ]
+        
+        % ট্রি স্ট্রাকচার অনুযায়ী নোড পজিশনিং
+        \node (13) at (0,4) {13}
+            child {node {7}}
+            child {node {26}
+                child {node {17}}
+                child {node {45}
+                    child {node {40}
+                        child {node {35}}
+                        child[missing] % ডান পাশের চাইল্ড খালি রাখার জন্য
+                    }
+                    child[missing] % ডান পাশের চাইল্ড খালি রাখার জন্য
+                }
+            };
+
+    \end{tikzpicture}
+\end{center}
+
+\mk{13} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+\item How is the concept of potential function used to design a splay tree? Explain.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2023-24
+\item What are the splay-step operations to make a binary search tree a balanced one?
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2022-23
+\item Define the rank of a node of a splay tree. Prove that the change in potential of a splay tree not resulting from any splay after an insertion operation is $O(\log n)$, where the splay tree had $n$ nodes before the insertion operation.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item (i)For the splay tree of the following figure, show the resulting tree after successively accessing the keys 3 and 9 in the splay tree.
+\\(ii)For the splay tree of the following figure, show the resulting tree after deleting key 6 after doing operations in (i) (i.e., accessing the keys 3 and 9).
+
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  level 1/.style={sibling distance=5cm},
+  level 2/.style={sibling distance=3cm},
+  level 3/.style={sibling distance=2cm},
+  level 4/.style={sibling distance=1.5cm},
+]
+  \node {10}
+    child { node {4}
+      child { node {2}
+        child { node {1} }
+        child { node {3} }}
+      child { node {6}
+        child { node {5} }
+        child { node {8}
+          child { node {7} }
+          child { node {9} }}}}
+    child { node {11}
+      child[missing]{}
+      child { node {12}
+        child[missing]{}
+        child { node {13} }}};
+\end{tikzpicture}
+\end{center}
+
+
+
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+
+\item \textit{[BST given]} Perform \textsc{Splay}(1) on the given binary search tree, showing all intermediate steps and operations performed at each node. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\begin{center}
+  \begin{tikzpicture}[
+  every node/.style={circle, draw, minimum size=0.9cm, font=\bfseries},
+  level distance=1.5cm,
+]
+  \node {5} child { node {4}
+    child { node {3}
+      child { node {2}
+        child { node {1} }}}};
+\end{tikzpicture}
+\end{center}
+
+\item What is the main objective of splay trees? Do splay trees explicitly try to balance the height? \mk{5}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+%% Q — 2020-21
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cB}{Skip Lists}
+\label{sub:s2-skip}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Prove that the expected space usage of a skip list having $n$ items is $O(n)$. Perform the following operations on the given skip list sequentially: (i) Insert key $= 17$ where $i = 2$, (ii) Insert key $= 25$ where $i = 4$, (iii) Delete key $= 25$. Show all the steps and the resulting skip lists.
+\begin{center}
+    \begin{tikzpicture}[
+        % Elegantly scaled grid distances
+        xscale=1.8, yscale=1.2,
+        % Clean, modern styling for the rectangular nodes
+        node style/.style={
+            rectangle, 
+            draw=black!80, 
+            thick, 
+            fill=white,
+            minimum width=1.2cm, 
+            minimum height=0.65cm, 
+            inner sep=2pt,
+            rounded corners=1pt % Adds a subtle professional touch
+        },
+        % Style for row labels
+        label style/.style={     
+            text=black!70,
+            anchor=east
+        },
+        % Style for straight connection lines
+        edge style/.style={
+            thick, 
+            black!80
+        }
+    ]
+
+        % ==========================================
+        % HEADER INFO
+        % ==========================================
+        \node at (2.5, 3.8) {$h=3, n=4$};
+
+        % ==========================================
+        % ROW S3 (Top Row)
+        % ==========================================
+        \node[label style] at (-0.6, 3.0) {S3};
+        \node[node style] (inf_neg_3) at (0, 3.0) {-inf};
+        \node[node style] (inf_pos_3) at (5, 3.0) {+inf};
+        
+        \draw[edge style] (inf_neg_3) -- (inf_pos_3);
+        
+        % Elegant Arrow pointing to S3's -inf
+        \draw[thick, <-, >=Stealth, draw=black!80] (inf_neg_3.north) -- ++(0, 0.5) 
+            node[above] {S};
+
+        % ==========================================
+        % ROW S2
+        % ==========================================
+        \node[label style] at (-0.6, 2.0) {S2};
+        \node[node style] (inf_neg_2) at (0, 2.0) {-inf};
+        \node[node style] (n15_2)     at (2, 2.0) {15};
+        \node[node style] (inf_pos_2) at (5, 2.0) {+inf};
+        
+        \draw[edge style] (inf_neg_2) -- (n15_2);
+        \draw[edge style] (n15_2) -- (inf_pos_2);
+
+        % ==========================================
+        % ROW S1
+        % ==========================================
+        \node[label style] at (-0.6, 1.0) {S1};
+        \node[node style] (inf_neg_1) at (0, 1.0) {-inf};
+        \node[node style] (n15_1)     at (2, 1.0) {15};
+        \node[node style] (n23_1)     at (3, 1.0) {23};
+        \node[node style] (inf_pos_1) at (5, 1.0) {+inf};
+        
+        \draw[edge style] (inf_neg_1) -- (n15_1);
+        \draw[edge style] (n15_1) -- (n23_1);
+        \draw[edge style] (n23_1) -- (inf_pos_1);
+
+        % ==========================================
+        % ROW S0 (Bottom Row - Fully Spaced out)
+        % ==========================================
+        \node[label style] at (-0.6, 0.0) {S0};
+        \node[node style] (inf_neg_0) at (0, 0.0) {-inf};
+        \node[node style] (n10_0)     at (1, 0.0) {10};
+        \node[node style] (n15_0)     at (2, 0.0) {15};
+        \node[node style] (n23_0)     at (3, 0.0) {23};
+        \node[node style] (n36_0)     at (4, 0.0) {36};
+        \node[node style] (inf_pos_0) at (5, 0.0) {+inf};
+        
+        \draw[edge style] (inf_neg_0) -- (n10_0);
+        \draw[edge style] (n10_0) -- (n15_0);
+        \draw[edge style] (n15_0) -- (n23_0);
+        \draw[edge style] (n23_0) -- (n36_0);
+        \draw[edge style] (n36_0) -- (inf_pos_0);
+
+    \end{tikzpicture}
+\end{center}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+\item In a skip list with $n$ entries,
+\begin{enumerate}
+\item Prove that the expected space used is $O(n)$.
+\item Prove that the expected search and insertion time is $O(\log n)$.
+\end{enumerate}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item In a skip list with $n$ entries, prove that (i) the expected space used is $O(n)$, and (ii) the expected search and insertion time is $O(\log n)$. \mk{15}
+\yr{CSE 207 | 2018--19}
+
+\item Show that the expected space used by a skip list with $n$ entries is $O(n)$ and the expected height of a skip list is $O(\log n)$. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2015--16}
+
+\item Compare linked lists and skip lists. Show that the expected space used by a skip list with $n$ entries is $O(n)$. Draw the skip-list for the following table that shows the keys and consecutive numbers of heads found in a coin toss while inserting the keys:
+...
+\mk{15}
+\yr{CSE 203 | L-2/T-1 | 2014--15}
+
+\item Write algorithms for the search, insertion and deletion operations of skip lists. Show that the expected search, insertion and deletion time is $O(\log n)$ in a skip list with $n$ entries. Also show that the expected space used is $O(n)$. \mk{18}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+
+\item Compare linked lists and skip lists. \mk{5}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+\item Draw the skip-list for the following table that shows the keys and consecutive numbers of heads found in a coin toss while inserting the keys in a probabilistic skip-list:
+\begin{center}
+\begin{tabular}{lcccccccccc}
+\toprule
+Key & 3 & 6 & 7 & 9 & 12 & 17 & 19 & 21 & 25 & 26 \\
+No.\ of consecutive heads & 1 & 4 & 1 & 2 & 1 & 2 & 1 & 1 & 3 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Perform the following operations on the skip-list and show the procedures:
+\begin{enumerate}
+  \item Search 21
+  \item Insert 22 with 3 consecutive heads
+  \item Delete 19
+  \item Search 18
+\end{enumerate}
+\mk{7+8=15}
+\yr{CSE 203 | L-2/T-1 | 2011--12}
+
+\item Show that the expected running time of searching in a probabilistic skip-list is $O(\log n)$. \mk{6}
+\yr{CSE 203 | L-2/T-1 | 2011--12}
+
+
+%% Q — 2020-21
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cB}{Advanced Heaps (Binomial Heaps)}
+\label{sub:s2-binheap}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Prove that there are $\binom{k}{i}$ nodes at depth $i$ in a binomial heap $B_k$ of order $k$.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+%% Q — 2024-25
+\item Draw the maximally damaged tree resulting from $B_6$.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+%% Q — 2024-25
+\item Let $H_1$ and $H_2$ be binomial heaps. Suppose the highest order tree in heap $H_1$ is of order $m$, and the highest order tree in $H_2$ has degree $m+1$. Prove or disprove: ``$H_2$ must have more nodes than $H_1$, regardless of how many trees are present in $H_1$ and $H_2$.''
+\mk{7} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Prove the following properties for a binomial tree $B_k$ of order $k$:
+\begin{enumerate}
+  \item The number of nodes is $2^k$.
+  \item The height is $k$.
+  \item The degree of root is $k$.
+\end{enumerate}
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2023-24
+\item Perform union of two binomial min heaps with six and seven nodes respectively. You can use any valid values in the nodes.
+\mk{10} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Answer the following questions for two max priority queues \texttt{pq1} and \texttt{pq2} implemented using binomial heap. Both are initially empty.
+\begin{enumerate}
+  \item Insert $-5, 20, 4, 19, 1, -3, 6, 12, 3, 2, 18$ in \texttt{pq1} and $25, 21, 10, 13, 17, 9, 8, 11, 7$ in \texttt{pq2}. Draw the two binomial heaps after the insertion.
+  \item Meld \texttt{pq1} and \texttt{pq2} and then decrease the key of node 20 to $-20$ from the melded priority queue. Show the necessary steps.
+  \item What will be the total actual cost in credits if we call the Extract-Max operation two times consecutively on the resultant priority queue? Assume that unlinking a node from its children takes one credit, two node addition operations take one credit, an insertion of a node takes one credit, and a two-key comparison takes one credit. All other operations take zero credit.
+\end{enumerate}
+\mk{23} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2018-19
+\item Prove that in a binomial heap, the amortized cost of INSERT is $O(1)$ and the worst-case cost of EXTRACT-MIN and DECREASE-KEY is $O(\log n)$.
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+
+\item Suppose there are two priority queues named pq1 and pq2. The pq1 is a max priority queue and pq2 is a min priority queue. Both the priority queues are implemented using the binomial heap data structure. The priority queue pq1 was initially empty, but then the following numbers were inserted in this order: 210, 201, 220, 202, 221, 205, and 209. The internal heap representation of the priority queue pq2 is show in figure 1. Now answer the following questions:
+
+\vspace{0.5cm}
+
+% =========================================================================
+% TIKZ BINOMIAL HEAP DIAGRAM SECTION
+% =========================================================================
+\begin{center}
+    \begin{tikzpicture}[
+        scale=1, transform shape, % Adjusted globally to ensure perfect A4 horizontal fit
+        vertex/.style={
+            circle, 
+            draw=black, 
+            thick, 
+            fill=white,
+            minimum size=0.65cm, 
+            inner sep=0pt
+        },
+        edge/.style={
+            thick, 
+            black!80
+        },
+        root edge/.style={
+            thick, 
+            black, 
+            <-
+        },
+        sibling distance=1.1cm,
+        level distance=1.1cm
+    ]
+
+        % -----------------------------------------------------------------
+        % TREE 1 (Root: 7) - The largest binomial component B_4
+        % -----------------------------------------------------------------
+        \node[vertex] (r7) at (0,0) {7};
+        
+        % Children of 7
+        \node[vertex] (n14) at (-3.5,-1.2) {14};
+        \node[vertex] (n80) at (-1.3,-1.2) {80};
+        \node[vertex] (n55) at (0.2,-1.2) {55};
+        \node[vertex] (n24) at (1.5,-1.2) {24};
+        
+        \draw[edge] (r7) -- (n14);
+        \draw[edge] (r7) -- (n80);
+        \draw[edge] (r7) -- (n55);
+        \draw[edge] (r7) -- (n24);
+
+        % Children of 14
+        \node[vertex] (n22) at (-4.7,-2.4) {22};
+        \node[vertex] (n25) at (-3.5,-2.4) {25};
+        \node[vertex] (n17) at (-2.3,-2.4) {17};
+        
+        \draw[edge] (n14) -- (n22);
+        \draw[edge] (n14) -- (n25);
+        \draw[edge] (n14) -- (n17);
+
+        % Children of 22
+        \node[vertex] (n115) at (-5.3,-3.6) {115};
+        \node[vertex] (n77)  at (-4.2,-3.6) {77};
+        
+        \draw[edge] (n22) -- (n115);
+        \draw[edge] (n22) -- (n77);
+        
+        % Child of 115
+        \node[vertex] (n183) at (-5.3,-4.8) {183};
+        \draw[edge] (n115) -- (n183);
+
+        % Child of 25
+        \node[vertex] (n128) at (-3.5,-3.6) {128};
+        \draw[edge] (n25) -- (n128);
+
+        % Children of 80
+        \node[vertex] (n82_1)  at (-1.8,-2.4) {82};
+        \node[vertex] (n118)   at (-0.8,-2.4) {118};
+        
+        \draw[edge] (n80) -- (n82_1);
+        \draw[edge] (n80) -- (n118);
+        
+        % Child of 82 (Left branch under 80)
+        \node[vertex] (n188) at (-1.8,-3.6) {188};
+        \draw[edge] (n82_1) -- (n188);
+
+        % Child of 55
+        \node[vertex] (n82_2) at (0.2,-2.4) {82};
+        \draw[edge] (n55) -- (n82_2);
+
+        % -----------------------------------------------------------------
+        % TREE 2 (Root: 11) - Binomial component B_3
+        % -----------------------------------------------------------------
+        \node[vertex] (r11) at (4.5,0) {11};
+        
+        % Children of 11
+        \node[vertex] (n35_1) at (3.1,-1.2) {35};
+        \node[vertex] (n21)   at (4.5,-1.2) {21};
+        \node[vertex] (n36)   at (5.7,-1.2) {36};
+        
+        \draw[edge] (r11) -- (n35_1);
+        \draw[edge] (r11) -- (n21);
+        \draw[edge] (r11) -- (n36);
+
+        % Children of 35
+        \node[vertex] (n176) at (2.5,-2.4) {176};
+        \node[vertex] (n108) at (3.7,-2.4) {108};
+        
+        \draw[edge] (n35_1) -- (n176);
+        \draw[edge] (n35_1) -- (n108);
+        
+        % Child of 176
+        \node[vertex] (n189) at (2.5,-3.6) {189};
+        \draw[edge] (n176) -- (n189);
+
+        % Child of 21
+        \node[vertex] (n38) at (4.5,-2.4) {38};
+        \draw[edge] (n21) -- (n38);
+
+        % -----------------------------------------------------------------
+        % TREE 3 (Root: 35) - Binomial component B_1
+        % -----------------------------------------------------------------
+        \node[vertex] (r35_2) at (7.5,0) {35};
+        \node[vertex] (n72)   at (7.5,-1.2) {72};
+        
+        \draw[edge] (r35_2) -- (n72);
+
+        % -----------------------------------------------------------------
+        % ROOT LIST POINTERS (Horizontal Linked List)
+        % -----------------------------------------------------------------
+        \draw[root edge] (r7) -- (r11);
+        \draw[root edge] (r11) -- (r35_2);
+
+    \end{tikzpicture}
+  \end{center}
+\begin{enumerate}
+\item Formulate an algorithm or pseudocode that will convert a min priority queue to a max priority queue. The amortized running time of the algorithm has to be $O(n)$ where $n$ is the total length of the min priority queue. Note that the priority queues are implemented using the binomial heap data structure. Also, analyze the amortized running time of your proposed algorithm using the potential method.
+ 
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Apply your proposed algorithm on \texttt{pq2} to convert it to a max priority queue.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Apply the meld operation on \texttt{pq1} and \texttt{pq2} and store it to a new priority queue \texttt{pq3}. Show the internal heap representation of \texttt{pq3}. Note that you have to work with the updated \texttt{pq2}.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Determine the internal heap representation of \texttt{pq3} after executing extract-max operation three times on \texttt{pq3}.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Evaluate the total actual cost in credits of the extract-max operations in the previous question. Assume that unlinking a node from its children takes one credit, a node addition operation takes one credit, an insertion of a node takes one credit, and a comparison takes one credit.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+
+\item A friend of yours claims that it is possible to implement Find-Min operation in a Binomial Min Heap in $O(1)$ time using the idea of Fibonacci Min Heap. Justify his claim with proper explanation.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2020-21
+\item A binomial heap has 19 nodes. Find out the binomial trees this binomial heap has.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+
+\end{enumerate}
+%% Q — 2022-23
+\item Prove that there are $\binom{k}{i}$ nodes at depth $i$ in a binomial heap $B_k$ of order $k$.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item Show the binomial heap that results when the node $X$ with key 17 is deleted from the binomial heap shown in the Figure below. Show the intermediate steps.
+\begin{center}
+  \begin{tikzpicture}[
+        scale=0.85, transform shape,
+        >=stealth,
+        every node/.style={
+            circle,
+            draw=black,
+            ultra thick, 
+            minimum size=0.7cm,
+            inner sep=0pt,
+            font=\small,
+            thick
+        },
+        edge/.style={
+            thick,
+            black
+        },
+        label style/.style={
+            draw=none,
+            font=\large\bfseries,
+            above=2pt
+        }
+    ]
+        % ==========================================
+        % ROOT NODES (Main Backbone)
+        % ==========================================
+        \node (n3) at (5,2) {3};
+        \node[right=3.5cm of n3] (n23_r) {23};
+        
+        % Horizontal root connection
+        \draw[edge] (n3) -- (n23_r);
+
+        % Rightmost Branch under root 23
+        \node[below=1.0cm of n23_r] (n89) {89};
+        \draw[edge] (n23_r) -- (n89);
+
+        % ==========================================
+        % CHILDREN OF ROOT '3'
+        % ==========================================
+        \node[below left=1.0cm and 3.5cm of n3] (n15) {15};
+        \node[below left=1.2cm and 0.8cm of n3] (n11) {11};
+        \node[below=1.2cm of n3] (n28) {28};
+        \node[below right=1.2cm and 0.4cm of n3] (n33) {33};
+
+        \draw[edge] (n3) -- (n15);
+        \draw[edge] (n3) -- (n11);
+        \draw[edge] (n3) -- (n28);
+        \draw[edge] (n3) -- (n33);
+
+        % ==========================================
+        % SUBTREE UNDER NODE '11' & '28'
+        % ==========================================
+        \node[below left=0.9cm and 0.5cm of n11] (n19) {19};
+        \node[below right=0.9cm and 0.2cm of n11] (n16) {16};
+        \draw[edge] (n11) -- (n19);
+        \draw[edge] (n11) -- (n16);
+
+        \node[below=0.9cm of n19] (n20) {20};
+        \draw[edge] (n19) -- (n20);
+
+        \node[below=0.9cm of n28] (n30) {30};
+        \draw[edge] (n28) -- (n30);
+
+        % ==========================================
+        % SUBTREE UNDER NODE '15'
+        % ==========================================
+        % Node 17 has a label 'X' on top
+        \node[below left=1.0cm and 1.2cm of n15, label={[label style]above:X}] (n17) {17};
+        \node[below=1.2cm of n15] (n42) {42};
+        \node[below right=1.0cm and 0.4cm of n15] (n23_l) {23};
+
+        \draw[edge] (n15) -- (n17);
+        \draw[edge] (n15) -- (n42);
+        \draw[edge] (n15) -- (n23_l);
+
+        % Under 42
+        \node[below=0.9cm of n42] (n45) {45};
+        \draw[edge] (n42) -- (n45);
+
+        % ==========================================
+        % SUBTREE UNDER NODE '17'
+        % ==========================================
+        \node[below left=1.0cm and 0.6cm of n17] (n21) {21};
+        \node[below=1.1cm of n17] (n18) {18};
+        \draw[edge] (n17) -- (n21);
+        \draw[edge] (n17) -- (n18);
+
+        % Bottom-most left node
+        \node[below=0.9cm of n21] (n25) {25};
+        \draw[edge] (n21) -- (n25);
+
+    \end{tikzpicture}
+\end{center}
+
+\mk{17} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+
+%% Q — 2022-23
+\item Mention the amortized running times of the following operations for binomial and Fibonacci heaps:
+\begin{enumerate}
+  \item Union
+  \item Find min
+  \item Extract min
+  \item Decrease key
+\end{enumerate}
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2019--20, 2018--19}
+
+
+%% Q — 2021-22
+\item Prove that there are $\binom{k}{i}$ nodes at depth $i$ in a binomial heap $B_k$ of order $k$.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+
+
+\item Write down the running times of the following operations for both Binomial heap and Fibonacci heap: (i) Insert key, (ii) Find min, (iii) Extract min, (iv) Union of two heaps, (v) Decrease key. A friend claims to have designed a mergeable heap with $O(1)$ time for all operations above. Would you believe it? Justify. \mk{6+6}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+\item Prove that there are $\binom{k}{i}$ nodes at depth $i$ in a binomial tree $B_k$. \mk{5}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cB}{Advanced Heaps (Fibonacci Heaps)}
+\label{sub:s2-fibheap}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Show the Fibonacci heap that results when the minimum node (5) is deleted from the given Fibonacci heap. Show the intermediate steps.
+\begin{center}
+      \begin{tikzpicture}[
+        scale=1.1,
+        every node/.style={circle, draw=black, ultra thick, minimum size=0.7cm, inner sep=0pt, font=\bfseries},
+        thick
+    ]
+
+        % --- Nodes Positioning ---
+        % Root list (Horizontal line elements)
+        \node (7)  at (0, 3) {7};
+        \node (24) at (2, 3) {24};
+        \node (23) at (4, 3) {23};
+        \node (17) at (5.8, 3) {17};
+        \node (5)  at (7.6, 3) {5};
+
+        % Tree under node 7
+        \node (30) at (0, 1.5) {30};
+
+        % Tree under node 24
+        \node (26) at (1.3, 1.5) {26};
+        \node (46) at (2.7, 1.5) {46};
+        \node (35) at (1.3, 0) {35};
+
+        % Tree under node 23
+        \node (51) at (4, 1.5) {51};
+
+        % Tree under node 5
+        \node (18) at (6.6, 1.5) {18};
+        \node (52) at (7.6, 1.5) {52};
+        \node (41) at (8.6, 1.5) {41};
+        \node (44) at (8.6, 0) {44};
+
+
+        % --- Edges (Connections) ---
+        % Horizontal dashed lines between root nodes
+        \draw[dashed, thick] (7)  -- (24);
+        \draw[dashed, thick] (24) -- (23);
+        \draw[dashed, thick] (23) -- (17);
+        \draw[dashed, thick] (17) -- (5);
+
+        % Vertical and angled child connections
+        \draw (7)  -- (30);
+        
+        \draw (24) -- (26);
+        \draw (24) -- (46);
+        \draw (26) -- (35);
+        
+        \draw (23) -- (51);
+        
+        \draw (5)  -- (18);
+        \draw (5)  -- (52);
+        \draw (5)  -- (41);
+        \draw (41) -- (44);
+
+
+        % --- "min" Pointer Annotation ---
+        % Text label for min
+        \node[draw=none, font=\bfseries\large] (min_text) at (7.6, 4.2) {min};
+        % Arrow pointing down to node 5
+        \draw[-{Stealth[scale=1.2]}, ultra thick] (min_text) -- (5.north);
+
+    \end{tikzpicture}
+\end{center}
+
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Illustrate step by step what happens if the Extract-Min operation is executed on the given Fibonacci heap (nodes with keys 6, 2, 1, 5, 3, 4, 7, 8, 9 where 1 is the minimum).
+
+\begin{center}
+     \begin{tikzpicture}[
+        scale=1.4,
+        % সাধারণ নোডের স্টাইল
+        normalnode/.style={circle, draw=black, thick, minimum size=0.6cm, inner sep=0pt, font=\bfseries},
+        % ধূসর রঙের শেডেড নোডের স্টাইল
+        shadednode/.style={circle, draw=black, fill=gray!50, thick, minimum size=0.6cm, inner sep=0pt, font=\bfseries},
+        thick
+    ]
+
+        % নোড পজিশনিং (স্থানাঙ্ক বা Coordinates নির্ধারণ)
+        \node[normalnode] (6) at (0,2) {6};
+        \node[normalnode] (2) at (1.5,2) {2};
+        \node[normalnode] (5) at (1.5,1) {5};
+        
+        \node[normalnode] (1) at (4,2) {1};
+        \node[normalnode] (3) at (2.5,1) {3};
+        \node[shadednode] (4) at (3.2,1) {4};
+        \node[shadednode] (7) at (4,1) {7};
+        \node[normalnode] (8) at (4,0) {8};
+        \node[normalnode] (9) at (4,-1) {9};
+
+ 
+        \draw[dashed] (6) -- (2);
+        \draw[dashed] (2) -- (1);
+        
+    
+        \draw (2) -- (5);
+        \draw (1) -- (3);
+        \draw (1) -- (4);
+        \draw (1) -- (7);
+        \draw (7) -- (8);
+        \draw (8) -- (9);
+
+        % "minimum" টেক্সট এবং নির্দেশক তীর (Pointer arrow)
+        \node[anchor=south] (min_text) at (4.5,2.4) {minimum};
+
+    \end{tikzpicture}
+\end{center}
+
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Recall the deletion operation of the Fibonacci Heap data structure. Professor Rahsut has proposed a variant of the deletion operation (RAHSUT-DELETE). For this variant:
+
+\begin{lstlisting}
+RAHSUT-DELETE(H, x)
+    if x == H.min
+        FIB-HEAP-EXTRACT-MIN(H)
+    else
+        y = x.p
+        if y != NIL
+            CUT(H, x, y) // cuts the link between x and its parent y, making x a root.
+            CASCADING-CUT(H, y) // recursively marks and cuts the parents if has to
+        add x's child to the root list of H
+        remove x from the root list of H
+\end{lstlisting}
+
+\begin{enumerate}
+  \item Construct a good upper bound on the actual time of RAHSUT-DELETE when $x$ is not \texttt{H.min}. Your bound should be in terms of \texttt{x.degree} and the number $c$ of calls to the CASCADING-CUT procedure.
+  \item Suppose we call RAHSUT-DELETE($H$, $x$) and let $H'$ be the Fibonacci heap that results. Assuming that node $x$ is not a root, find the potential of $H'$ in terms of \texttt{x.degree}, the number $c$ of calls to the CASCADING-CUT procedure, $\Phi(H)$, and $m(H)$.
+\end{enumerate}
+ 
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2020-21
+\item Describe how Fibonacci numbers are related to Fibonacci Heaps.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+
+%% Q — 2020-21
+\item Prove or disprove the claim that ``We do not mark the root node of any tree in the decrease key operation performed on a Fibonacci Min Heap, even if the root node loses a child''. Perform an extract-min operation on the Fibonacci Min Heap shown below. Show all the steps and the resulting Fibonacci Min Heap.
+\begin{center}
+      \begin{tikzpicture}[
+        scale=1.1, transform shape,
+        % Base style for standard single-circled nodes
+        node style/.style={
+            circle, 
+            draw=black, 
+            thick, 
+            fill=white,
+            minimum size=0.8cm, 
+            inner sep=0pt
+        },
+        % Style for marked/double-circled nodes
+        marked style/.style={
+            circle, 
+            draw=black, 
+            thick, 
+            double, 
+            double distance=1.5pt,
+            fill=white,
+            minimum size=0.8cm, 
+            inner sep=0pt
+        },
+        % Style for straight root and child connection lines
+        edge style/.style={
+            thick, 
+            black!90
+        }
+    ]
+
+        % ==========================================
+        % ROOT LIST (Horizontal Row)
+        % ==========================================
+        \node[node style] (n17)  at (0, 0) {17};
+        \node[node style] (n129) at (1.8, 0) {129};
+        \node[node style] (n90)  at (3.6, 0) {90};
+        \node[node style] (n110) at (5.1, 0) {110};
+
+        % Root list horizontal connections
+        \draw[edge style] (n17) -- (n129);
+        \draw[edge style] (n129) -- (n90);
+        \draw[edge style] (n90) -- (n110);
+
+        % Minimal pointer marker above node 17
+        \draw[thick, <-, >=Stealth] (n17.north) -- ++(0, 0.6) 
+            node[above] {min};
+
+        % ==========================================
+        % SUBTREE UNDER NODE 17
+        % ==========================================
+        \node[marked style] (n163) at (-2.0, -1.5) {163};
+        \node[node style]   (n350) at (-0.8, -1.5) {350};
+        \node[node style]   (n479) at (0.4, -1.5) {479};
+
+        \draw[edge style] (n17) -- (n163);
+        \draw[edge style] (n17) -- (n350);
+        \draw[edge style] (n17) -- (n479);
+
+        % Deepest child under 163 (Marked)
+        \node[marked style] (n382) at (-2.0, -3.0) {382};
+        \draw[edge style] (n163) -- (n382);
+
+        % Deepest child under 350
+        \node[node style] (n575) at (-0.8, -3.0) {575};
+        \draw[edge style] (n350) -- (n575);
+
+        % ==========================================
+        % SUBTREE UNDER NODE 129
+        % ==========================================
+        \node[node style] (n849) at (1.8, -1.5) {849};
+        \draw[edge style] (n129) -- (n849);
+
+    \end{tikzpicture}
+\end{center}
+Here double-circled nodes are marked and single-circled nodes are unmarked.
+
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+
+
+%% Q — 2022-23
+\item Mention the amortized running times of the following operations for binomial and Fibonacci heaps:
+\begin{enumerate}
+  \item Union
+  \item Find min
+  \item Extract min
+  \item Decrease key
+\end{enumerate}
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2019--20, 2018--19}
+ 
+
+%% Q — 2023-24
+\item In the context of Fibonacci heaps, draw the maximally damaged tree of degree 6 (i.e., $f_6$).
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2022-23
+\item Show the Fibonacci heap that results when the minimum node (3) is deleted from the Fibonacci heap shown in Figure for Q2. Show the intermediate steps.
+\begin{center}
+  \begin{tikzpicture}[
+    >=stealth,
+    node distance=1.5cm,
+    every node/.style={
+        circle,
+        draw=black,
+        minimum size=0.9cm,
+        inner sep=0pt,
+        font=\large
+    },
+    root/.style={
+        node distance=2cm,
+    },
+    min_pointer/.style={
+        draw=none,
+        minimum size=0.1cm,
+        inner sep=0pt
+    }
+]
+
+% Nodes for each binomial tree root
+\node[root] (n7) {7};
+\node[root, right=of n7] (n24) {24};
+\node[root, right=of n24] (n23) {23};
+\node[root, right=of n23] (n17) {17};
+\node[root, right=of n17] (n3) {3};
+
+% min marker
+\node[min_pointer, above=1.1cm of n3, label={[label distance=0.1cm, font=\large]above:min}] (minptr) {};
+\draw[->, ultra thick] (minptr.south) -- (n3.north);
+
+% Child nodes and trees for each root
+% Tree B1 (root 7)
+\node[below=of n7] (n30) {30};
+\draw (n7) -- (n30);
+
+% Tree B2 (root 24)
+\node[below left=1.2cm and 0.3cm of n24] (n26) {26};
+\node[below right=1.2cm and 0.3cm of n24] (n46) {46};
+\draw (n24) -- (n26);
+\draw (n24) -- (n46);
+\node[below=of n26] (n35) {35};
+\draw (n26) -- (n35);
+
+% Tree B0 (root 23) - no children
+% Tree B0 (root 17) - no children
+
+% Tree B3 (root 3) - specific order based on image
+\node[below left=1.3cm and 0.6cm of n3] (n18) {18};
+\node[below=1.6cm of n3] (n52) {52};
+\node[below right=1.3cm and 0.6cm of n3] (n41) {41};
+\draw (n3) -- (n18);
+\draw (n3) -- (n52);
+\draw (n3) -- (n41);
+
+\node[below=of n18] (n39) {39};
+\draw (n18) -- (n39);
+
+\node[below=of n41] (n44) {44};
+\draw (n41) -- (n44);
+
+% Sibling connections for root nodes
+\draw[dashed] (n7) -- (n24);
+\draw[dashed] (n24) -- (n23);
+\draw[dashed] (n23) -- (n17);
+\draw[dashed] (n17) -- (n3);
+
+\end{tikzpicture}
+\end{center}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+
+
+\item Write the algorithm for extracting the minimum key from a Fibonacci heap. \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item What is a maximally damaged tree in the context of Fibonacci heaps? Draw the maximally damaged tree of order 5 (degree of root is 5). \mk{4+6}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%% ══════════════════════════════════════════════════════════════════════
+%%  PART III — HASHING
+%% ══════════════════════════════════════════════════════════════════════
+\secdivider{Part III}{Hashing}{cC}{cC}{Hash Functions and Collision Resolution}
+\titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
+
+%% ── S3: Hashing ───────────────────────────────────────────────────────
+\section{S3 --- Hashing}
+\label{sec:S3}
+\markboth{S3 --- Hashing}{}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cC}{Hash Functions and Collision Resolution}
+\label{sub:s3-hash}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Consider a hash table of size 11 into which the keys 10, 22, 31, 4, 15, 28, 17, 88, and 59 are inserted in the given order using $h(k) = k \bmod 11$. For collision resolution, four different strategies are to be used independently: (i) separate chaining, (ii) linear probing with $h(k,i) = (h(k) + 2i) \bmod 11$, (iii) quadratic probing with $h(k,i) = (h(k) + 3 + i^2) \bmod 11$, and (iv) double hashing where $h_1(k) = k \bmod 11$ and $h_2(k) = 7 - (k \bmod 7)$. For each method, construct the final hash table and compute the total number of unsuccessful probes required during insertion.
+\mk{25} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Show that the expected time for a successful search in a hash table implemented using chaining is $O(1 + \alpha)$ where $\alpha$ is the load factor.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2023-24
+\item Explain how you can handle collisions in a hash table using the double hashing method.
+\mk{7} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Suppose you implemented a hashtable ADT that supports constant time insertion, 
+    deletion, and search. You used the hash function h1. On the contrary, your friend 
+    implemented another hashtable ADT using the hash function h2. The h1 hashes the 
+    keys 100, 130, 110, 150, 160, 200, 700, 800, 300 into 0, 3, 2, 0, 3, 1, 2, 5, and 8 
+    respectively. The h2 hashes the same keys into 1, 4, 7, 10, 13, 4, 7, 10, 13. You made 
+    the hashtable size 16 but your friend made it to 17. For collision resolution, you used 
+    the quadratic probing function $f(i) = 2 \times i^2 + 3$. But your friend used the double-
+    hashing technique and the second hash function was $h_2(x) = 19 - (x\%17)$. You 
+    inserted all the keys in the same order mentioned before to the hashtable. Then you 
+    deleted the key 100 and then searched for the key 150. But your hashtable 
+    implementation was showing ``key 150 not found''. Now, answer the following 
+    questions:
+\begin{enumerate}
+  \item Compare your implementation with your friend's by analyzing the total unsuccessful probes during insertion in both cases.
+  \item Identify the possible core reason for not finding the key 150 during the search and provide a solution.
+\end{enumerate}
+\mk{20} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+
+\item Suppose you implemented a hashtable ADT that supports constant time insertion, deletion, and search. You used the hash function $h1$. On the contrary, your friend suggested using the hash function $h2$. The $h1$ hashes the keys 100, 130, 110, 150, 160, 200, 700, 800, 300 into 0, 3, 2, 0, 3, 1, 2, 5, and 8, respectively. The $h2$ hashes the same keys into 1, 4, 7, 10, 13, 4, 7, 10, 13. You made the hashtable size 15 but your friend suggested making it 17. You used the quadratic probing function $f(i) = 3 \cdot i^2 + 5$ for collision resolution. Your friend suggested using the double-hashing technique. The second hash function is $h_2(x) = 11 - (x \% 17)$. You inserted all the keys in the order mentioned before to the hashtable. Then you deleted the key 110 and then searched for the key 700. But your hashtable implementation was showing ``key 700 not found''. Now, answer the following questions:
+\begin{enumerate}
+\item \textbf{[Comparing hash functions]} Compare two hash function implementations with quadratic probing vs.\ double hashing by analyzing the total unsuccessful probes during insertion in both cases.
+ 
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Comment on a friend's suggestion regarding the hash table size.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Identify the possible core reason for not finding a key during the search and provide a solution.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+\end{enumerate}
+
+%% Q — 2021-22
+\item Analyze the running time of a chaining hash table in both successful search and unsuccessful search cases.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2022-23
+\item You are given the task to implement the hash table data structure for a new programming language. You may use either separate chaining or open addressing. In open addressing, there are various options for probing. Explain your choice precisely with proper justification.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Assuming simple uniform hashing, prove that a successful search in separate chaining requires expected $O(1 + \alpha)$ work, where $\alpha$ is the load factor.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item Suppose you have invited $N$ people to a dinner, and you asked someone to enter their arrival times into a hash table. Assume that exactly one guest can enter the dinner hall at a particular time. Assuming separate chaining, briefly describe how you can achieve $1 + \log \alpha$ expected time for an unsuccessful search, where $\alpha$ is the load factor.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item Consider successively inserting the keys 10, 22, 31, 4, 15, 28, 16, 37 and 59 into a hash table of size $m = 11$ with hash function $h(k) = k \bmod m$. Illustrate the resulting hash tables after inserting these keys using (i) linear probing, and (ii) quadratic probing. You do not need to show the intermediate steps, just show the hash table after inserting all the elements.
+ 
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item Assuming simple uniform hashing, prove that an unsuccessful search in separate chaining takes expected $O(1 + \alpha)$ work, where $\alpha$ is the load factor.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item Quadratic probing does not necessarily probe all locations in hash tables. Do you agree with this statement? Justify your answer.
+\mk{6} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item Consider successively inserting the keys 14, 3, 29, 3, 19, 16, 35, and 2 into a hash table of size $m = 11$ with hash function $h(k) = k \bmod m$. Illustrate the resulting hash table after inserting these keys using quadratic probing. You do not need to show the intermediate steps, just show the hash table after inserting all the elements.
+ 
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+
+\item Assuming simple uniform hashing, prove that an unsuccessful search in separate chaining takes expected $O(1 + \alpha)$ work, where $\alpha$ is the load factor. \mk{12}
+\yr{CSE 207 | 2018--19}
+
+
+\item Quadratic probing does not necessarily probe all locations in a hash table --- do you agree? Justify your answer. \mk{6}
+\yr{CSE 207 | 2018--19}
+
+\item Consider successively inserting the keys $14, 3, 29, 3, 19, 16, 35, 2$ into a hash table of size $m = 11$ with hash function $h(k) = k \bmod m$. Illustrate the resulting hash table using quadratic probing. \mk{12}
+\yr{CSE 207 | 2018--19}
+
+\item Under simple uniform hashing, what is the expected number of items that may collide with an element $x$ in a hash table with separate chaining, given $m$ chains and $n$ items? \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item ``Quadratic probing does not necessarily probe all locations in the hash table'' --- prove or disprove. Briefly discuss the concept of perfect hashing. \mk{5+5}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Assuming simple uniform hashing, prove that a successful search in separate chaining takes expected $O(1 + \alpha)$ work, where $\alpha$ is the load factor. \mk{16}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+
+\item Consider inserting the keys $14, 3, 29, 25, 19, 16, 35, 2$ into a hash table of size $m = 11$ with hash function $h(k) = k \bmod m$. Illustrate the result using quadratic probing. \mk{6}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+
+\item Prove that the first $\lceil m/2 \rceil$ probes in quadratic probing are distinct given $m$ is a prime number. What is the major advantage of double hashing over quadratic probing? \mk{8+3}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item Explain `Chaining' and `Open Addressing' methods for solving the problem of collisions in a hash table. Explain the three commonly used techniques to compute the probe sequences required for open addressing. \mk{15}
+\yr{CSE 203 | L-2/T-1 | 2015--16}
+
+\item What makes a good hash function? Explain the three commonly used techniques to compute the probe sequences required for open addressing in a hash table. \mk{15}
+\yr{CSE 203 | L-2/T-1 | 2014--15}
+
+\item Draw the 11-item hash table that results from using the hash function $h(i) = (2i + 5) \bmod 11$ to hash the keys $12, 44, 13, 88, 23, 94, 11, 39, 20, 16, 5$, assuming collisions are handled by double hashing using a secondary hash function $h'(k) = 7 - (k \bmod 7)$. \mk{12}
+\yr{CSE 203 | L-2/T-1 | 2013--14}
+
+\item Write pseudocode for finding a key, inserting a key, and deleting a key in a hash table using quadratic probing. Explain your method with an example. \mk{12}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+\item Prove that in a hash table in which collisions are resolved by chaining, a successful search takes average-case time $\Theta(1 + \alpha)$, under the assumption of uniform hashing, where $\alpha$ is the load factor. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+\item Insert the keys $18, 41, 22, 44, 59, 32, 31, 73$ into a hash table of size 13 using double hashing with
+\[ h_1(k) = k \bmod 13, \qquad h_2(k) = 8 - (k \bmod 8). \]
+Draw the resulting hash table. \mk{13}
+\yr{CSE 203 | L-2/T-1 | 2012--13}
+
+\item Consider inserting the keys $18, 41, 22, 44, 59, 32, 31, 73$ into a hash table of length $m = 13$ using double hashing with
+\[ h_1(k) = k \bmod 13, \qquad h_2(k) = 8 - (k \bmod 8). \]
+Draw the resulting hash table. \mk{10}
+\yr{CSE 203 | L-2/T-1 | 2011--12}
+
+
+\item What are the properties of a good hash function? \mk{4}
+\yr{CSE 203 | L-2/T-1 | 2011--12}
+
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%% ══════════════════════════════════════════════════════════════════════
+%%  PART IV — NP-COMPLETENESS
+%% ══════════════════════════════════════════════════════════════════════
+\secdivider{Part IV}{NP-Completeness}{cD}{cD}{P vs NP Classes, Reductions, NP-hard and NP-complete Problems}
+\titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
+
+%% ── S4: NP-Completeness ───────────────────────────────────────────────
+\section{S4 --- NP-Completeness}
+\label{sec:S4}
+\markboth{S4 --- NP-Completeness}{}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cD}{P vs NP Classes}
+\label{sub:s4-pvsnp}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Prove that $P = NP \Rightarrow NP = \text{co-}NP$.
+\mk{12} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+%% Q — 2024-25
+\item Prove or disprove that $P = NP \cap \text{co-}NP$.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+%% Q — 2024-25
+\item ``It is possible that $P \neq NP$, yet $NP = \text{co-}NP$.'' Do you agree with this statement? Justify your answer.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Define the classes of problems P, NP, and NP-complete. Draw a Venn diagram showing the widely believed relationship among these classes.
+\mk{9} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Differentiate among NP, NP-hard, and NP-complete classes of problems.
+\mk{6} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2023-24
+\item Using an example, show that if a problem is in NP, the complement of that problem is in co-NP. Draw the general consensus regarding P, NP and co-NP in a Venn diagram.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2022-23
+\item Suppose $X \in \text{NP-complete}$. Prove that $X \in P$ if and only if $P = NP$.
+\mk{8} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item Prove that $P = NP \Rightarrow NP = \text{co-}NP$.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item How do we cope with hard problems? Discuss. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Suppose $X \in \text{NP-complete}$. Prove that $X \in P$ if and only if $P = NP$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item Prove that $\text{NP} \neq \text{co-NP} \Rightarrow P \neq NP$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item If $L_1$ and $L_2$ are two languages such that $L_1 \leq_p L_2$, show that $L_2 \in P$ implies $L_1 \in P$. If an NP-complete problem is polynomially solvable, prove that $P = NP$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2013--14}
+
+item Define the following six classes of problems: P, Co-P, NP, Co-NP, NPC, and NP-hard. By a diagram show the relationship among P, Co-P, NP, Co-NP, and NPC that most researchers regard as the most likely. \mk{6+4=10}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cD}{Reductions}
+\label{sub:s4-reductions}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item For a graph $G = (V, E)$, a set of vertices $I$ in $G$ is an \textit{independent set} if for every two vertices in $I$, there is no edge between them, and a set $C$ of vertices in $V$ is a \textit{clique} if every two distinct vertices are adjacent. Given a graph $G$ and a number $K$, the independent set problem is known to be NP-complete. The clique problem asks: given a graph $G = (V, E)$ and an integer $K$, does $G$ have a clique of size at least $K$? Prove that the clique problem is as hard as the independent set problem.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item In the \textit{Set Cover} problem (decision version), we are given a set of elements $U$ (the 
+universe), a collection of subsets $S = \{S_1, S_2, \dots S_m\}$ where each $S_i \subseteq U$, and an integer 
+$k$. The goal is to determine whether there exists a sub-collection $C \subseteq S$ of size $\le k$ such 
+that $\bigcup_{S_i \in C} S_i = U$. Prove that the set cover problem is NP-complete.
+
+\textbf{Hint:} Given a graph $G = (V, E)$ and an integer $k$, the vertex cover problem (decision 
+version) is to determine whether there is a subset of vertices $V' \subseteq V$ with $|V'| \le k$ such 
+that every edge in $E$ is incident to at least one vertex in $V'$. This problem is known to be 
+NP-complete.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Imagine you are managing a team of employees, each with their own set of tasks to 
+    complete. However, some tasks cannot be worked on simultaneously due to 
+    dependencies or resource constraints. Your goal is to maximize productivity by 
+    scheduling as many tasks as possible while ensuring that no two conflicting tasks are 
+    assigned to the same team member simultaneously. You described the problem to your 
+    friend. He commented, ``The problem can be mapped to a popular NP-complete 
+    problem and can be proved to be NP-hard by reduction technique.''
+    
+    \textbf{Justify} your friend's comment by mapping the problem to an NP-complete problem 
+    and reducing it to another known NP-complete problem.
+\mk{17} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+\item Suppose you are a developer of a social media platform. The platform wants to 
+    add a feature in the admin section. The feature is to identify the minimal subset of 
+    users who can reach out to all other users of the platform through their (selected 
+    subset users') connections. Now you have to formulate an algorithm to develop the 
+    feature. Your colleague commented that the problem can be mapped to a popular np-
+    complete problem.
+\begin{enumerate}
+
+\item \textbf{[Minimal subset reachability problem]} Map the problem to the NP-complete problem that your colleague suggested.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item \textbf{[Minimal subset reachability problem]} Prove that the problem is NP-complete. You have to use the 3-SAT problem in the proof.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2021--22}
+\end{enumerate}
+%% Q — 2022-23
+\item Explain how we can prove that an optimization problem is NP-complete.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item For a graph $G = (V, E)$, a set $S$ of vertices in $G$ is a \textit{vertex cover} if every edge $e$ in $G$ has at least one end in $S$. Given a graph $G$ and a number $K$, the vertex cover problem asks if $G$ contains a vertex cover of size at most $K$. Given a set $U$ of $n$ elements, a collection $S_1, S_2, \ldots, S_m$ of subsets of $U$, and a number $k$, the set cover problem asks if there exists a collection of at most $k$ of these subsets whose union is equal to $U$. Prove that the set cover problem is at least as hard as the vertex cover problem.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2019-20
+\item A vertex cover of a graph $G = (V, E)$ is a subset of vertices $S \subseteq V$ that includes at least one endpoint of every edge in $E$. Give a linear-time algorithm for the following task.\\
+\textbf{Input:} An undirected tree $T = (V, E)$\\
+\textbf{Output:} The size of the smallest vertex cover of $T$.
+\mk{13} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+\item The TAUTOLOGY problem asks if a given Boolean formula is true for all possible assignments to the Boolean variables. Prove or disprove that TAUTOLOGY is in co-NP.
+\mk{6} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+%% Q — 2018-19
+\item For a graph $G = (V, E)$, a set $S$ of vertices in $G$ is a \textit{vertex cover} if every edge $e$ in $G$ has at least one end in $S$. A set of vertices $I$ in $G$ is an \textit{independent set} if for every two vertices in $I$, there is no edge between them. Given a graph $G$ and a number $K$, the vertex cover problem asks if $G$ contains a vertex cover of size at most $K$. Given a graph $G$ and a number $K$, the independent set problem asks if $G$ contains an independent set of size at least $K$. Prove that the vertex cover problem is at least as hard as the independent set problem.
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item What do you mean by $X \leq_p Y$? Show that the vertex cover problem $\leq_p$ set cover problem. \mk{3+7}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Given clauses $C_1, C_2, \ldots, C_k$ each of length 3 over Boolean variables (3-SAT), and a graph $G$ with number $K$ (Vertex Cover asks if $G$ has a vertex cover of size $\leq K$). Prove that Vertex Cover is at least as hard as 3-SAT. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+\item Explain the term ``reducibility''. If $L_1$ and $L_2$ are two languages such that $L_1 \leq_p L_2$, show that $L_2 \in P$ implies $L_1 \in P$. If any NP-complete problem is polynomial-time solvable, prove that $P = NP$. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item Define the classes P, NP, and NP-complete. What are the steps to prove a problem $X$ is NP-complete? Prove that the decision version of the independent set problem is NP-complete using a reduction from 3-CNF-SAT. Give an intuitive sketch of the proof of the Cook-Levin theorem (CIRCUIT-SAT is NP-complete). \mk{4+4+12+5}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item If $L_1$ and $L_2$ are two languages such that $L_1 \leq_p L_2$, then show that $L_2 \in P$ implies $L_1 \in P$. If any NP-complete problem is polynomial-time solvable, then prove that $P = NP$. \mk{7+3=10}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+
+\item \textbf{Instance of Satisfiability Problem}\\
+Boolean variables: $X_1, X_2, X_3, X_4, X_5$\\
+Clauses:
+\begin{align*}
+C_1 &= X_1 \vee \overline{X_2}, \quad C_2 = \overline{X_1} \vee X_2 \vee X_4 \vee \overline{X_5}\\
+C_3 &= \overline{X_2}, \quad C_4 = X_2 \vee X_3 \vee \overline{X_4}
+\end{align*}
+Mention the number of boolean variables and clauses in the 3-SAT problem.
+
+
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cD}{NP-hard and NP-complete Problems}
+\label{sub:s4-nphard}
+
+\begin{enumerate}
+
+%% Q — 2023-24
+\item What are some approaches to deal with an NP-complete problem?
+\mk{6} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+\item Define the satisfiability problem. Show that the independent set problem is NP-hard by reducing the 3-SAT problem to the independent set problem. \mk{3+7}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Your friend claims to have developed a polynomial-time algorithm to solve the set-packing problem. What will happen if this claim is proved to be true? \mk{5}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Write the names of four NP-complete problems. Define the following six classes of problems: P, Co-P, NP, Co-NP, NP-complete, and NP-hard. By a diagram show the relationship among these classes that most researchers regard as most likely.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2013--14}
+
+\item Show that the decision version of the vertex cover optimization problem is NP-complete using a reduction from the Independent Set decision problem. \mk{12}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Prove that the optimization version of the Independent Set problem is NP-hard. \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item What are the traveling-salesman problem, Euler tour problem and Hamiltonian cycle problem? If $L_1 \leq_p L_2$ and $L_2 \leq_p L_3$, then prove that $L_1 \leq_p L_3$. \mk{3+7=10}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+
+\item Prove that the decision version of the maximum clique problem is NP-complete by reducing from 3-CNF-SAT. \mk{17}
+\yr{CSE 207 | L-2/T-2 | 2009--10}
+
+\item What do you mean by NP-hard and NP-complete problems? Prove that finding a clique in a graph is NP-complete. \mk{5+12}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+\item Write down the procedure of proving that a problem is NP-complete. \mk{5}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+
+\item There are clauses $C_1 = (X_1 \vee \overline{X_2})$, $C_2 = (\overline{X_1} \vee X_2 \vee X_4 \vee \overline{X_5})$, $C_3 = \overline{X_2}$, and $C_4 = (X_2 \vee X_3 \vee \overline{X_4})$. How the above instance of the satisfiability problem can be transformed into an instance of 3-SAT problem? ($X_1$, $X_2$, $X_3$, $X_4$ and $X_5$ are boolean variables) \mk{13}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+\item Define: (i) size of a problem, (ii) time complexity function, (iii) the class P, (iv) the class NP, (v) NP-Complete problems. Show how an instance of the satisfiability problem can be transformed into an instance of 3-SAT. Prove that 3-colouring of a graph is NP-complete. \mk{10+10+15}
+\yr{CSE 207 | L-2/T-2 | 2007--08}
+
+
+\item Prove that 3-colouring of a graph is NP-complete.
+\yr{CSE 207 | L-2/T-2 | 2007--08}
+
+\item What is the difference between NP-complete and NP-hard problems? \\
+Prove that the satisfiability of Boolean formulas is NP-complete.\\
+ Prove that $3\text{-SAT} \leq_p \text{Independent Set}$. \\
+ Give an example of reduction by equivalence .
+ \mk{5+15+10}
+\yr{CSE 207 | L-2/T-2 | 2006--07}
+
+
+\end{enumerate}
+
+%% ══════════════════════════════════════════════════════════════════════
+%%  PART V — COPING WITH HARDNESS
+%% ══════════════════════════════════════════════════════════════════════
+\secdivider{Part V}{Coping with Hardness}{cE}{cE}{Approximation Algorithms, Backtracking, Branch and Bound}
+\titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
+
+%% ── S5: Coping with Hardness ──────────────────────────────────────────
+\section{S5 --- Coping with Hardness}
+\label{sec:S5}
+\markboth{S5 --- Coping with Hardness}{}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cE}{Approximation Algorithms}
+\label{sub:s5-approx}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Give an approximation algorithm for the vertex cover problem. Analyze the approximation ratio of your algorithm.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Let $\pi = \pi_1 \pi_2 \dots \pi_n$ be a permutation of $1\ 2 \dots n$ (the identity permutation). A reversal 
+$(i, j)$ reverses the contiguous subsequence between $i$ and $j$ i.e. transforms $\pi_1 \dots \pi_{i-1}\pi_i$ 
+$\pi_{i+1} \dots \pi_{j-1}\ \pi_j\ \pi_{j+1} \dots \pi_{n}$ into $\pi_1 \dots \pi_{i-1}\pi_j\ \pi_{j-1} \dots \pi_{i+1}\ \pi_i\ \pi_{j+1} \dots \pi_n$. The sorting by 
+reversals problem is to find the minimum number of reversals that transforms a given 
+permutation to the identity permutation. For example, the permutation $[4\ 1\ 2\ 3]$ can be 
+sorted by reversing $[1\ 2\ 3]$ to get $[4\ 3\ 2\ 1]$ and then reversing this entire sequence.
+
+Let's extend the permutation by adding $\pi_0 = 0$ and $\pi_{n+1} = n + 1$ to the ends ($\pi_0$ and $\pi_{n+1}$ 
+are not moved during sorting). We say there is a breakpoint between $\pi_i$ and $\pi_{i+1}$ if they 
+are not consecutive. For example, $[4\ 1\ 2\ 3]$ is converted to $[0\ 4\ 1\ 2\ 3\ 5]$ and there are 
+three breakpoints: between $0$ and $4$, $4$ and $1$, and $3$ and $5$.
+\begin{enumerate}
+  \item Provide a lower bound on the number of reversals needed to sort a permutation $\pi$, in terms of the number of breakpoints in it.
+  \item Design an approximation algorithm for the sorting by reversals problem with an approximation ratio at most 4. (Hint: consider maximal runs of contiguously increasing and contiguously decreasing elements.)
+\end{enumerate}
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item Give a 2-approximation algorithm for the vertex cover problem and prove that the algorithm computes the vertex cover at most twice the size of the actual vertex cover size.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+
+
+\item Suppose you want to fill up your luggage with the required items for your upcoming 
+tour. But the luggage has a capacity of 600 kg. The items have different values and 
+weights which are given below:
+
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Item} & \textbf{Value} & \textbf{Weight} \\ \hline
+1    & 1200  & 150    \\ \hline
+2    & 1100  & 100    \\ \hline
+3    & 950   & 250    \\ \hline
+4    & 1350  & 350    \\ \hline
+5    & 800   & 200    \\ \hline
+6    & 1500  & 300    \\ \hline
+\end{tabular}
+\end{center}
+
+You want to fill up your luggage so that the total values of the items are maximized. 
+So you plan to use an approximation algorithm that you learned from your teacher to 
+solve the problem. The approximation algorithm scales down the high values by 
+$\epsilon V_{max}/2n$ ($\epsilon = \text{precision parameter}$, $V_{max} = \text{largest value and } n = \text{total items}$) and 
+utilizes a dynamic programing technique. The dynamic programing technique uses 
+the subproblem $OPT(i,v)$ (the minimum weight of the luggage for which we can 
+obtain a solution of value at least $v$ using a subset of items 1 to i), instead of using 
+$OPT(i, w)$ (the max value subset of items 1 to i with weight limit w).
+\begin{enumerate}
+
+\item \textbf{[Luggage maximization using scaling and dynamic programming]} Why does the approximation algorithm use the $OPT(i, v)$ subproblem instead of $OPT(i, w)$?
+ 
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Apply the approximation algorithm to solve the luggage problem with $\varepsilon = 0.1$.
+ 
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2021-22
+\item Prove that for any $\varepsilon > 0$, the approximation algorithm computes a feasible solution whose value is within a $(1 + \varepsilon)$ factor of the optimum in $O(n^3/\varepsilon)$.
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
+\end{enumerate}
+%% Q — 2022-23
+\item In the bottleneck traveling salesperson problem (TSP), we are given an undirected graph $G$ with weights on its edges and asked to find a tour that visits the vertices of $G$ exactly once and returns to the start so as to minimize the cost of the maximum-weight edge in the tour. Assuming that the weights in $G$ satisfy the triangle inequality, design a polynomial-time 3-approximation algorithm for bottleneck TSP.
+\mk{13} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+\item What is fixed-parameter tractability? Why is it useful?
+\item \mk{7} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Show how to construct a near optimal solution using a minimum spanning tree for the symmetric traveling salesman problem with distances that satisfy the triangle inequality.
+\begin{center}
+      \begin{tikzpicture}[
+        scale=2.5, % Scale up for better readability of weights
+        vertex/.style={circle, draw=black, thick, fill=white, minimum size=0.6cm, font=\large\itshape},
+        edge/.style={thick, black},
+        weight/.style={fill=white, inner sep=2pt, font=\large}
+    ]
+
+        % ==========================================
+        % VERTICES (Arranged in a regular pentagon)
+        % ==========================================
+        % 90 degrees puts 'a' at the very top center
+        \node[vertex] (a) at (90:1) {a};
+        \node[vertex] (b) at (162:1) {b};
+        \node[vertex] (c) at (18:1) {c};
+        \node[vertex] (d) at (234:1) {d};
+        \node[vertex] (e) at (306:1) {e};
+
+        % ==========================================
+        % EDGES WITH WEIGHT LABELS
+        % ==========================================
+        
+        % Outer Pentagon Edges
+        \draw[edge] (a) -- node[weight, swap] {2} (b);
+        \draw[edge] (a) -- node[weight] {2} (c);
+        \draw[edge] (b) -- node[weight, swap] {3} (d);
+        \draw[edge] (c) -- node[weight] {4} (e);
+        \draw[edge] (d) -- node[weight] {6} (e);
+
+        % Inner/Cross Edges
+        \draw[edge] (b) -- node[weight, pos=0.4] {4} (c);
+        \draw[edge] (a) -- node[weight, pos=0.25, swap] {1} (d);
+        \draw[edge] (a) -- node[weight, pos=0.7] {6} (e);
+        \draw[edge] (b) -- node[weight, pos=0.3] {5} (e);
+        \draw[edge] (c) -- node[weight, pos=0.7, swap] {3} (d);
+
+    \end{tikzpicture}
+\end{center}
+\mk{12} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+%% Q — 2020-21
+
+\item Discuss the approximability of the general Traveling Salesperson Problem (TSP). Give an approximation algorithm for the Euclidean TSP problem and compute the approximation ratio of your algorithm. \mk{2+3+5}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+
+\item Give an approximation algorithm for the set cover problem and compute the approximation ratio. \mk{3+7}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+\item What is the vertex cover problem? Write a polynomial-time approximation algorithm for it. Prove its time complexity and find the approximation ratio. For the general traveling-salesman problem, prove that one cannot find good approximate tours in polynomial time unless $P = NP$. \mk{7+8=15}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item Consider the following instance of the maximum satisfiability (MAX-SAT) problem.
+
+\begin{itemize}
+    \item[] Set of Boolean variables, $V = \{w, x, y, z\}$
+    \item[] Set of clauses, $C = \{C1, C2, C3, C4, C5, C6\}$
+    \item[] where $C1 = (w \vee \bar{x} \vee \bar{y} \vee z)$, \quad
+            $C2 = (w \vee \bar{y})$, \quad
+            $C3 = (x \vee \bar{y})$, \quad
+            $C4 = (y \vee \bar{z})$
+    \item[] $C5 = (z \vee \bar{w})$, \quad
+            $C6 = (\bar{w} \vee \bar{x})$
+\end{itemize}
+
+\noindent
+Now find an assignment of variables such that maximum number of clauses is satisfied.
+Compute your solution using branch and bound algorithm. Write down a suitable bound
+function for the problem. Show detailed calculation steps through a branch and bound
+search tree.\mk{12}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item Write a polynomial-time 2-approximation algorithm for the traveling-salesman problem where the edge weights satisfy the triangle inequality, and prove the approximation ratio. If $P = NP$, prove that for any constant $\rho > 1$, there is no polynomial-time approximation algorithm with ratio $\rho$ for the general TSP. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2013--14}
+
+\item Consider the following greedy approximation algorithm for the vertex cover optimization problem. \mk{15}
+
+\begin{lstlisting}
+GreedyVertexCover(G):
+    C = {}
+    while E is not empty:          // E is the set of edges
+        u = vertex in V with maximum degree  // V is the set of vertices
+        V = V - {u}
+        C = C union {u}
+        for each edge (u, v) adjacent to u:
+            E = E - {(u, v)}       // remove all edges covered by vertex u
+    return C                       // C is the vertex cover
+\end{lstlisting}
+
+\begin{enumerate}
+  \item Give an example graph where the above algorithm may not produce the optimal vertex cover.
+  \item Show that the approximation ratio of the above greedy algorithm is $O(\lceil \lg |E| \rceil)$.
+\end{enumerate}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Give an efficient 2-approximation algorithm for vertex cove: optimization problem. \mk{8}
+\yr{CSE 207 | L-2/T-2 | 2012--13}
+
+\item Write a polynomial-time 2-approximation algorithm for the vertex-cover problem, and prove the approximation ratio of the algorithm. If $P = NP$, then prove that for any constant $\rho \geq 1$, there is no polynomial-time approximation algorithm with ratio $\rho$ for the general traveling-salesman problem. \mk{8+7=15}
+\yr{CSE 207 | L-2/T-2 | 2011--12}
+
+
+\item Give a 2-approximation algorithm for the Traveling Salesperson Problem (TSP) for graphs obeying the triangle inequality. Prove the approximation ratio. \mk{17}
+\yr{CSE 207 | L-2/T-2 | 2009--10}
+
+\item Write a 2-approximation algorithm for the ``vertex cover'' problem. Show that your algorithm has the mentioned approximation ratio. \mk{10}
+\yr{CSE 207 | 2008--2009}
+
+\item Write a 2-approximation algorithm for the vertex cover problem. Justify your answer. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2006--07}
+
+
+%% Q — 2019-20
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cE}{Backtracking}
+\label{sub:s5-backtrack}
+
+\begin{enumerate}
+
+%% Q — 2018-19
+\item Consider the following Boolean formula:
+\[
+  (x' \vee y') \wedge (x' \vee y) \wedge (x \vee y' \vee z) \wedge (x \vee y \vee z)
+\]
+Use a backtracking algorithm to decide whether this is satisfiable or not. Show the backtracking tree.
+\mk{10} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Consider the following boolean formula:
+\[
+  (x \vee y') \wedge (x' \vee w) \wedge (x \vee y \vee z') \wedge (x' \vee w \vee z)
+\]
+Use the backtracking algorithm to decide whether the boolean formula is satisfiable or not. If satisfiable, find all the assignments of the boolean variables for which the boolean formula is satisfiable. You must show the backtracking tree.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2024-25
+\item Consider the following Boolean formula:
+\[
+  (x' \vee y') \wedge (x \vee y') \wedge (x' \vee y) \wedge (x \vee y \vee z') \wedge (x \vee y \vee z)
+\]
+Use the backtracking algorithm to decide whether this is satisfiable or not. You must show the backtracking tree.
+\mk{10} \yr{CSE 207 | L-2/T-2 | 2018--19}
+
+\item Apply backtracking to the problem of finding a Hamiltonian circuit in a given graph. Show the corresponding state-space tree. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+
+\begin{center}
+  
+  \begin{tikzpicture}[
+    every node/.style={circle, fill=black, 
+                       minimum size=6pt, inner sep=0pt},
+    every edge/.style={draw}
+  ]
+
+  % Outer rectangle (back)
+  \node[label=above left:$a$]  (a) at (0, 3)   {};
+  \node[label=above right:$b$] (b) at (6, 3)   {};
+  \node[label=below right:$c$] (c) at (6, 0)   {};
+  \node[label=below left:$d$]  (d) at (0, 0)   {};
+
+  % Inner rectangle (front)
+  \node[label=above left:$f$]  (f) at (1.5, 2) {};
+  \node[label=above right:$g$] (g) at (4.5, 2) {};
+  \node[label=below right:$h$] (h) at (4.5, 1) {};
+  \node[label=below left:$e$]  (e) at (1.5, 1) {};
+
+  % Outer rectangle
+  \draw (a) -- (b) -- (c) -- (d) -- (a);
+
+  % Inner rectangle
+  \draw (f) -- (g) -- (h) -- (e) -- (f);
+
+  % Connecting edges
+  \draw (a) -- (f);
+  \draw (b) -- (g);
+  \draw (c) -- (h);
+  \draw (d) -- (e);
+
+  \end{tikzpicture}
+\end{center}
+
+
+\item Discuss the Presumed Optimal Solution for the Multipeg Tower of Hanoi Problem with its properties. Solve the problem for $(n, p) = (395, 8)$. \mk{5+10}
+\yr{CSE 203 | L-2/T-1 | 2017--18}
+
+\item Consider the following Boolean formula: $(x' \vee y)(x \vee y' \vee z)(y \vee y')(x \vee y)(x \vee y \vee z')(x \vee y \vee z)$. Use a backtracking algorithm to decide whether it is satisfiable. Show the backtracking tree. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+
+\item Compare the techniques of brute-force algorithms, heuristics, and approximation algorithms for coping with hard problems. Write a backtracking algorithm to color a map with no more than four colors. \mk{5+5=10}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item Solve the Multi-peg Tower of Hanoi problem with $(n, p) = (377, 8)$. Find $k_{\max}$, $N_0$, and $n_1$ for at least two subproblems. \mk{10}
+\yr{CSE 207 | L-2/T-2 | 2013--14}
+
+\item Solve the Multi-peg Tower of Hanoi problem with $(n, p) = (270, 7)$, showing the values of $k$, $\max$, $N_0$, $n_1$. Present the solution by drawing a binary tree. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+
+\item Discuss the Multi-peg Hanoi problem. Argue in favour of the recurrence relation to be satisfied by the presumed optimal solution. Prove the properties of the presumed optimal solution. \mk{5+5+10=20}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+\item Write down the backtracking technique for solving the 4-Queen problem. Give the state tree also. \mk{10+5=15}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+\item Discuss the Multi-Peg Tower of Hanoi problem. Argue in favour of the recurrence relation satisfied by the presumed optimal solution. Solve the problem with $(n, p) = (271, 7)$, showing the solution in a binary tree with at least 4 nodes. \mk{15+20}
+\yr{CSE 207 | L-2/T-2 | 2007--08}
+
+
+\item Solve the Multi-peg Tower of Hanoi problem with $(n, p) = (273, 7)$. Show the subproblems arising up to the second level of recursion using a binary tree. \mk{15}
+\yr{CSE 207 | L-2/T-2 | 2006--07}
+
+
+
+
+%% Q — 2020-21
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cE}{Branch and Bound}
+\label{sub:s5-branchbound}
+
+\begin{enumerate}
+
+%% Q — 2019-20
+\item Consider the following instance of the 0-1 knapsack problem. Solve this instance using the branch and bound algorithm. Show the branch-and-bound tree. Knapsack capacity $= 10$.
+ 
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Item} & \textbf{Weight} & \textbf{Value} \\
+\hline
+1 & 4 & 40 \\
+2 & 3 & 50 \\
+3 & 5 & 70 \\
+4 & 3 & 45 \\
+\hline
+\end{tabular}
+\end{center}
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\item Explain branch-and-bound algorithms with an illustrative example.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+%% Q — 2024-25
+\item You want to fill up your luggage with required items for an upcoming tour. The luggage has a capacity of 60~kg. The items have the following values and weights:
+ 
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Item} & \textbf{Value} & \textbf{Weight (kg)} \\
+\hline
+1 & 120 & 15 \\
+2 & 110 & 10 \\
+3 & 95  & 25 \\
+4 & 135 & 35 \\
+5 & 80  & 20 \\
+6 & 150 & 30 \\
+\hline
+\end{tabular}
+\end{center}
+Solve this 0-1 knapsack problem using the branch and bound technique to maximize total value.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2022-23
+\item There are 4 places in your village. You want to start from a place, then visit all other places and return to the first place without visiting the same place twice (other than the starting place), minimizing cost. The costs are given below:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{From/To} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} \\
+\hline
+1 & 0  & 10 & 15 & 20 \\
+2 & 5  & 0  & 12 & 18 \\
+3 & 8  & 9  & 0  & 17 \\
+4 & 11 & 14 & 16 & 0  \\
+\hline
+\end{tabular}
+\end{center}
+Give an exponential time algorithm to solve this problem with running time $O(n^2 \cdot 2^n)$, and find the optimal tour using your algorithm.
+\mk{20} \yr{CSE 207 | L-2/T-1 | 2022--23}
+
+%% Q — 2023-24
+\item There are 6 places in your village. You want to visit all the places and return to 
+    the first place that you will visit. Also, you don't want to visit the same place twice 
+    other than the starting place. You want to finish the visits with minimum cost. The 
+    cost of the roads between these places are given below:
+    
+    \begin{center}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{From/To} & \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & \textbf{6} \\ \hline
+    \textbf{1}       & 0          & 10         & 15         & 20         & 25         & 30         \\ \hline
+    \textbf{2}       & 5          & 0          & 12         & 18         & 24         & 29         \\ \hline
+    \textbf{3}       & 8          & 9          & 0          & 17         & 22         & 28         \\ \hline
+    \textbf{4}       & 11         & 14         & 16         & 0          & 21         & 27         \\ \hline
+    \textbf{5}       & 13         & 19         & 23         & 26         & 0          & 31         \\ \hline
+    \textbf{6}       & 28         & 27         & 25         & 24         & 22         & 0          \\ \hline
+    \end{tabular}
+    \end{center}
+
+Find the optimal tour using branch and bound, and pruning techniques combined.
+\mk{20} \yr{CSE 207 | L-2/T-2 | 2021--22}
+
+%% Q — 2022-23
+\item In one approach to solve the Traveling Salesman Problem using branch-and-bound technique, the lower bound of the cost of completing a partial tour has been calculated from the cost of the minimum spanning tree spanning the remaining nodes of the graph. Decide whether this bound function will give correct answer all the time, with proper explanation. If there is any better bound function for this problem, mention it.
+\mk{5} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+%% Q — 2021-22
+\item Solve the following instance of a 0-1 knapsack problem by a branch-and-bound algorithm using a state-space tree. You must show the branch-and-bound tree.\\[4pt]
+Knapsack capacity $= 10$.
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Item} & \textbf{Weight} & \textbf{Value} \\
+\hline
+1 & 2 & 10 \\
+2 & 3 & 9  \\
+3 & 2 & 20 \\
+4 & 5 & 30 \\
+\hline
+\end{tabular}
+\end{center}
+\mk{15} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
+
+ \item Solve the following instance of the 0-1 knapsack problem using a branch-and-bound algorithm with a state-space tree (capacity = 10\,kg):
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+Item & Weight (kg) & Profit (Taka) \\
+\midrule
+1 & 3 & 18 \\
+2 & 5 & 35 \\
+3 & 4 & 44 \\
+4 & 7 & 36 \\
+5 & 2 & 18 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\mk{8}
+\yr{CSE 207 | L-2/T-2 | 2017--18}
+
+\item Solve the following 0-1 knapsack instance (capacity = 10) using the branch-and-bound algorithm. Show the branch-and-bound tree.
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Item & Weight & Value \\
+\midrule
+1 & 2 & 10 \\
+2 & 3 & 9 \\
+3 & 2 & 20 \\
+4 & 5 & 30 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\mk{20}
+\yr{CSE 207 | L-2/T-2 | 2016--17}
+
+
+\item Solve the following 0/1 knapsack instance (capacity = 15) using the branch-and-bound approach with a state-space tree:
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Item & Weight & Value \\
+\midrule
+1 & 7 & 140 \\
+2 & 6 & 132 \\
+3 & 4 & 140 \\
+4 & 3 & 90 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Compare the backtracking and branch-and-bound techniques. \mk{3+12=15}
+\yr{CSE 207 | L-2/T-2 | 2015--16}
+
+\item \textbf{(c)} Consider the following instance of the maximum satisfiability (MAX-SAT) problem.
+
+\begin{itemize}
+    \item[] Set of Boolean variables, $V = \{w, x, y, z\}$
+    \item[] Set of clauses, $C = \{C1, C2, C3, C4, C5, C6\}$
+    \item[] where $C1 = (w \vee \bar{x} \vee \bar{y} \vee z)$, \quad
+            $C2 = (w \vee \bar{y})$, \quad
+            $C3 = (x \vee \bar{y})$, \quad
+            $C4 = (y \vee \bar{z})$
+    \item[] $C5 = (z \vee \bar{w})$, \quad
+            $C6 = (\bar{w} \vee \bar{x})$
+\end{itemize}
+
+\noindent
+Now find an assignment of variables such that maximum number of clauses is satisfied.
+Compute your solution using branch and bound algorithm. Write down a suitable bound
+function for the problem. Show detailed calculation steps through a branch and bound
+search tree.\mk{12}
+\yr{CSE 207 | L-2/T-2 | 2014--15}
+
+\item What is a state-space tree? Solve the following instance of the 0/1 knapsack problem (capacity = 10) using the branch-and-bound approach with a state-space tree:
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Item & Weight & Value \\
+\midrule
+1 & 7 & 42 \\
+2 & 4 & 40 \\
+3 & 3 & 12 \\
+4 & 5 & 25 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\mk{15}
+\yr{CSE 207 | L-2/T-2 | 2013--14}
+
+
+  \item Applying the FIFO branch-and-bound technique on the 4-Queen problem, it is found that the technique is not efficient. Why? \mk{6}
+\yr{CSE 207 | L-2/T-2 | 2008--09}
+
+%% Q — 2020-21
+\end{enumerate}
+
+%% ══════════════════════════════════════════════════════════════════════
+%%  PART VI — STRING MATCHING ALGORITHMS
+%% ══════════════════════════════════════════════════════════════════════
+\secdivider{Part VI}{String Matching Algorithms}{cF}{cF}{Knuth-Morris-Pratt (KMP) Algorithm}
+\titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
+
+%% ── S6: String Matching Algorithms ───────────────────────────────────
+\section{S6 --- String Matching Algorithms}
+\label{sec:S6}
+\markboth{S6 --- String Matching Algorithms}{}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cF}{Knuth-Morris-Pratt (KMP) Algorithm}
+\label{sub:s6-kmp}
+
+\begin{enumerate}
+
+%% Q — 2023-24
+\item Construct the prefix function using the Knuth-Morris-Pratt (KMP) algorithm for the pattern \texttt{ABABC}. Explain how you can use this prefix function to search for this pattern in the text \texttt{ABABABABC}.
+\mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+\end{enumerate}
+
+\secdivider{Part VII}{Randomized Algorithms}{cF}{cF}{Monte Carlo Algorithms \& Probability Amplification, Las Vegas Algorithms \& Randomized Quick Sort}
+\titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
+
+%% ── S6: String Matching Algorithms ───────────────────────────────────
+\section{S7 --- Randomized Algorithms}
+\label{sec:S7}
+\markboth{S6 --- Randomized Algorithms}{}
+
+
+\subtopic{cF}{Monte Carlo Algorithms \& Probability Amplification}
+\label{sub:s7-montecarlo}
+
+\begin{enumerate}
+  \item  Suppose you have designed a Monte Carlo Algorithm for a given problem which succeeds with probability $\ge \frac{1}{n^2}$. However, your boss has asked you to achieve at least $(1 - \frac{1}{n})$ success probability. Explain how you can achieve this.
+  \mk{10} \yr{CSE 207 | L-2/T-1 | 2024--25}
+  
+\end{enumerate}
+
+\subtopic{cF}{Las Vegas Algorithms \& Randomized Quick Sort}
+\label{sub:s7-lasvegas}
+
+\begin{enumerate}
+  \item Analyze the running time of the randomized quick sort algorithm.
+  \mk{12} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+\end{enumerate}
+
+
+
+\end{document}

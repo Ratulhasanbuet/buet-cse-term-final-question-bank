@@ -1,0 +1,30 @@
+## Core LaTeX auxiliary files
+*.aux
+*.log
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+
+## Bibliography auxiliary files (if you use BibTeX/Biber)
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+
+## Indexing auxiliary files
+*.idx
+*.ind
+*.ilg
+
+## Text editor / IDE specific files (VS Code, Texstudio etc.)
+.vscode/
+*.bak
+*.sav
+.DS_Store
+Thumbs.db
+
+## Optional: If you want to ignore build directory (like 'build/' or 'out/')
+# build/
+# out/
