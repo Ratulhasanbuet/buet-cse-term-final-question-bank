@@ -1,0 +1,105 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{circuitikz}
+\usepackage{amsmath}
+\usetikzlibrary{circuits.logic.US,calc}
+
+
+\begin{document}
+\begin{center}
+    \begin{circuitikz}[american,thick, x=1.3cm ]
+
+    % \draw (0, 0) node[op amp] (op1) {};
+    % \draw (5,-0.5) node[op amp] (op2) {};
+    % \draw (op1.+) to[R , l=$3k\Omega$] (-4,-0.5) to[V , l=$10V$] (-4, -4);
+    % \draw (-4,-4) -- ( 7,-4);
+    % \draw (op1.-) -- (-1,0.5) -- (-1, 2) -- (1,2)-- ( 1,0);
+    % \draw (-1.5,-0.5) to[R , l_=$10k\Omega$] (-1.5,-4); 
+    % \draw (-1, -0.5) -- (-1,-2) to[R, l=$6k\Omega$] ( 3,-2) -- (3,2) to[R, l=$5k\Omega$]  (7,2)  --(7,-0.5) --(op2.out);
+    %  \draw (7, -0.5) to[R, l=$5k\Omega$, i=$i_o$] (7,-4);
+    % \draw (op1.out) to[R, l=$5k\Omega$] (3,0) -- (op2.-);
+    % \draw (op2.+) -- (4, -1) -- (4,-4);
+    % \draw (3,-4) node[ground]{};
+
+    \draw (0,0) node[op amp] (op1){};
+    \draw (op1.-) to[R ,l=$5k\Omega$] (-3,0.5) to[V , l=$2v$]  (-3,-3);
+    \draw (op1.+) to (-1, -0.5) to[R, l=$10k\Omega$] (-1,-3) -- (-3,-3);
+    \draw (-2,-3) node[ground]{};
+    \draw (op1.-) -- (-0.9,1.5)  to[R, l=$20k\Omega$] (1.5,1.5)--(1.5,0);
+    \draw (op1.out)  to[R, l=$40k\Omega$] (4,0);
+
+    
+
+    \draw (0,-8) node[op amp] (op2){};
+    \draw (op2.-) to[R ,l=$10k\Omega$] (-3,-7.5) to[V , l=$3v$]  (-3,-13);
+    \draw (op2.+) to (-1, -8.5) to[R, l=$30k\Omega$] (-1,-13) -- (-3,-13);
+    \draw (-2,-13) node[ground]{};
+    \draw (op2.out)  to[R, l=$80k\Omega$] (4,-8) to[R, l=$20k\Omega$] (4,-11) node[ground]{};
+    \draw (-1, -10) to[R, l=$50k\Omega$] (1.5,-10)--(1.5,-8);
+
+
+    \draw (5,-4) node[op amp] (op3){};
+    \draw (op3.-) -- (4,0);
+    \draw (op3.+) -- (4,-8);
+
+    \draw (8.5,-4) node[op amp, rotate=180](op4){};
+
+    \draw (op3.out)  to[R, l=$20k\Omega$, i=$i_o$] (op4.out);
+    \draw (op4.-) to[R, l_=$20k\Omega$] (9.3,-7) to[V , l=$4v$] (9.3,-10) node[ground]{};
+
+
+    \draw (4,0) to[R, l=$40k\Omega$] (6,0)-- (op3.out);
+    \draw (op4.out) -- (7.5,-2)-- (9.5,-2)-- (op4.+);
+\end{circuitikz}
+\end{center}
+\newpage
+
+
+
+
+\begin{center}
+\begin{circuitikz}
+    % Set style to IEEE
+    % \ctikzset{logic ports=us}
+    
+    % Define gates
+    \node[and port] (AND1) at (0,0) {};
+    \node[not port] (NOT1) at (0,-3) {};
+    \node[not port] (NOT2) at (0,-7) {};
+    \draw (AND1.in 1) -- ++(-4,0) node[left]{$P$};
+    \draw (AND1.in 2) -- ++(-4,0) node[left]{$Q$};
+
+    \draw (NOT2.in) -- ++ (-3,0) --++(0,7.3);
+
+    \node[or port, anchor=in 2] (OR1) at (1,-6.5){};
+    \draw (NOT2.out) -- (OR1.in 2);
+    \draw (OR1.in 1) -- ++ (-4,0) --++ (0,5.7);
+    \draw (NOT1.in) -- ++(-2.3,0);
+
+    \node[and port] (AND2) at (3.5,-4){};
+    \draw (AND2.in 1) -- (NOT1.out);
+    \draw (AND2.in 2) --++ (-5.8,0);
+
+    \node[or port] (OR2) at (6,-1){};
+    \draw (AND1.out) -- (OR2.in 1);
+    \draw (AND2.out) -- (OR2.in 2);
+
+    \node[and port] (AND3) at (9, -2.5){};
+    \draw (AND3.in 2) -- (OR1.out);
+    \draw (AND3.in 1) -- (OR2.out);
+    \draw (AND3.out) --++ (0.5,0);
+
+
+
+    
+    % Connect inputs and outputs
+    % \draw (OR1.out) -- (AND1.in 1);
+    % \draw (NOT1.out) -- (AND1.in 2);
+    
+    % % Label inputs/outputs
+    % \draw (OR1.in 1) -- ++(-1,0) node[left]{$A$};
+    % \draw (OR1.in 2) -- ++(-1,0) node[left]{$B$};
+    % \draw (NOT1.in) -- ++(-1,0) node[left]{$C$};
+    % \draw (AND1.out) -- ++(1,0) node[right]{$Out$};
+\end{circuitikz}
+\end{center}
+\end{document}
