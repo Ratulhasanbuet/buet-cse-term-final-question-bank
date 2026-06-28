@@ -3413,7 +3413,13 @@
 \subtopic{cA}{MOSFET Transconductance}
 \label{sub:s3-gm}
 
-\begin{enumerate}\item How can the MOSFET transconductance $g_m$ be varied with the design parameters $W/L$ ratio and overdrive voltage $V_{ov}$? Explain.
+\begin{enumerate}
+
+\item Derive the condition of small signal operation considering a simple CS nMOS amplifier circuit. Find the expression of MOSFET transconductance $g_m$ from there as well.
+\mk{8} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
+    
+\item How can the MOSFET transconductance $g_m$ be varied with the design parameters $W/L$ ratio and overdrive voltage $V_{ov}$? Explain.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
 \end{enumerate}
@@ -5307,7 +5313,9 @@
 \subtopic{cC}{Common Source Amplifier}
 \label{sub:s6-cs}
 
-\begin{enumerate}\item For the Common Source amplifier circuit shown, the transistor has $V_t=1\,\text{V}$, $\mu_n C_{ox}(W/L)=4\,\text{mA/V}^2$, and $V_A=100\,\text{V}$. All capacitors behave as open circuits under DC and short circuits under AC.\\
+\begin{enumerate}
+    
+\item For the Common Source amplifier circuit shown, the transistor has $V_t=1\,\text{V}$, $\mu_n C_{ox}(W/L)=4\,\text{mA/V}^2$, and $V_A=100\,\text{V}$. All capacitors behave as open circuits under DC and short circuits under AC.\\
 
 (i) Find the DC bias voltage $V_D$ and drain current $I_D$ (ignore Early effect for bias). \\
 (ii) Find $g_m$, $r_o$ and draw the small-signal equivalent circuit. \\
@@ -5401,6 +5409,12 @@
 
 \item Explain why adding a source resistor $R_S$ to a Common-Source MOSFET amplifier improves its bias stability compared to directly grounding the source terminal. Detail how $R_S$ actively compensates for manufacturing variations in the threshold voltage $V_t$ and transconductance parameter $k_n$.
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
+    
+\item A CS amplifier is connected to a source $v_{sig}$ with resistance $R_{sig}$ and it utilizes a MOSFET with $\mu_n C_{ox} = 400 \mu\text{A/V}^2$, $W/L = 10$, and $V_A = 10\text{V}$. It is biased at $I_D = 0.2\text{ mA}$ and uses $R_D = 6\text{ k}\Omega$. Find $R_{in}$, $A_{vo}$, and $R_o$. If a load resistance of $10\text{ k}\Omega$ is connected to the output, what will be the overall voltage gain $G_v$? If a 0.2-V peak sine-wave signal is required at the output, what must the peak amplitude of $v_{sig}$ be?
+\mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
+
 
 \item In the circuit shown, the NMOS transistor has $|V_t|=0.9\,\text{V}$ and $V_A=50\,\text{V}$ and is operated with $V_D=2\,\text{V}$. What is the voltage gain $v_0/v_i$? What do $V_D$ and the gain become for $I=1\,\text{mA}$?
 
@@ -5829,7 +5843,65 @@ Assume $V_t=1\,\text{V}$, $K_n' W/L=2\,\text{mA/V}^2$, $V_A=100\,\text{V}$.
 \subtopic{cE}{Mathematical Operations}
 \label{sub:s7-math}
 
-\begin{enumerate}\item Find the expression of output voltage $v_0$ in terms of input voltages and resistances in the circuit shown. Also calculate the value of output voltage at $t=1\,\text{sec}$ given that $v_1=2\,\text{V}$, $v_2=5\,\text{V}$, $v_3=1\,\text{V}$, and $v_4=5\sin(100\pi t)$.
+\begin{enumerate}
+
+\item For the circuit shown in Figure below, find all the marked node voltages and branch currents:
+
+\begin{center}
+    \begin{circuitikz}[thick, scale=1.2, transform shape]
+
+    % Op-amp placed at coordinate (1.5, 0)
+    \node[op amp] (opamp) at (1.5,0) {};
+
+    % Inverting input node
+    \draw (0, 0.5) node[circ] (NodeA) {} -- (opamp.-);
+
+    % Non-inverting input to ground
+    \draw (opamp.+) -- ++(-0.5,0) to[short] ++(0,-0.5) node[ground] {};
+
+    % Input branch and voltage source
+    \draw (-3, 0.5) node[ocirc] (VinNode) {} to[R, l_=$1\,\text{k}\Omega$, i^=$i_1$] (NodeA);
+    \draw (-3, -1.5) node[ground] {} to[V,invert,  l_=$5\,\text{V}$] (VinNode);
+    \node[left] at (-3.7, -0.5) {$v_{\text{in}}$};
+
+    % Feedback Network (T-network)
+    % Left vertical wire
+    \draw (NodeA) to[short, i^=$i_2$] (0, 2.5);
+
+    % Top-left horizontal resistor
+    \draw (0, 2.5) to[R, l_=$1\,\text{k}\Omega$] (2.5, 2.5) node[circ] (NodeB) {};
+
+    % Middle grounded resistor
+    \draw (2.5, 0.8) node[ground] {} to[R, l^=$1\,\text{k}\Omega$, i_=$i_3$] (NodeB);
+
+    % Top-right horizontal resistor
+    \draw (NodeB) to[R, l_=$1\,\text{k}\Omega$] (5, 2.5);
+
+    % Right vertical wire
+    \draw (5, 2.5) to[short, i^=$i_4$] (5, 0);
+
+    % Connect to op-amp output
+    \draw (opamp.out) -- (5, 0) node[circ] {};
+
+    % Output terminals (v_0)
+    \draw (5, 0) -- (6, 0) node[ocirc] (Vout+) {};
+    \draw (6, -1.5) node[ocirc] (Vout-) {} -- (6, -2) node[ground] {};
+    
+    % This draws the +, - and v_0 label automatically between the two open nodes
+    \draw (Vout+) to[open, v=$v_0$] (Vout-);
+
+\end{circuitikz}
+
+\end{center}
+\mk{17} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
+\item Suppose, you have three voltage sources: $V_1 = \sin(40t)$, $V_2 = \sin(100t)$, $V_3 = 1\text{V}$. Design a circuit using op-amps that will generate the following output:
+$$V_{out} = 5\sin(40t) - 4\cos(100t) + 4$$
+Draw the overall connection diagram with required values of elements. You may assume that the op-amps are biased using a 15V source.   
+\mk{18} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
+
+\item Find the expression of output voltage $v_0$ in terms of input voltages and resistances in the circuit shown. Also calculate the value of output voltage at $t=1\,\text{sec}$ given that $v_1=2\,\text{V}$, $v_2=5\,\text{V}$, $v_3=1\,\text{V}$, and $v_4=5\sin(100\pi t)$.
 \begin{center}
     
 \begin{circuitikz}[thick,american, scale=1.2, thick]
@@ -6197,6 +6269,34 @@ where $V_1$ and $V_2$ are two different input sources.
 \label{sub:s7-schmitt}
 
 \begin{enumerate}
+
+
+\item Write down the characteristics of an ideal op-amp. Draw the voltage transfer characteristics of the circuit shown in Figure below. Voltage transfer characteristics shows the variation in output voltage in response to variations in the input voltage.
+\begin{center}
+\begin{circuitikz}[thick, scale=1, transform shape]
+    % Op-amp with non-inverting (+) input on top, filled with gray
+    \draw (3,0) node[op amp, noinv input up] (opamp) {}; 
+    
+    % Inverting (-) terminal to ground
+    \draw (opamp.-) -- ++(0,-0.5) node[ground] {};
+    
+    % Non-inverting (+) terminal node
+    \draw (opamp.+) to[short, -*] ++(-0.5,0) coordinate (Vplus) node[below left] {V\textsubscript{+}};
+    
+    % Input resistor R1 and Voltage Source Vin
+    \draw (Vplus) to[R, l_=$R_1$] ++(-2.5,0) coordinate (V_in_top);
+    \draw (V_in_top) to[V, v_=$\text{V}_{\text{in}}$] ++(0,-1.5) node[ground] {};
+    
+    % Positive feedback resistor R2
+    \draw (Vplus) -- ++(0, 1.2) coordinate (up) to[R, l=$R_2$] (up -| opamp.out) to[short, -*] (opamp.out);
+    
+    % Output node Vo
+    \draw (opamp.out) to[short, -o] ++(1,0) node[right] {V\textsubscript{o}};
+\end{circuitikz}
+\end{center}
+
+\mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
     
 \item Determine the op-amp circuit that generates the transfer characteristics shown in the figure.
 \begin{center}
@@ -7224,7 +7324,9 @@ Write the final output expression in terms of the circuit components used in you
 
 \begin{enumerate}
 
-
+\item Define Barkhausen criterion. Describe the operating principle of an op-amp based Wein bridge oscillator. Derive the conditions for Barkhausen criteria to be satisfied in this oscillator and the expression of oscillation frequency.
+\mk{17} \yr{EEE 263 | L-2/T-1 | 2023--24}    
+   
 \item For the Wien bridge circuit connected to an op-amp shown: 
 \begin{enumerate}
     
@@ -7595,6 +7697,105 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \label{sub:s8-555}
 
 \begin{enumerate}
+
+\item A 555 timer is connected in the configuration shown in Figure below. The capacitor shown in the circuit is 1 nF. Find the values of $R_A$ and $R_B$ required to generate an oscillation frequency of 50kHz and duty cycle of 60\%. What measures can be taken if we want to achieve duty cycle below 50\%?
+\begin{center}
+    \begin{circuitikz}[thick, american, scale=1.0, y=1.3cm]
+
+    % IC Bounding Box
+    \draw[thick] (1.5, -1) rectangle (10.75, 8.5);
+
+    % Coordinates for connection dots (junctions)
+    \coordinate (midR) at (0, 7.5);
+    \coordinate (vc) at (0, 5);
+    \coordinate (vcc_split) at (3, 9.5);
+    \coordinate (vth) at (3, 6.5);
+    \coordinate (vtl) at (3, 4.5);
+    \coordinate (gnd_int) at (3, 0.5);
+    \coordinate (vc_split) at (2, 5);
+
+    % External Components (Left Side)
+    \draw (vcc_split) -- (0, 9.5) to[R, l=$R_A$] (midR);
+    \draw (midR) to[R, l=$R_B$] (vc);
+    \draw (vc) to[C, l=$C$] (0, 2) node[ground] {};
+    \node[left=0.1cm] at (vc) {$v_c$};
+
+    % VCC Supply Arrow
+    \draw[-latex] (vcc_split) -- (3, 10.3) node[right] {$V_{CC}$};
+    \draw (vcc_split) -- (3, 8.5);
+
+
+    % Internal Voltage Divider Line
+    \draw (3, 8.5) to[R, l=$R_1$] (vth);
+    \draw (vth) to[R, l=$R_1$] (vtl);
+    \draw (vtl) to[R, l=$R_1$] (3, 2.5) -- (gnd_int) -- (3, 1);
+    
+
+    \draw (gnd_int) -- (3, -1) node[ground] {};
+
+    % Voltage Divider Labels
+    \node[left=0.1cm] at (vth) {$V_{TH}$};
+    \node[left=0.1cm] at (vtl) {$V_{TL}$};
+
+    % Comparators
+    \node[op amp, noinv input up, anchor=-] (comp1) at (5.5, 6.2) {};
+    \node[op amp, noinv input up, anchor=+] (comp2) at (5.5, 4.8) {};
+    \node at (5.5, 7.6) {Comparator 1};
+    \node at (5.5, 5.6) {Comparator 2};
+
+    % Wiring: Voltage Divider to Comparators
+    \draw (vth) -- (comp1.-);
+    \draw (vtl) -- (comp2.+);
+
+    % Wiring: v_c to Comparators
+    \draw (vc) -- (vc_split);
+    \draw (vc_split) -- (2, 7.0) -- (comp1.+);
+    \draw (vc_split) -- (2, 4.0) -- (comp2.-);
+
+    % Flip-Flop Block
+    \draw[thick] (8.5, 3.75) rectangle (10.0, 7.25);
+    \node at (9.25, 5.5) {Flip-flop};
+    \node[anchor=west, xshift=0.1cm] at (8.5, 6.75) {$R$};
+    \node[anchor=west, xshift=0.1cm] at (8.5, 4.25) {$S$};
+    \node[anchor=east, xshift=-0.1cm] at (10.0, 6.75) {$Q$};
+    \node[anchor=east, xshift=-0.1cm] at (10.0, 4.25) {$\overline{Q}$};
+
+    % Wiring: Comparators to Flip-Flop
+    \draw (comp1.out) -- (8.5, 7);
+    \draw (comp2.out) -- (8.5, 4);
+
+    % Output vo
+    \draw (10, 6.75) -- (11.5, 6.75) node[ocirc] {} node[above right] {$v_o$};
+
+    % Transistor Q1 (xscale=-1 mirrors it to put base on the right)
+    \node[npn, xscale=-1] (q1) at (6.5, 1.5) {};
+    \node at (6, 1.5) {$Q_1$};
+
+    % Wiring: Transistor
+    % Base Connection
+    \draw (10.0, 4.25) -- (10.25, 4.25) -- (10.25, 1.5) to[R, l_=$100\ \Omega$] (q1.B);
+    % Emitter Connection
+    \draw (q1.E) |- (gnd_int);
+    % Collector Connection (Discharge line jumping out of the box)
+    \draw (q1.C) -- (6.5, 2.5) -- (-1.5, 2.5) -- (-1.5, 7.5) -- (midR);
+
+    % Draw Junction Dots (filled circles)
+    \filldraw (midR) circle (1.5pt);
+    \filldraw (vc) circle (1.5pt);
+    \filldraw (vcc_split) circle (1.5pt);
+    \filldraw (vth) circle (1.5pt);
+    \filldraw (vtl) circle (1.5pt);
+    \filldraw (gnd_int) circle (1.5pt);
+    \filldraw (vc_split) circle (1.5pt);
+
+\end{circuitikz}
+
+\end{center}
+\mk{12} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
+\item With proper connection diagram, explain the monostable mode of operation of a 555 timer. Design a monostable multivibrator using a 555 timer that can generate an output pulse with duration T = 100ms. Draw the waveforms of output voltage and trigger voltage of your designed circuit.
+\mk{18} \yr{EEE 263 | L-2/T-1 | 2023--24}
+    
 
 \item Design an oscillator circuit using a 555 Timer IC which has a square wave output with oscillation frequency of 20\,kHz and duty cycle of 25\%. Provide a necessary illustration of the designed circuit and draw the wave shape.
 

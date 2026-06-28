@@ -437,7 +437,7 @@ A \textbf{3-tier architecture} decouples the user interface, business logic, and
 
 \begin{center}
 \renewcommand{\arraystretch}{1.4}
-\begin{tabularx}{\textwidth}{@{} l X X @{}}
+\begin{tabular}{@{} l l l @{}}
 \toprule
 \textbf{Feature} & \textbf{2-Tier Architecture} & \textbf{3-Tier Architecture} \\
 \midrule
@@ -447,11 +447,8 @@ A \textbf{3-tier architecture} decouples the user interface, business logic, and
 \textbf{Maintenance} & High effort (update every client device) & Low effort (centralized updates) \\
 \textbf{Use Case} & Legacy desktop software, internal enterprise tools & Web applications, cloud services, e-commerce \\
 \bottomrule
-\end{tabularx}
+\end{tabular}
 \end{center}
-
-\vspace{1em}
-\noindent\textbf{Exam Tip:} When differentiating the two architectures, always emphasize where the \textbf{Business Logic} resides. In 2-tier, it is bundled with the client; in 3-tier, it is isolated in the application server.
 
 \end{tcolorbox}
 
@@ -555,14 +552,7 @@ Data abstraction is typically implemented using the \textbf{Three-Schema Archite
     \end{itemize}
 \end{enumerate}
 
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} A key concept intrinsically linked to data abstraction is \textbf{Data Independence}. 
-\begin{itemize}
-    \item \textit{Logical Data Independence:} Changing the logical schema (e.g., adding a new column to a table) without rewriting application programs at the View level.
-    \item \textit{Physical Data Independence:} Changing the physical schema (e.g., migrating from HDD to SSD, or switching from a Hash index to a B+ Tree) without altering the Logical schema.
-\end{itemize}
+
 \end{tcolorbox}
 
 \item Why does it yield current values when derived attributes are not stored in the database? Discuss with an example.
@@ -662,11 +652,6 @@ FROM
 \end{tabularx}
 \end{center}
 
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} While derived attributes save storage and guarantee data freshness, they consume CPU cycles during execution. In highly transactional systems where complex derivation formulas are queried millions of times, developers might choose to store them physically and manage updates via database \textbf{Triggers} to optimize read performance.
-
 \end{tcolorbox}
 
 \item What are the requirements of an ideal DBMS? Define entity and attribute in the context of database with suitable example(s).
@@ -762,8 +747,6 @@ Feature & Entity & Attribute \\
 \end{tabularx}
 \end{center}
 
-\vspace{1em}
-\noindent\textbf{Exam Tip:} Always underline the primary key attribute in your ER diagrams. If an exam question asks for attributes, ensure you include a mix of key, simple, multivalued, or derived attributes to demonstrate comprehensive knowledge.
 
 \end{tcolorbox}
 
@@ -865,11 +848,6 @@ Feature & Set Semantics & Bag (Multiset) Semantics \\
 \end{tabularx}
 \end{center}
 
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} In SQL, the standard \texttt{UNION}, \texttt{INTERSECT}, and \texttt{EXCEPT} (or \texttt{MINUS}) operators perform \textbf{Set} operations by default (they implicitly remove duplicates). To instruct SQL to use \textbf{Bag} operations, you must append the keyword \texttt{ALL}, such as \texttt{UNION ALL}, \texttt{INTERSECT ALL}, or \texttt{EXCEPT ALL}.
-
 \end{tcolorbox}
 
 %% Q8
@@ -938,10 +916,6 @@ At the core of a robust relational DBMS is its ability to process database trans
 \end{center}
 \vspace{1.5em}
 
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} When answering questions about DBMS properties, always explicitly differentiate between the \textbf{general structural properties} (like Data Independence and Abstraction) and the \textbf{transactional properties} (ACID). Explicitly listing ACID guarantees full marks for the transactional aspect of the DBMS.
 
 \end{tcolorbox}
 
@@ -1055,10 +1029,6 @@ This represents the physical layer where the information is permanently written.
     \item \textbf{Indices:} Auxiliary data structures (such as B+ Trees or Hash tables) that provide fast access to data items based on key values, bypassing sequential scans.
 \end{itemize}
 
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} When describing the architecture, emphasize that the \textbf{Storage Manager} is the critical bridge. The Query Processor does not touch the disk directly; it must request data via the Storage Manager's Buffer and File Managers.
 
 \end{tcolorbox}
 
@@ -1187,10 +1157,6 @@ Security & Coarse OS-level permissions (Read/Write file). & Granular role-based 
 \end{tabularx}
 \end{center}
 
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} When answering this question, explicitly group your points. The most critical contrasts examiners look for are \textbf{Data Independence}, the elimination of \textbf{Redundancy}, and the presence of \textbf{ACID transactional guarantees}. Mentioning ACID guarantees full marks for the operational properties of a DBMS.
 
 \end{tcolorbox}
 
@@ -1339,10 +1305,6 @@ A Database Management System (DBMS) is a complex software system tasked with man
     \item \textbf{Indices:} Specialized data structures (e.g., B+ Trees) that speed up the retrieval of specific records without sequentially scanning the entire data file.
 \end{itemize}
 
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} When drawing the block diagram in an exam, the most crucial relationship to establish is that the \textbf{Query Processor} does \textit{not} interact with the disk directly. All data requests must pass through the \textbf{Storage Manager} (specifically the Buffer Manager and File Manager).
 
 \end{tcolorbox}
 
@@ -1452,11 +1414,6 @@ Feature & DDL (Data Definition Language) & DML (Data Manipulation Language) \\
 \bottomrule
 \end{tabularx}
 \end{center}
-
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} To guarantee full marks, always map the two concepts together: \textbf{DDL} is the language used to define the \textbf{Schema}, whereas \textbf{DML} is the language used to manage the \textbf{Data (Instance)}.
 
 \end{tcolorbox}
 
@@ -1589,11 +1546,6 @@ Disadvantages &
 \end{itemize} \\
 \bottomrule
 \end{tabularx}
-
-\vspace{1em}
-\hrule
-\vspace{0.5em}
-\noindent\textbf{Exam Tip:} When discussing "Multiple relations in one file", explicitly use the term \textbf{Multitable Clustering}. This keyword demonstrates a deep understanding of physical storage optimization techniques used by modern systems like Oracle (Table Clusters) to optimize join operations.
 
 \end{tcolorbox}
 

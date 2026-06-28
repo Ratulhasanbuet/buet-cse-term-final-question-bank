@@ -1,0 +1,117 @@
+\documentclass[12pt,a3paper]{article}
+
+%% ── Packages ──────────────────────────────────────────────────────────
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage[hidelinks,colorlinks=true,linkcolor=blue!70!black]{hyperref}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{needspace}
+\usepackage[strings]{underscore}
+\usepackage{array,booktabs}
+\usepackage{multirow}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{makecell}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{mathtools}
+\usepackage{forest}
+\usetikzlibrary{er}
+
+\usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
+\usetikzlibrary{shapes.geometric, positioning}
+\usetikzlibrary{matrix, positioning, arrows.meta, calc}
+\usetikzlibrary{positioning, calc}
+\usetikzlibrary{tikzmark, calc, arrows.meta}
+\usetikzlibrary{shapes.geometric, positioning, arrows.meta}
+\tcbuselibrary{skins,breakable}
+\usetikzlibrary{patterns}
+
+\usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
+\usetikzlibrary{decorations.pathreplacing}
+\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+
+\definecolor{ct1bg}{RGB}{230,241,251}
+\definecolor{ct1fg}{RGB}{24,95,165}
+\definecolor{ct2bg}{RGB}{234,243,222}
+\definecolor{ct2fg}{RGB}{59,109,17}
+\definecolor{ct3bg}{RGB}{250,238,218}
+\definecolor{ct3fg}{RGB}{133,79,11}
+\definecolor{ct4bg}{RGB}{250,236,231}
+\definecolor{ct4fg}{RGB}{153,60,29}
+\definecolor{headerbg}{RGB}{235,235,232}
+
+\renewcommand{\arraystretch}{1.5}
+\renewcommand\theadfont{\bfseries\small}
+
+\begin{document}
+
+\begin{center}
+{\Large\bfseries L2-T1 Class Test Schedule \quad January 2026}
+\end{center}
+
+\vspace{1em}
+
+\subsection*{CSE 215 --- Database}
+\begin{center}
+    
+\noindent
+\begin{tabular}{ccccccccc}
+\toprule
+\rowcolor{headerbg}
+\thead{CT} & \thead{Date} & \thead{Day} & \thead{Room 103} & \thead{Room 104} & \thead{Room 107} & \thead{Room 108} & \thead{Room 109} & \thead{Room 203} \\
+\midrule
+\rowcolor{ct1bg}\textcolor{ct1fg}{\bfseries CT 1} &  8 Jul 2026 & Wednesday & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\rowcolor{ct2bg}\textcolor{ct2fg}{\bfseries CT 2} & 22 Jul 2026 & Wednesday & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\rowcolor{ct3bg}\textcolor{ct3fg}{\bfseries CT 3} &  2 Sep 2026 & Wednesday & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\rowcolor{ct4bg}\textcolor{ct4fg}{\bfseries CT 4} & 16 Sep 2026 & Wednesday & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{1.4em}
+
+%% ============ CSE 207 ============
+\subsection*{CSE 207 --- Data Structures \& Algorithms II}
+\begin{center}
+\noindent
+\begin{tabular}{ccccccccc}
+\toprule
+\rowcolor{headerbg}
+\thead{CT} & \thead{Date} & \thead{Day} & \thead{Room 103} & \thead{Room 104} & \thead{Room 108} & \thead{Room 109} & \thead{Room 203} & \thead{Room 204} \\
+\midrule
+\rowcolor{ct1bg}\textcolor{ct1fg}{\bfseries CT 1} & 13 Jul 2026 & Monday    & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\rowcolor{ct2bg}\textcolor{ct2fg}{\bfseries CT 2} & 27 Jul 2026 & Monday    & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\rowcolor{ct3bg}\textcolor{ct3fg}{\bfseries CT 3} &  7 Sep 2026 & Monday    & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\rowcolor{ct4bg}\textcolor{ct4fg}{\bfseries CT 4} & 21 Sep 2026 & Monday    & 1--30 & 31--60 & 61--90 & 91--120 & 121--150 & 151--rest \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1.4em}
+
+%% ============ CSE 205 ============
+\subsection*{CSE 205 --- Digital Logic Design \quad {\normalfont\small (20 students per room)}}
+\begin{center}
+    
+\noindent
+\begin{tabular}{ccclllllllll}
+\toprule
+\rowcolor{headerbg}
+\thead{CT} & \thead{Date} & \thead{Day} & \thead{103} & \thead{104} & \thead{108} & \thead{109} & \thead{203} & \thead{204} & \thead{205} & \thead{206} & \thead{207} \\
+\midrule
+\rowcolor{ct1bg}\textcolor{ct1fg}{\bfseries CT 1} & 15 Jul 2026 & Wednesday & 1--20 & 21--40 & 41--60 & 61--80 & 81--100 & 101--120 & 121--140 & 141--160 & 161--rest \\
+\rowcolor{ct2bg}\textcolor{ct2fg}{\bfseries CT 2} & 29 Jul 2026 & Wednesday & 1--20 & 21--40 & 41--60 & 61--80 & 81--100 & 101--120 & 121--140 & 141--160 & 161--rest \\
+\rowcolor{ct3bg}\textcolor{ct3fg}{\bfseries CT 3} &  9 Sep 2026 & Wednesday & 1--20 & 21--40 & 41--60 & 61--80 & 81--100 & 101--120 & 121--140 & 141--160 & 161--rest \\
+\rowcolor{ct4bg}\textcolor{ct4fg}{\bfseries CT 4} & 23 Sep 2026 & Wednesday & 1--20 & 21--40 & 41--60 & 61--80 & 81--100 & 101--120 & 121--140 & 141--160 & 161--rest \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{document}
