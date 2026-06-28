@@ -2416,7 +2416,7 @@ To find the simplified Sum-of-Products (SOP) expression, we map the 1s into a 3-
     \maxterms{0,1,2,4}
     \implicant{3}{7}
     \implicant{5}{7}
-    \implicant{6}{7}
+    \implicant{7}{6}
 \end{karnaugh-map}
 \end{center}
 
@@ -3582,7 +3582,7 @@ This equation dictates a two-level NAND structure. Additionally, the complements
 
     % X Input and tied split
     \draw (0, 5.28) node[left] {$x$} -- ++(1,0) coordinate(x_branch) -- (nand1.in 1);
-    \draw (x_branch) |- (1.8, 4.5) coordinate(tieX);
+    \draw (x_branch) |- (1.5, 4.5) coordinate(tieX);
     \fill (x_branch) circle (1.5pt);
     \fill (tieX) circle (1.5pt);
     \draw (tieX) |- (invX.in 1);
@@ -3590,7 +3590,7 @@ This equation dictates a two-level NAND structure. Additionally, the complements
     
     % Y Input and tied split
     \draw (0, 4.72) node[left] {$y$} -- ++(0.5,0) coordinate(y_branch) |- (nand1.in 2);
-    \draw (y_branch) |- (1.8, 2.5) coordinate(tieY);
+    \draw (y_branch) |- (1.5, 2.5) coordinate(tieY);
     \fill (y_branch) circle (1.5pt);
     \fill (tieY) circle (1.5pt);
     \draw (tieY) |- (invY.in 1);
@@ -8222,45 +8222,48 @@ To ensure high readability and avoid overlapping routing, the complete logic cir
 \vspace{1em}
 \begin{center}
 \textbf{Tier 1: Bit-Level Signal Generation (Shown for bit $i$)} \\
-\vspace{0.5em}
-\begin{circuitikz}[thick, scale=0.9, transform shape]
-    % Input Nodes
-    \node (xi) at (0, 3) {$X_i$};
-    \node (yi) at (0, 1) {$Y_i$};
-    
-    % Splitters/Dots
-    \filldraw (1, 3) circle (2pt);
-    \filldraw (1.5, 1) circle (2pt);
-    
-    % Inverters
-    \node[not port, scale=0.7] (notX) at (3, 4) {};
-    \node[not port, scale=0.7] (notY) at (3, 0) {};
-    
-    % Routing to inverters
-    \draw (1, 3) |- (notX.in);
-    \draw (1.5, 1) |- (notY.in);
-    
-    % Gates for ei, gi, li
-    \node[and port] (andG) at (6, 2.5) {};
-    \node[xnor port] (xnorE) at (6, 1) {};
-    \node[and port] (andL) at (6, -0.5) {};
-    
-    % Wiring to andG (gi = Xi * !Yi)
-    \draw (1, 3) |- (andG.in 1);
-    \draw (notY.out) |- (andG.in 2);
-    
-    % Wiring to xnorE (ei = Xi XNOR Yi)
-    \draw (1, 3) -- (1, 1.28) -- (xnorE.in 1);
-    \draw (1.5, 1) -- (1.5, 0.72) -- (xnorE.in 2);
-    
-    % Wiring to andL (li = !Xi * Yi)
-    \draw (notX.out) |- (andL.in 1);
-    \draw (1.5, 1) |- (andL.in 2);
-    
-    % Output Labels
-    \node[right] at (andG.out) {$g_i \ (X_i > Y_i)$};
-    \node[right] at (xnorE.out) {$e_i \ (X_i = Y_i)$};
-    \node[right] at (andL.out) {$l_i \ (X_i < Y_i)$};
+\vspace{1.5em}
+\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
+    \ctikzset{logic ports=ieee}
+
+    % --- Inputs ---
+    \node[left, font=\bfseries] at (0, 4.28) {$X_i$};
+    \node[left, font=\bfseries] at (0, -0.28) {$Y_i$};
+
+    % --- Main Logic Gates ---
+    \node[and port] (ANDG) at (8, 4) {};
+    \node[xnor port] (XNORE) at (8, 2) {};
+    \node[and port] (ANDL) at (8, 0) {};
+
+    % --- Inverters ---
+    \node[not port, scale=0.7] (NOTY) at (5.5, 3.72) {};
+    \node[not port, scale=0.7] (NOTX) at (5.5, 0.28) {};
+
+    % --- Wiring X_i ---
+    % Direct to ANDG
+    \draw (0, 4.28) -- (ANDG.in 1);
+    % Tap down to XNORE
+    \draw (1, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 1);
+    % Tap down to NOTX
+    \draw (2.5, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTX.in);
+    % NOTX to ANDL
+    \draw (NOTX.out) -- (ANDL.in 1);
+
+    % --- Wiring Y_i ---
+    % Direct to ANDL
+    \draw (0, -0.28) -- (ANDL.in 2);
+    % Tap up to XNORE
+    \draw (1.5, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 2);
+    % Tap up to NOTY
+    \draw (4, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTY.in);
+    % NOTY to ANDG
+    \draw (NOTY.out) -- (ANDG.in 2);
+
+    % --- Outputs ---
+    \draw (ANDG.out) -- ++(0.5,0) node[right] {$g_i \ (X_i > Y_i)$};
+    \draw (XNORE.out) -- ++(0.5,0) node[right] {$e_i \ (X_i = Y_i)$};
+    \draw (ANDL.out) -- ++(0.5,0) node[right] {$l_i \ (X_i < Y_i)$};
+
 \end{circuitikz}
 \end{center}
 
@@ -8403,7 +8406,7 @@ We implement the minimal SOP expression using a standard logic bus architecture.
     % Inverted Lines
     \draw (notA.out) -- (1, -3);
     \draw (notB.out) -- (3, -3);
-    \draw (notC.out) -- (5, -3);
+    \draw (notC.out) -- (5, -3.5);
 
     % Gate 1: A'BC
     \node[and port, number inputs=3] (and1) at (8, 3) {};
@@ -8700,31 +8703,31 @@ We construct the circuit diagram utilizing logic gates. The input bus is organiz
 \begin{center}
 \begin{circuitikz}[thick]
     % Input Labels
-    \node at (0, 10.5) {$A$};
-    \node at (2, 10.5) {$B$};
-    \node at (4, 10.5) {$C$};
-    \node at (6, 10.5) {$D$};
+    \node at (0, 11.5) {$A$};
+    \node at (2, 11.5) {$B$};
+    \node at (4, 11.5) {$C$};
+    \node at (6, 11.5) {$D$};
 
     % Main Input Lines
-    \draw (0, 10) -- (0, 0);
-    \draw (2, 10) -- (2, 0);
-    \draw (4, 10) -- (4, 0);
-    \draw (6, 10) -- (6, 0);
+    \draw (0, 11) -- (0, -1);
+    \draw (2, 11) -- (2, -1);
+    \draw (4, 11) -- (4, -1);
+    \draw (6, 11) -- (6, -1);
 
-    % Inverters
-    \node[not port, rotate=-90, scale=0.7] (notA) at (1, 9.5) {};
-    \node[not port, rotate=-90, scale=0.7] (notB) at (3, 9.5) {};
-    \node[not port, rotate=-90, scale=0.7] (notC) at (5, 9.5) {};
+    % Inverters (Moved higher to avoid overlap)
+    \node[not port, rotate=-90, scale=0.7] (notA) at (1, 10.5) {};
+    \node[not port, rotate=-90, scale=0.7] (notB) at (3, 10.5) {};
+    \node[not port, rotate=-90, scale=0.7] (notC) at (5, 10.5) {};
 
     % Connect Inverters to Main Lines
-    \draw (0, 10) to[short, *-] (1, 10) -- (notA.in);
-    \draw (2, 10) to[short, *-] (3, 10) -- (notB.in);
-    \draw (4, 10) to[short, *-] (5, 10) -- (notC.in);
+    \draw (0, 11) to[short, *-] (1, 11) -- (notA.in);
+    \draw (2, 11) to[short, *-] (3, 11) -- (notB.in);
+    \draw (4, 11) to[short, *-] (5, 11) -- (notC.in);
 
     % Inverted Lines
-    \draw (notA.out) -- (1, 0);
-    \draw (notB.out) -- (3, 0);
-    \draw (notC.out) -- (5, 0);
+    \draw (notA.out) -- (1, -1);
+    \draw (notB.out) -- (3, -1);
+    \draw (notC.out) -- (5, -1);
 
     % ======== Output w = ABC ========
     \node[and port, number inputs=3] (andW) at (9, 9) {};
@@ -8777,7 +8780,6 @@ We construct the circuit diagram utilizing logic gates. The input bus is organiz
 
 \end{circuitikz}
 \end{center}
-
 \end{tcolorbox}
 
 \end{enumerate}
@@ -9769,17 +9771,17 @@ The minterms for $B_{out}$ are $\sum m(1, 2, 3, 7)$.
 \begin{karnaugh-map}[4][2][1][$y B_{in}$][$x$]
     \minterms{1,2,3,7}
     \autoterms[0]
-    \implicant{1}{2} % groups minterms 1 and 3 (cells 1 and 2 in 4x2 matrix)
-    \implicant{2}{3} % groups minterms 3 and 2 (cells 2 and 3)
-    \implicant{2}{6} % groups minterms 3 and 7 (cells 2 and 6)
+    \implicant{1}{3} % Groups minterms 1 and 3 (Group 2)
+    \implicant{3}{2} % Groups minterms 3 and 2 (Group 1)
+    \implicant{3}{7} % Groups minterms 3 and 7 (Group 3)
 \end{karnaugh-map}
 \end{center}
 
 By grouping the 1s in the K-map, we obtain three pairs:
 \begin{itemize}
-    \item Group 1 (cells 2, 3 $\rightarrow$ $m_3, m_2$): yields $\mathbf{\bar{x}y}$
-    \item Group 2 (cells 1, 2 $\rightarrow$ $m_1, m_3$): yields $\mathbf{\bar{x}B_{in}}$
-    \item Group 3 (cells 2, 6 $\rightarrow$ $m_3, m_7$): yields $\mathbf{yB_{in}}$
+    \item Group 1 ($m_3, m_2$): yields $\mathbf{\bar{x}y}$
+    \item Group 2 ($m_1, m_3$): yields $\mathbf{\bar{x}B_{in}}$
+    \item Group 3 ($m_3, m_7$): yields $\mathbf{yB_{in}}$
 \end{itemize}
 Thus, the simplified Boolean expression is:
 \begin{align*}
@@ -9954,7 +9956,7 @@ When $C_{out} = 1$, the second 4-bit binary adder adds $0110_2$ to the intermedi
 \textbf{\textcolor{cD}{3. BCD Adder Block Diagram}}
 
 \begin{center}
-\begin{circuitikz}[line width=0.8pt]
+\begin{circuitikz}[line width=0.8pt, thick]
     % --- Adder 1 ---
     \draw[fill=white] (-1.5, 3) rectangle (1.5, 6);
     \node at (0, 4.5) [align=center] {\textbf{4-bit Binary} \\ \textbf{Adder 1}};
@@ -9972,7 +9974,7 @@ When $C_{out} = 1$, the second 4-bit binary adder adds $0110_2$ to the intermedi
     
     % --- Adder 2 ---
     \draw[fill=white] (-1.5, -3.5) rectangle (1.5, -0.5);
-    \node at (0, -2) [align=center] {\textbf{4-bit Binary} \\ \textbf{Adder 2}};
+    \node at (0, -2) [align=center, scale=0.6] {\textbf{4-bit Binary} \\ \textbf{Adder 2}};
     
     % Adder 2 Labels inside
     \node[below] at (-1, -0.5) {$Z_3$};
@@ -10012,7 +10014,7 @@ When $C_{out} = 1$, the second 4-bit binary adder adds $0110_2$ to the intermedi
     
     % Route K to OR
     \draw (1.5, 4.5) coordinate (kout) node[right, xshift=2pt] {$K$};
-    \draw (kout) -- (6.5, 4.5) |- (or1.in 1);
+    \draw (kout) -- (5, 4.5) |- (or1.in 1);
     
     % Route ANDs to OR
     \draw (and1.out) |- (or1.in 2);
@@ -10266,61 +10268,57 @@ To implement this efficiently using XOR gates (sharing logic with the Difference
 \vspace{1em}
 \textbf{\textcolor{cD}{3. Logic Circuit Implementation}}
 
-The equations $D = A \oplus B \oplus B_{in}$ and $B_{out} = \bar{A}B + B_{in}(\overline{A \oplus B})$ indicate that a Full Subtractor can be elegantly constructed by cascading two Half-Subtractors and an OR gate.
-
 \begin{center}
-\begin{circuitikz}[line width=0.8pt]
-    % Inputs
-    \node (A) at (0, 5) {$A$};
-    \node (B) at (0, 3.5) {$B$};
-    \node (Bin) at (0, 1.5) {$B_{in}$};
-
-    % Gates for First Half Subtractor
-    \node[xor port] (XOR1) at (3, 4.25) {};
-    \node[not port, scale=0.7] (NOT1) at (2, 2.75) {};
-    \node[and port] (AND1) at (4, 3) {};
-
-    % Gates for Second Half Subtractor
-    \node[xor port] (XOR2) at (7, 4.25) {};
-    \node[not port, scale=0.7] (NOT2) at (5, 2.75) {};
-    \node[and port] (AND2) at (7, 2) {};
-
-    % OR Gate for Borrow Out
-    \node[or port] (OR) at (9, 2.5) {};
-
-    % Wiring A
-    \draw (A) -- ++(1,0) coordinate (a_j) |- (XOR1.in 1);
-    \draw (a_j) |- (NOT1.in);
-    \fill (a_j) circle (1.5pt);
-
-    % Wiring B
-    \draw (B) -- ++(1.5,0) coordinate (b_j) |- (XOR1.in 2);
-    \draw (b_j) |- (AND1.in 2);
-    \fill (b_j) circle (1.5pt);
-
-    % Wiring inside first half subtractor
-    \draw (NOT1.out) |- (AND1.in 1);
-
-    % Wiring XOR1 to XOR2 and NOT2
-    \draw (XOR1.out) -- ++(0.5,0) coordinate (x1_j) |- (XOR2.in 1);
-    \draw (x1_j) |- (NOT2.in);
-    \fill (x1_j) circle (1.5pt);
-
-    % Wiring Bin
-    \draw (Bin) -- ++(4.5,0) coordinate (bin_j) |- (XOR2.in 2);
-    \draw (bin_j) |- (AND2.in 2);
-    \fill (bin_j) circle (1.5pt);
-
-    % Wiring inside second half subtractor
-    \draw (NOT2.out) |- (AND2.in 1);
-
-    % Outputs
-    \draw (XOR2.out) -- ++(2,0) node[right] {\textbf{Difference ($D$)}};
+\begin{circuitikz}[line width=0.8pt, >=stealth, transform shape, thick, x=1.3cm]
     
-    % Borrow out logic
-    \draw (AND1.out) |- (OR.in 1);
-    \draw (AND2.out) |- (OR.in 2);
-    \draw (OR.out) -- ++(1,0) node[right] {\textbf{Borrow-out ($B_{out}$)}};
+
+    % --- Inputs ---
+    \node[left] at (0, 6.28) {\textbf{$A$}};
+    \node[left] at (0, 5.72) {\textbf{$B$}};
+    \node[left] at (0, 2.22) {\textbf{$B_{in}$}};
+
+    % --- First Half Subtractor ---
+    \node[xor port] (XOR1) at (3, 6) {};
+    \node[and port] (AND1) at (3, 4) {};
+    \node[not port, scale=0.7] (NOT1) at (1.5, 4.28) {}; 
+
+    % Wiring A and B to XOR1
+    \draw (0, 6.28) -- (XOR1.in 1);
+    \draw (0, 5.72) -- (XOR1.in 2);
+
+    % Taps to AND1 / NOT1
+    \draw (0.6, 6.28) node[circle, fill, inner sep=1.5pt] {} |- (NOT1.in);
+    \draw (NOT1.out) -- (AND1.in 1);
+    \draw (1.2, 5.72) node[circle, fill, inner sep=1.5pt] {} |- (AND1.in 2);
+
+    % --- Second Half Subtractor ---
+    \node[xor port] (XOR2) at (7.5, 5) {};
+    \node[and port] (AND2) at (7.5, 2.5) {};
+    \node[not port, scale=0.7] (NOT2) at (6, 2.78) {}; 
+
+    % Wiring XOR1 to XOR2
+    \draw (XOR1.out) -- (4.2, 6) |- (XOR2.in 1); 
+    
+    % Wiring Bin to XOR2 and AND2
+    \draw (0, 2.22) -- (AND2.in 2); 
+    
+    % Tap for Bin up to XOR2.in 2 (at 4.72)
+    \draw (4.8, 2.22) node[circle, fill, inner sep=1.5pt] {} |- (XOR2.in 2);
+
+    % Tap for NOT2 down to NOT2.in (at 2.78)
+    \draw (5.6, 5.28) node[circle, fill, inner sep=1.5pt] {} |- (NOT2.in);
+    \draw (NOT2.out) -- (AND2.in 1);
+
+    % --- OR Gate ---
+    \node[or port] (OR) at (10.5, 3.25) {};
+
+    % Wiring ANDs to OR
+    \draw (AND1.out) -- (9, 4) |- (OR.in 1);
+    \draw (AND2.out) -- (9, 2.5) |- (OR.in 2);
+
+    % --- Outputs ---
+    \draw (XOR2.out) -- ++(0.5,0) node[right] {\textbf{Difference ($D$)}};
+    \draw (OR.out) -- ++(0.5,0) node[right] {\textbf{Borrow-out ($B_{out}$)}};
 
 \end{circuitikz}
 \end{center}
@@ -10407,69 +10405,82 @@ The core of the circuit is a standard BCD Adder. It consists of:
 \textbf{\textcolor{cD}{4. Complete System Block Diagram}}
 
 \begin{center}
-\begin{circuitikz}[line width=0.8pt]
+\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
 
-    % --- Inputs ---
-    \node (A) at (0, 7) {\textbf{$A_3 A_2 A_1 A_0$}};
-    \node (B) at (-4, 7) {\textbf{$B_3 B_2 B_1 B_0$}};
-    \node (S) at (-6.5, 7) {\textbf{Select ($S$)}};
+    % ================= Inputs =================
+    \node (S) at (-2, 8) {\textbf{Select ($S$)}};
+    \node (B) at (2, 8) {\textbf{$B_3 B_2 B_1 B_0$}};
+    \node (A) at (6, 8) {\textbf{$A_3 A_2 A_1 A_0$}};
 
-    % --- Conditional 9's Complementer ---
-    \node[draw, thick, minimum width=2.5cm, minimum height=2cm, fill=white] (Comp) at (-4, 4.5) {\begin{tabular}{c} \textbf{Conditional} \\ \textbf{9's Complementer} \end{tabular}};
-    \draw[->] (B) -- (Comp.north);
-    \draw[->] (S.south) |- (Comp.west);
-
-    % --- Binary Adder 1 ---
-    \node[draw, thick, minimum width=4cm, minimum height=3cm, fill=white] (Add1) at (0, 2) {\begin{tabular}{c} \textbf{4-Bit Binary Adder 1} \\ (Computes $Z = A + Y + S$) \end{tabular}};
+    % ================= Conditional 9's Complementer =================
+    \node[draw, thick, minimum width=3.5cm, minimum height=1.8cm, fill=white, rounded corners=2pt, align=center] 
+        (Comp) at (2, 6) {\textbf{Conditional} \\ \textbf{9's Complementer}};
     
-    % Connections to Adder 1
-    \draw[->] (A) -- (Add1.north) node[midway, right] {$A$};
-    \draw[->] (Comp.east) -| (-1.5, 3.5) node[above right] {$Y_3 Y_2 Y_1 Y_0$} -- (-1.5, 3.5) |- (Add1.west);
-    \draw[->] (-6.5, 4.5) |- (-2.5, 2) node[above right] {$C_{in}=S$} -- (Add1.west);
-    \fill (-6.5, 4.5) circle (2pt);
+    \draw[->, thick] (B) -- (Comp.north);
+    \draw[->, thick] (S) |- (Comp.west);
+    \fill (-2, 6) circle (2pt);
 
-    % --- BCD Correction Logic ---
-    \node[and port] (AND1) at (5, 2.5) {};
-    \node[and port] (AND2) at (5, 1.5) {};
-    \node[or port, number inputs=3] (OR1) at (7, 2) {};
+    % ================= First 4-Bit Binary Adder =================
+    \node[draw, thick, minimum width=6.5cm, minimum height=3cm, fill=white, rounded corners=2pt, align=center] 
+        (Add1) at (4, 2.5) {\textbf{4-Bit Binary Adder 1} \\ (Computes $Z = A + Y + S$)};
 
-    % Extract Z bits
-    \draw (Add1.east) ++(0, 0.5) coordinate (Z3) node[right] {$Z_3$};
-    \draw (Add1.east) ++(0, 0.2) coordinate (Z2) node[right] {$Z_2$};
-    \draw (Add1.east) ++(0, -0.1) coordinate (Z1) node[right] {$Z_1$};
-    \draw (Add1.east) ++(0, -0.4) coordinate (Z0) node[right] {$Z_0$};
-    \draw (Add1.east) ++(0, -1) coordinate (Cout1) node[right] {$C_{out1}$};
+    \draw[->, thick] (A) -- (A |- Add1.north) node[midway, right] {$A$};
+    \draw[->, thick] (Comp.south) -- (Comp.south |- Add1.north) node[midway, left] {$Y$};
+    \draw[->, thick] (-2, 6) -- (-2, 2.5) -- (Add1.west) node[pos=0.85, above] {$C_{in}=S$};
 
-    % Route logic
-    \draw (Z3) -- ++(1,0) coordinate (z3_j) |- (AND1.in 1);
-    \draw (z3_j) |- (AND2.in 1);
-    \fill (z3_j) circle (1.5pt);
+    % ================= Extracting bits from Z & Cout1 =================
+    \coordinate (Z3) at (8.5, 3.5);
+    \coordinate (Z2) at (8.5, 3.0);
+    \coordinate (Z1) at (8.5, 2.5);
+    \coordinate (Z0) at (8.5, 2.0);
+    \coordinate (Cout1) at (8.5, 1.5);
     
-    \draw (Z2) -- ++(1.5,0) |- (AND1.in 2);
-    \draw (Z1) -- ++(1.2,0) |- (AND2.in 2);
+    \node[right] at (Z3) {$Z_3$};
+    \node[right] at (Z2) {$Z_2$};
+    \node[right] at (Z1) {$Z_1$};
+    \node[right] at (Z0) {$Z_0$};
+    \node[right] at (Cout1) {$C_{out1}$};
 
-    \draw (AND1.out) |- (OR1.in 1);
-    \draw (AND2.out) |- (OR1.in 2);
-    \draw (Cout1) -- ++(0.5,0) |- (OR1.in 3);
+    \draw[thick] (Add1.east |- Z3) -- (Z3);
+    \draw[thick] (Add1.east |- Z2) -- (Z2);
+    \draw[thick] (Add1.east |- Z1) -- (Z1);
+    \draw[thick] (Add1.east |- Z0) -- (Z0);
+    \draw[thick] (Add1.east |- Cout1) -- (Cout1);
 
-    % Output of Correction logic
-    \draw (OR1.out) -- ++(0.5,0) coordinate (Cbcd) node[above] {$C_{BCD}$};
+    % ================= BCD Correction Logic =================
+    \node[and port] (AND1) at (11.5, 3.25) {};
+    \node[and port] (AND2) at (11.5, 2.25) {};
+    \node[or port, number inputs=3] (OR1) at (13.5, 2.5) {};
 
-    % --- Binary Adder 2 ---
-    \node[draw, thick, minimum width=4cm, minimum height=3cm, fill=white] (Add2) at (0, -3.5) {\begin{tabular}{c} \textbf{4-Bit Binary Adder 2} \\ (Adds Correction $0 C_{BCD} C_{BCD} 0$) \end{tabular}};
+    % Wiring Z3, Z2, Z1 to AND Gates
+    \draw[thick] (Z3) -- (9.5, 3.5) |- (AND1.in 1);
+    \draw[thick] (9.5, 3.5) |- (AND2.in 1);
+    \fill (9.5, 3.5) circle (1.5pt);
 
-    % Bus from Adder 1 to Adder 2
-    \draw[->, thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
+    \draw[thick] (Z2) -- (10.0, 3.0) |- (AND1.in 2);
+    \draw[thick] (Z1) -- (10.5, 2.5) |- (AND2.in 2);
 
-    % Correction routing to Adder 2
-    \draw[->] (Cbcd) |- (Add2.east) node[above right] {Correction Vector};
+    % Wiring ANDs and Cout1 to OR Gate
+    \draw[thick] (AND1.out) |- (OR1.in 1);
+    \draw[thick] (AND2.out) |- (OR1.in 2);
+    \draw[thick] (Cout1) -- (12.2, 1.5) |- (OR1.in 3);
+
+    % ================= Second 4-Bit Binary Adder =================
+    \node[draw, thick, minimum width=6.5cm, minimum height=3cm, fill=white, rounded corners=2pt, align=center] 
+        (Add2) at (4, -3.5) {\textbf{4-Bit Binary Adder 2} \\ (Adds Correction $0 C_{BCD} C_{BCD} 0$)};
+
+    % Z Bus down to Adder 2
+    \draw[->, ultra thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
+
+    % Routing C_BCD back to Adder 2 and Out
+    \draw[thick] (OR1.out) -- ++(0.5,0) coordinate (Cbcd_tap);
+    \fill (Cbcd_tap) circle (2pt);
+    \draw[->, thick] (Cbcd_tap) -- ++(1.5,0) node[right, font=\bfseries] {Final Carry-Out ($C_{BCD}$)};
     
-    % Final Outputs
-    \draw[->, thick] (Add2.south) -- ++(0, -1) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
-    
-    \draw[->] (Cbcd) -- ++(2.5,0) |- (-6.5, -3.5) node[above right] {$C_{out}$} -- (Add2.west);
-    \fill (Cbcd) circle (2pt);
-    \draw[->] (8.5, 2) -- (10, 2) node[right] {\textbf{Final Carry-Out ($C_{BCD}$)}};
+    \draw[->, thick] (Cbcd_tap) |- (Add2.east) node[above right, pos=0.85] {Correction Vector};
+
+    % ================= Final Result =================
+    \draw[->, ultra thick] (Add2.south) -- ++(0, -1.5) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
 
 \end{circuitikz}
 \end{center}
@@ -10509,60 +10520,80 @@ A second \textbf{4-bit Binary Adder} adds the correction vector $0, C_{BCD}, C_{
 \textbf{\textcolor{cD}{2. Circuit Diagram}}
 
 \begin{center}
-\begin{circuitikz}[line width=0.8pt]
+\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
+    \ctikzset{logic ports=ieee}
 
-    % Inputs
-    \node (A) at (0, 7) {\textbf{$A_3 A_2 A_1 A_0$}};
-    \node (B) at (-4, 7) {\textbf{$B_3 B_2 B_1 B_0$}};
-    \node (X) at (-6.5, 7) {\textbf{Select ($x$)}};
+    % ================= Inputs =================
+    \node (X) at (-2, 8) {\textbf{Select ($x$)}};
+    \node (B) at (2, 8) {\textbf{$B_3 B_2 B_1 B_0$}};
+    \node (A) at (6, 8) {\textbf{$A_3 A_2 A_1 A_0$}};
 
-    % Conditional 9's Complementer
-    \node[draw, thick, minimum width=2.5cm, minimum height=2cm, fill=white] (Comp) at (-4, 4.5) {\begin{tabular}{c} \textbf{Conditional} \\ \textbf{9's Complementer} \end{tabular}};
-    \draw[->] (B) -- (Comp.north);
-    \draw[->] (X.south) |- (Comp.west);
-
-    % Binary Adder 1
-    \node[draw, thick, minimum width=4cm, minimum height=3cm, fill=white] (Add1) at (0, 2) {\begin{tabular}{c} \textbf{4-Bit Binary Adder 1} \\ ($Z = A + Y + x$) \end{tabular}};
-    \draw[->] (A) -- (Add1.north) node[midway, right] {$A$};
-    \draw[->] (Comp.east) -| (-1.5, 3.5) node[above right] {$Y_3 Y_2 Y_1 Y_0$} -- (-1.5, 3.5) |- (Add1.west);
+    % ================= Conditional 9's Complementer =================
+    \node[draw, thick, minimum width=3.5cm, minimum height=1.6cm, fill=white, rounded corners=2pt, align=center] 
+        (Comp) at (2, 6) {\textbf{Conditional} \\ \textbf{9's Complementer}};
     
-    % Carry in = x
-    \draw[->] (-6.5, 4.5) |- (-2.5, 2) node[above right] {$C_{in}=x$} -- (Add1.west);
-    \fill (-6.5, 4.5) circle (2pt);
+    \draw[->, thick] (B) -- (Comp.north);
+    \draw[->, thick] (X) |- (Comp.west);
+    \fill (-2, 6) circle (2pt);
 
-    % BCD Correction Logic Gates
-    \node[and port, scale=0.8] (AND1) at (5, 2.5) {};
-    \node[and port, scale=0.8] (AND2) at (5, 1.5) {};
-    \node[or port, number inputs=3, scale=0.8] (OR1) at (7, 2) {};
+    % ================= First 4-Bit Binary Adder =================
+    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
+        (Add1) at (4, 2.5) {\textbf{4-Bit Binary Adder 1} \\ ($Z = A + Y + x$)};
 
-    % Extracting Z bits
-    \draw (Add1.east) ++(0, 0.5) coordinate (Z3) node[right] {$Z_3$};
-    \draw (Add1.east) ++(0, 0.2) coordinate (Z2) node[right] {$Z_2$};
-    \draw (Add1.east) ++(0, -0.1) coordinate (Z1) node[right] {$Z_1$};
-    \draw (Add1.east) ++(0, -1) coordinate (Cout1) node[right] {$C_{out1}$};
+    \draw[->, thick] (A) -- (A |- Add1.north) node[midway, right] {$A$};
+    \draw[->, thick] (Comp.south) -- (Comp.south |- Add1.north) node[midway, left] {$Y$};
+    \draw[->, thick] (-2, 6) -- (-2, 2.5) -- (Add1.west) node[pos=0.85, above] {$C_{in}=x$};
 
-    \draw (Z3) -- ++(0.8,0) coordinate (z3_j) |- (AND1.in 1);
-    \draw (z3_j) |- (AND2.in 1); \fill (z3_j) circle (1.5pt);
-    \draw (Z2) -- ++(1.2,0) |- (AND1.in 2);
-    \draw (Z1) -- ++(1.0,0) |- (AND2.in 2);
-
-    \draw (AND1.out) |- (OR1.in 1);
-    \draw (AND2.out) |- (OR1.in 2);
-    \draw (Cout1) -- ++(0.5,0) |- (OR1.in 3);
-    \draw (OR1.out) -- ++(0.5,0) coordinate (Cbcd) node[above] {$C_{BCD}$};
-
-    % Binary Adder 2
-    \node[draw, thick, minimum width=4cm, minimum height=3cm, fill=white] (Add2) at (0, -3.5) {\begin{tabular}{c} \textbf{4-Bit Binary Adder 2} \\ ($S = Z + 0 C_{BCD} C_{BCD} 0$) \end{tabular}};
-
-    % Connections to Adder 2
-    \draw[->, thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
-    \draw[->] (Cbcd) |- (Add2.east) node[above right] {Correction Vector};
+    % ================= Extracting bits from Z & Cout1 =================
+    \coordinate (Z3) at (8.5, 3.5);
+    \coordinate (Z2) at (8.5, 3.0);
+    \coordinate (Z1) at (8.5, 2.5);
+    \coordinate (Cout1) at (8.5, 1.5);
     
-    % Final Outputs
-    \draw[->, thick] (Add2.south) -- ++(0, -1) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
-    \draw[->] (Cbcd) -- ++(2,0) |- (-6.5, -3.5) node[above right] {$C_{out}$} -- (Add2.west);
-    \fill (Cbcd) circle (2pt);
-    \draw[->] (8, 2) -- (10, 2) node[right] {\textbf{Carry to Next Digit}};
+    \node[right] at (Z3) {$Z_3$};
+    \node[right] at (Z2) {$Z_2$};
+    \node[right] at (Z1) {$Z_1$};
+    \node[right] at (Cout1) {$C_{out1}$};
+
+    \draw[thick] (Add1.east |- Z3) -- (Z3);
+    \draw[thick] (Add1.east |- Z2) -- (Z2);
+    \draw[thick] (Add1.east |- Z1) -- (Z1);
+    \draw[thick] (Add1.east |- Cout1) -- (Cout1);
+
+    % ================= BCD Correction Logic =================
+    \node[and port] (AND1) at (11.5, 3.25) {};
+    \node[and port] (AND2) at (11.5, 2.25) {};
+    \node[or port, number inputs=3] (OR1) at (13.5, 2.5) {};
+
+    % Wiring Z3, Z2, Z1 to AND Gates
+    \draw[thick] (Z3) -- (9.5, 3.5) |- (AND1.in 1);
+    \draw[thick] (9.5, 3.5) |- (AND2.in 1);
+    \fill (9.5, 3.5) circle (1.5pt);
+
+    \draw[thick] (Z2) -- (10.0, 3.0) |- (AND1.in 2);
+    \draw[thick] (Z1) -- (10.5, 2.5) |- (AND2.in 2);
+
+    % Wiring ANDs and Cout1 to OR Gate
+    \draw[thick] (AND1.out) |- (OR1.in 1);
+    \draw[thick] (AND2.out) |- (OR1.in 2);
+    \draw[thick] (Cout1) -- (12.2, 1.5) |- (OR1.in 3);
+
+    % ================= Second 4-Bit Binary Adder =================
+    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
+        (Add2) at (4, -3.5) {\textbf{4-Bit Binary Adder 2} \\ ($S = Z + 0 C_{BCD} C_{BCD} 0$)};
+
+    % Z Bus down to Adder 2
+    \draw[->, ultra thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
+
+    % Routing C_BCD back to Adder 2 and Out
+    \draw[thick] (OR1.out) -- ++(0.5,0) coordinate (Cbcd_tap);
+    \fill (Cbcd_tap) circle (2pt);
+    \draw[->, thick] (Cbcd_tap) -- ++(1.5,0) node[right, font=\bfseries] {$C_{BCD}$ (Carry to Next Digit)};
+    
+    \draw[->, thick] (Cbcd_tap) -- (Cbcd_tap |- Add2.east) -- (Add2.east) node[above right, pos=0.7] {Correction ($0, C_{BCD}, C_{BCD}, 0$)};
+
+    % ================= Final Result =================
+    \draw[->, ultra thick] (Add2.south) -- ++(0, -1.5) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
 
 \end{circuitikz}
 \end{center}
@@ -10659,71 +10690,80 @@ If $C_{BCD} = 1$, a second \textbf{4-bit Binary Adder} adds $0110_2$ to $Z$. If 
 \textbf{\textcolor{cD}{3. BCD Adder/Subtractor Circuit Diagram}}
 
 \begin{center}
-\begin{circuitikz}[line width=0.8pt]
+\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
+    \ctikzset{logic ports=ieee}
 
-    % Inputs
-    \node (A) at (0, 7.5) {\textbf{$A_3 A_2 A_1 A_0$}};
-    \node (B) at (-4.5, 7.5) {\textbf{$B_3 B_2 B_1 B_0$}};
-    \node (M) at (-7.5, 7.5) {\textbf{Mode ($M$)}};
+    % ================= Inputs =================
+    \node (M) at (-1, 7.5) {\textbf{Mode ($M$)}};
+    \node (B) at (3, 7.5) {\textbf{$B_3 B_2 B_1 B_0$}};
+    \node (A) at (7, 7.5) {\textbf{$A_3 A_2 A_1 A_0$}};
 
-    % Conditional 9's Complementer
-    \node[draw, thick, minimum width=3cm, minimum height=2cm, fill=white] (Comp) at (-4.5, 5) {\begin{tabular}{c} \textbf{Conditional} \\ \textbf{9's Complementer} \\ \small{$Y = B \oplus f(M)$} \end{tabular}};
-    \draw[->] (B) -- (Comp.north);
-    \draw[->] (M.south) |- (Comp.west);
-
-    % First 4-Bit Binary Adder
-    \node[draw, thick, minimum width=4cm, minimum height=3cm, fill=white, rounded corners=2pt] (Add1) at (0, 2) {\begin{tabular}{c} \textbf{4-Bit Binary Adder} \\ Sum $Z = A + Y + M$ \end{tabular}};
+    % ================= Conditional 9's Complementer =================
+    \node[draw, thick, minimum width=3.5cm, minimum height=1.6cm, fill=white, rounded corners=2pt, align=center] 
+        (Comp) at (3, 5) {\textbf{Conditional} \\ \textbf{9's Complementer} \\ \small{$Y = B \oplus f(M)$}};
     
-    % Connections to Adder 1
-    \draw[->] (A) -- (Add1.north) node[midway, right] {$A$};
-    \draw[->] (Comp.east) -| (-2, 4) node[above right] {$Y$} -- (-2, 4) |- (Add1.west);
+    \draw[->, thick] (B) -- (Comp.north);
+    \draw[->, thick] (M) |- (Comp.west);
+    \fill (-1, 5) circle (2pt);
+
+    % ================= First 4-Bit Binary Adder =================
+    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
+        (Add1) at (5, 2) {\textbf{4-Bit Binary Adder} \\ Sum $Z = A + Y + M$};
+
+    \draw[->, thick] (A) -- (A |- Add1.north) node[midway, right] {$A$};
+    \draw[->, thick] (Comp.south) -- (Comp.south |- Add1.north) node[midway, left] {$Y$};
+    \draw[->, thick] (-1, 5) -- (-1, 2) -- (Add1.west) node[pos=0.85, above] {$C_{in}$};
+
+    % ================= Extracting bits from Z & Cout1 =================
+    \coordinate (Z3) at (8.25, 3.0);
+    \coordinate (Z2) at (8.25, 2.5);
+    \coordinate (Z1) at (8.25, 2.0);
+    \coordinate (Cout1) at (8.25, 1.0);
     
-    % Carry-in M
-    \draw[->] (-7.5, 5) |- (-3, 2) node[above right] {$C_{in}=M$} -- (Add1.west);
-    \fill (-7.5, 5) circle (2pt);
+    \node[right] at (Z3) {$Z_3$};
+    \node[right] at (Z2) {$Z_2$};
+    \node[right] at (Z1) {$Z_1$};
+    \node[right] at (Cout1) {$C_{out1}$};
 
-    % BCD Correction Logic
-    \node[and port] (AND1) at (5, 2.7) {};
-    \node[and port] (AND2) at (5, 1.3) {};
-    \node[or port, number inputs=3] (OR1) at (7, 2) {};
+    \draw[thick] (Add1.east |- Z3) -- (Z3);
+    \draw[thick] (Add1.east |- Z2) -- (Z2);
+    \draw[thick] (Add1.east |- Z1) -- (Z1);
+    \draw[thick] (Add1.east |- Cout1) -- (Cout1);
 
-    % Extracting bits from Z
-    \draw (Add1.east) ++(0, 0.7) coordinate (Z3) node[right] {$Z_3$};
-    \draw (Add1.east) ++(0, 0.2) coordinate (Z2) node[right] {$Z_2$};
-    \draw (Add1.east) ++(0, -0.3) coordinate (Z1) node[right] {$Z_1$};
-    \draw (Add1.east) ++(0, -0.8) coordinate (Z0) node[right] {$Z_0$};
-    \draw (Add1.east) ++(0, -1.2) coordinate (Cout1) node[right] {$C_{out1}$};
+    % ================= BCD Correction Logic =================
+    \node[and port] (AND1) at (11, 2.75) {};
+    \node[and port] (AND2) at (11, 1.75) {};
+    \node[or port, number inputs=3] (OR1) at (13, 2.0) {};
 
-    % Routing Correction Logic
-    \draw (Z3) -- ++(1,0) coordinate (z3_j) |- (AND1.in 1);
-    \draw (z3_j) |- (AND2.in 1); \fill (z3_j) circle (1.5pt);
-    \draw (Z2) -- ++(1.4,0) |- (AND1.in 2);
-    \draw (Z1) -- ++(1.2,0) |- (AND2.in 2);
+    % Wiring Z3, Z2, Z1 to AND Gates
+    \draw[thick] (Z3) -- (9.2, 3.0) |- (AND1.in 1);
+    \draw[thick] (9.2, 3.0) |- (AND2.in 1);
+    \fill (9.2, 3.0) circle (1.5pt);
 
-    \draw (AND1.out) |- (OR1.in 1);
-    \draw (AND2.out) |- (OR1.in 2);
-    \draw (Cout1) -- ++(0.5,0) |- (OR1.in 3);
-    
-    % C_BCD flag
-    \draw (OR1.out) -- ++(0.5,0) coordinate (Cbcd) node[above, font=\bfseries] {$C_{BCD}$};
+    \draw[thick] (Z2) -- (9.5, 2.5) |- (AND1.in 2);
+    \draw[thick] (Z1) -- (9.8, 2.0) |- (AND2.in 2);
 
-    % Second 4-Bit Binary Adder
-    \node[draw, thick, minimum width=4.5cm, minimum height=3cm, fill=white, rounded corners=2pt] (Add2) at (0, -4) {\begin{tabular}{c} \textbf{4-Bit Binary Adder} \\ Result $= Z + 0 C_{BCD} C_{BCD} 0$ \end{tabular}};
+    % Wiring ANDs and Cout1 to OR Gate
+    \draw[thick] (AND1.out) |- (OR1.in 1);
+    \draw[thick] (AND2.out) |- (OR1.in 2);
+    \draw[thick] (Cout1) -- (11.5, 1.0) |- (OR1.in 3);
 
-    % Bus Z to Adder 2
+    % ================= Second 4-Bit Binary Adder =================
+    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
+        (Add2) at (5, -3.5) {\textbf{4-Bit Binary Adder} \\ Result $= Z + 0 C_{BCD} C_{BCD} 0$};
+
+    % Z Bus down to Adder 2
     \draw[->, ultra thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
 
-    % Correction Vector to Adder 2
-    \draw[->] (Cbcd) |- (Add2.east) node[above right] {\small{$0, C_{BCD}, C_{BCD}, 0$}};
+    % Routing C_BCD back to Adder 2 and Out
+    \draw[thick] (OR1.out) -- ++(0.8,0) coordinate (Cbcd_tap);
+    \fill (Cbcd_tap) circle (2pt);
+    \draw[->, thick] (Cbcd_tap) -- ++(1.5,0) node[right, font=\bfseries] {$C_{BCD}$ (Carry/Borrow Out)};
     
-    % Final Outputs
-    \draw[->, ultra thick] (Add2.south) -- ++(0, -1) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
-    
-    % Carry out mapping
-    \draw[->] (Cbcd) -- ++(2.5,0) |- (-7.5, -4) node[above right] {$C_{out}$} -- (Add2.west);
-    \fill (Cbcd) circle (2pt);
-    
-    \draw[->] (9, 2) -- (10.5, 2) node[right] {\textbf{Carry/Borrow Out}};
+    \draw[->, thick] (Cbcd_tap) |- (12, -3.5) -- (Add2.east) node[above right, pos=0.55] {\small{$0, C_{BCD}, C_{BCD}, 0$}};
+
+    % ================= Final Result =================
+    \draw[->, ultra thick] (Add2.south) -- ++(0, -1.5) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
 
 \end{circuitikz}
 \end{center}
@@ -10928,40 +10968,41 @@ Once the carries are evaluated in parallel, the final sum is calculated as:
 To implement this design reliably, the hardware is structured into three parallel modules based on the equations above.
 
 \begin{center}
-\begin{tikzpicture}[>=latex, node distance=2cm, scale=0.9, transform shape, font=\small]
-    \tikzstyle{block} = [draw, rectangle, minimum height=2.5em, minimum width=5em, text centered, fill=cD!10, rounded corners=3pt, thick, draw=cD!80!black]
+\begin{tikzpicture}[>=latex, node distance=3cm, scale=0.9, transform shape, font=\small]
+
+    \tikzstyle{block} = [draw, rectangle, minimum height=3em, minimum width=12cm, text centered, fill=blue!10, rounded corners=3pt, thick, cD]
     
     % Stage 1
-    \node[block, minimum width=12cm] (pg) {\textbf{Stage 1: P \& G Generator} $\quad (P_i = X_i \oplus Y_i, \quad G_i = X_i \cdot Y_i)$};
+    \node[block] (pg) {\textbf{Stage 1: P \& G Generator} $\quad (P_i = X_i \oplus Y_i, \quad G_i = X_i \cdot Y_i)$};
     
     % Stage 2
-    \node[block, below of=pg, node distance=2.5cm, minimum width=12cm] (cla) {\textbf{Stage 2: Carry Look-Ahead Generator} $\quad (\text{Computes } C_1, C_2, C_3, C_4 \text{ via SOP logic})$};
+    \node[block, below of=pg] (cla) {\textbf{Stage 2: Carry Look-Ahead Generator} $\quad (\text{Computes } C_1, C_2, C_3, C_4 \text{ via SOP logic})$};
     
     % Stage 3
-    \node[block, below of=cla, node distance=2.5cm, minimum width=12cm] (sum) {\textbf{Stage 3: Sum Generator} $\quad (S_i = P_i \oplus C_i)$};
+    \node[block, below of=cla] (sum) {\textbf{Stage 3: Sum Generator} $\quad (S_i = P_i \oplus C_i)$};
     
     % Inputs Top
-    \draw[<-] (pg.160) -- ++(0, 1) node[above] {$X_3 \dots X_0$};
-    \draw[<-] (pg.20) -- ++(0, 1) node[above] {$Y_3 \dots Y_0$};
+    \draw[<-] ([xshift=-3cm]pg.north) -- ++(0, 1.2) node[above] {$X_3 \dots X_0$};
+    \draw[<-] ([xshift=3cm]pg.north) -- ++(0, 1.2) node[above] {$Y_3 \dots Y_0$};
     
     % P and G from Stage 1 to Stage 2
-    \draw[->] (pg.250) -- (pg.250 |- cla.north) node[pos=0.5, left] {$P_3 \dots P_0$};
-    \draw[->] (pg.290) -- (pg.290 |- cla.north) node[pos=0.5, right] {$G_3 \dots G_0$};
+    \draw[->] ([xshift=-1.5cm]pg.south) -- ([xshift=-1.5cm]cla.north) node[midway, left] {$P_3 \dots P_0$};
+    \draw[->] ([xshift=1.5cm]pg.south) -- ([xshift=1.5cm]cla.north) node[midway, right] {$G_3 \dots G_0$};
     
     % Carries from Stage 2 to Stage 3
-    \draw[->] (cla.south) -- (sum.north) node[pos=0.5, right] {$C_3, C_2, C_1, C_0$};
+    \draw[->] (cla.south) -- (sum.north) node[midway, right] {$C_3, C_2, C_1, C_0$};
     
-    % P from Stage 1 bypass to Stage 3
-    \draw[->, rounded corners] (pg.190) -- ++(-1,0) |- (sum.170) node[pos=0.25, left] {$P_3 \dots P_0$};
+    % P from Stage 1 bypass to Stage 3 (Routed wider to completely avoid C4)
+    \draw[->, rounded corners] ([yshift=-2mm]pg.west) -- ++(-3.5,0) node[midway, above] {$P_3 \dots P_0$} |- ([yshift=2mm]sum.west);
     
     % Carry In
-    \draw[<-] (cla.0) -- ++(1.5, 0) node[right] {$C_0$ (Carry In)};
+    \draw[<-] (cla.east) -- ++(1.5, 0) node[right] {$C_0$ (Carry In)};
     
     % Carry Out
-    \draw[->] (cla.180) -- ++(-1.5, 0) node[left] {$C_4$ (Carry Out)};
+    \draw[->] (cla.west) -- ++(-1.5, 0) node[left] {$C_4$ (Carry Out)};
     
     % Sum Out
-    \draw[->] (sum.south) -- ++(0, -1) node[below] {\textbf{Sum Result:} $S_3 S_2 S_1 S_0$};
+    \draw[->] (sum.south) -- ++(0, -1.2) node[below] {\textbf{Sum Result:} $S_3 S_2 S_1 S_0$};
 \end{tikzpicture}
 \end{center}
 
@@ -11006,57 +11047,58 @@ Below is the gate-level implementation of the \textbf{Carry Lookahead Generator}
 
 \begin{center}
 \begin{circuitikz}[scale=0.9, transform shape, thick]
-    \ctikzset{logic ports=ieee}
     
     % --- C1 Logic ---
-    \node[and port] (a1) at (3, 0) {};
-    \node[or port] (o1) at (6, -0.5) {};
+    \node[or port] (o1) at (7, 0) {};
+    \node[and port] (a11) at (4, -0.6) {};
     
-    \draw (o1.in 1) -- (0, 0 |- o1.in 1) node[left] {$G_0$};
-    \draw (a1.in 1) -- (0, 0 |- a1.in 1) node[left] {$P_0$};
-    \draw (a1.in 2) -- (0, 0 |- a1.in 2) node[left] {$C_0$};
-    \draw (a1.out) |- (o1.in 2);
+    \draw (o1.in 1) -- ++(-6,0) node[left] {$G_0$};
+    \draw (a11.in 1) -- ++(-3,0) node[left] {$P_0$};
+    \draw (a11.in 2) -- ++(-3,0) node[left] {$C_0$};
+    \draw (a11.out) |- (o1.in 2);
     \draw (o1.out) -- ++(1,0) node[right, font=\bfseries] {$C_1$};
 
     % --- C2 Logic ---
-    \node[and port] (a21) at (3, -2.5) {};
-    \node[and port, number inputs=3] (a22) at (3, -4) {};
-    \node[or port, number inputs=3] (o2) at (6, -3) {};
+    \node[or port, number inputs=3] (o2) at (7, -3.5) {};
+    \node[and port] (a21) at (4, -3.5) {};
+    \node[and port, number inputs=3] (a22) at (4, -4.8) {};
 
-    \draw (o2.in 1) -- (0, 0 |- o2.in 1) node[left] {$G_1$};
-    \draw (a21.in 1) -- (0, 0 |- a21.in 1) node[left] {$P_1$};
-    \draw (a21.in 2) -- (0, 0 |- a21.in 2) node[left] {$G_0$};
+    \draw (o2.in 1) -- ++(-1,0) --++(0, 1) --++(-5,0) node[left] {$G_1$};
     
-    \draw (a22.in 1) -- (0, 0 |- a22.in 1) node[left] {$P_1$};
-    \draw (a22.in 2) -- (0, 0 |- a22.in 2) node[left] {$P_0$};
-    \draw (a22.in 3) -- (0, 0 |- a22.in 3) node[left] {$C_0$};
+    \draw (a21.in 1) -- ++(-3,0) node[left] {$P_1$};
+    \draw (a21.in 2) -- ++(-3,0) node[left] {$G_0$};
+    
+    \draw (a22.in 1) -- ++(-3,0) node[left] {$P_1$};
+    \draw (a22.in 2) -- ++(-3,0) node[left] {$P_0$};
+    \draw (a22.in 3) -- ++(-3,0) node[left] {$C_0$};
     
     \draw (a21.out) |- (o2.in 2);
     \draw (a22.out) |- (o2.in 3);
     \draw (o2.out) -- ++(1,0) node[right, font=\bfseries] {$C_2$};
 
     % --- C3 Logic ---
-    \node[and port] (a31) at (3, -6) {};
-    \node[and port, number inputs=3] (a32) at (3, -7.5) {};
-    \node[and port, number inputs=4] (a33) at (3, -9.5) {};
-    \node[or port, number inputs=4] (o3) at (6, -7.5) {};
+    \node[or port, number inputs=4] (o3) at (7, -8) {};
+    \node[and port] (a31) at (4, -7.5) {};
+    \node[and port, number inputs=3] (a32) at (4, -8.8) {};
+    \node[and port, number inputs=4] (a33) at (4, -10.3) {};
 
-    \draw (o3.in 1) -- (0, 0 |- o3.in 1) node[left] {$G_2$};
-    \draw (a31.in 1) -- (0, 0 |- a31.in 1) node[left] {$P_2$};
-    \draw (a31.in 2) -- (0, 0 |- a31.in 2) node[left] {$G_1$};
+    \draw (o3.in 1) -- ++(-1,0) --++(0,1)--++(-5,0) node[left] {$G_2$};
     
-    \draw (a32.in 1) -- (0, 0 |- a32.in 1) node[left] {$P_2$};
-    \draw (a32.in 2) -- (0, 0 |- a32.in 2) node[left] {$P_1$};
-    \draw (a32.in 3) -- (0, 0 |- a32.in 3) node[left] {$G_0$};
+    \draw (a31.in 1) -- ++(-3,0) node[left] {$P_2$};
+    \draw (a31.in 2) -- ++(-3,0) node[left] {$G_1$};
     
-    \draw (a33.in 1) -- (0, 0 |- a33.in 1) node[left] {$P_2$};
-    \draw (a33.in 2) -- (0, 0 |- a33.in 2) node[left] {$P_1$};
-    \draw (a33.in 3) -- (0, 0 |- a33.in 3) node[left] {$P_0$};
-    \draw (a33.in 4) -- (0, 0 |- a33.in 4) node[left] {$C_0$};
+    \draw (a32.in 1) -- ++(-3,0) node[left] {$P_2$};
+    \draw (a32.in 2) -- ++(-3,0) node[left] {$P_1$};
+    \draw (a32.in 3) -- ++(-3,0) node[left] {$G_0$};
+    
+    \draw (a33.in 1) -- ++(-3,0) node[left] {$P_2$};
+    \draw (a33.in 2) -- ++(-3,0) node[left] {$P_1$};
+    \draw (a33.in 3) -- ++(-3,0) node[left] {$P_0$};
+    \draw (a33.in 4) -- ++(-3,0) node[left] {$C_0$};
     
     \draw (a31.out) |- (o3.in 2);
     \draw (a32.out) |- (o3.in 3);
-    \draw (a33.out) |- (o3.in 4);
+    \draw (a33.out)--++(1,0) |- (o3.in 4);
     \draw (o3.out) -- ++(1,0) node[right, font=\bfseries] {$C_3$};
 \end{circuitikz}
 \end{center}
@@ -11065,51 +11107,53 @@ The fully integrated structural top-level design incorporates the initial PG Gen
 
 \begin{center}
 \begin{circuitikz}[scale=0.85, transform shape, thick]
-    \ctikzset{logic ports=ieee}
-    % CLA Generator Block
-    \draw[fill=cD!5, rounded corners, draw=cD] (4.5,0.5) rectangle (8.5, -8);
-    \node[font=\large\bfseries, text=cD, align=center] at (6.5, -3.75) {Carry Lookahead\\Generator};
 
-    \foreach \i/\y in {0/-1, 1/-4, 2/-7} {
-        \node[left] (A\i) at (0, \y+0.5) {$A_\i$};
-        \node[left] (B\i) at (0, \y-0.5) {$B_\i$};
 
-        % PG Generator
-        \node[xor port, scale=0.6] (pgx\i) at (2.5, \y+0.5) {};
-        \node[and port, scale=0.6] (pga\i) at (2.5, \y-0.5) {};
+    % ================= CLA Block Background =================
+    \draw[fill=cD!5, rounded corners, draw=cD] (5, 2.5) rectangle (8.5, -9);
+    \node[font=\large\bfseries, text=cD, align=center] at (6.75, -3.25) {3-Bit Carry\\Look-Ahead\\Generator};
+    
+    % ================= Initial Carry C0 =================
+    \draw (0, 1.8) node[left] {$C_0$} -- (5, 1.8) node[pos=0.85, above] {$C_0$};
 
-        \draw (A\i) -- (pgx\i.in 1);
-        \draw (B\i) -- (pga\i.in 2);
-        \draw (0.5, \y+0.5) |- (pga\i.in 1); \fill (0.5, \y+0.5) circle (1.5pt);
-        \draw (1.0, \y-0.5) |- (pgx\i.in 2); \fill (1.0, \y-0.5) circle (1.5pt);
+    % ================= 3-Bit Logic Loops =================
+    \foreach \i/\y in {0/0, 1/-3.5, 2/-7} {
+        
+        % --- P and G Generators (Left Side) ---
+        \node[xor port, scale=0.8] (pgx\i) at (3, \y+0.8) {};
+        \node[and port, scale=0.8] (pga\i) at (3, \y-0.8) {};
+        
+        % Inputs A_i, B_i
+        \draw (0, |- pgx\i.in 1) node[left] {$A_\i$} -- (pgx\i.in 1);
+        \draw (0, |- pga\i.in 2) node[left] {$B_\i$} -- (pga\i.in 2);
+        
+        % Tapping inputs for P and G
+        \draw (1.0, |- pgx\i.in 1) coordinate (tapA\i);
+        \fill (tapA\i) circle (1.5pt);
+        \draw (tapA\i) |- (pga\i.in 1);
+        
+        \draw (1.5, |- pga\i.in 2) coordinate (tapB\i);
+        \fill (tapB\i) circle (1.5pt);
+        \draw (tapB\i) |- (pgx\i.in 2);
 
-        % Connect PG to CLA
-        \draw (pgx\i.out) -- (4.5, \y+0.5) node[pos=0.5, above] {$P_\i$};
-        \draw (pga\i.out) -- (4.5, \y-0.5) node[pos=0.5, below] {$G_\i$};
+        % Connect P and G to CLA Block
+        \draw (pgx\i.out) -- (5, |- pgx\i.out) node[pos=0.5, above] {$P_\i$};
+        \draw (pga\i.out) -- (5, |- pga\i.out) node[pos=0.5, below] {$G_\i$};
 
-        % Sum Generator
-        \node[xor port, scale=0.6] (sum\i) at (10.5, \y+0.5) {};
-        \draw (3.8, \y+0.5) |- (sum\i.in 1); \fill (3.8, \y+0.5) circle (1.5pt);
-        \draw (sum\i.out) -- (11.5, \y+0.5) node[right, font=\bfseries] {$S_\i$};
+        % --- Sum Generators (Right Side) ---
+        \node[xor port, scale=0.8] (sum\i) at (10.5, \y) {};
+        
+        % Output Carries and Propagates from CLA to Sum Gates
+        \draw (8.5, |- sum\i.in 1) -- (sum\i.in 1) node[pos=0.4, above] {$P_\i$};
+        \draw (8.5, |- sum\i.in 2) -- (sum\i.in 2) node[pos=0.4, below] {$C_\i$};
+        
+        % Final Sum Output
+        \draw (sum\i.out) -- (12, |- sum\i.out) node[right, font=\bfseries] {$S_\i$};
     }
 
-    % Carry Wiring
-    % C0 input
-    \node[left] (C0) at (2.5, -0.1) {$C_0$};
-    \draw (C0) -- (4.5, -0.1);
-    \fill (3.5, -0.1) circle (1.5pt);
-    \draw (3.5, -0.1) -- (3.5, -0.8) |- (sum0.in 2);
+    % ================= Final Carry Out C3 =================
+    \draw (8.5, -8.3) -- (12, -8.3) node[right, font=\bfseries] {$C_3$ ($C_{out}$)};
 
-    % C1 out of CLA
-    \draw (8.5, -2.8) -- (9.5, -2.8) |- (sum1.in 2);
-    \node[above] at (9, -2.8) {$C_1$};
-
-    % C2 out of CLA
-    \draw (8.5, -5.8) -- (9.5, -5.8) |- (sum2.in 2);
-    \node[above] at (9, -5.8) {$C_2$};
-
-    % C3 out of CLA
-    \draw (8.5, -7.5) -- (11.5, -7.5) node[right, font=\bfseries] {$C_3$};
 \end{circuitikz}
 \end{center}
 
@@ -11280,52 +11324,58 @@ By unrolling the carry equations, we derive independent carry logic for the 4-bi
 
 \textbf{Structural Block Diagram of the 4-Bit CLA:}
 
+\vspace{0.3cm}
 \begin{center}
 \begin{circuitikz}[scale=0.85, transform shape, thick]
-    \ctikzset{logic ports=ieee}
-    
-    % Carry Lookahead Logic Block
-    \draw[fill=cD!5, rounded corners, draw=cD] (5, 1) rectangle (9, -9.5);
-    \node[font=\large\bfseries, text=cD, align=center] at (7, -4.25) {4-Bit Carry\\Look-Ahead\\Generator};
-    \node[align=center, font=\footnotesize] at (7, -5.5) {(Implements\\SOP Logic for\\$C_1, C_2, C_3, C_4$)};
 
-    \foreach \i/\y in {0/-1, 1/-3.5, 2/-6, 3/-8.5} {
-        % Inputs
-        \node[left] (A\i) at (0, \y+0.6) {$A_\i$};
-        \node[left] (B\i) at (0, \y-0.6) {$B_\i$};
 
-        % PG Generator
-        \node[xor port, scale=0.6] (pgx\i) at (2.5, \y+0.6) {};
-        \node[and port, scale=0.6] (pga\i) at (2.5, \y-0.6) {};
 
-        \draw (A\i) -- (pgx\i.in 1);
-        \draw (B\i) -- (pga\i.in 2);
-        \draw (0.8, \y+0.6) |- (pga\i.in 1); \fill (0.8, \y+0.6) circle (1.5pt);
-        \draw (1.2, \y-0.6) |- (pgx\i.in 2); \fill (1.2, \y-0.6) circle (1.5pt);
+    % ================= CLA Block Background =================
+    \draw[fill=cD!5, rounded corners, draw=cD] (5, 2.5) rectangle (8.5, -12.5);
+    \node[font=\large\bfseries, text=cD, align=center] at (6.75, -5.25) {4-Bit Carry\\Look-Ahead\\Generator};
+    \node[align=center, font=\footnotesize] at (6.75, -6.75) {(Implements\\SOP Logic for\\$C_1, C_2, C_3, C_4$)};
 
-        % Connect PG to CLA Block
-        \draw (pgx\i.out) -- (5, \y+0.6) node[pos=0.5, above] {$P_\i$};
-        \draw (pga\i.out) -- (5, \y-0.6) node[pos=0.5, below] {$G_\i$};
+    % ================= Initial Carry C0 =================
+    \draw (0, 1.8) node[left] {$C_0$} -- (5, 1.8) node[pos=0.85, above] {$C_0$};
 
-        % Sum Generator
-        \node[xor port, scale=0.6] (sum\i) at (11.5, \y+0.6) {};
-        \draw (4.2, \y+0.6) |- (sum\i.in 1); \fill (4.2, \y+0.6) circle (1.5pt);
-        \draw (sum\i.out) -- (12.5, \y+0.6) node[right, font=\bfseries] {$S_\i$};
+    % ================= 4-Bit Logic Loops =================
+    \foreach \i/\y in {0/0, 1/-3.5, 2/-7, 3/-10.5} {
+        
+        % --- P and G Generators (Left Side) ---
+        \node[xor port, scale=0.8] (pgx\i) at (3, \y+0.8) {};
+        \node[and port, scale=0.8] (pga\i) at (3, \y-0.8) {};
+        
+        % Inputs A_i, B_i
+        \draw (0, |- pgx\i.in 1) node[left] {$A_\i$} -- (pgx\i.in 1);
+        \draw (0, |- pga\i.in 2) node[left] {$B_\i$} -- (pga\i.in 2);
+        
+        % Tapping inputs for P and G
+        \draw (1.0, |- pgx\i.in 1) coordinate (tapA\i);
+        \fill (tapA\i) circle (1.5pt);
+        \draw (tapA\i) |- (pga\i.in 1);
+        
+        \draw (1.5, |- pga\i.in 2) coordinate (tapB\i);
+        \fill (tapB\i) circle (1.5pt);
+        \draw (tapB\i) |- (pgx\i.in 2);
+
+        % Connect P and G to CLA Block
+        \draw (pgx\i.out) -- (5, |- pgx\i.out) node[pos=0.5, above] {$P_\i$};
+        \draw (pga\i.out) -- (5, |- pga\i.out) node[pos=0.5, below] {$G_\i$};
+
+        % --- Sum Generators (Right Side) ---
+        \node[xor port, scale=0.8] (sum\i) at (10.5, \y) {};
+        
+        % Output Carries and Propagates from CLA to Sum Gates
+        \draw (8.5, |- sum\i.in 1) -- (sum\i.in 1) node[pos=0.4, above] {$P_\i$};
+        \draw (8.5, |- sum\i.in 2) -- (sum\i.in 2) node[pos=0.4, below] {$C_\i$};
+        
+        % Final Sum Output
+        \draw (sum\i.out) -- (12, |- sum\i.out) node[right, font=\bfseries] {$S_\i$};
     }
 
-    % Initial Carry C0
-    \node[left] (C0) at (2.5, 0.2) {$C_0$};
-    \draw (C0) -- (5, 0.2);
-    \fill (4.5, 0.2) circle (1.5pt);
-    \draw (4.5, 0.2) |- (sum0.in 2);
-    
-    % Carry lines from CLA block to Sum XOR gates
-    \draw (9, -2.5) -- (10.2, -2.5) |- (sum1.in 2); \node[above right] at (9, -2.5) {$C_1$};
-    \draw (9, -5.0) -- (10.4, -5.0) |- (sum2.in 2); \node[above right] at (9, -5.0) {$C_2$};
-    \draw (9, -7.5) -- (10.6, -7.5) |- (sum3.in 2); \node[above right] at (9, -7.5) {$C_3$};
-    
-    % Final Carry Out C4
-    \draw (9, -9) -- (12.5, -9) node[right, font=\bfseries] {$C_4$ ($C_{out}$)};
+    % ================= Final Carry Out C4 =================
+    \draw (8.5, -11.8) -- (12, -11.8) node[right, font=\bfseries] {$C_4$ ($C_{out}$)};
+
 \end{circuitikz}
 \end{center}
 
@@ -11601,68 +11651,70 @@ Using the derived Boolean equations, we can construct the logic circuit using ca
 \vspace{0.5cm}
 \begin{center}
 \begin{circuitikz}[scale=1, transform shape]
-    % Input Nodes
+    
+    % ================= Input Nodes =================
     \node[anchor=east, font=\bfseries] (A0) at (0, 0) {$A_0$};
     \node[anchor=east, font=\bfseries] (A1) at (0, -2) {$A_1$};
     \node[anchor=east, font=\bfseries] (A2) at (0, -4) {$A_2$};
     \node[anchor=east, font=\bfseries] (A3) at (0, -6) {$A_3$};
 
+    % ================= Logic Gates =================
+    % XOR gates aligned on the right
+    \node[xor port, fill=cD!10, draw=cD] (X1) at (8.5, -2) {};
+    \node[xor port, fill=cD!10, draw=cD] (X2) at (8.5, -4) {};
+    \node[xor port, fill=cD!10, draw=cD] (X3) at (8.5, -6) {};
+    
+    % OR gates cascaded in the middle
+    \node[or port, fill=cD!10, draw=cD]  (O1) at (4.5, -3.5) {};
+    \node[or port, fill=cD!10, draw=cD]  (O2) at (6.5, -5.5) {};
+
+    % ================= Routing =================
+    
     % --- Bit 0 ---
-    % Directly pass A0 to Y0
+    % Y0 Output is just a straight pass-through
     \draw[thick] (A0.east) -- (11, 0) node[right, font=\bfseries, text=cD] {$Y_0$};
     
+    % A0 Trunk (Taps off for X1 and O1)
+    \coordinate (A0_t) at (1, 0);
+    \fill (A0_t) circle (2pt); % T-junction
+    \draw[thick] (A0_t) -- (A0_t |- O1.in 1) -- (O1.in 1);
+    \draw[thick] (A0_t |- X1.in 1) circle (2pt) -- (X1.in 1);
+
     % --- Bit 1 ---
-    \node[xor port] (X1) at (4, -1.5) {};
-    \node[or port]  (O1) at (4, -2.5) {};
+    % A1 Trunk (L-junction at top, taps off for X1 and ends at O1)
+    \draw[thick] (A1.east) -- (2, -2) coordinate (A1_t);
+    \draw[thick] (A1_t) -- (A1_t |- O1.in 2) -- (O1.in 2);
+    \draw[thick] (A1_t |- X1.in 2) circle (2pt) -- (X1.in 2);
     
-    % Route A1 to X1 and O1
-    \draw[thick] (A1.east) -- (1.5, -2);
-    \fill (1.5, -2) circle (2pt);
-    \draw[thick] (1.5, -2) |- (X1.in 1);
-    \draw[thick] (1.5, -2) |- (O1.in 1);
-    
-    % Route A0 (acting as E1) to X1 and O1
-    \fill (2.5, 0) circle (2pt);
-    \draw[thick] (2.5, 0) |- (X1.in 2);
-    \fill (3.0, 0) circle (2pt);
-    \draw[thick] (3.0, 0) |- (O1.in 2);
-    
-    % Output Y1
-    \draw[thick] (X1.out) -- (11, -1.5) node[right, font=\bfseries, text=cD] {$Y_1$};
-    
+    % Y1 Output
+    \draw[thick] (X1.out) -- (11, -2) node[right, font=\bfseries, text=cD] {$Y_1$};
+
     % --- Bit 2 ---
-    \node[xor port] (X2) at (7, -3.5) {};
-    \node[or port]  (O2) at (7, -4.5) {};
+    % E2 Trunk (from O1 out to X2 and O2)
+    \draw[thick] (O1.out) -- ++(0.3, 0) coordinate (E2_t);
+    \draw[thick] (E2_t) -- (E2_t |- O2.in 1) -- (O2.in 1);
+    \draw[thick] (E2_t |- X2.in 1) circle (2pt) -- (X2.in 1);
     
-    % Route A2 to X2 and O2
-    \draw[thick] (A2.east) -- (4.5, -4);
-    \fill (4.5, -4) circle (2pt);
-    \draw[thick] (4.5, -4) |- (X2.in 1);
-    \draw[thick] (4.5, -4) |- (O2.in 1);
+    % A2 Trunk
+    \draw[thick] (A2.east) -- (3, -4) coordinate (A2_t);
+    \draw[thick] (A2_t) -- (A2_t |- O2.in 2) -- (O2.in 2);
+    \draw[thick] (A2_t |- X2.in 2) circle (2pt) -- (X2.in 2);
     
-    % Route E2 (from O1) to X2 and O2
-    \draw[thick] (O1.out) -- (5.5, -2.5);
-    \fill (5.5, -2.5) circle (2pt);
-    \draw[thick] (5.5, -2.5) |- (X2.in 2);
-    \draw[thick] (5.5, -2.5) |- (O2.in 2);
-    
-    % Output Y2
-    \draw[thick] (X2.out) -- (11, -3.5) node[right, font=\bfseries, text=cD] {$Y_2$};
-    
+    % Y2 Output
+    \draw[thick] (X2.out) -- (11, -4) node[right, font=\bfseries, text=cD] {$Y_2$};
+
     % --- Bit 3 ---
-    \node[xor port] (X3) at (10, -5.5) {};
+    % E3 Trunk (from O2 out to X3)
+    \draw[thick] (O2.out) -- ++(0.3, 0) coordinate (E3_t);
+    \draw[thick] (E3_t) -- (E3_t |- X3.in 1) -- (X3.in 1);
     
-    % Route A3 to X3
-    \draw[thick] (A3.east) -- (8.5, -6);
-    \draw[thick] (8.5, -6) |- (X3.in 1);
+    % A3 Trunk
+    \draw[thick] (A3.east) -- (4, -6) coordinate (A3_t);
+    \draw[thick] (A3_t) -- (A3_t |- X3.in 2) -- (X3.in 2);
     
-    % Route E3 (from O2) to X3
-    \draw[thick] (O2.out) -- (8.5, -4.5);
-    \draw[thick] (8.5, -4.5) |- (X3.in 2);
-    
-    % Output Y3
-    \draw[thick] (X3.out) -- (11, -5.5) node[right, font=\bfseries, text=cD] {$Y_3$};
-    
+    % Y3 Output
+    \draw[thick] (X3.out) -- (11, -6) node[right, font=\bfseries, text=cD] {$Y_3$};
+
 \end{circuitikz}
 \end{center}
 \vspace{0.2cm}
@@ -12129,7 +12181,7 @@ The following diagram illustrates the complete 3x3 multiplier utilizing two 4-bi
     \draw[thick] ([yshift=-0.4cm]A2.east) node[left, font=\footnotesize] {$S_0$} -- (10.5, -0.4) node[right, font=\bfseries, text=cD, scale=1.2] {$P_2$};
 
     % P1 from A1 S0 (Routed underneath A2 for geometric clarity)
-    \draw[thick] ([yshift=-0.4cm]A1.east) node[left, font=\footnotesize] {$S_0$} -- (3.5, -0.4) |- (10.5, -4.0) node[right, font=\bfseries, text=cD, scale=1.2] {$P_1$};
+    \draw[thick] ([yshift=-0.4cm]A1.east) node[left, font=\footnotesize] {$S_0$} -- (3, -0.4) |- (10.5, -4.0) node[right, font=\bfseries, text=cD, scale=1.2] {$P_1$};
 
     % P0 direct from Partial Product Generation (Bypasses adders)
     \draw[thick] (-2.2, -4.7) node[left] {$A_0 \cdot B_0$} -- (10.5, -4.7) node[right, font=\bfseries, text=cD, scale=1.2] {$P_0$};
@@ -13337,31 +13389,39 @@ Below is the block diagram representation of the encoder highlighting the priori
 \vspace{0.5cm}
 \begin{center}
 \begin{circuitikz}[scale=0.9, transform shape]
-    % Main Box
-    \draw[thick, draw=cD, fill=white, rounded corners=5pt] (0,0) rectangle (7,10);
-    \node[align=center, font=\Large\bfseries, text=cD] at (3.5, 5) {9-to-4 \\ Priority Encoder};
+    % ================= Main Box =================
+    % Box height increased to 11 to prevent boundary overlapping with bottom/top pins
+    \draw[thick, draw=cD, fill=white, rounded corners=5pt] (0,0) rectangle (7,11);
+    \node[align=center, font=\Large\bfseries, text=cD] at (3.5, 5.5) {9-to-4 \\ Priority \\ Encoder};
 
-    % Enable Pin (Active Low)
-    \draw[thick] (-2, 9) node[left, font=\bfseries] {Enable} -- (-0.2, 9);
-    \draw[thick] (0, 9) circle (0.2) node[right=0.2cm, font=\bfseries] {$\overline{E}$};
+    % ================= Inputs (Left Side) =================
     
-    % Data Inputs mapped by priority
-    \draw[thick] (-2, 8) node[left] {Highest Prio} -- (0, 8) node[right, font=\bfseries] {$D_0$};
-    \draw[thick] (-2, 7) -- (0, 7) node[right, font=\bfseries] {$D_1$};
-    \draw[thick] (-2, 6) -- (0, 6) node[right, font=\bfseries] {$D_2$};
-    \draw[thick] (-2, 5) -- (0, 5) node[right, font=\bfseries] {$D_3$};
-    \draw[thick] (-2, 4) -- (0, 4) node[right, font=\bfseries] {$D_4$};
-    \draw[thick] (-2, 3) -- (0, 3) node[right, font=\bfseries] {$D_5$};
-    \draw[thick] (-2, 2) -- (0, 2) node[right, font=\bfseries] {$D_6$};
-    \draw[thick] (-2, 1) -- (0, 1) node[right, font=\bfseries] {$D_7$};
-    \draw[thick] (-2, 0) node[left] {Lowest Prio} -- (0, 0) node[right, font=\bfseries] {$D_8$};
+    % Enable Pin (Active Low) - Properly using ocirc to prevent manual circle overlaps
+    \draw[thick] (-2.5, 10) node[left, font=\bfseries] {Enable} -- (-0.15, 10);
+    \node[ocirc] at (-0.05, 10) {};
+    \node[right, font=\bfseries] at (0.1, 10) {$\overline{E}$};
+    
+    % Data Inputs mapped by priority (Uniformly spaced)
+    \draw[thick] (-2.5, 9) node[left] {Highest Prio} -- (0, 9) node[right, font=\bfseries] {$D_0$};
+    \draw[thick] (-2.5, 8) -- (0, 8) node[right, font=\bfseries] {$D_1$};
+    \draw[thick] (-2.5, 7) -- (0, 7) node[right, font=\bfseries] {$D_2$};
+    \draw[thick] (-2.5, 6) -- (0, 6) node[right, font=\bfseries] {$D_3$};
+    \draw[thick] (-2.5, 5) -- (0, 5) node[right, font=\bfseries] {$D_4$};
+    \draw[thick] (-2.5, 4) -- (0, 4) node[right, font=\bfseries] {$D_5$};
+    \draw[thick] (-2.5, 3) -- (0, 3) node[right, font=\bfseries] {$D_6$};
+    \draw[thick] (-2.5, 2) -- (0, 2) node[right, font=\bfseries] {$D_7$};
+    \draw[thick] (-2.5, 1) node[left] {Lowest Prio} -- (0, 1) node[right, font=\bfseries] {$D_8$};
 
-    % Outputs
-    \draw[thick, text=cD] (7, 7.5) node[left, font=\bfseries, text=black] {$Y_3$} -- (9, 7.5) node[right, font=\bfseries] {MSB};
-    \draw[thick, text=cD] (7, 6) node[left, font=\bfseries, text=black] {$Y_2$} -- (9, 6);
-    \draw[thick, text=cD] (7, 4.5) node[left, font=\bfseries, text=black] {$Y_1$} -- (9, 4.5);
-    \draw[thick, text=cD] (7, 3) node[left, font=\bfseries, text=black] {$Y_0$} -- (9, 3) node[right, font=\bfseries] {LSB};
-    \draw[thick, dashed, text=cD] (7, 1) node[left, font=\bfseries, text=black] {$V$} -- (9, 1) node[right, font=\bfseries] {Valid};
+    % ================= Outputs (Right Side) =================
+    
+    % Data Outputs (Uniformly spaced)
+    \draw[thick, draw=cD] (7, 8) node[left, font=\bfseries, text=black] {$Y_3$} -- (9, 8) node[right, font=\bfseries, text=black] {MSB};
+    \draw[thick, draw=cD] (7, 6.5) node[left, font=\bfseries, text=black] {$Y_2$} -- (9, 6.5);
+    \draw[thick, draw=cD] (7, 5) node[left, font=\bfseries, text=black] {$Y_1$} -- (9, 5);
+    \draw[thick, draw=cD] (7, 3.5) node[left, font=\bfseries, text=black] {$Y_0$} -- (9, 3.5) node[right, font=\bfseries, text=black] {LSB};
+    
+    % Valid Bit Output
+    \draw[thick, dashed, draw=cD] (7, 2) node[left, font=\bfseries, text=black] {$V$} -- (9, 2) node[right, font=\bfseries, text=black] {Valid};
 
 \end{circuitikz}
 \end{center}
@@ -13422,50 +13482,50 @@ Below is the complete schematic utilizing a 3-to-8 decoder and standard OR gates
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.95, transform shape]
+\begin{circuitikz}[scale=0.9, transform shape]
     % Decoder Box
-    \draw[thick, draw=black, fill=white, rounded corners=2pt] (0,0) rectangle (3,9);
-    \node[align=center, font=\large\bfseries, text=black] at (1.5, 8.2) {3-to-8\\Decoder};
+    \draw[thick, draw=black, fill=white, rounded corners=3pt] (0,0) rectangle (3,9);
+    \node[align=center, font=\large\bfseries, text=black] at (1.5, 8.2) {$3 \times 8$\\Decoder};
+    
+    % Enable pin
+    \draw[thick] (1.5, 9) -- (1.5, 9.5) node[above, font=\bfseries] {Enable ($E=1$)};
     
     % Inputs
     \draw[thick] (-1.5, 7) node[left, font=\bfseries] {$A$} -- (0, 7) node[right, font=\small\bfseries] {$I_2$};
     \draw[thick] (-1.5, 5) node[left, font=\bfseries] {$B$} -- (0, 5) node[right, font=\small\bfseries] {$I_1$};
     \draw[thick] (-1.5, 3) node[left, font=\bfseries] {$C_{in}$} -- (0, 3) node[right, font=\small\bfseries] {$I_0$};
     
-    % Outputs (m0 to m7) stubs
+    % Outputs (m0 to m7) labels and stubs
     \foreach \i [evaluate=\i as \y using 8-\i] in {0,...,7} {
         \draw[thick] (3, \y) -- (3.8, \y);
-        \node[above] at (3.4, \y) {$m_\i$};
+        \node[above, font=\small] at (3.4, \y) {$m_\i$};
     }
 
     % OR gates
     \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (sumOR) at (9, 5.5) {};
     \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (coutOR) at (9, 2.5) {};
     
-    \node[right, font=\bfseries] at (sumOR.out) {Sum ($S$)};
-    \node[right, font=\bfseries] at (coutOR.out) {Carry ($C_{out}$)};
+    \node[right, font=\bfseries, text=cD] at (sumOR.out) {Sum ($S$)};
+    \node[right, font=\bfseries, text=cD] at (coutOR.out) {Carry ($C_{out}$)};
 
     % ----------------------------------------------------
-    % Route to Sum (1, 2, 4, 7)
+    % Wiring to Sum (1, 2, 4, 7)
     % ----------------------------------------------------
-    \draw[thick] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
-    \draw[thick] (3.8, 6) -- (5.0, 6) |- (sumOR.in 2); % m2
-    \draw[thick] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
-    
-    % m7 acts as a main trunk since it goes to both gates
-    \draw[thick] (3.8, 1) -- (6.0, 1); 
-    \draw[thick] (6.0, 1) |- (sumOR.in 4); 
+    \draw[thick, draw=cD] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
+    \draw[thick, draw=cD] (3.8, 6) -- (4.6, 6) |- (sumOR.in 2); % m2
+    \draw[thick, draw=cD] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
+    \draw[thick, draw=cD] (3.8, 1) -- (6.0, 1) |- (sumOR.in 4); % m7
 
     % ----------------------------------------------------
-    % Route to Cout (3, 5, 6, 7)
+    % Wiring to Cout (3, 5, 6, 7)
     % ----------------------------------------------------
-    \draw[thick] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
-    \draw[thick] (3.8, 3) -- (5.6, 3) |- (coutOR.in 2); % m5
-    \draw[thick] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
+    \draw[thick, draw=black!70] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
+    \draw[thick, draw=black!70] (3.8, 3) -- (5, 3) |- (coutOR.in 2); % m5
+    \draw[thick, draw=black!70] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
     
-    % m7 branch to Cout
-    \draw[thick] (6.0, 1) |- (coutOR.in 4); 
-    \fill (6.0, 1) circle (2pt); % Connection dot for m7 branch
+    % Branch m7 to Cout
+    \draw[thick, draw=black!70] (6.0, 1) --++(0.5,0) |- (coutOR.in 4); 
+    \fill[cD] (6.0, 1) circle (2.5pt); % Connection dot
 
 \end{circuitikz}
 \end{center}
@@ -13745,7 +13805,7 @@ To implement the circuit:
     % Wiring to Sum (1, 2, 4, 7)
     % ----------------------------------------------------
     \draw[thick, draw=cD] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
-    \draw[thick, draw=cD] (3.8, 6) -- (5.0, 6) |- (sumOR.in 2); % m2
+    \draw[thick, draw=cD] (3.8, 6) -- (4.6, 6) |- (sumOR.in 2); % m2
     \draw[thick, draw=cD] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
     \draw[thick, draw=cD] (3.8, 1) -- (6.0, 1) |- (sumOR.in 4); % m7
 
@@ -13753,11 +13813,11 @@ To implement the circuit:
     % Wiring to Cout (3, 5, 6, 7)
     % ----------------------------------------------------
     \draw[thick, draw=black!70] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
-    \draw[thick, draw=black!70] (3.8, 3) -- (5.6, 3) |- (coutOR.in 2); % m5
+    \draw[thick, draw=black!70] (3.8, 3) -- (5, 3) |- (coutOR.in 2); % m5
     \draw[thick, draw=black!70] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
     
     % Branch m7 to Cout
-    \draw[thick, draw=black!70] (6.0, 1) |- (coutOR.in 4); 
+    \draw[thick, draw=black!70] (6.0, 1) --++(0.5,0) |- (coutOR.in 4); 
     \fill[cD] (6.0, 1) circle (2.5pt); % Connection dot
 
 \end{circuitikz}
@@ -13824,51 +13884,62 @@ Using the simplified Boolean equations, the priority encoder can be realized usi
 \vspace{0.5cm}
 \begin{center}
 \begin{circuitikz}[scale=0.9, transform shape, thick]
+
+    % ================= Input Labels & Horizontal Lines =================
+    \node[left, font=\bfseries] at (0, 7.5) {$D_3$};
+    \node[left, font=\bfseries] at (0, 7.0) {$D_2$};
+    \node[left, font=\bfseries] at (0, 6.5) {$D_1$};
+    \node[left, font=\bfseries] at (0, 6.0) {$D_0$};
+
+    \draw (0, 7.5) -- (1, 7.5);
+    \draw (0, 7.0) -- (2, 7.0);
+    \draw (0, 6.5) -- (4, 6.5);
+    \draw (0, 6.0) -- (5, 6.0);
+
+    % ================= Vertical Input Buses =================
+    \draw (1, 7.5) -- (1, -0.2); \fill (1, 7.5) circle (2pt);
+    \draw (2, 7.0) -- (2, -0.2); \fill (2, 7.0) circle (2pt);
+    \draw (4, 6.5) -- (4, -0.2); \fill (4, 6.5) circle (2pt);
+    \draw (5, 6.0) -- (5, -0.2); \fill (5, 6.0) circle (2pt);
+
+    % ================= Inverted D2 Bus =================
+    \node[not port, rotate=270, scale=0.8] (notD2) at (3, 6.2) {};
+    \draw (2, 0 |- notD2.in) -- (notD2.in); 
+    \fill (2, 0 |- notD2.in) circle (2pt);
+    \draw (notD2.out) -- (3, -0.2);
+    \node[right, font=\small\bfseries] at (3, 5.5) {$\overline{D_2}$};
+
+    % ================= Logic Gates =================
     
-    % Input Labels
-    \node[left, font=\bfseries] at (0, 8.5) {$D_3$};
-    \node[left, font=\bfseries] at (0, 7) {$D_2$};
-    \node[left, font=\bfseries] at (0, 5.5) {$D_1$};
-    \node[left, font=\bfseries] at (0, 4) {$D_0$};
-
-    % Input Trunks
-    \draw (0, 8.5) -- (2.5, 8.5);
-    \draw (0, 7) -- (2.5, 7);
-    \draw (0, 5.5) -- (2.5, 5.5);
-    \draw (0, 4) -- (2.5, 4);
-
     % --- Y1 Logic: Y1 = D3 + D2 ---
-    \node[or port, fill=cD!10, draw=cD] (orY1) at (6.5, 8) {};
-    \draw[draw=cD] (1, 8.5) |- (orY1.in 1);
-    \draw[draw=cD] (1.5, 7) |- (orY1.in 2);
-    \node[right, font=\bfseries, text=cD] at (orY1.out) {$Y_1$};
-    \fill[cD] (1, 8.5) circle (2pt);
-    \fill[cD] (1.5, 7) circle (2pt);
+    % Placed at x=10.5 to align with other output gates
+    \node[or port, fill=cD!10, draw=cD] (orY1) at (10.5, 5) {};
+    \draw (1, 0 |- orY1.in 1) -- (orY1.in 1); \fill (1, 0 |- orY1.in 1) circle (2pt);
+    \draw (2, 0 |- orY1.in 2) -- (orY1.in 2); \fill (2, 0 |- orY1.in 2) circle (2pt);
 
     % --- Y0 Logic: Y0 = D3 + (D2' * D1) ---
-    \node[not port, scale=0.8] (notD2) at (4, 6.5) {};
-    \draw (2, 7) |- (notD2.in);
-    \fill (2, 7) circle (2pt);
+    % AND Gate for (D2' * D1)
+    \node[and port, fill=cD!10, draw=cD] (andY0) at (8, 2.5) {};
+    \draw (3, 0 |- andY0.in 1) -- (andY0.in 1); \fill (3, 0 |- andY0.in 1) circle (2pt);
+    \draw (4, 0 |- andY0.in 2) -- (andY0.in 2); \fill (4, 0 |- andY0.in 2) circle (2pt);
 
-    \node[and port, fill=cD!10, draw=cD] (andY0) at (6.5, 6) {};
-    \draw[draw=cD] (notD2.out) |- (andY0.in 1);
-    \draw[draw=cD] (2.5, 5.5) |- (andY0.in 2);
-    \fill[cD] (2.5, 5.5) circle (2pt);
-
-    \node[or port, fill=cD!10, draw=cD] (orY0) at (9.5, 6.5) {};
-    \draw[draw=cD] (0.5, 8.5) |- (orY0.in 1);
-    \draw[draw=cD] (andY0.out) |- (orY0.in 2);
-    \node[right, font=\bfseries, text=cD] at (orY0.out) {$Y_0$};
-    \fill[cD] (0.5, 8.5) circle (2pt);
+    % OR Gate for Y0
+    \node[or port, fill=cD!10, draw=cD] (orY0) at (10.5, 2.78) {};
+    \draw (1, 0 |- orY0.in 1) -- (orY0.in 1); \fill (1, 0 |- orY0.in 1) circle (2pt);
+    % andY0.out aligns perfectly with orY0.in 2 (2.78 - 0.28 = 2.50)
+    \draw (andY0.out) -- (orY0.in 2); 
 
     % --- Valid Logic: V = D3 + D2 + D1 + D0 ---
-    \node[or port, number inputs=4, fill=cD!10, draw=cD] (orV) at (6.5, 3) {};
-    \draw (0.5, 8.5) -- (0.5, 3.4) |- (orV.in 1);
-    \draw (1.5, 7) -- (1.5, 3.1) |- (orV.in 2);
-    \draw (2.5, 5.5) -- (2.5, 2.9) |- (orV.in 3);
-    \draw (0, 4) -- (3, 4) |- (orV.in 4);
-    
-    \node[right, font=\bfseries, text=cD] at (orV.out) {$V$ (Valid)};
+    \node[or port, number inputs=4, fill=cD!10, draw=cD] (orV) at (10.5, 0.5) {};
+    \draw (1, 0 |- orV.in 1) -- (orV.in 1); \fill (1, 0 |- orV.in 1) circle (2pt);
+    \draw (2, 0 |- orV.in 2) -- (orV.in 2); \fill (2, 0 |- orV.in 2) circle (2pt);
+    \draw (4, 0 |- orV.in 3) -- (orV.in 3); \fill (4, 0 |- orV.in 3) circle (2pt);
+    \draw (5, 0 |- orV.in 4) -- (orV.in 4); \fill (5, 0 |- orV.in 4) circle (2pt);
+
+    % ================= Output Labels =================
+    \draw[->, thick, draw=cD] (orY1.out) -- ++(1.5,0) node[right, font=\bfseries, text=cD] {$Y_1$};
+    \draw[->, thick, draw=cD] (orY0.out) -- ++(1.5,0) node[right, font=\bfseries, text=cD] {$Y_0$};
+    \draw[->, thick, draw=cD] (orV.out)  -- ++(1.5,0) node[right, font=\bfseries, text=cD] {$V \ \text{(Valid)}$};
 
 \end{circuitikz}
 \end{center}
@@ -13929,7 +14000,7 @@ $A_2$ & $A_1$ & $A_0$ & $Y_0$ & $Y_1$ & $Y_2$ & $Y_3$ & $Y_4$ & $Y_5$ & $Y_6$ & 
     % Top Decoder (Decoder 0: Handles Y0 to Y3)
     %---------------------------------------------------
     \draw[thick, fill=white] (5, 5) rectangle (8, 9);
-    \node[align=center, font=\bfseries] at (6.5, 7.5) {$2 \times 4$\\Decoder 0};
+    \node[align=center, font=\bfseries, scale=0.8] at (6.5, 7.5) {$2 \times 4$\\Decoder 0};
     
     % Input pins for Decoder 0
     \node[right, font=\small\bfseries] at (5, 8.5) {$E$};
@@ -13946,7 +14017,7 @@ $A_2$ & $A_1$ & $A_0$ & $Y_0$ & $Y_1$ & $Y_2$ & $Y_3$ & $Y_4$ & $Y_5$ & $Y_6$ & 
     % Bottom Decoder (Decoder 1: Handles Y4 to Y7)
     %---------------------------------------------------
     \draw[thick, fill=white] (5, 0) rectangle (8, 4);
-    \node[align=center, font=\bfseries] at (6.5, 2.5) {$2 \times 4$\\Decoder 1};
+    \node[align=center, font=\bfseries, scale=0.8] at (6.5, 2.5) {$2 \times 4$\\Decoder 1};
     
     % Input pins for Decoder 1
     \node[right, font=\small\bfseries] at (5, 3.5) {$E$};
@@ -14323,7 +14394,7 @@ The implementation requires a $3 \times 8$ decoder and two 4-input OR gates:
     % ----------------------------------------------------
     % Wiring to Sum (1, 2, 4, 7)
     % ----------------------------------------------------
-    \draw[draw=cD] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
+    \draw[draw=cD] (3.8, 7) -- (5.4, 7) |- (sumOR.in 1); % m1
     \draw[draw=cD] (3.8, 6) -- (5.0, 6) |- (sumOR.in 2); % m2
     \draw[draw=cD] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
     \draw[draw=cD] (3.8, 1) -- (6.0, 1) |- (sumOR.in 4); % m7
@@ -14332,11 +14403,11 @@ The implementation requires a $3 \times 8$ decoder and two 4-input OR gates:
     % Wiring to Cout (3, 5, 6, 7)
     % ----------------------------------------------------
     \draw[draw=black!70] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
-    \draw[draw=black!70] (3.8, 3) -- (5.6, 3) |- (coutOR.in 2); % m5
+    \draw[draw=black!70] (3.8, 3) -- (4.8, 3) |- (coutOR.in 2); % m5
     \draw[draw=black!70] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
     
     % Branch m7 to Cout
-    \draw[draw=black!70] (6.0, 1) |- (coutOR.in 4); 
+    \draw[draw=black!70] (6.0, 1) --++(0.5,0) |- (coutOR.in 4); 
     \fill[cD] (6.0, 1) circle (2.5pt); % Connection dot
 
 \end{circuitikz}
@@ -14794,65 +14865,83 @@ Final optimized Boolean equation mapping directly to gates:
 \vspace{0.2cm}
 \begin{center}
 \begin{circuitikz}[scale=0.9, transform shape, thick]
-    
-    % Decoder Block
+
+    % ================= Decoder Block =================
     \draw[fill=white, rounded corners=2pt] (0, 0) rectangle (2.5, 6);
     \node[align=center, font=\bfseries] at (1.25, 3) {$2\times4$\\Decoder};
     
-    % Inputs A, B, EN
+    % Decoder Inputs (A, B, EN)
     \draw (-1.5, 4.5) node[left, font=\bfseries] {$y$} -- (0, 4.5) node[right, font=\small\bfseries] {$A$};
     \draw (-1.5, 3.5) node[left, font=\bfseries] {$z$} -- (0, 3.5) node[right, font=\small\bfseries] {$B$};
-    \draw (-1.5, 1.5) node[left, font=\bfseries] {Logic `0'} -- (0, 1.5);
+    
+    \draw (-1.5, 1.5) node[left, font=\bfseries] {Logic `0'} -- (-0.15, 1.5);
+    \node[ocirc] at (-0.05, 1.5) {};
     \node[right, font=\small\bfseries] at (0, 1.5) {$\overline{EN}$};
-    \draw[{Circle[open]}-] (0, 1.5) -- (-0.1, 1.5);
     
-    % Decoder Active-Low Outputs
-    \draw[{Circle[open]}-] (2.5, 5.2) -- (3.5, 5.2) node[above] {$D_0'$};
-    \draw[{Circle[open]}-] (2.5, 3.9) -- (3.5, 3.9) node[above] {$D_1'$};
-    \draw[{Circle[open]}-] (2.5, 2.6) -- (3.5, 2.6) node[above] {$D_2'$};
-    \draw[{Circle[open]}-] (2.5, 1.3) -- (3.5, 1.3) node[above] {$D_3'$};
-    
-    % Inputs w, x lines
-    \draw (3.5, -1) node[left, font=\bfseries] {$w$} -- (5.5, -1);
-    \draw (3.5, -2) node[left, font=\bfseries] {$x$} -- (5.5, -2);
-    
-    % w, x combination gates
-    \node[nand port, fill=cD!10, draw=cD] (nandwx) at (7, -0.5) {};
-    \node[xnor port, fill=cD!10, draw=cD] (xnorwx) at (7, -2.5) {};
-    
-    \draw (4.5, -1) |- (nandwx.in 1); \fill (4.5, -1) circle (2pt);
-    \draw (5.0, -2) |- (nandwx.in 2); \fill (5.0, -2) circle (2pt);
-    
-    \draw (4.5, -1) |- (xnorwx.in 1);
-    \draw (5.0, -2) |- (xnorwx.in 2);
+    % Decoder Active-Low Outputs Nodes & Labels
+    \foreach \y/\i in {5.2/0, 3.9/1, 2.6/2, 1.3/3} {
+        \draw (2.5, \y) -- (2.7, \y);
+        \node[ocirc] at (2.6, \y) {};
+        \node[above, font=\small] at (3.3, \y) {$D_\i'$};
+    }
 
+    % ================= Gates Definition =================
+    % w, x combination gates placed cleanly below decoder y-level
+    \node[nand port, fill=cD!10, draw=cD] (nandwx) at (4.5, -0.5) {};
+    \node[xnor port, fill=cD!10, draw=cD] (xnorwx) at (4.5, -2.2) {};
+    
     % Intermediate OR Gates
-    \node[or port, fill=cD!5, draw=cD] (or0) at (8, 5.2) {};
-    \node[or port, fill=cD!5, draw=cD] (or1) at (8, 3.9) {};
-    \node[or port, fill=cD!5, draw=cD] (or3) at (8, 1.3) {};
+    \node[or port, fill=cD!5, draw=cD] (or0) at (7.5, 5.2) {};
+    \node[or port, fill=cD!5, draw=cD] (or1) at (7.5, 3.9) {};
+    \node[or port, fill=cD!5, draw=cD] (or3) at (7.5, 1.3) {};
     
-    % Routing for D0' + x
-    \draw (3.5, 5.4) |- (or0.in 1);
-    \draw (5.0, -2) -- (5.0, 5.0) |- (or0.in 2);
-    
-    % Routing for D1' + NAND(w,x)
-    \draw (3.5, 4.1) |- (or1.in 1);
-    \draw (nandwx.out) |- (or1.in 2);
-    
-    % Routing for D3' + XNOR(w,x)
-    \draw (3.5, 1.5) |- (or3.in 1);
-    \draw (xnorwx.out) |- (or3.in 2);
-
     % Final NAND4 Gate
     \node[nand port, number inputs=4, fill=cD!20, draw=cD, scale=1.3] (finalNand) at (11.5, 3.25) {};
+
+    % ================= Input Routing (w, x) =================
+    % Global w, x lines feeding into NAND(w,x) directly
+    \draw (-1.5, 0 |- nandwx.in 1) node[left, font=\bfseries] {$w$} -- (nandwx.in 1);
+    \draw (-1.5, 0 |- nandwx.in 2) node[left, font=\bfseries] {$x$} -- (nandwx.in 2);
     
-    \draw (or0.out) -| (9.5, 4.22) |- (finalNand.in 1);
-    \draw (or1.out) -| (9.5, 3.57) |- (finalNand.in 2);
-    \draw (3.5, 2.6) -| (9.5, 2.93) |- (finalNand.in 3); % D2' directly connects
-    \draw (or3.out) -| (9.5, 2.28) |- (finalNand.in 4);
+    % Taps for XNOR(w,x)
+    \fill (2.0, 0 |- nandwx.in 1) circle (2pt);
+    \draw (2.0, 0 |- nandwx.in 1) -- (2.0, 0 |- xnorwx.in 1) -- (xnorwx.in 1);
     
-    % Output Label
-    \draw (finalNand.out) -- (12.5, 3.25) node[right, font=\bfseries\large, text=cD] {$f(w, x, y, z)$};
+    \fill (2.5, 0 |- nandwx.in 2) circle (2pt);
+    \draw (2.5, 0 |- nandwx.in 2) -- (2.5, 0 |- xnorwx.in 2) -- (xnorwx.in 2);
+    
+    % Tap for x going up to OR0
+    \fill (3.2, 0 |- nandwx.in 2) circle (2pt);
+    \draw (3.2, 0 |- nandwx.in 2) -- (3.2, 0 |- or0.in 2) -- (or0.in 2);
+
+    % ================= Internal Routing =================
+    % D0' to OR0
+    \draw (2.7, 5.2) -- (4.0, 5.2) -- (4.0, 0 |- or0.in 1) -- (or0.in 1);
+    
+    % D1' to OR1
+    \draw (2.7, 3.9) -- (4.0, 3.9) -- (4.0, 0 |- or1.in 1) -- (or1.in 1);
+    
+    % NAND(w,x) out to OR1
+    \draw (nandwx.out) -- (5.3, 0 |- nandwx.out) -- (5.3, 0 |- or1.in 2) -- (or1.in 2);
+    
+    % D3' to OR3
+    \draw (2.7, 1.3) -- (4.0, 1.3) -- (4.0, 0 |- or3.in 1) -- (or3.in 1);
+    
+    % XNOR(w,x) out to OR3
+    \draw (xnorwx.out) -- (5.7, 0 |- xnorwx.out) -- (5.7, 0 |- or3.in 2) -- (or3.in 2);
+
+    % ================= Final NAND Routing =================
+    % Staggered vertical buses to prevent overlapping lines
+    \draw (or0.out) -- (9.2, 0 |- or0.out) -- (9.2, 0 |- finalNand.in 1) -- (finalNand.in 1);
+    \draw (or1.out) -- (9.6, 0 |- or1.out) -- (9.6, 0 |- finalNand.in 2) -- (finalNand.in 2);
+    
+    % D2' routes directly to NAND4, bypassing OR stage
+    \draw (2.7, 2.6) -- (10.0, 2.6) -- (10.0, 0 |- finalNand.in 3) -- (finalNand.in 3);
+    
+    \draw (or3.out) -- (9.2, 0 |- or3.out) -- (9.2, 0 |- finalNand.in 4) -- (finalNand.in 4);
+
+    % ================= Output =================
+    \draw[->, thick, draw=cD] (finalNand.out) -- ++(1.5, 0) node[right, font=\bfseries\large, text=cD] {$f(w, x, y, z)$};
 
 \end{circuitikz}
 \end{center}
@@ -16108,19 +16197,65 @@ We will require a single \textbf{NOT gate} to generate the $\overline{C_{in}}$ s
 \vspace{0.4cm}
 \subsection*{3. Circuit Diagram}
 \begin{center}
-\begin{circuitikz}[scale=1.0, transform shape, thick]
+\begin{circuitikz}[scale=0.9, transform shape, thick]
     
-    % MUX 1: Sum
+
+    % ================= MUX 1: Sum =================
     \draw[fill=white, rounded corners=2pt] (0, 0) rectangle (2.5, 4);
     \node[align=center, font=\bfseries] at (1.25, 2) {4-to-1 \\ MUX \\ (Sum)};
     
-    % MUX 2: Cout
+    % MUX 1 Input Pins Labels
+    \node[right, font=\small\bfseries] at (0, 3.5) {$I_0$};
+    \node[right, font=\small\bfseries] at (0, 2.5) {$I_1$};
+    \node[right, font=\small\bfseries] at (0, 1.5) {$I_2$};
+    \node[right, font=\small\bfseries] at (0, 0.5) {$I_3$};
+    
+    % ================= MUX 2: Carry =================
     \draw[fill=white, rounded corners=2pt] (7, 0) rectangle (9.5, 4);
     \node[align=center, font=\bfseries] at (8.25, 2) {4-to-1 \\ MUX \\ (Carry)};
 
-    % Global Select Lines
-    \draw (-1.5, -1.5) node[left, font=\bfseries] {$A$} -- (8.0, -1.5);
-    \draw (-1.5, -2.5) node[left, font=\bfseries] {$B$} -- (8.9, -2.5);
+    % MUX 2 Input Pins Labels
+    \node[right, font=\small\bfseries] at (7, 3.5) {$I_0$};
+    \node[right, font=\small\bfseries] at (7, 2.5) {$I_1$};
+    \node[right, font=\small\bfseries] at (7, 1.5) {$I_2$};
+    \node[right, font=\small\bfseries] at (7, 0.5) {$I_3$};
+
+    % ================= Global Input Buses (Top) =================
+    % Cin horizontal bus
+    \draw (-2.5, 6) node[left, font=\bfseries] {$C_{in}$} -- (6.5, 6);
+    
+    % NOT Gate for Cin' (pointing downwards)
+    \node[not port, rotate=270, scale=0.8] (not1) at (-1.5, 5.2) {};
+    \draw (-1.5, 6) -- (not1.in);
+    \fill (-1.5, 6) circle (2pt);
+    \node[left, font=\small\bfseries] at (-1.5, 4.4) {$\overline{C_{in}}$};
+    
+    % Cin' vertical bus (MUX 1)
+    \draw (not1.out) -- (-1.5, 1.5);
+    
+    % Cin vertical bus (MUX 1)
+    \draw (-0.5, 6) -- (-0.5, 0.5);
+    \fill (-0.5, 6) circle (2pt);
+    
+    % Cin vertical bus (MUX 2)
+    \draw (6.5, 6) -- (6.5, 1.5);
+    \fill (6.5, 6) circle (2pt);
+
+    % ================= MUX 1 Connections =================
+    \draw[->] (-0.5, 3.5) -- (0, 3.5); \fill (-0.5, 3.5) circle (2pt); % I0 -> Cin
+    \draw[->] (-1.5, 2.5) -- (0, 2.5); \fill (-1.5, 2.5) circle (2pt); % I1 -> Cin'
+    \draw[->] (-1.5, 1.5) -- (0, 1.5);                                 % I2 -> Cin'
+    \draw[->] (-0.5, 0.5) -- (0, 0.5);                                 % I3 -> Cin
+
+    % ================= MUX 2 Connections =================
+    \draw[->] (6.0, 3.5) node[left, font=\small\bfseries] {$0$ (GND)} -- (7, 3.5); % I0 -> 0
+    \draw[->] (6.5, 2.5) -- (7, 2.5); \fill (6.5, 2.5) circle (2pt);               % I1 -> Cin
+    \draw[->] (6.5, 1.5) -- (7, 1.5);                                                % I2 -> Cin
+    \draw[->] (6.0, 0.5) node[left, font=\small\bfseries] {$1$ ($V_{cc}$)} -- (7, 0.5); % I3 -> 1
+
+    % ================= Global Select Lines (Bottom) =================
+    \draw (-2.5, -1.5) node[left, font=\bfseries] {$A$} -- (8.0, -1.5);
+    \draw (-2.5, -2.5) node[left, font=\bfseries] {$B$} -- (9.0, -2.5);
     
     % Select Connections MUX 1
     \node[above, font=\small\bfseries] at (0.8, 0) {$S_1$};
@@ -16134,47 +16269,7 @@ We will require a single \textbf{NOT gate} to generate the $\overline{C_{in}}$ s
     \draw[<-] (7.8, 0) -- (7.8, -1.5); \fill (7.8, -1.5) circle (2pt);
     \draw[<-] (8.7, 0) -- (8.7, -2.5); \fill (8.7, -2.5) circle (2pt);
 
-    % Global Data Buses (Top)
-    \draw (-2.5, 6) node[left, font=\bfseries] {$C_{in}$} -- (8, 6);
-    \fill (-1.5, 6) circle (2pt);
-    
-    % NOT Gate for Cin'
-    \node[not port, rotate=270, scale=0.7, fill=white] (not1) at (-1.5, 5.4) {};
-    \draw (-1.5, 6) -- (not1.in);
-    \draw (not1.out) -- (-1.5, 4.8);
-    \draw (-1.5, 4.8) -- (1, 4.8); % Extends Cin' bus just enough for MUX1
-    \node[above, font=\small\bfseries] at (-0.5, 4.8) {$\overline{C_{in}}$};
-
-    % MUX 1 Input Pins & Connections
-    \node[right, font=\small\bfseries] at (0, 3.5) {$I_0$};
-    \node[right, font=\small\bfseries] at (0, 2.5) {$I_1$};
-    \node[right, font=\small\bfseries] at (0, 1.5) {$I_2$};
-    \node[right, font=\small\bfseries] at (0, 0.5) {$I_3$};
-    
-    \draw (-0.5, 6) -- (-0.5, 0.5); \fill (-0.5, 6) circle (2pt);
-    \draw (-1.0, 4.8) -- (-1.0, 1.5); \fill (-1.0, 4.8) circle (2pt);
-    
-    \draw[<-] (0, 3.5) -- (-0.5, 3.5); \fill (-0.5, 3.5) circle (2pt);
-    \draw[<-] (0, 2.5) -- (-1.0, 2.5); \fill (-1.0, 2.5) circle (2pt);
-    \draw[<-] (0, 1.5) -- (-1.0, 1.5);
-    \draw[<-] (0, 0.5) -- (-0.5, 0.5);
-
-    % MUX 2 Input Pins & Connections
-    \node[right, font=\small\bfseries] at (7, 3.5) {$I_0$};
-    \node[right, font=\small\bfseries] at (7, 2.5) {$I_1$};
-    \node[right, font=\small\bfseries] at (7, 1.5) {$I_2$};
-    \node[right, font=\small\bfseries] at (7, 0.5) {$I_3$};
-    
-    % MUX 2 Constant Inputs
-    \draw[<-] (7, 3.5) -- (6.0, 3.5) node[left, font=\small\bfseries] {$0$ (GND)};
-    \draw[<-] (7, 0.5) -- (6.0, 0.5) node[left, font=\small\bfseries] {$1$ ($V_{cc}$)};
-    
-    % MUX 2 Cin Connections
-    \draw (6.5, 6) -- (6.5, 1.5); \fill (6.5, 6) circle (2pt);
-    \draw[<-] (7, 2.5) -- (6.5, 2.5); \fill (6.5, 2.5) circle (2pt);
-    \draw[<-] (7, 1.5) -- (6.5, 1.5);
-
-    % Outputs
+    % ================= Outputs =================
     \draw[->, thick, draw=cD] (2.5, 2) -- (4, 2) node[right, font=\bfseries, text=cD] {$Sum \ (S)$};
     \draw[->, thick, draw=cD] (9.5, 2) -- (11, 2) node[right, font=\bfseries, text=cD] {$Carry \ (C_{out})$};
 
