@@ -1561,6 +1561,109 @@ Disadvantages &
 \item Define super key, candidate key, and primary key with examples.
 \mk{9} \yr{CSE 215 | L-2/T-1 | 2024--25}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Introduction and Running Example}
+In the relational data model, keys are fundamental constraints used to uniquely identify tuples (rows) within a relation (table) and to establish relationships between different relations. 
+
+To illustrate these concepts, consider the following relation schema for a university system:
+\begin{center}
+    \textbf{STUDENT( \underline{Roll\_No}, Reg\_No, Email, Name, Age, Branch )}
+\end{center}
+\textit{Assumption:} \texttt{Roll\_No}, \texttt{Reg\_No} (Registration Number), and \texttt{Email} are strictly unique for every student. Two students may share the same \texttt{Name}, \texttt{Age}, or \texttt{Branch}.
+
+\subsection*{2. Definitions and Mathematical Properties}
+
+\subsubsection*{A. Super Key}
+\begin{itemize}
+    \item \textbf{Definition:} A Super Key is a set of one or more attributes whose combined values uniquely identify a tuple within a relation.
+    \item \textbf{Mathematical Property (Uniqueness):} Let $R$ be a relation schema. A subset of attributes $K \subseteq R$ is a super key if the functional dependency $K \rightarrow R$ holds.
+    \item \textbf{Examples:} 
+    \begin{itemize}
+        \item $\{\text{Roll\_No}\}$
+        \item $\{\text{Reg\_No}, \text{Name}\}$
+        \item $\{\text{Email}, \text{Age}, \text{Branch}\}$
+        \item $\{\text{Roll\_No}, \text{Reg\_No}, \text{Email}, \text{Name}, \text{Age}, \text{Branch}\}$ (The trivial super key comprising all attributes).
+    \end{itemize}
+    \item \textbf{Note:} Adding any arbitrary attribute to a super key results in another valid super key.
+\end{itemize}
+
+\subsubsection*{B. Candidate Key}
+\begin{itemize}
+    \item \textbf{Definition:} A Candidate Key is a \textbf{minimal} super key. It is a super key such that no proper subset of its attributes also constitutes a super key.
+    \item \textbf{Mathematical Property (Minimality):} $K$ is a candidate key if $K$ is a super key, and for any proper subset $K' \subset K$, $K'$ is \textit{not} a super key.
+    \item \textbf{Examples:} 
+    \begin{itemize}
+        \item $\{\text{Roll\_No}\}$ (Minimal, removing it leaves the empty set).
+        \item $\{\text{Reg\_No}\}$ 
+        \item $\{\text{Email}\}$
+    \end{itemize}
+    \item \textit{Why is $\{\text{Reg\_No}, \text{Name}\}$ NOT a Candidate Key?} Because its proper subset $\{\text{Reg\_No}\}$ is already a super key. Thus, it violates the minimality condition.
+\end{itemize}
+
+\subsubsection*{C. Primary Key}
+\begin{itemize}
+    \item \textbf{Definition:} The Primary Key is the specific candidate key selected by the database designer to principally identify tuples in the relation.
+    \item \textbf{Properties:} 
+    \begin{itemize}
+        \item A relation can have \textbf{only one} primary key.
+        \item Its attributes cannot contain \texttt{NULL} values (Entity Integrity Constraint).
+        \item Its values should ideally remain immutable (unchanging) over time.
+    \end{itemize}
+    \item \textbf{Example:} From the candidate keys $\{\text{Roll\_No}\}$, $\{\text{Reg\_No}\}$, and $\{\text{Email}\}$, the designer selects \textbf{$\{\text{Roll\_No}\}$} as the Primary Key. 
+    \item \textbf{Note:} The unselected candidate keys ($\{\text{Reg\_No}\}$ and $\{\text{Email}\}$) are then referred to as \textbf{Alternate Keys}.
+\end{itemize}
+
+\subsection*{3. Visualizing the Relationship}
+
+The relationship between these keys can be accurately represented using set theory. All candidate keys are super keys, and the primary key is exactly one of the candidate keys.
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[thick]
+    % Outer set: Super Keys
+    \draw (0,0) ellipse (4.5cm and 3cm);
+    \node[anchor=south, font=\bfseries\large] at (0, 2.2) {Set of All Super Keys};
+    
+    % Example of non-minimal super key
+    \node[font=\footnotesize] at (0, 1.8) {e.g., \{Roll\_No, Name\}, \{Email, Age\}};
+    
+    % Inner set: Candidate Keys
+    \draw (0,-0.6) ellipse (3.5cm and 1.8cm);
+    \node[anchor=south, font=\bfseries] at (0, 0.5) {Set of Candidate Keys (Minimal SKs)};
+    
+    % Primary Key subset
+    \draw (-1.2, -1) circle (0.8cm);
+    \node[align=center, font=\small\bfseries] at (-1.2, -1) {Primary\\Key\\ \normalfont \scriptsize e.g., \{Roll\_No\}};
+    
+    % Alternate Key subset
+    \draw (1.2, -1) circle (0.8cm);
+    \node[align=center, font=\small\bfseries] at (1.2, -1) {Alternate\\Key(s)\\ \normalfont \scriptsize e.g., \{Email\}};
+    
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\subsection*{4. Comparison Summary}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{@{} >{\bfseries}l X X X @{}}
+\toprule
+Feature & Super Key & Candidate Key & Primary Key \\
+\midrule
+\textbf{Definition} & Uniquely identifies a tuple. & A minimal super key. & The chosen candidate key. \\
+\textbf{Quantity} & Many per relation. & One or more per relation. & Exactly one per relation. \\
+\textbf{Minimality} & Not required. & Strictly required. & Strictly required. \\
+\textbf{Null Values} & May contain NULLs (if other attributes ensure uniqueness). & Cannot contain NULLs (in practice). & Strictly prohibits NULLs. \\
+\textbf{Subset Relation} & The superset of all keys. & A subset of Super Keys. & A subset of Candidate Keys. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+\end{tcolorbox}
+
 \item Suppose we have two relations $A$ and $B$ with the same set of attributes. Relation $A$ has $n_a$ tuples and relation $B$ has $n_b$ tuples. For each of the following relational algebra expressions, give the minimum and maximum number of tuples that can appear in the result. Assume that the produced results are bags, not sets.
 \begin{enumerate}
   \item $A \cap B$
@@ -1570,15 +1673,271 @@ Disadvantages &
 \end{enumerate}
 \mk{8} \yr{CSE 215 | L-2/T-2 | 2020--21}
 
-%% Q4 — 2024-25 super key, candidate key, primary key with examples
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{Bag Semantics Overview}
+In relational algebra, standard operations often assume \textbf{set semantics} (where duplicates are eliminated). However, real-world Database Management Systems (DBMS) typically use \textbf{bag (multiset) semantics}, where duplicates are retained unless explicitly removed. 
+
+Let a tuple $t$ appear $x$ times in relation $A$ (where $\sum x = n_a$) and $y$ times in relation $B$ (where $\sum y = n_b$). The output cardinality depends on how the specific bag operation computes the new frequency for each tuple.
+
+---
+
+\subsubsection*{1. Intersection ($A \cap B$)}
+\begin{itemize}
+    \item \textbf{Working Principle:} Under bag semantics, the intersection retains a tuple $t$ exactly $\min(x, y)$ times.
+    \item \textbf{Minimum Tuples:} $\mathbf{0}$. This occurs when relations $A$ and $B$ are completely disjoint (they share no tuples in common).
+    \item \textbf{Maximum Tuples:} $\mathbf{\min(n_a, n_b)}$. This occurs when all tuples of the smaller relation are entirely contained within the larger relation.
+\end{itemize}
+
+\subsubsection*{2. Selection and Difference ($\sigma_c(A) - B$)}
+\begin{itemize}
+    \item \textbf{Working Principle:} First, the selection $\sigma_c(A)$ filters $A$. The number of tuples generated by $\sigma_c(A)$ can range from $0$ to $n_a$. Next, the bag difference $X - B$ computes the frequency of tuple $t$ as $\max(0, count(t \in X) - y)$.
+    \item \textbf{Minimum Tuples:} $\mathbf{0}$. This occurs if the selection condition $c$ matches no tuples in $A$ (yielding 0 tuples), OR if all tuples generated by $\sigma_c(A)$ also exist in $B$ in equal or greater quantities, causing them to be entirely subtracted out.
+    \item \textbf{Maximum Tuples:} $\mathbf{n_a}$. This occurs if the selection condition $c$ is true for all tuples in $A$ (yielding $n_a$ tuples), AND relations $A$ and $B$ are completely disjoint, meaning no tuples are subtracted by $B$.
+\end{itemize}
+
+\subsubsection*{3. Union ($A \cup B$)}
+\begin{itemize}
+    \item \textbf{Working Principle:} Under bag semantics, union does \textbf{not} eliminate duplicates (equivalent to \texttt{UNION ALL} in SQL). The frequency of a tuple $t$ in the result is simply $x + y$. 
+    \item \textbf{Minimum Tuples:} $\mathbf{n_a + n_b}$.
+    \item \textbf{Maximum Tuples:} $\mathbf{n_a + n_b}$.
+    \item \textbf{Note:} Unlike set union (which can range from $\max(n_a, n_b)$ to $n_a + n_b$), bag union always yields exactly the sum of the cardinalities of the two input relations.
+\end{itemize}
+
+\subsubsection*{4. Left Outer Join ($A \bowtie_L B$)}
+\begin{itemize}
+    \item \textbf{Working Principle:} Because $A$ and $B$ have the \textit{same set of attributes}, the join condition evaluates all attributes for equality (Natural Left Outer Join). 
+    \begin{itemize}
+        \item If a tuple in $A$ finds matching tuples in $B$ ($y > 0$), it produces $x \times y$ copies.
+        \item If it finds no match ($y = 0$), the Left Outer Join ensures the tuple from $A$ is preserved exactly $x$ times, padded with NULLs (though here, all attributes overlap).
+    \end{itemize}
+    Mathematically, the total tuples are $\sum (x \cdot \max(y, 1))$.
+    \item \textbf{Minimum Tuples:} $\mathbf{n_a}$. This occurs either when $A$ and $B$ are completely disjoint (every tuple in $A$ gets preserved exactly once with no matches), or when every tuple in $A$ matches exactly one tuple in $B$.
+    \item \textbf{Maximum Tuples:} $\mathbf{\max(n_a, n_a \times n_b)}$. If $n_b > 0$, the maximum is $n_a \times n_b$. This explosion occurs when every tuple in $A$ is identical, and every tuple in $B$ is also identical to the tuples in $A$, resulting in a full Cartesian product. If $B$ is empty ($n_b = 0$), the maximum is simply $n_a$.
+\end{itemize}
+
+---
+
+\subsection*{Summary Table}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabularx}{0.9\textwidth}{@{} >{\bfseries}l X X @{}}
+\toprule
+Relational Algebra Expression & Minimum Tuples & Maximum Tuples \\
+\midrule
+$A \cap B$ & $0$ & $\min(n_a, n_b)$ \\
+$\sigma_c(A) - B$ & $0$ & $n_a$ \\
+$A \cup B$ & $n_a + n_b$ & $n_a + n_b$ \\
+$A \bowtie_L B$ & $n_a$ & $\max(n_a, n_a \cdot n_b)$ \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+
+\end{tcolorbox}
+
+
 \item Should a primary key have any semantic meaning? Explain your answer.
 \mk{6} \yr{CSE 303 | L-3/T-1 | 2014--15}
 
-%% Q3 — 2020-21 min/max tuples for RA expressions (bags)
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Direct Answer}
+Ideally, \textbf{no}. A primary key should generally \textbf{not} have any semantic (real-world business) meaning. 
+
+In database design, keys are divided into two categories based on meaning:
+\begin{itemize}
+    \item \textbf{Natural Key (Semantic):} An attribute that has a logical relationship to the business data (e.g., Social Security Number, Email Address, Vehicle Identification Number).
+    \item \textbf{Surrogate Key (Meaningless):} An artificially generated attribute with no real-world meaning, created solely to identify a tuple uniquely (e.g., an Auto-Incrementing Integer, UUID/GUID).
+\end{itemize}
+
+Best practices in modern database design strongly favor the use of \textbf{Surrogate Keys} for primary keys, while applying \texttt{UNIQUE} constraints to Natural Keys.
+
+\subsection*{2. Why Semantic Primary Keys are Problematic}
+
+Using a semantic attribute as a primary key introduces several risks to the stability and performance of a relational database:
+
+\begin{enumerate}
+    \item \textbf{Mutability (Data Changes):} Semantic data is tied to business rules and human behavior, meaning it is subject to change. For example, if an \texttt{Email} is used as a primary key and the user changes their email address, the database must perform a cascading update to every foreign key in every related table (e.g., Orders, Logs, Profiles). A surrogate key, being meaningless, never needs to change.
+    \item \textbf{Format and Business Rule Changes:} Business rules evolve. A 9-digit alphanumeric product code might be expanded to 12 digits. If this code is a primary key, altering the data type or length across millions of foreign key references is an expensive and risky operation.
+    \item \textbf{Reusability:} Some semantic identifiers get recycled over time (e.g., phone numbers or invoice numbers). Reusing a primary key can lead to catastrophic data integrity issues where old, unrelated records accidentally link to new entities.
+    \item \textbf{Privacy and Security:} Primary keys are frequently exposed in URLs, log files, and API endpoints. Using sensitive semantic data (like an SSN or phone number) as a primary key leaks personally identifiable information (PII).
+    \item \textbf{Performance (Storage and Indexing):} Semantic keys are often long strings (like \texttt{VARCHAR(255)} for an email). String comparisons are significantly slower than integer comparisons. Furthermore, B+ Tree indexes built on large strings consume more memory and disk space. A surrogate key, typically a 4-byte or 8-byte integer, is highly optimized for fast \texttt{JOIN} operations.
+\end{enumerate}
+
+\subsection*{3. Visualizing the Recommended Approach}
+
+Instead of forcing a semantic attribute to act as the primary key, database designers implement a surrogate primary key and designate the semantic attributes as \textbf{Alternate Keys} (using the \texttt{UNIQUE} constraint).
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    pkbox/.style={draw, rectangle, minimum width=3cm, minimum height=0.8cm, align=center, fill=black!10, font=\small\bfseries},
+    attrbox/.style={draw, rectangle, minimum width=3.5cm, minimum height=0.8cm, align=center, fill=white, font=\small}
+]
+    % Bad Design
+    \node[font=\bfseries, text=black!80] at (0, 2) {Suboptimal Design: Semantic Primary Key};
+    \node[pkbox] (n1) at (-3.5, 1) {\underline{User\_Email} (PK)};
+    \node[attrbox] (n2) at (0, 1) {First\_Name};
+    \node[attrbox] (n3) at (3.5, 1) {Last\_Name};
+    
+    % Good Design
+    \node[font=\bfseries, text=black!80] at (0, -1) {Recommended Design: Meaningless Surrogate Key};
+    \node[pkbox, minimum width=2.5cm] (s1) at (-4.75, -2) {\underline{User\_ID} (PK)};
+    \node[attrbox, minimum width=3.5cm, fill=black!5] (s2) at (-1.75, -2) {User\_Email (UNIQUE)};
+    \node[attrbox, minimum width=2.5cm] (s3) at (1.25, -2) {First\_Name};
+    \node[attrbox, minimum width=2.5cm] (s4) at (3.75, -2) {Last\_Name};
+    
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\subsection*{4. Comparison: Natural (Semantic) vs. Surrogate (Meaningless) Keys}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{} p{3.5cm} p{5.5cm} p{5.5cm} @{}}
+\toprule
+\textbf{Feature} & \textbf{Natural Key (Semantic)} & \textbf{Surrogate Key (Meaningless)} \\
+\midrule
+\textbf{Origin} & Exists in the real world (e.g., SSN). & System-generated (e.g., Auto-increment). \\
+\textbf{Immutability} & Prone to change if business rules change. & 100\% Immutable. Never changes. \\
+\textbf{Performance} & Often slow (e.g., long strings). & Very fast (e.g., 32/64-bit integers). \\
+\textbf{Coupling} & Tightly couples DB structure to business rules. & Decouples structure from business logic. \\
+\textbf{Use Case} & Enforce uniqueness (Alternate Key). & Primary Key / Foreign Key relationships. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+\noindent\textbf{Notes:} While surrogate keys are generally preferred, there is one major exception: \textbf{Link Tables} (Junction Tables) used to resolve Many-to-Many relationships. In a link table (e.g., \texttt{Enrollment(Student\_ID, Course\_ID)}), the primary key should be the composite of the two foreign keys, which intrinsically carries semantic meaning regarding the relationship.
+
+\end{tcolorbox}
+
 \item Describe with an example, the object identity and reference types in SQL. How can you process queries using reference type?
 \mk{10} \yr{CSE 215 | L-3/T-1 | 2010--11}
 
-%% Q2
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Object Identity in SQL}
+
+In standard relational databases, tuples (rows) are identified purely by their values, specifically through a \textbf{Primary Key}. However, in \textbf{Object-Relational Database Management Systems (ORDBMS)} complying with the SQL:1999 standard and later, tuples can be treated as unique objects.
+
+\begin{itemize}
+    \item \textbf{Object Identity (OID):} When a row is inserted into a ``typed table'' (a table built upon a user-defined complex data type), the DBMS assigns it a unique, system-generated, and immutable Object Identifier (OID).
+    \item \textbf{Properties of OID:} Unlike primary keys, an OID has no real-world semantic meaning, does not depend on the object's attribute values, and never changes even if all the data within the row is updated.
+\end{itemize}
+
+\subsection*{2. Reference Types (\texttt{REF})}
+
+A \textbf{Reference Type} is a special data type in SQL that stores an OID. It acts essentially as a strongly-typed \textbf{pointer} to a specific object (row) in another typed table.
+\begin{itemize}
+    \item \textbf{Working Principle:} Instead of using standard Foreign Keys that store copies of Primary Key values (which requires traditional joins), a \texttt{REF} attribute directly points to the memory/disk location of the referenced object, enabling highly efficient object traversal.
+    \item \textbf{Scoping:} A reference type is usually constrained using a \texttt{SCOPE} clause to ensure it only points to objects within a specific target table.
+\end{itemize}
+
+\subsection*{3. Example Scenario: DDL for Objects and References}
+
+Consider a university system where an \texttt{Employee} works for a \texttt{Department}. First, we define the object types, and then we create the typed tables.
+
+\begin{lstlisting}[language=SQL]
+-- 1. Create the base User-Defined Types (UDT)
+CREATE TYPE DepartmentType AS (
+    Dept_No INT,
+    Dept_Name VARCHAR(50)
+);
+
+CREATE TYPE EmployeeType AS (
+    Emp_ID INT,
+    Name VARCHAR(50),
+    Works_For REF(DepartmentType) -- The Reference Type
+);
+
+-- 2. Create Typed Tables
+CREATE TABLE Departments OF DepartmentType (
+    REF IS Dept_OID SYSTEM GENERATED, -- Explicitly generating OIDs
+    PRIMARY KEY (Dept_No)
+);
+
+CREATE TABLE Employees OF EmployeeType (
+    PRIMARY KEY (Emp_ID),
+    SCOPE FOR Works_For IS Departments -- Restricting pointer target
+);
+\end{lstlisting}
+
+\subsection*{4. Visualizing Object References}
+
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    cell/.style={draw, rectangle, minimum height=0.7cm, align=center, fill=white, font=\small},
+    head/.style={draw, rectangle, minimum height=0.7cm, align=center, fill=black!10, font=\small\bfseries},
+    arrow/.style={->, >=latex, thick, rounded corners=4pt, blue!70!black}
+]
+    % Employees Table Setup
+    \node[font=\bfseries] at (-2, 2) {Employees Table (Source)};
+    \node[head, minimum width=1.5cm] (eid) at (-4.25, 1.2) {Emp\_ID};
+    \node[head, minimum width=2.5cm] (enm) at (-2.25, 1.2) {Name};
+    \node[head, minimum width=2.5cm] (ewf) at (0.25, 1.2) {Works\_For};
+    
+    \node[cell, minimum width=1.5cm] (r1_id) at (-4.25, 0.5) {101};
+    \node[cell, minimum width=2.5cm] (r1_nm) at (-2.25, 0.5) {Alice};
+    \node[cell, minimum width=2.5cm, fill=blue!5] (r1_wf) at (0.25, 0.5) {\itshape 0x9A4F...}; % OID value
+
+    % Departments Table Setup
+    \node[font=\bfseries] at (4.5, 2) {Departments Table (Target)};
+    \node[head, minimum width=2.5cm] (doid) at (3.5, 1.2) {OID (System)};
+    \node[head, minimum width=1.5cm] (dno) at (5.5, 1.2) {Dept\_No};
+    \node[head, minimum width=2cm] (dnm) at (7.25, 1.2) {Dept\_Name};
+
+    \node[cell, minimum width=2.5cm, fill=blue!5] (r2_oid) at (3.5, 0.5) {\itshape 0x9A4F...};
+    \node[cell, minimum width=1.5cm] (r2_no) at (5.5, 0.5) {10};
+    \node[cell, minimum width=2cm] (r2_nm) at (7.25, 0.5) {Research};
+
+    % Reference Arrow
+    \draw[arrow] (r1_wf.south) -- +(0,-0.5) -| (r2_oid.south) node[pos=0.25, above, font=\footnotesize\bfseries, text=black] {Dereference (Pointer Traversal)};
+
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\subsection*{5. Query Processing Using Reference Types}
+
+To process queries involving reference types, standard \texttt{JOIN} operations can be entirely bypassed. Instead, object-relational SQL introduces \textbf{Path Expressions} and \textbf{Dereferencing}.
+
+\subsubsection*{A. Dereferencing Operator (\texttt{->})}
+The \texttt{->} operator takes a \texttt{REF} value and retrieves the object it points to, allowing direct access to the target object's attributes.
+
+\begin{lstlisting}[language=SQL]
+-- Retrieve employee names and the name of the department they work for.
+-- Notice the absence of a JOIN clause.
+SELECT e.Name, 
+       e.Works_For->Dept_Name AS Department_Name
+FROM Employees e;
+\end{lstlisting}
+
+\subsubsection*{B. The \texttt{DEREF()} Function}
+If the goal is to return the entire referenced object (tuple) rather than just a specific attribute, the \texttt{DEREF()} function is utilized.
+
+\begin{lstlisting}[language=SQL]
+-- Retrieve the full Department object for the employee named Alice
+SELECT DEREF(e.Works_For) AS Dept_Object
+FROM Employees e
+WHERE e.Name = 'Alice';
+\end{lstlisting}
+
+\subsection*{6. Advantages of Object References}
+\begin{itemize}
+    \item \textbf{Performance (Implicit Joins):} Traversing pointers is computationally faster than performing hash-joins or sort-merge joins on standard foreign keys.
+    \item \textbf{Simpler Query Syntax:} Complex, multi-table relationships can be queried cleanly using cascading path expressions (e.g., \texttt{a->b->c}) without cluttering the \texttt{FROM} clause.
+    \item \textbf{Polymorphism:} References can be designed to point to an object of a super-type or any of its sub-types, enabling polymorphic queries.
+\end{itemize}
+
+\end{tcolorbox}
+
 \end{enumerate}
 
 %% ── S2: Database Design ───────────────────────────────────────────────
@@ -1592,36 +1951,610 @@ Disadvantages &
 
 \begin{enumerate}
 
-%% Q1
+
 \item Differentiate between strong entity and weak entity by showing appropriate examples. How do you design them in a relational schema?
 \mk{10} \yr{CSE 215 | L-2/T-2 | 2018--19}
 
-%% Q8 — 2017-18
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Distinction Between Strong and Weak Entities}
+
+In Entity-Relationship (ER) modeling, entities are categorized based on their ability to be uniquely identified strictly by their own attributes.
+
+\begin{itemize}
+    \item \textbf{Strong Entity:} An entity type that possesses a \textbf{Primary Key}. It has an independent existence in the database and does not rely on any other entity for its identification.
+    \item \textbf{Weak Entity:} An entity type that does \textbf{not} have sufficient attributes to form a primary key. It depends on a strong entity (called the \textbf{Identifying Owner}) for its existence and identification. It uses a \textbf{Partial Key} (or Discriminator) combined with the primary key of its owner to uniquely identify its instances.
+\end{itemize}
+
+\subsubsection*{Comparison Table}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabularx}{\textwidth}{@{} >{\bfseries}l X X @{}}
+\toprule
+Feature & Strong Entity & Weak Entity \\
+\midrule
+\textbf{Primary Key} & Has its own primary key. & Does not have a primary key; has a partial key. \\
+\textbf{Existence} & Independent existence. & Existence depends on the identifying strong entity. \\
+\textbf{Relationship} & Associated via standard relationships. & Associated via an \textbf{identifying relationship}. \\
+\textbf{Participation} & Can have total or partial participation. & \textbf{Always} has total participation in the identifying relationship. \\
+\textbf{ER Diagram} & Represented by a single rectangle. & Represented by a double rectangle. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\subsection*{2. Example and ER Diagram Representation}
+
+\textbf{Example Scenario:} Consider a company database storing information about \texttt{EMPLOYEE}s and their \texttt{DEPENDENT}s (spouses, children). 
+\begin{itemize}
+    \item \texttt{EMPLOYEE} is a \textbf{Strong Entity} uniquely identified by \texttt{Emp\_ID}.
+    \item \texttt{DEPENDENT} is a \textbf{Weak Entity}. A dependent's name (\texttt{Dep\_Name}) only identifies them uniquely \textit{within} the context of a specific employee. It cannot uniquely identify a dependent across the entire company.
+\end{itemize}
+
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white},
+    weakentity/.style={draw, double, double distance=1.5pt, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white},
+    identrel/.style={draw, double, double distance=1.5pt, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.8cm, align=center, fill=white}
+]
+    % Entities and Relationships
+    \node[entity] (emp) at (0,0) {\textbf{EMPLOYEE}};
+    \node[identrel] (has) at (4.5,0) {Has};
+    \node[weakentity] (dep) at (9,0) {\textbf{DEPENDENT}};
+
+    % Employee Attributes
+    \node[attribute] (empid) at (-1.5, 2) {\underline{Emp\_ID}};
+    \node[attribute] (name) at (1.5, 2) {Name};
+
+    % Dependent Attributes
+    \node[attribute] (depname) at (7.5, 2) {Dep\_Name};
+    % Manual dashed underline for partial key
+    \draw[dashed, thick] (6.6, 1.7) -- (8.4, 1.7);
+    \node[attribute] (relation) at (10.5, 2) {Relation};
+
+    % Connections
+    \draw (emp) -- (empid);
+    \draw (emp) -- (name);
+    
+    \draw (dep) -- (depname);
+    \draw (dep) -- (relation);
+
+    % Participation lines (Single for Strong, Double for Weak)
+    \draw (emp) -- (has) node[midway, above, font=\footnotesize] {1};
+    \draw[double, double distance=1.5pt] (has) -- (dep) node[midway, above, font=\footnotesize] {N};
+
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\subsection*{3. Design in a Relational Schema}
+
+To convert a strong and weak entity relationship into a relational database schema, apply the following mapping rules:
+
+\begin{enumerate}
+    \item \textbf{Strong Entity Mapping:} Create a separate table for the strong entity. Its attributes become columns, and its key attribute becomes the \textbf{Primary Key (PK)}.
+    \item \textbf{Weak Entity Mapping:} Create a separate table for the weak entity. Include all of its own attributes. Then, add the Primary Key of the identifying strong entity as a \textbf{Foreign Key (FK)}.
+    \item \textbf{Weak Entity Primary Key:} The Primary Key of the weak entity table is a \textbf{Composite Key} formed by combining its Foreign Key and its Partial Key.
+\end{enumerate}
+
+\subsubsection*{Relational Schema Diagram}
+
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[x=1cm, y=1cm, thick]
+    % Styles
+    \tikzset{
+        tablebox/.style={draw, rectangle, minimum height=0.9cm, align=center, fill=white},
+        tablename/.style={draw, rectangle, minimum height=0.9cm, align=center, fill=black!10, font=\bfseries}
+    }
+
+    % EMPLOYEE Table
+    \node[tablename, minimum width=2.5cm] at (1.25, 2.5) {EMPLOYEE};
+    \node[tablebox, minimum width=2.5cm, font=\bfseries] (pk_emp) at (3.75, 2.5) {\underline{Emp\_ID}};
+    \node[tablebox, minimum width=2.5cm] at (6.25, 2.5) {Name};
+
+    % DEPENDENT Table
+    \node[tablename, minimum width=2.5cm] at (1.25, 0.5) {DEPENDENT};
+    \node[tablebox, minimum width=2.5cm, font=\bfseries, align=center] (fk_dep) at (3.75, 0.5) {\underline{Emp\_ID} \\[-0.5ex] \normalfont\scriptsize (FK)};
+    \node[tablebox, minimum width=2.5cm, font=\bfseries] at (6.25, 0.5) {\underline{Dep\_Name}};
+    \node[tablebox, minimum width=2.5cm] at (8.75, 0.5) {Relation};
+
+    % Foreign Key Arrow
+    \draw[->, >=latex, rounded corners=3pt] (fk_dep.north) -- (3.75, 1.5) -| (pk_emp.south);
+
+    % Note
+    \node[anchor=west, font=\footnotesize\itshape] at (0, -0.7) {* Note: The primary key of DEPENDENT is composite: (Emp\_ID, Dep\_Name).};
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{1em}
+\hrule
+\vspace{0.5em}
+\noindent\textbf{Exam Tip:} When mapping a weak entity, you do \textbf{not} create a separate relation (table) for the identifying relationship (e.g., the "Has" diamond). The relationship is implicitly managed by the foreign key placed inside the weak entity's table.
+
+\end{tcolorbox}
+
 \item Define weak entity set. Also give an example of a weak entity set.
 \mk{5} \yr{CSE 215 | L-2/T-2 | 2017--18}
 
-\item Consider the following information about a university database. Professors have an SSN, a name, an age, a rank, and a research speciality. Projects have a project number, a sponsor name (e.g., NSF), a starting date, an ending date, and a budget. Graduate students have an SSN, a name, an age, and a degree program (e.g., M.S.\ or Ph.D). Each project is managed by one professor (the principal investigator). Each project is worked on by one or more professors (co-investigators). Professors can manage and/or work on multiple projects. Each project is worked on by one or more graduate students (research assistants). When graduate students work on a project, a professor must supervise their work. Graduate students can work on multiple projects, having a (potentially different) supervisor for each. Departments have a department number, name, and main office. A professor (chairman) runs each department. Professors work in one or more departments with a time percentage per department. Graduate students have one major department. Each graduate student has a more senior graduate student (student advisor) who advises on course selection.
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
 
-Draw an Entity-Relationship (ER) diagram to represent the data requirements described above.
-\mk{18} \yr{CSE 303 | L-3/T-1 | 2014--15}
+\subsection*{1. Definition}
+A \textbf{weak entity set} is an entity type that does not contain sufficient attributes to uniquely identify its own entities (i.e., it lacks a primary key of its own). To be uniquely identified, a weak entity must be associated with another entity set, known as the \textbf{identifying entity set} (or strong entity set).
 
-%% Q5
+\subsection*{2. Key Characteristics}
+\begin{itemize}
+    \item \textbf{Existence Dependency:} A weak entity cannot exist in the database without its corresponding strong entity. If the strong entity is deleted, all its associated weak entities must also be deleted (cascade delete).
+    \item \textbf{Identifying Relationship:} The relationship associating the weak entity set with the strong entity set is called the identifying relationship. In an Entity-Relationship (ER) diagram, it is denoted by a \textbf{double diamond}.
+    \item \textbf{Total Participation:} The weak entity set always exhibits total participation (denoted by a \textbf{double line}) in the identifying relationship, meaning every weak entity must be related to an identifying entity.
+    \item \textbf{Partial Key (Discriminator):} Instead of a primary key, a weak entity set has a \textbf{partial key} (or discriminator). This is an attribute (or set of attributes) that uniquely identifies weak entities related to the \textit{same} strong entity. It is denoted by a \textbf{dashed underline} in an ER diagram.
+    \item \textbf{Primary Key Formation:} The actual primary key of a weak entity is a composite key formed by combining the primary key of the strong entity set with the weak entity set's partial key.
+\end{itemize}
+
+\subsection*{3. Example Scenario}
+Consider a company database that stores information about employees and their dependents (e.g., spouses, children) for health insurance purposes. 
+\begin{itemize}
+    \item \textbf{Strong Entity Set:} \texttt{EMPLOYEE} (uniquely identified by \texttt{Emp\_ID}).
+    \item \textbf{Weak Entity Set:} \texttt{DEPENDENT}. A dependent's name (\texttt{Dep\_Name}) is not globally unique across the whole company, but it is unique for a specific employee. 
+    \item \textbf{Identifying Relationship:} \texttt{Policy\_Covers}.
+\end{itemize}
+
+In this context, a dependent only exists in the database if their associated employee exists. 
+
+\subsection*{4. ER Diagram Representation}
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white},
+    weakentity/.style={draw, double, double distance=1.5pt, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white},
+    identrel/.style={draw, double, double distance=1.5pt, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.8cm, align=center, fill=white}
+]
+    % Entities and Relationship
+    \node[entity] (emp) at (0,0) {\textbf{EMPLOYEE}};
+    \node[identrel] (covers) at (4.5,0) {Policy\_\\Covers};
+    \node[weakentity] (dep) at (9,0) {\textbf{DEPENDENT}};
+
+    % Employee Attributes
+    \node[attribute] (empid) at (-1.5, 2) {\underline{Emp\_ID}};
+    \node[attribute] (empname) at (1.5, 2) {Name};
+
+    % Dependent Attributes
+    \node[attribute] (depname) at (7.5, 2) {Dep\_Name};
+    % Manual dashed underline for partial key
+    \draw[dashed, thick] (6.5, 1.7) -- (8.5, 1.7);
+    
+    \node[attribute] (deprel) at (10.5, 2) {Relation};
+
+    % Connections (Attributes to Entities)
+    \draw (emp) -- (empid);
+    \draw (emp) -- (empname);
+    
+    \draw (dep) -- (depname);
+    \draw (dep) -- (deprel);
+
+    % Relationship connections with participation and cardinality
+    \draw (emp) -- (covers) node[midway, above, font=\footnotesize] {1};
+    \draw[double, double distance=1.5pt] (covers) -- (dep) node[midway, above, font=\footnotesize] {N};
+
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\hrule
+\vspace{0.75em}
+\noindent\textbf{Exam Tip (Relational Mapping):} When mapping this ER model to a relational database schema, you do not create a separate table for the identifying relationship. Instead, the resulting \texttt{DEPENDENT} table will simply have the composite primary key \texttt{(Emp\_ID, Dep\_Name)}, where \texttt{Emp\_ID} acts as a foreign key referencing the \texttt{EMPLOYEE} table.
+
+\end{tcolorbox}
+
+
+
+
+
 \item Show an example of specialization hierarchy in the context of ERD with disjoint and overlapping subtypes.
 \mk{9} \yr{CSE 303 | L-3/T-1 | 2014--15}
 
-%% Q6
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Specialization Hierarchy and Constraints}
+
+\textbf{Specialization} is the top-down design process of defining a set of subclasses (subtypes) from a single superclass (supertype) based on distinguishing characteristics. The entities in the subtypes inherit all attributes and relationships of the supertype. 
+
+Specialization hierarchies are governed by \textbf{disjointness constraints}, which dictate whether an entity can belong to more than one subclass simultaneously:
+
+\begin{itemize}
+    \item \textbf{Disjoint Subtypes (denoted by `d`):} An entity instance of the supertype can belong to \textbf{at most one} subtype. The subtypes are mutually exclusive.
+    \item \textbf{Overlapping Subtypes (denoted by `o`):} An entity instance of the supertype can belong to \textbf{more than one} subtype simultaneously.
+\end{itemize}
+
+\subsection*{2. Example Scenario and ER Diagram}
+
+Consider a university database containing a general \texttt{PERSON} entity. 
+\begin{itemize}
+    \item A \texttt{PERSON} can be a \texttt{STUDENT}, an \texttt{EMPLOYEE}, or \textbf{both}. This is an \textbf{overlapping} specialization.
+    \item An \texttt{EMPLOYEE} can be either a \texttt{FACULTY} member or a \texttt{STAFF} member, but \textbf{never both}. This is a \textbf{disjoint} specialization.
+    \item Furthermore, every \texttt{EMPLOYEE} \textit{must} be either \texttt{FACULTY} or \texttt{STAFF} (Total Specialization, denoted by a double line).
+\end{itemize}
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.8cm, align=center, fill=white, font=\small},
+    spec/.style={draw, circle, minimum size=0.8cm, align=center, fill=white, font=\bfseries}
+]
+
+    % --- LEVEL 1: SUPERTYPE ---
+    \node[entity] (person) at (0, 7) {PERSON};
+    
+    % Person Attributes
+    \node[attribute] (ssn) at (-3, 7.8) {\underline{SSN}};
+    \node[attribute] (name) at (3, 7.8) {Name};
+    \draw (person) -- (ssn);
+    \draw (person) -- (name);
+
+    % --- LEVEL 2: OVERLAPPING SUBTYPES ---
+    \node[spec] (overlap) at (0, 5) {o};
+    \draw (person) -- (overlap); % Partial Specialization (Single Line)
+    
+    \node[entity] (student) at (-4, 3.5) {STUDENT};
+    \node[entity] (employee) at (4, 3.5) {EMPLOYEE};
+    
+    % Connections from 'o' to Subtypes
+    \draw (overlap) -- (0, 4.2) -| (student);
+    \draw (overlap) -- (0, 4.2) -| (employee);
+    
+    % Subtype 1 Attributes
+    \node[attribute] (major) at (-7, 3.5) {Major};
+    \draw (student) -- (major);
+
+    % --- LEVEL 3: DISJOINT SUBTYPES (From EMPLOYEE) ---
+    \node[spec] (disjoint) at (4, 1.5) {d};
+    
+    % Total Specialization (Double Line)
+    \draw[double, double distance=1.5pt] (employee) -- (disjoint);
+    
+    \node[entity] (faculty) at (1.5, 0) {FACULTY};
+    \node[entity] (staff) at (6.5, 0) {STAFF};
+    
+    % Connections from 'd' to Subtypes
+    \draw (disjoint) -- (4, 0.7) -| (faculty);
+    \draw (disjoint) -- (4, 0.7) -| (staff);
+    
+    % Subtype 2 & 3 Attributes
+    \node[attribute] (rank) at (-1, 0) {Rank};
+    \node[attribute] (position) at (9, 0) {Position};
+    \draw (faculty) -- (rank);
+    \draw (staff) -- (position);
+
+\end{tikzpicture}
+\end{center}
+\vspace{1.5em}
+
+\subsection*{3. Key Observations from the Diagram}
+
+\begin{enumerate}
+    \item \textbf{Overlapping (`o`):} The circle containing 'o' connects \texttt{PERSON} to \texttt{STUDENT} and \texttt{EMPLOYEE}. Because it is overlapping, a specific SSN (e.g., a graduate teaching assistant) can exist simultaneously as a \texttt{STUDENT} and an \texttt{EMPLOYEE}.
+    \item \textbf{Disjoint (`d`):} The circle containing 'd' connects \texttt{EMPLOYEE} to \texttt{FACULTY} and \texttt{STAFF}. An employee is strictly categorized as one or the other; no individual can hold both a standard faculty and staff role concurrently in this schema.
+    \item \textbf{Completeness Constraints:}
+    \begin{itemize}
+        \item The single line from \texttt{PERSON} to the \texttt{`o`} circle indicates \textbf{Partial Specialization}. A \texttt{PERSON} might just be an Alumnus (not modeled here) and thus does not have to be a \texttt{STUDENT} or \texttt{EMPLOYEE}.
+        \item The double line from \texttt{EMPLOYEE} to the \texttt{`d`} circle indicates \textbf{Total Specialization}. If a record exists in \texttt{EMPLOYEE}, it \textit{must} be present in either the \texttt{FACULTY} or \texttt{STAFF} subclass.
+    \end{itemize}
+\end{enumerate}
+
+\end{tcolorbox}
+
 \item Which considerations should be applied while choosing the primary key of a relation? Discuss with example how the multi-valued attribute problem in database design can be solved.
 \mk{12} \yr{CSE 303 | L-3/T-1 | 2013--14}
 
-%% Q7 — 2018-19
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Considerations for Choosing a Primary Key}
+
+A \textbf{Primary Key (PK)} is a candidate key chosen by the database designer to uniquely identify tuples (rows) within a relation. When multiple candidate keys exist, the following considerations should be applied to select the most appropriate primary key:
+
+\begin{itemize}
+    \item \textbf{Uniqueness and Non-Nullability (Entity Integrity):} The chosen attribute(s) must guarantee uniqueness across all tuples and must never accept \texttt{NULL} values.
+    \item \textbf{Irreducibility (Minimality):} If the key is composite (consisting of multiple attributes), no attribute can be removed without destroying the uniqueness property.
+    \item \textbf{Immutability (Stability):} The value of a primary key should rarely, ideally never, change over time. Frequent updates to a primary key cause cascading updates in foreign keys, degrading performance and risking data anomalies.
+    \item \textbf{Simplicity and Size:} A single-attribute key is preferable to a composite key. Additionally, shorter, numeric data types (e.g., \texttt{INT}) are heavily preferred over long strings (e.g., \texttt{VARCHAR}) because primary keys are heavily indexed, and smaller keys lead to faster search operations and lower storage overhead for the B+ tree indexes.
+    \item \textbf{Security and Privacy:} Avoid using sensitive or personally identifiable information (PII) such as Social Security Numbers (SSN), email addresses, or phone numbers as primary keys.
+    \item \textbf{Surrogate vs. Natural Keys:} If no natural candidate key meets the above criteria, a \textbf{surrogate key} (a system-generated, artificial identifier like an auto-incrementing integer) should be introduced.
+\end{itemize}
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\subsection*{2. Solving the Multi-valued Attribute Problem}
+
+\textbf{Definition:} A \textbf{multi-valued attribute} is an attribute that can store multiple distinct values for a single entity instance simultaneously. For example, an employee might have multiple phone numbers or possess multiple skills. 
+
+\textbf{The Problem:} Relational databases require relations to be in \textbf{First Normal Form (1NF)}, which strictly prohibits multi-valued attributes. Storing multiple values in a single column violates atomic domains, making data retrieval, querying, and updating highly inefficient and prone to anomalies.
+
+\textbf{The Solution:} To resolve this in database design, the multi-valued attribute is removed from the original entity and placed into a \textbf{new, separate relation}. 
+\begin{itemize}
+    \item The new relation contains the multi-valued attribute itself.
+    \item It also includes the primary key of the original entity as a \textbf{Foreign Key (FK)}.
+    \item The \textbf{Primary Key} of this new relation is the composite of the original primary key and the multi-valued attribute.
+\end{itemize}
+
+\subsubsection*{Example Scenario}
+Consider an \texttt{EMPLOYEE} entity that tracks the employee's ID, Name, and multiple \texttt{Skills}. In the ER Diagram, the multi-valued attribute \texttt{Skill} is represented by a double ellipse.
+
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=3cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.8cm, align=center, fill=white, font=\small},
+    multiattribute/.style={draw, double, double distance=1.5pt, ellipse, minimum width=2.2cm, minimum height=0.8cm, align=center, fill=white, font=\small}
+]
+    % Entity
+    \node[entity] (emp) at (0,0) {EMPLOYEE};
+
+    % Attributes
+    \node[attribute] (empid) at (-3, 1.5) {\underline{Emp\_ID}};
+    \node[attribute] (name) at (0, 2) {Name};
+    \node[multiattribute] (skill) at (3, 1.5) {Skill};
+
+    % Connections
+    \draw (emp) -- (empid);
+    \draw (emp) -- (name);
+    \draw (emp) -- (skill);
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\subsubsection*{Relational Mapping (Decomposition)}
+
+To map this to a relational schema and conform to 1NF, we decompose the entity into two distinct tables: \texttt{EMPLOYEE} and \texttt{EMP\_SKILL}.
+
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[
+    table/.style={draw, rectangle, minimum height=0.8cm, align=center, fill=white, font=\small},
+    header/.style={table, fill=gray!20, font=\small\bfseries}
+]
+    % --- Table 1: EMPLOYEE ---
+    \node[anchor=west, font=\bfseries] at (0, 1.5) {Relation 1: EMPLOYEE};
+    
+    \node[header, minimum width=3cm] (t1c1) at (1.5, 0.5) {\underline{Emp\_ID} (PK)};
+    \node[table, minimum width=4cm] (t1c2) at (5, 0.5) {Name};
+
+    % --- Table 2: EMP_SKILL ---
+    \node[anchor=west, font=\bfseries] at (0, -1) {Relation 2: EMP\_SKILL (Resolves Multi-valued Attribute)};
+    
+    \node[header, minimum width=4cm] (t2c1) at (2, -2) {\underline{Emp\_ID} (PK, FK)};
+    \node[header, minimum width=4cm] (t2c2) at (6, -2) {\underline{Skill} (PK)};
+
+    % Foreign Key Arrow
+    \draw[->, thick, rounded corners] (t2c1.south) -- +(0,-0.5) -| (t1c1.south);
+    \node[font=\footnotesize, right] at (2.2, -3.2) {Foreign Key relates back to EMPLOYEE};
+
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\textbf{Explanation of the Mapping:}
+\begin{enumerate}
+    \item \textbf{\texttt{EMPLOYEE(Emp\_ID, Name)}:} The original entity becomes a table, holding only the single-valued attributes. \texttt{Emp\_ID} remains the Primary Key.
+    \item \textbf{\texttt{EMP\_SKILL(Emp\_ID, Skill)}:} The multi-valued attribute \texttt{Skill} gets its own table. To link the skill to the correct employee, we import \texttt{Emp\_ID} as a Foreign Key. Because one employee can have many skills, \texttt{Emp\_ID} alone is not unique in this new table. Therefore, the Primary Key for \texttt{EMP\_SKILL} is the composite key \texttt{(Emp\_ID, Skill)}.
+\end{enumerate}
+
+\end{tcolorbox}
+
 \item What are the different elements of Entity-Relation Model? Briefly discuss them.
 \mk{15} \yr{CSE 303 | L-3/T-1 | 2012--13}
 
-%% Q3
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{Introduction to the ER Model}
+The \textbf{Entity-Relationship (ER) Model} is a high-level conceptual data model used in database design to represent the logical structure of a database. It abstracts the real-world system into a collection of basic objects and the associations among them. The three fundamental elements of the ER model are \textbf{Entities}, \textbf{Attributes}, and \textbf{Relationships}.
+
+\subsection*{1. Entities and Entity Sets}
+An \textbf{entity} is a real-world object or concept that exists independently and can be uniquely identified (e.g., a specific student, a specific car). An \textbf{entity set} is a collection of entities of the same type.
+\begin{itemize}
+    \item \textbf{Strong Entity:} An entity set that contains sufficient attributes to uniquely identify all its entities. It has a primary key and is represented by a \textbf{single rounded rectangle}.
+    \item \textbf{Weak Entity:} An entity set that does not have a primary key of its own and depends on another entity (the strong entity) for its existence. It is represented by a \textbf{double rounded rectangle}.
+\end{itemize}
+
+\subsection*{2. Attributes}
+\textbf{Attributes} are the properties or characteristics that describe an entity. They are represented by \textbf{ellipses}. Attributes can be classified into several types:
+\begin{itemize}
+    \item \textbf{Simple Attribute:} Cannot be subdivided further (e.g., Gender, Salary).
+    \item \textbf{Composite Attribute:} Can be divided into smaller subparts representing basic attributes (e.g., \textit{Name} can be divided into \textit{First Name}, \textit{Middle Name}, and \textit{Last Name}).
+    \item \textbf{Single-valued Attribute:} Has only a single value for a particular entity (e.g., Date of Birth).
+    \item \textbf{Multi-valued Attribute:} Can have multiple values for a single entity. Represented by a \textbf{double ellipse} (e.g., Phone Number, Skills).
+    \item \textbf{Derived Attribute:} Its value is computed or derived from another related attribute or set of attributes. Represented by a \textbf{dashed ellipse} (e.g., \textit{Age} derived from \textit{Date of Birth}).
+    \item \textbf{Key Attribute:} Uniquely identifies an entity within an entity set. Its name is \textbf{underlined}.
+\end{itemize}
+
+\subsection*{3. Relationships and Relationship Sets}
+A \textbf{relationship} is an association among two or more entities. A \textbf{relationship set} is a collection of similar relationships. They are represented by \textbf{diamonds}.
+\begin{itemize}
+    \item \textbf{Degree of Relationship:} The number of participating entity types (e.g., Unary, Binary, Ternary).
+    \item \textbf{Cardinality Ratio:} Expresses the maximum number of relationship instances an entity can participate in (e.g., $1:1$ (One-to-One), $1:N$ (One-to-Many), $M:N$ (Many-to-Many)).
+    \item \textbf{Participation Constraint:} 
+    \begin{itemize}
+        \item \textbf{Total Participation:} Every entity in the set must participate in at least one relationship instance. Represented by a \textbf{double line}.
+        \item \textbf{Partial Participation:} Only some entities in the set participate in the relationship. Represented by a \textbf{single line}.
+    \end{itemize}
+    \item \textbf{Identifying Relationship:} The relationship associating a weak entity to its strong entity. Represented by a \textbf{double diamond}.
+\end{itemize}
+
+\vspace{1em}
+\subsection*{4. Visual Summary of ER Elements}
+
+The following Entity-Relationship diagram illustrates all the fundamental elements working together in a unified database schema.
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    weakentity/.style={draw, double, double distance=1.5pt, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    identrel/.style={draw, double, double distance=1.5pt, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=1.8cm, minimum height=0.7cm, align=center, fill=white, font=\small},
+    multiattribute/.style={draw, double, double distance=1.5pt, ellipse, minimum width=1.8cm, minimum height=0.7cm, align=center, fill=white, font=\small},
+    derivedattribute/.style={draw, dashed, ellipse, minimum width=1.8cm, minimum height=0.7cm, align=center, fill=white, font=\small}
+]
+
+    % --- Entities ---
+    \node[entity] (emp) at (0,0) {EMPLOYEE};
+    \node[weakentity] (dep) at (10,0) {DEPENDENT};
+
+    % --- Relationship ---
+    \node[identrel] (has) at (5,0) {Has};
+
+    % --- Connections Entity to Relationship ---
+    % Employee to Has (Partial, 1)
+    \draw (emp) -- (has) node[midway, above] {$1$};
+    % Dependent to Has (Total, N)
+    \draw[double, double distance=1.5pt] (has) -- (dep) node[midway, above] {$N$};
+
+    % --- Employee Attributes ---
+    \node[attribute] (empid) at (-3, 1.8) {\underline{Emp\_ID}};
+    \node[attribute] (name) at (0, 2) {Name};
+    \node[attribute] (fname) at (-1.5, 3.5) {F\_Name};
+    \node[attribute] (lname) at (1.5, 3.5) {L\_Name};
+    \node[multiattribute] (phone) at (3, 1.8) {Phone};
+    \node[derivedattribute] (age) at (-3, -1.2) {Age};
+
+    % Attribute Connections for Employee
+    \draw (emp) -- (empid);
+    \draw (emp) -- (name);
+    \draw (emp) -- (phone);
+    \draw (emp) -- (age);
+    \draw (name) -- (fname);
+    \draw (name) -- (lname);
+
+    % --- Dependent Attributes ---
+    \node[attribute] (depname) at (9, 2) {Dep\_Name};
+    % Manual dashed underline for partial key
+    \draw[dashed, thick] (8.1, 1.7) -- (9.9, 1.7);
+    \node[attribute] (relation) at (11.5, 1.5) {Relation};
+
+    % Attribute Connections for Dependent
+    \draw (dep) -- (depname);
+    \draw (dep) -- (relation);
+
+    % --- Labels ---
+    \node[font=\footnotesize\itshape, text=black!70] at (0, -0.8) {Strong Entity};
+    \node[font=\footnotesize\itshape, text=black!70] at (10, -0.8) {Weak Entity};
+    \node[font=\footnotesize\itshape, text=black!70] at (5, -1.2) {Identifying Relationship};
+    \node[font=\footnotesize\itshape, text=black!70] at (0, 2.6) {Composite};
+    \node[font=\footnotesize\itshape, text=black!70] at (-3, 2.4) {Key};
+    \node[font=\footnotesize\itshape, text=black!70] at (3, 2.4) {Multi-valued};
+    \node[font=\footnotesize\itshape, text=black!70] at (-3, -1.8) {Derived};
+    \node[font=\footnotesize\itshape, text=black!70] at (9, 2.6) {Partial Key};
+
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
 \item What is a weak entity set? What is the requirement of a weak entity set?
 \mk{10} \yr{CSE 303 | L-3/T-1 | 2012--13}
 
-%% Q4
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Definition of a Weak Entity Set}
+In the Entity-Relationship (ER) model, a \textbf{weak entity set} is an entity set that does not contain sufficient attributes to form a primary key of its own. Instead, it relies on another entity set—called the \textbf{strong entity set} (or owner entity set)—for its existence and identification. 
+
+The primary key of a weak entity set is formed by a combination of the primary key of its strong entity set and its own \textbf{discriminator} (or partial key).
+
+\subsection*{2. Requirements of a Weak Entity Set}
+For a weak entity set to exist and function correctly in a database schema, the following requirements must be met:
+
+\begin{enumerate}
+    \item \textbf{Existence Dependency (Owner Entity):} A weak entity cannot exist in the database without its corresponding strong entity. If the strong entity is deleted, all its associated weak entities must also be deleted (cascading delete).
+    \item \textbf{Identifying Relationship:} The weak entity set must be associated with the strong entity set via a specific relationship known as the \textbf{identifying relationship}. In an ER diagram, this is represented by a double diamond.
+    \item \textbf{Total Participation:} The weak entity set must exhibit \textbf{total participation} in the identifying relationship. This means every instance of the weak entity must participate in the relationship. It is represented by a double line connecting the weak entity to the identifying relationship.
+    \item \textbf{Discriminator (Partial Key):} Although it lacks a full primary key, the weak entity set must possess a set of attributes that uniquely identifies its instances \textit{among the instances related to a specific strong entity}. This attribute is called the partial key and is represented by a dashed underline in an ER diagram.
+\end{enumerate}
+
+\subsection*{3. Visual Representation (ER Diagram)}
+
+Consider an organization where employees have dependents (e.g., children, spouse) for insurance purposes. A dependent cannot exist in the database without the employee, and two different employees might have dependents with the same name. Thus, \textbf{DEPENDENT} is a weak entity set owned by the \textbf{EMPLOYEE} strong entity set.
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=3cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    weakentity/.style={draw, double, double distance=1.5pt, rectangle, rounded corners, minimum width=3cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    identrel/.style={draw, double, double distance=1.5pt, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.8cm, align=center, fill=white, font=\small}
+]
+
+    % --- Entities ---
+    \node[entity] (emp) at (0,0) {EMPLOYEE};
+    \node[weakentity] (dep) at (10,0) {DEPENDENT};
+
+    % --- Relationship ---
+    \node[identrel] (has) at (5,0) {Has};
+
+    % --- Connections Entity to Relationship ---
+    % Employee to Has (Partial, Cardinality 1)
+    \draw (emp) -- (has) node[midway, above, font=\small] {$1$};
+    
+    % Dependent to Has (Total Participation, Cardinality N)
+    \draw[double, double distance=1.5pt] (has) -- (dep) node[midway, above, font=\small] {$N$};
+
+    % --- Employee Attributes ---
+    \node[attribute] (empid) at (0, 2.5) {\underline{Emp\_ID}};
+    
+    % Attribute Connections for Employee
+    \draw (emp) -- (empid);
+
+    % --- Dependent Attributes ---
+    \node[attribute] (depname) at (10, 2.5) {Dep\_Name};
+    % Manual dashed underline for partial key (Discriminator)
+    \draw[dashed, thick] (9.0, 2.2) -- (11.0, 2.2);
+
+    % Attribute Connections for Dependent
+    \draw (dep) -- (depname);
+
+    % --- Informational Labels ---
+    \node[font=\footnotesize\itshape, text=black!80] at (0, -1) {Strong Entity Set};
+    \node[font=\footnotesize\itshape, text=black!80] at (5, -1.2) {Identifying Relationship};
+    \node[font=\footnotesize\itshape, text=black!80] at (10, -1) {Weak Entity Set};
+    \node[font=\footnotesize\itshape, text=black!80] at (0, 3.2) {Primary Key};
+    \node[font=\footnotesize\itshape, text=black!80] at (10, 3.2) {Partial Key (Discriminator)};
+
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\subsection*{4. Comparison Summary}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{} l p{6cm} p{6cm} @{}}
+\toprule
+\textbf{Feature} & \textbf{Strong Entity Set} & \textbf{Weak Entity Set} \\
+\midrule
+\textbf{Primary Key} & Has its own primary key. & Lacks a primary key; uses a partial key. \\
+\textbf{Existence} & Exists independently. & Existence depends on a strong entity. \\
+\textbf{Representation} & Single rounded rectangle. & Double rounded rectangle. \\
+\textbf{Relationship} & Associated via regular relationships. & Associated via an identifying relationship (double diamond). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{tcolorbox}
+
 \item Consider the following scenario of a hospital:
 
 \begin{itemize}[leftmargin=1.5em,itemsep=2pt]
@@ -1635,7 +2568,158 @@ Draw an Entity-Relationship (ER) diagram to represent the data requirements desc
 Define entities and their attributes for the hospital management system described above.
 \mk{10} \yr{CSE 215 | L-3/T-1 | 2010--11}
 
-%% Q2
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity Definitions and Attributes}
+
+Based on the hospital scenario provided, the system can be modeled using the following core entities and their attributes. \textbf{Primary Keys (PK)} are underlined and used to uniquely identify records, while \textbf{Foreign Keys (FK)} establish relationships between the entities.
+
+\begin{itemize}[leftmargin=2em, itemsep=1em]
+    \item \textbf{WARD}: Represents the physical wards where patients are admitted.
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \underline{\textbf{Ward\_ID}} (PK): Unique identifier for the ward.
+        \item \textbf{Ward\_Name}: Name or designation of the ward.
+        \item \textbf{Capacity}: Maximum number of patients the ward can hold.
+    \end{itemize}
+
+    \item \textbf{PATIENT}: Stores information regarding the individuals receiving care.
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \underline{\textbf{Patient\_ID}} (PK): Unique identifier for the patient.
+        \item \textbf{Name}: Full name of the patient.
+        \item \textbf{Admission\_Date}: Date the patient was admitted.
+        \item \textbf{Ward\_ID} (FK): The specific ward to which the patient is admitted.
+    \end{itemize}
+
+    \item \textbf{STAFF}: A generalized entity representing both doctors and healthcare assistants to streamline the payment and shift tracking system.
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \underline{\textbf{Staff\_ID}} (PK): Unique identifier for the staff member.
+        \item \textbf{Name}: Full name of the staff member.
+        \item \textbf{Role}: Distinguishes between 'Doctor' and 'Healthcare Assistant'.
+        \item \textbf{Employment\_Type}: Indicates if the staff is 'Full-time' or 'Part-time'.
+        \item \textbf{Overtime\_Hours}: Tracks varying amounts of overtime worked.
+        \item \textbf{Grade\_ID} (FK): Links to the pay grade for rate calculations.
+    \end{itemize}
+
+    \item \textbf{PAY\_GRADE}: Manages the varying payment rates subject to a staff member's grade.
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \underline{\textbf{Grade\_ID}} (PK): Unique identifier for the pay grade.
+        \item \textbf{Basic\_Hourly\_Rate}: Standard rate of pay.
+        \item \textbf{Overtime\_Rate}: Multiplier or specific rate for overtime hours.
+    \end{itemize}
+
+    \item \textbf{DRUG}: Stores the inventory and pricing of treatments.
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \underline{\textbf{Drug\_ID}} (PK): Unique identifier for the medication.
+        \item \textbf{Drug\_Name}: Name of the drug.
+        \item \textbf{Unit\_Cost}: The cost per single administration/pill of the drug.
+    \end{itemize}
+
+    \item \textbf{TREATMENT}: An associative entity (or relationship entity) tracking the specific drug regimens assigned to patients.
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \underline{\textbf{Treatment\_ID}} (PK): Unique identifier for the specific treatment plan.
+        \item \textbf{Patient\_ID} (FK): The patient receiving the treatment.
+        \item \textbf{Drug\_ID} (FK): The specific drug prescribed.
+        \item \textbf{Doctor\_ID} (FK): The staff ID of the doctor who prescribed it.
+        \item \textbf{Frequency\_Per\_Day}: Number of times the drug must be taken daily.
+        \item \textbf{Duration\_Days}: Varying length of time the drug is required.
+        \item \textit{\textbf{Weekly\_Cost}} (Derived): A calculated attribute resolving the system's need to compute treatment cost per week ($\text{Frequency\_Per\_Day} \times 7 \times \text{Unit\_Cost}$).
+    \end{itemize}
+    
+    \item \textbf{PATIENT\_DOCTOR\_ASSIGNMENT}: Resolves the many-to-many relationship mapping between patients and their assigned doctors (as a patient can have 1 or 2 doctors).
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \underline{\textbf{Patient\_ID}} (PK, FK)
+        \item \underline{\textbf{Staff\_ID}} (PK, FK)
+    \end{itemize}
+\end{itemize}
+
+\vspace{1.5em}
+\subsection*{2. Conceptual Entity-Relationship (ER) Diagram}
+
+The following diagram illustrates the core entities, their key attributes, and the cardinalities of their relationships based on the constraints described in the scenario.
+
+\vspace{2em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    node distance=2.5cm,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=1.8cm, minimum height=0.6cm, align=center, fill=white, font=\footnotesize},
+    derived/.style={draw, dashed, ellipse, minimum width=1.8cm, minimum height=0.6cm, align=center, fill=white, font=\footnotesize}
+]
+
+    % --- Entities ---
+    \node[entity] (patient) at (0, 0) {PATIENT};
+    \node[entity] (ward) at (0, 4) {WARD};
+    \node[entity] (staff) at (-6, 0) {STAFF};
+    \node[entity] (grade) at (-6, -4) {PAY\_GRADE};
+    \node[entity] (treatment) at (6, 0) {TREATMENT};
+    \node[entity] (drug) at (6, -4) {DRUG};
+
+    % --- Relationships ---
+    \node[relationship] (admitted) at (0, 2) {Admitted\_In};
+    \node[relationship] (treats) at (-3, 0) {Assigned\_To}; % Doctor to Patient
+    \node[relationship] (assigned) at (-6, 4) {Works\_In}; % Assistant to Ward
+    \node[relationship] (hasgrade) at (-6, -2) {Has\_Grade};
+    \node[relationship] (receives) at (3, 0) {Receives};
+    \node[relationship] (includes) at (6, -2) {Includes};
+
+    % --- Connecting Entities and Relationships with Cardinalities ---
+    \draw (patient) -- (admitted) node[midway, right] {$N$};
+    \draw (admitted) -- (ward) node[midway, right] {$1$};
+
+    \draw (staff) -- (treats) node[midway, above] {$M$};
+    \draw (treats) -- (patient) node[midway, above] {$N$};
+
+    \draw (staff) -- (assigned) node[midway, left] {$N$};
+    \draw (assigned) -- (ward) node[midway, above] {$1$};
+
+    \draw (staff) -- (hasgrade) node[midway, left] {$N$};
+    \draw (hasgrade) -- (grade) node[midway, left] {$1$};
+
+    \draw (patient) -- (receives) node[midway, above] {$1$};
+    \draw (receives) -- (treatment) node[midway, above] {$N$};
+
+    \draw (treatment) -- (includes) node[midway, right] {$N$};
+    \draw (includes) -- (drug) node[midway, right] {$1$};
+
+    % --- Attributes for WARD ---
+    \node[attribute] (wardid) at (2, 4.8) {\underline{Ward\_ID}};
+    \node[attribute] (wname) at (2, 3.2) {Name};
+    \draw (ward) -- (wardid); \draw (ward) -- (wname);
+
+    % --- Attributes for PATIENT ---
+    \node[attribute] (patid) at (1.5, 1) {\underline{Patient\_ID}};
+    \node[attribute] (pname) at (1.5, -1) {Name};
+    \draw (patient) -- (patid); \draw (patient) -- (pname);
+
+    % --- Attributes for STAFF ---
+    \node[attribute] (staffid) at (-8.5, 1) {\underline{Staff\_ID}};
+    \node[attribute] (srole) at (-8.5, 0) {Role};
+    \node[attribute] (sot) at (-8.5, -1) {OT\_Hours};
+    \draw (staff) -- (staffid); \draw (staff) -- (srole); \draw (staff) -- (sot);
+
+    % --- Attributes for PAY_GRADE ---
+    \node[attribute] (gradeid) at (-8.5, -3.5) {\underline{Grade\_ID}};
+    \node[attribute] (grates) at (-8.5, -4.5) {Rates};
+    \draw (grade) -- (gradeid); \draw (grade) -- (grates);
+
+    % --- Attributes for TREATMENT ---
+    \node[attribute] (treatid) at (8.5, 1) {\underline{Treat\_ID}};
+    \node[attribute] (tfreq) at (8.5, 0) {Freq/Dur};
+    \node[derived] (tcost) at (8.5, -1) {Wk\_Cost};
+    \draw (treatment) -- (treatid); \draw (treatment) -- (tfreq); \draw (treatment) -- (tcost);
+
+    % --- Attributes for DRUG ---
+    \node[attribute] (drugid) at (8.5, -3.5) {\underline{Drug\_ID}};
+    \node[attribute] (dcost) at (8.5, -4.5) {Unit\_Cost};
+    \draw (drug) -- (drugid); \draw (drug) -- (dcost);
+
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -1644,7 +2728,7 @@ Define entities and their attributes for the hospital management system describe
 
 \begin{enumerate}
 
-%% Q1
+
 \item You are the manager of the website development department of your organisation.
 Each website developed by your organization can be uniquely identified by a url. It also has
 a public host-ip address and a date of going live. Each website is developed by a team of
@@ -1658,6 +2742,128 @@ to a web framework is its author name.
 Design an Entity-Relationship Diagram for your website development department to manage it conveniently. 
 \mk{10} \yr{CSE 215 | L-2/T-2 | 2018--19}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity Identification and Attributes}
+Based on the provided scenario for the website development department, we can identify four primary entities along with their respective attributes. \textbf{Primary Keys (PK)} are used to uniquely identify each record.
+
+\begin{itemize}[leftmargin=2em, itemsep=0.5em]
+    \item \textbf{WEBSITE}: Stores details about the deployed projects.
+    \begin{itemize}[label={--}, itemsep=1pt]
+        \item \underline{\textbf{URL}} (PK): The unique identifier for each website.
+        \item \textbf{Host\_IP}: The public host-IP address.
+        \item \textbf{Live\_Date}: The date the website went live.
+    \end{itemize}
+
+    \item \textbf{DEVELOPER}: Stores professional and personal details of the staff.
+    \begin{itemize}[label={--}, itemsep=1pt]
+        \item \underline{\textbf{Emp\_ID}} (PK): The unique employee identifier.
+        \item \textbf{Name}: The full name of the developer.
+        \item \textbf{Address}: Residential address.
+        \item \textbf{Qualification}: Highest educational qualification.
+        \item \textbf{Salary}: Current compensation.
+        \item \textbf{Hire\_Date}: Date of joining the organization.
+    \end{itemize}
+
+    \item \textbf{FRAMEWORK}: Details the web-based frameworks utilized for development.
+    \begin{itemize}[label={--}, itemsep=1pt]
+        \item \underline{\textbf{F\_Name}} (PK): The specific name of the framework.
+        \item \textbf{F\_Dev\_Year}: The year the framework was developed.
+        \item \textbf{Author}: The author or creator of the framework.
+    \end{itemize}
+
+    \item \textbf{LANGUAGE}: The programming language associated with the frameworks.
+    \begin{itemize}[label={--}, itemsep=1pt]
+        \item \underline{\textbf{L\_Name}} (PK): The specific name of the programming language.
+        \item \textbf{L\_Dev\_Year}: The development year of the language.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{2. Relationships and Cardinalities}
+The entities interact through the following relationships:
+\begin{itemize}
+    \item \textbf{Develops (DEVELOPER and WEBSITE)}: A \textbf{Many-to-Many (M:N)} relationship. The scenario states a website is developed by a "team of developers" (meaning multiple developers per website), and a developer can generally work on multiple websites over time. 
+    \item \textbf{Uses\_Framework (WEBSITE and FRAMEWORK)}: A \textbf{Many-to-One (N:1)} relationship. Each website is developed using one specific web-based framework, but a single framework can be used to build many websites.
+    \item \textbf{Associated\_With (FRAMEWORK and LANGUAGE)}: A \textbf{Many-to-One (N:1)} relationship. Each framework is associated with a \textit{particular} (single) programming language, while a programming language (like Python or JavaScript) can have multiple frameworks associated with it (e.g., Django, Flask).
+\end{itemize}
+
+\vspace{1em}
+\subsection*{3. Entity-Relationship (ER) Diagram}
+
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\small}
+]
+
+    % --- Entities ---
+    \node[entity] (DEV) at (-4, 3) {DEVELOPER};
+    \node[entity] (WEB) at (4, 3) {WEBSITE};
+    \node[entity] (FWK) at (4, -3) {FRAMEWORK};
+    \node[entity] (LANG) at (-4, -3) {LANGUAGE};
+
+    % --- Relationships ---
+    \node[relationship] (DEV_WEB) at (0, 3) {Develops};
+    \node[relationship] (WEB_FWK) at (4, 0) {Uses\_Framework};
+    \node[relationship] (FWK_LANG) at (0, -3) {Associated\_With};
+
+    % --- Connection Lines & Cardinalities ---
+    \draw (DEV) -- (DEV_WEB) node[midway, above, font=\bfseries] {M};
+    \draw (DEV_WEB) -- (WEB) node[midway, above, font=\bfseries] {N};
+
+    \draw (WEB) -- (WEB_FWK) node[midway, right, font=\bfseries] {N};
+    \draw (WEB_FWK) -- (FWK) node[midway, right, font=\bfseries] {1};
+
+    \draw (FWK) -- (FWK_LANG) node[midway, above, font=\bfseries] {N};
+    \draw (FWK_LANG) -- (LANG) node[midway, above, font=\bfseries] {1};
+
+    % --- Attributes for DEVELOPER ---
+    \node[attribute] (d_id) at (-4, 5.2) {\underline{Emp\_ID}};
+    \node[attribute] (d_name) at (-6.8, 4.5) {Name};
+    \node[attribute] (d_addr) at (-7.5, 3) {Address};
+    \node[attribute] (d_qual) at (-6.8, 1.5) {Qualification};
+    \node[attribute] (d_sal) at (-4, 1) {Salary};
+    \node[attribute] (d_hire) at (-1.5, 1.5) {Hire\_Date};
+
+    \draw (DEV) -- (d_id);
+    \draw (DEV) -- (d_name);
+    \draw (DEV) -- (d_addr);
+    \draw (DEV) -- (d_qual);
+    \draw (DEV) -- (d_sal);
+    \draw (DEV) -- (d_hire);
+
+    % --- Attributes for WEBSITE ---
+    \node[attribute] (w_url) at (4, 5.2) {\underline{URL}};
+    \node[attribute] (w_ip) at (6.5, 4.5) {Host\_IP};
+    \node[attribute] (w_date) at (7, 3) {Live\_Date};
+
+    \draw (WEB) -- (w_url);
+    \draw (WEB) -- (w_ip);
+    \draw (WEB) -- (w_date);
+
+    % --- Attributes for FRAMEWORK ---
+    \node[attribute] (f_author) at (7, -2) {Author};
+    \node[attribute] (f_name) at (7, -3.5) {\underline{F\_Name}};
+    \node[attribute] (f_year) at (6.2, -5) {F\_Dev\_Year};
+
+    \draw (FWK) -- (f_author);
+    \draw (FWK) -- (f_name);
+    \draw (FWK) -- (f_year);
+
+    % --- Attributes for LANGUAGE ---
+    \node[attribute] (l_name) at (-4, -5.2) {\underline{L\_Name}};
+    \node[attribute] (l_year) at (-6.8, -4.2) {L\_Dev\_Year};
+
+    \draw (LANG) -- (l_name);
+    \draw (LANG) -- (l_year);
+
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
 \item You are designing a database for a university with the following requirements: Each student has a student id, name, address and contact name. Each course has a course number, name, credit hours, and the minimum level and term. Each student enrols in several courses. University employees are either faculty members or office staff. Faculty members have a name, designation, address, contact number and room number. Office staff have a name, contact, address and hourly payment rate. In each semester (identified by a label e.g.\ ``January 2019''), every faculty member conducts several courses; a single course can have many teachers. If a course is conducted by several teachers, one is assigned as coordinator.
 \begin{enumerate}
   \item Write down the list of entity sets with their attributes.
@@ -1665,7 +2871,131 @@ Design an Entity-Relationship Diagram for your website development department to
 \end{enumerate}
 \mk{20} \yr{CSE 215 | L-2/T-2 | 2017--18}
 
-%% Q8 — 2018-19 Website development department
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity Sets and their Attributes}
+
+Based on the scenario, we can identify the following entity sets and their attributes. A generalized superclass \textbf{EMPLOYEE} is introduced to hold the shared attributes of \textbf{FACULTY} and \textbf{OFFICE\_STAFF}. Primary keys are underlined.
+
+\begin{itemize}[leftmargin=2em, itemsep=0.5em]
+    \item \textbf{STUDENT}: \underline{Student\_ID}, Name, Address, Contact\_Name.
+    \item \textbf{COURSE}: \underline{Course\_No}, Name, Credit\_Hours, Min\_Level, Min\_Term.
+    \item \textbf{EMPLOYEE} (Superclass): \underline{Emp\_ID} (Assumed as a unique identifier), Name, Address, Contact\_Number.
+    \item \textbf{FACULTY} (Subclass of Employee): Designation, Room\_Number.
+    \item \textbf{OFFICE\_STAFF} (Subclass of Employee): Hourly\_Rate.
+\end{itemize}
+
+\textbf{Relationship Sets \& their Attributes:}
+\begin{itemize}[leftmargin=2em, itemsep=0.5em]
+    \item \textbf{Enrols}: Associates \textbf{STUDENT} and \textbf{COURSE}. (Multiplicity: Many-to-Many).
+    \item \textbf{Conducts}: Associates \textbf{FACULTY} and \textbf{COURSE}. (Multiplicity: Many-to-Many). 
+    \begin{itemize}
+        \item \textit{Attributes}: \textbf{Semester} (label indicating when it is taught), \textbf{Is\_Coordinator} (Boolean flag indicating if the faculty is the assigned coordinator for that course).
+    \end{itemize}
+\end{itemize}
+
+\vspace{1em}
+\subsection*{2. Entity-Relationship (ER) Diagram}
+
+The following ER diagram uses standard Chen's notation. The generalization (ISA) is represented by a circle linking the subclasses to the superclass.
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.6cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.6cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=1.6cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    isa/.style={draw, circle, minimum size=1cm, align=center, fill=white, font=\bfseries}
+]
+
+    % ================= ENTITIES =================
+    \node[entity] (STUDENT) at (-6, 4) {STUDENT};
+    \node[entity] (COURSE) at (5, 4) {COURSE};
+    \node[entity] (EMPLOYEE) at (-6, -4) {EMPLOYEE};
+    \node[entity] (FACULTY) at (5, -4) {FACULTY};
+    \node[entity] (STAFF) at (-0.5, -8) {OFFICE\_STAFF};
+
+    % ================= RELATIONSHIPS & ISA =================
+    \node[relationship] (ENROLS) at (-0.5, 4) {Enrols};
+    \node[relationship] (CONDUCTS) at (5, 0) {Conducts};
+    \node[isa] (ISA) at (-0.5, -4) {ISA};
+
+    % ================= CONNECTIONS WITH MULTIPLICITIES =================
+    % Student - Enrols - Course
+    \draw (STUDENT) -- (ENROLS) node[midway, above, font=\bfseries] {M};
+    \draw (ENROLS) -- (COURSE) node[midway, above, font=\bfseries] {N};
+
+    % Faculty - Conducts - Course
+    \draw (FACULTY) -- (CONDUCTS) node[midway, right, font=\bfseries] {M};
+    \draw (CONDUCTS) -- (COURSE) node[midway, right, font=\bfseries] {N};
+
+    % Employee Hierarchy (ISA)
+    \draw[->, >=stealth] (ISA) -- (EMPLOYEE); % Arrow pointing to Superclass
+    \draw (FACULTY) -- (ISA);
+    \draw (STAFF) -- (ISA);
+
+    % ================= ATTRIBUTES =================
+    
+    % --- STUDENT Attributes ---
+    \node[attribute] (s_id) at (-7.5, 5.8) {\underline{Student\_ID}};
+    \node[attribute] (s_name) at (-4.5, 5.8) {Name};
+    \node[attribute] (s_addr) at (-8.5, 4) {Address};
+    \node[attribute] (s_contact) at (-7.5, 2.2) {Contact\_Name};
+    
+    \draw (STUDENT) -- (s_id);
+    \draw (STUDENT) -- (s_name);
+    \draw (STUDENT) -- (s_addr);
+    \draw (STUDENT) -- (s_contact);
+
+    % --- COURSE Attributes ---
+    \node[attribute] (c_no) at (3.5, 5.8) {\underline{Course\_No}};
+    \node[attribute] (c_name) at (6.5, 5.8) {Name};
+    \node[attribute] (c_credit) at (7.5, 4.8) {Credit\_Hours};
+    \node[attribute] (c_minlvl) at (7.5, 3.2) {Min\_Level};
+    \node[attribute] (c_minterm) at (6.5, 2.2) {Min\_Term};
+
+    \draw (COURSE) -- (c_no);
+    \draw (COURSE) -- (c_name);
+    \draw (COURSE) -- (c_credit);
+    \draw (COURSE) -- (c_minlvl);
+    \draw (COURSE) -- (c_minterm);
+
+    % --- CONDUCTS Attributes ---
+    \node[attribute] (cond_sem) at (8, 0.8) {Semester};
+    \node[attribute] (cond_coord) at (8, -0.8) {Is\_Coordinator};
+
+    \draw (CONDUCTS) -- (cond_sem);
+    \draw (CONDUCTS) -- (cond_coord);
+
+    % --- EMPLOYEE Attributes ---
+    \node[attribute] (e_id) at (-7.5, -2.2) {\underline{Emp\_ID}};
+    \node[attribute] (e_name) at (-4.5, -2.2) {Name};
+    \node[attribute] (e_addr) at (-8.5, -4) {Address};
+    \node[attribute] (e_contact) at (-7.5, -5.8) {Contact\_No};
+
+    \draw (EMPLOYEE) -- (e_id);
+    \draw (EMPLOYEE) -- (e_name);
+    \draw (EMPLOYEE) -- (e_addr);
+    \draw (EMPLOYEE) -- (e_contact);
+
+    % --- FACULTY Attributes ---
+    \node[attribute] (f_desig) at (8, -3.2) {Designation};
+    \node[attribute] (f_room) at (8, -4.8) {Room\_No};
+
+    \draw (FACULTY) -- (f_desig);
+    \draw (FACULTY) -- (f_room);
+
+    % --- OFFICE STAFF Attributes ---
+    \node[attribute] (o_rate) at (3, -8) {Hourly\_Rate};
+
+    \draw (STAFF) -- (o_rate);
+
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
 \item 
 There are many books in central library of BUET in different subjects. Each book must
 have a ISBN number, title, name of authors, subject and number of copies. A book can
@@ -1694,13 +3024,517 @@ labeled as issued and will be cleared after return by the borrower.
 \end{enumerate}
 \mk{35} \yr{CSE 303 | L-3/T-1 | 2016--17}
 
-%% Q7 — 2017-18 University database
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity-Relationship Diagram (ERD)}
+
+The following Entity-Relationship Diagram models the library management system. A generalized \textbf{BORROWER} superclass is used to represent \textbf{TEACHER}, \textbf{STUDENT}, and \textbf{STAFF}. A ternary relationship \textbf{Supplies} links \textbf{SUPPLIER}, \textbf{TENDER}, and \textbf{BOOK\_COPY}.
+
+\vspace{1em}
+\begin{center}
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    weakentity/.style={draw, rectangle, double, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=1.6cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    multiattribute/.style={draw, ellipse, double, minimum width=1.6cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    isa/.style={draw, circle, minimum size=1cm, align=center, fill=white, font=\bfseries}
+]
+
+    % ================= ENTITIES =================
+    \node[entity] (PUBLISHER) at (-6, 9) {PUBLISHER};
+    \node[entity] (BOOK) at (6, 9) {BOOK};
+    \node[entity] (BOOK_COPY) at (6, 4) {BOOK\_COPY};
+    \node[entity] (SUPPLIER) at (-6, 4) {SUPPLIER};
+    \node[entity] (TENDER) at (0, 0) {TENDER};
+    \node[entity] (BORROWER) at (6, -2) {BORROWER};
+    \node[entity] (TEACHER) at (1, -7) {TEACHER};
+    \node[entity] (STUDENT) at (6, -7) {STUDENT};
+    \node[entity] (STAFF) at (11, -7) {STAFF};
+
+    % ================= RELATIONSHIPS & ISA =================
+    \node[relationship] (PUBLISHES) at (0, 9) {Publishes};
+    \node[relationship] (HAS) at (6, 6.5) {Has\_Copy};
+    \node[relationship] (SUPPLIES) at (0, 4) {Supplies};
+    \node[relationship] (ISSUES) at (6, 1) {Issues};
+    \node[isa] (ISA) at (6, -4.5) {ISA};
+
+    % ================= CONNECTIONS =================
+    % Publisher - Publishes - Book
+    \draw (PUBLISHER) -- (PUBLISHES) node[midway, above, font=\bfseries] {1};
+    \draw (PUBLISHES) -- (BOOK) node[midway, above, font=\bfseries] {N};
+
+    % Book - Has - Book Copy
+    \draw (BOOK) -- (HAS) node[midway, right, font=\bfseries] {1};
+    \draw (HAS) -- (BOOK_COPY) node[midway, right, font=\bfseries] {N};
+
+    % Ternary: Supplier, Tender, Book_Copy -> Supplies
+    \draw (SUPPLIER) -- (SUPPLIES) node[midway, above, font=\bfseries] {1};
+    \draw (TENDER) -- (SUPPLIES) node[midway, right, font=\bfseries] {1};
+    \draw (SUPPLIES) -- (BOOK_COPY) node[midway, above, font=\bfseries] {N};
+
+    % Borrower - Issues - Book Copy
+    \draw (BORROWER) -- (ISSUES) node[midway, right, font=\bfseries] {M};
+    \draw (ISSUES) -- (BOOK_COPY) node[midway, right, font=\bfseries] {N};
+
+    % ISA Hierarchy
+    \draw[->, >=stealth] (ISA) -- (BORROWER);
+    \draw (TEACHER) |- (ISA);
+    \draw (STUDENT) -- (ISA);
+    \draw (STAFF) |- (ISA);
+
+    % ================= ATTRIBUTES =================
+    
+    % PUBLISHER
+    \node[attribute] (p_id) at (-6, 11) {\underline{Pub\_ID}};
+    \node[attribute] (p_name) at (-8.5, 10.5) {Name};
+    \node[attribute] (p_country) at (-9, 9) {Country};
+    \node[attribute] (p_addr) at (-8.5, 7.5) {Address};
+    \node[multiattribute] (p_cont) at (-6, 7) {Contacts};
+    \draw (PUBLISHER) -- (p_id); \draw (PUBLISHER) -- (p_name); \draw (PUBLISHER) -- (p_country); \draw (PUBLISHER) -- (p_addr); \draw (PUBLISHER) -- (p_cont);
+
+    % BOOK
+    \node[attribute] (b_isbn) at (6, 11) {\underline{ISBN}};
+    \node[attribute] (b_title) at (8.5, 10.5) {Title};
+    \node[multiattribute] (b_auth) at (9, 9) {Authors};
+    \node[attribute] (b_subj) at (8.5, 7.5) {Subject};
+    \node[attribute] (b_num) at (4, 10.5) {Num\_Copies};
+    \draw (BOOK) -- (b_isbn); \draw (BOOK) -- (b_title); \draw (BOOK) -- (b_auth); \draw (BOOK) -- (b_subj); \draw (BOOK) -- (b_num);
+
+    % BOOK COPY
+    \node[attribute] (bc_acc) at (9, 5) {\underline{Accession\_No}};
+    \node[attribute] (bc_ed) at (9, 4) {Edition};
+    \node[attribute] (bc_price) at (9, 3) {Price};
+    \node[attribute] (bc_date) at (7.5, 2.5) {Date\_Purchase};
+    \node[attribute] (bc_status) at (4, 3) {Status};
+    \draw (BOOK_COPY) -- (bc_acc); \draw (BOOK_COPY) -- (bc_ed); \draw (BOOK_COPY) -- (bc_price); \draw (BOOK_COPY) -- (bc_date); \draw (BOOK_COPY) -- (bc_status);
+
+    % SUPPLIER
+    \node[attribute] (s_id) at (-6, 6) {\underline{Sup\_ID}};
+    \node[attribute] (s_name) at (-8.5, 5) {Name};
+    \node[attribute] (s_addr) at (-8.5, 3) {Address};
+    \node[multiattribute] (s_cont) at (-6, 2) {Contacts};
+    \draw (SUPPLIER) -- (s_id); \draw (SUPPLIER) -- (s_name); \draw (SUPPLIER) -- (s_addr); \draw (SUPPLIER) -- (s_cont);
+
+    % TENDER
+    \node[attribute] (t_id) at (-3, 0) {\underline{Tender\_ID}};
+    \node[attribute] (t_name) at (-2, -1.5) {Name};
+    \node[attribute] (t_price) at (2, -1.5) {Total\_Price};
+    \node[attribute] (t_year) at (3, 0) {Year};
+    \draw (TENDER) -- (t_id); \draw (TENDER) -- (t_name); \draw (TENDER) -- (t_price); \draw (TENDER) -- (t_year);
+
+    % BORROWER
+    \node[attribute] (br_id) at (9, -1) {\underline{Borrower\_ID}};
+    \node[attribute] (br_name) at (9, -2) {Name};
+    \node[attribute] (br_cont) at (9, -3) {Contact\_No};
+    \node[attribute] (br_addr) at (4, -2) {Address};
+    \draw (BORROWER) -- (br_id); \draw (BORROWER) -- (br_name); \draw (BORROWER) -- (br_cont); \draw (BORROWER) -- (br_addr);
+
+    % ISSUES ATTRIBUTES
+    \node[attribute] (i_date) at (3, 1) {Issue\_Date};
+    \node[attribute] (i_ret) at (3, 0) {Return\_Date};
+    \node[attribute] (i_len) at (3, 2) {Period\_Length};
+    \draw (ISSUES) -- (i_date); \draw (ISSUES) -- (i_ret); \draw (ISSUES) -- (i_len);
+
+    % SUBCLASSES ATTRIBUTES
+    \node[attribute] (tc_join) at (1, -9) {Joining\_Date};
+    \node[attribute] (tc_desg) at (-1, -7) {Designation};
+    \draw (TEACHER) -- (tc_join); \draw (TEACHER) -- (tc_desg);
+
+    \node[attribute] (st_sess) at (5, -9) {Session};
+    \node[attribute] (st_lvl) at (6, -9.5) {Level};
+    \node[attribute] (st_term) at (7, -9) {Term};
+    \draw (STUDENT) -- (st_sess); \draw (STUDENT) -- (st_lvl); \draw (STUDENT) -- (st_term);
+
+    \node[attribute] (sf_off) at (11, -9) {Office\_Name};
+    \draw (STAFF) -- (sf_off);
+
+\end{tikzpicture}
+}
+\end{center}
+
+\vspace{1.5em}
+\subsection*{2. Relational Schema (Tables)}
+
+The ER Diagram is mapped to the following normalized relational tables. \textbf{Primary Keys (PK)} are \underline{underlined}, and \textbf{Foreign Keys (FK)} are listed below each relation.
+
+\begin{itemize}[leftmargin=1.5em, itemsep=1em]
+    \item \textbf{PUBLISHER} ( \underline{Publisher\_ID}, Name, Country\_of\_Origin, Address )
+    \item \textbf{PUBLISHER\_CONTACT} ( \underline{Publisher\_ID}, \underline{Contact\_Number} )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: Publisher\_ID references PUBLISHER(Publisher\_ID)}
+        \end{itemize}
+
+    \item \textbf{BOOK} ( \underline{ISBN}, Title, Subject, Number\_of\_Copies, Publisher\_ID )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: Publisher\_ID references PUBLISHER(Publisher\_ID)}
+        \end{itemize}
+    \item \textbf{BOOK\_AUTHOR} ( \underline{ISBN}, \underline{Author\_Name} )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: ISBN references BOOK(ISBN)}
+        \end{itemize}
+
+    \item \textbf{SUPPLIER} ( \underline{Supplier\_ID}, Name, Address )
+    \item \textbf{SUPPLIER\_CONTACT} ( \underline{Supplier\_ID}, \underline{Contact\_Number} )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: Supplier\_ID references SUPPLIER(Supplier\_ID)}
+        \end{itemize}
+
+    \item \textbf{TENDER} ( \underline{Tender\_ID}, Name, Total\_Price, Year )
+
+    \item \textbf{BOOK\_COPY} ( \underline{Accession\_Number}, Edition, Price, Date\_of\_Purchase, Status, ISBN, Supplier\_ID, Tender\_ID )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: ISBN references BOOK(ISBN)}
+            \item \textit{FK: Supplier\_ID references SUPPLIER(Supplier\_ID)}
+            \item \textit{FK: Tender\_ID references TENDER(Tender\_ID)}
+        \end{itemize}
+        
+    \item \textbf{BORROWER} ( \underline{Borrower\_ID}, Name, Contact\_Number, Address )
+    
+    \item \textbf{TEACHER} ( \underline{Borrower\_ID}, Joining\_Date, Designation )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: Borrower\_ID references BORROWER(Borrower\_ID)}
+        \end{itemize}
+        
+    \item \textbf{STUDENT} ( \underline{Borrower\_ID}, Session, Level, Term )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: Borrower\_ID references BORROWER(Borrower\_ID)}
+        \end{itemize}
+        
+    \item \textbf{STAFF} ( \underline{Borrower\_ID}, Office\_Name )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: Borrower\_ID references BORROWER(Borrower\_ID)}
+        \end{itemize}
+
+    \item \textbf{ISSUE} ( \underline{Borrower\_ID}, \underline{Accession\_Number}, \underline{Issue\_Date}, Length\_of\_Period, Return\_Date )
+        \begin{itemize}[label={--}, noitemsep, topsep=2pt]
+            \item \textit{FK: Borrower\_ID references BORROWER(Borrower\_ID)}
+            \item \textit{FK: Accession\_Number references BOOK\_COPY(Accession\_Number)}
+        \end{itemize}
+\end{itemize}
+
+\end{tcolorbox}
+
 \item East West Property Development is a construction company of Bashundhara Group with over 1000 employees. A customer can hire the company for more than one project, and employees sometimes work on more than one project at a time. Equipment is assigned to only one project. Draw an E-R diagram for this company indicating cardinality.
 \mk{7} \yr{CSE 303 | L-3/T-1 | 2015--16}
 
-%% Q4
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity and Relationship Analysis}
+
+Based on the scenario provided for East West Property Development, we can identify the following entities, relationships, and their respective cardinalities. Since specific attributes were not detailed in the prompt, standard identifier (primary key) and descriptive attributes have been assumed for completeness.
+
+\begin{itemize}[leftmargin=2em, itemsep=0.5em]
+    \item \textbf{Entities:}
+    \begin{itemize}[label={--}, itemsep=1pt]
+        \item \textbf{CUSTOMER}: Represents the clients who hire the company.
+        \item \textbf{PROJECT}: Represents the construction projects undertaken by the company.
+        \item \textbf{EMPLOYEE}: Represents the workforce of the company.
+        \item \textbf{EQUIPMENT}: Represents the machinery/tools used in construction.
+    \end{itemize}
+
+    \item \textbf{Relationships and Cardinalities:}
+    \begin{itemize}[label={--}, itemsep=1pt]
+        \item \textbf{Hires (CUSTOMER and PROJECT):} A \textbf{One-to-Many (1:N)} relationship. A customer can hire the company for more than one project (N), but a specific project is typically commissioned by a single customer (1).
+        \item \textbf{Works\_On (EMPLOYEE and PROJECT):} A \textbf{Many-to-Many (M:N)} relationship. Employees can work on more than one project at a time (N), and a construction project naturally requires multiple employees (M).
+        \item \textbf{Assigned\_To (EQUIPMENT and PROJECT):} A \textbf{Many-to-One (N:1)} relationship. Equipment is assigned to only one project at a time (1), but a single project will require multiple pieces of equipment (N).
+    \end{itemize}
+\end{itemize}
+
+\vspace{1em}
+\subsection*{2. Entity-Relationship (ER) Diagram}
+
+The following ER diagram uses standard Chen's notation to visualize the organizational data requirements.
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=1.8cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
+]
+
+    % ================= ENTITIES =================
+    \node[entity] (PROJ) at (0, 0) {PROJECT};
+    \node[entity] (CUST) at (0, 5) {CUSTOMER};
+    \node[entity] (EMP)  at (-6, 0) {EMPLOYEE};
+    \node[entity] (EQP)  at (6, 0) {EQUIPMENT};
+
+    % ================= RELATIONSHIPS =================
+    \node[relationship] (HIRES) at (0, 2.5) {Hires};
+    \node[relationship] (WORKS) at (-3, 0) {Works\_On};
+    \node[relationship] (ASSGN) at (3, 0) {Assigned\_To};
+
+    % ================= CONNECTIONS WITH MULTIPLICITIES =================
+    % Customer - Hires - Project (1:N)
+    \draw (CUST) -- (HIRES) node[midway, right, font=\bfseries] {1};
+    \draw (HIRES) -- (PROJ) node[midway, right, font=\bfseries] {N};
+
+    % Employee - Works_On - Project (M:N)
+    \draw (EMP) -- (WORKS) node[midway, above, font=\bfseries] {M};
+    \draw (WORKS) -- (PROJ) node[midway, above, font=\bfseries] {N};
+
+    % Equipment - Assigned_To - Project (N:1)
+    \draw (EQP) -- (ASSGN) node[midway, above, font=\bfseries] {N}; 
+    \draw (ASSGN) -- (PROJ) node[midway, above, font=\bfseries] {1}; 
+
+    % ================= ATTRIBUTES (Assumed for Completeness) =================
+    
+    % CUSTOMER Attributes
+    \node[attribute] (c_id) at (-2.5, 6) {\underline{Cust\_ID}};
+    \node[attribute] (c_name) at (2.5, 6) {Name};
+    \draw (CUST) -- (c_id);
+    \draw (CUST) -- (c_name);
+
+    % EMPLOYEE Attributes
+    \node[attribute] (e_id) at (-6, 2) {\underline{Emp\_ID}};
+    \node[attribute] (e_name) at (-8.5, 0) {Name};
+    \draw (EMP) -- (e_id);
+    \draw (EMP) -- (e_name);
+
+    % PROJECT Attributes
+    \node[attribute] (p_id) at (-1.5, -2) {\underline{Proj\_ID}};
+    \node[attribute] (p_name) at (1.5, -2) {Location};
+    \draw (PROJ) -- (p_id);
+    \draw (PROJ) -- (p_name);
+
+    % EQUIPMENT Attributes
+    \node[attribute] (eq_id) at (6, 2) {\underline{Eqp\_ID}};
+    \node[attribute] (eq_name) at (8.5, 0) {Type};
+    \draw (EQP) -- (eq_id);
+    \draw (EQP) -- (eq_name);
+
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
 \item A university has a large number of courses. Each course may have one or more different courses as prerequisites, or may have no prerequisites. Similarly, a particular course may be a prerequisite of any number of courses or may not be a prerequisite of any other course. Sketch an E-R diagram that includes \textbf{COURSE} as the single entity, including cardinality. Each course has a course number and title. Convert the E-R diagram into a relational schema.
 \mk{7} \yr{CSE 303 | L-3/T-1 | 2015--16}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity-Relationship (ER) Diagram}
+
+The scenario describes a \textbf{Unary (Recursive) Relationship} on a single entity \textbf{COURSE}. Since a course can have many prerequisites, and a course can be a prerequisite for many other courses, the relationship between \textbf{COURSE} and itself is \textbf{Many-to-Many (M:N)}. 
+
+To clarify the recursive relationship, \textit{roles} (``Main Course'' and ``Prerequisite'') are indicated on the edges connecting the entity to the relationship diamond.
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
+]
+
+    % ================= ENTITY AND RELATIONSHIP =================
+    \node[entity] (COURSE) at (0, 0) {COURSE};
+    \node[relationship] (REQ) at (0, -3.5) {Requires};
+
+    % ================= ATTRIBUTES =================
+    \node[attribute] (CNO) at (-2.5, 2) {\underline{Course\_No}};
+    \node[attribute] (TITLE) at (2.5, 2) {Title};
+
+    \draw (COURSE) -- (CNO);
+    \draw (COURSE) -- (TITLE);
+
+    % ================= RECURSIVE CONNECTIONS =================
+    % Left side routing: Main Course role
+    \draw (COURSE.west) 
+        -- (-4, 0) node[midway, above, font=\bfseries] {N} 
+        -- (-4, -3.5) node[midway, left, font=\itshape] {Main Course} 
+        -- (REQ.west);
+        
+    % Right side routing: Prerequisite role
+    \draw (COURSE.east) 
+        -- (4, 0) node[midway, above, font=\bfseries] {M} 
+        -- (4, -3.5) node[midway, right, font=\itshape] {Is Prerequisite} 
+        -- (REQ.east);
+
+\end{tikzpicture}
+\end{center}
+\vspace{1em}
+
+\subsection*{2. Relational Schema}
+
+To convert an $M:N$ recursive relationship into a relational schema, we must create two tables: one for the entity itself, and a junction (associative) table to represent the $M:N$ relationship. The primary keys (PK) are \underline{underlined}.
+
+\vspace{1em}
+
+\begin{itemize}[leftmargin=2em, itemsep=1em]
+    \item \textbf{COURSE} ( \underline{Course\_No}, Title )
+    \item \textbf{PREREQUISITE} ( \underline{Course\_No}, \underline{Prereq\_No} )
+\end{itemize}
+
+\vspace{1em}
+
+\subsubsection*{Foreign Key Constraints and Dependencies}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{} l l l @{}}
+\toprule
+\textbf{Relation} & \textbf{Foreign Key Attribute(s)} & \textbf{References} \\
+\midrule
+\textbf{COURSE}       & None & N/A \\
+\textbf{PREREQUISITE} & \textbf{Course\_No} & \textbf{COURSE} (Course\_No) \\
+\textbf{PREREQUISITE} & \textbf{Prereq\_No} & \textbf{COURSE} (Course\_No) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.5em}
+\textbf{Note:} In the \textbf{PREREQUISITE} table, both \texttt{Course\_No} and \texttt{Prereq\_No} act together as a composite Primary Key to uniquely identify a prerequisite pairing. Simultaneously, each attribute independently acts as a Foreign Key referencing the \textbf{COURSE} table.
+
+\end{tcolorbox}
+
+\item Consider the following information about a university database. Professors have an SSN, a name, an age, a rank, and a research speciality. Projects have a project number, a sponsor name (e.g., NSF), a starting date, an ending date, and a budget. Graduate students have an SSN, a name, an age, and a degree program (e.g., M.S.\ or Ph.D). Each project is managed by one professor (the principal investigator). Each project is worked on by one or more professors (co-investigators). Professors can manage and/or work on multiple projects. Each project is worked on by one or more graduate students (research assistants). When graduate students work on a project, a professor must supervise their work. Graduate students can work on multiple projects, having a (potentially different) supervisor for each. Departments have a department number, name, and main office. A professor (chairman) runs each department. Professors work in one or more departments with a time percentage per department. Graduate students have one major department. Each graduate student has a more senior graduate student (student advisor) who advises on course selection.
+Draw an Entity-Relationship (ER) diagram to represent the data requirements described above.
+\mk{18} \yr{CSE 303 | L-3/T-1 | 2014--15}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{Entity-Relationship (ER) Diagram}
+
+The following ER diagram captures all the specified data requirements, including the ternary relationship for student project supervision, recursive relationship for student advising, and partial/total participation constraints.
+
+\vspace{1.5em}
+\begin{center}
+\begin{tikzpicture}[
+    x=1cm, y=1cm,
+    entity/.style={draw, rectangle, rounded corners, minimum width=3cm, minimum height=1.2cm, align=center, fill=white, thick, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1.2cm, align=center, fill=white, thick},
+    attribute/.style={draw, ellipse, minimum width=1.5cm, minimum height=0.7cm, align=center, fill=white, font=\scriptsize, thick},
+    every node/.style={font=\small}
+]
+
+    % ===============================
+    % 1. ENTITIES
+    % ===============================
+    \node[entity] (prof) at (-6, 0) {PROFESSOR};
+    \node[entity] (grad) at (6, 0) {GRAD\_STUDENT};
+    \node[entity] (proj) at (0, 6) {PROJECT};
+    \node[entity] (dept) at (0, -6) {DEPARTMENT};
+
+    % ===============================
+    % 2. RELATIONSHIPS & CONNECTIONS
+    % ===============================
+
+    % A. Manages (Prof -> Proj) : 1 to N, Proj Total
+    \node[relationship] (manages) at (-4, 6) {Manages};
+    \draw[thick] (prof.north) -- (-6, 6) -- (manages.west) node[pos=0.5, above, font=\scriptsize] {1};
+    \draw[thick, double, double distance=1.5pt] (manages.east) -- (proj.west) node[midway, above, font=\scriptsize] {N};
+
+    % B. Runs (Prof -> Dept) : 1 to 1, Dept Total
+    \node[relationship] (runs) at (-4, -6) {Runs};
+    \draw[thick] (prof.south) -- (-6, -6) -- (runs.west) node[pos=0.5, below, font=\scriptsize] {1};
+    \draw[thick, double, double distance=1.5pt] (runs.east) -- (dept.west) node[midway, below, font=\scriptsize] {1};
+
+    % C. Co-Investigates (Prof -> Proj) : M to N, Proj Total
+    \node[relationship] (coinv) at (-3, 3) {Co-Inv.};
+    \draw[thick] (prof.north east) -- (coinv.south west) node[midway, above left, font=\scriptsize] {M};
+    \draw[thick, double, double distance=1.5pt] (coinv.north east) -- (proj.south west) node[midway, below right, font=\scriptsize] {N};
+
+    % D. Works_In (Prof -> Dept) : M to N, Prof Total
+    \node[relationship] (worksin) at (-3, -3) {Works\_In};
+    \draw[thick, double, double distance=1.5pt] (prof.south east) -- (worksin.north west) node[midway, below left, font=\scriptsize] {M};
+    \draw[thick] (worksin.south east) -- (dept.north west) node[midway, above right, font=\scriptsize] {N};
+    
+    % Attribute of Works_In
+    \node[attribute] (time) at (-4.5, -2) {time\_perc.};
+    \draw[thick] (worksin) -- (time);
+
+    % E. Majors_In (Grad -> Dept) : N to 1, Grad Total
+    \node[relationship] (majors) at (3, -3) {Majors\_In};
+    \draw[thick, double, double distance=1.5pt] (grad.south west) -- (majors.north east) node[midway, below right, font=\scriptsize] {N};
+    \draw[thick] (majors.south west) -- (dept.north east) node[midway, above left, font=\scriptsize] {1};
+
+    % F. Supervises_Work (Ternary: Prof, Grad, Proj)
+    \node[relationship, align=center] (supervises) at (0, 0) {Supervises\\Work};
+    \draw[thick] (supervises.west) -- (prof.east) node[midway, above, font=\scriptsize] {1 (Supv)};
+    \draw[thick] (supervises.east) -- (grad.west) node[midway, above, font=\scriptsize] {M};
+    \draw[thick, double, double distance=1.5pt] (supervises.north) -- (proj.south) node[midway, right, font=\scriptsize] {N};
+
+    % G. Advises (Grad -> Grad Recursive) : 1 to N, Advisee Total
+    \node[relationship] (advises) at (9, 0) {Advises};
+    \draw[thick] (grad.north) -- (6, 1.5) -- (9, 1.5) node[midway, above, font=\scriptsize] {1 (Advisor)} -- (advises.north);
+    \draw[thick, double, double distance=1.5pt] (grad.south) -- (6, -1.5) -- (9, -1.5) node[midway, below, font=\scriptsize] {N (Advisee)} -- (advises.south);
+
+
+    % ===============================
+    % 3. ATTRIBUTES
+    % ===============================
+    
+    % PROFESSOR Attributes
+    \node[attribute] (pssn) at (-9, 1.5) {\underline{SSN}};
+    \node[attribute] (pname) at (-9.5, 0.5) {name};
+    \node[attribute] (page) at (-9.5, -0.5) {age};
+    \node[attribute] (prank) at (-9, -1.5) {rank};
+    \node[attribute] (pspec) at (-7.5, -2) {research\_spec};
+    
+    \draw[thick] (prof) -- (pssn);
+    \draw[thick] (prof) -- (pname);
+    \draw[thick] (prof) -- (page);
+    \draw[thick] (prof) -- (prank);
+    \draw[thick] (prof) -- (pspec);
+
+    % PROJECT Attributes
+    \node[attribute] (pjnum) at (-3.5, 7.5) {\underline{project\_num}};
+    \node[attribute] (pjspon) at (-1.5, 8.2) {sponsor\_name};
+    \node[attribute] (pjbud) at (0.5, 8.2) {budget};
+    \node[attribute] (pjstart) at (2.5, 8) {starting\_date};
+    \node[attribute] (pjend) at (3.5, 7) {ending\_date};
+    
+    \draw[thick] (proj) -- (pjnum);
+    \draw[thick] (proj) -- (pjspon);
+    \draw[thick] (proj) -- (pjbud);
+    \draw[thick] (proj) -- (pjstart);
+    \draw[thick] (proj) -- (pjend);
+
+    % DEPARTMENT Attributes
+    \node[attribute] (dnum) at (-2.5, -7.5) {\underline{dept\_number}};
+    \node[attribute] (dname) at (0, -8) {name};
+    \node[attribute] (doff) at (2.5, -7.5) {main\_office};
+    
+    \draw[thick] (dept) -- (dnum);
+    \draw[thick] (dept) -- (dname);
+    \draw[thick] (dept) -- (doff);
+
+    % GRAD_STUDENT Attributes
+    \node[attribute] (gssn) at (4, 2) {\underline{SSN}};
+    \node[attribute] (gname) at (5.5, 2.5) {name};
+    \node[attribute] (gage) at (5.5, -2.5) {age};
+    \node[attribute] (gdeg) at (3.5, -2) {degree\_prog};
+    
+    \draw[thick] (grad) -- (gssn);
+    \draw[thick] (grad) -- (gname);
+    \draw[thick] (grad) -- (gage);
+    \draw[thick] (grad) -- (gdeg);
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{1em}
+\subsection*{Design Notes \& Assumptions}
+\begin{itemize}
+    \item \textbf{Ternary Relationship (\texttt{Supervises\_Work}):} Associates \texttt{PROFESSOR}, \texttt{GRAD\_STUDENT}, and \texttt{PROJECT}. A student working on a specific project must be supervised by one professor.
+    \item \textbf{Total Participation (Double Lines):} 
+    \begin{itemize}
+        \item \texttt{PROJECT} must have a PI (\texttt{Manages}) and co-investigators (\texttt{Co-Inv.}).
+        \item \texttt{DEPARTMENT} must be run by a chairman (\texttt{Runs}).
+        \item \texttt{PROFESSOR} must work in at least one department (\texttt{Works\_In}).
+        \item \texttt{GRAD\_STUDENT} must have a major department (\texttt{Majors\_In}) and an advisor (\texttt{Advises}).
+    \end{itemize}
+    \item \textbf{Recursive Relationship:} The \texttt{Advises} relationship maps senior graduate students (1) to their respective junior advisees (N).
+    \item \textbf{Relationship Attributes:} The `time percentage` is modeled as a descriptive attribute of the \texttt{Works\_In} M:N relationship, as it characterizes the specific assignment between a professor and a department.
+\end{itemize}
+
+\end{tcolorbox}
 
 %% Q5
 \item A library keeps records of current loans of books to borrowers. Each borrower is identified by a borrower number and each copy of a book by an accession number (the library may have more than one copy of any given book). The name and address of each borrower is held so that overdue loan reminders can be sent. Information held about books includes the title, author's name(s), publisher's name, publication date, ISBN, purchase price, classification (reference or fiction), and number of pages. A given book may be written by a number of authors; the library regards a book as only being published by a single publisher. The library assigns its own unique in-house codes for authors and publishers.
@@ -1710,7 +3544,165 @@ A book may cover a number of different subjects, and borrowers can use an online
 Draw an Entity-Relationship (ER) diagram to represent the Library data requirements described above.
 \mk{18} \yr{CSE 303 | L-3/T-1 | 2013--14}
 
-%% Q6 — 2016-17 BUET Library Management System
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity-Relationship (ER) Diagram Analysis}
+
+Based on the library data requirements provided, the following elements are identified to form the ER diagram:
+
+\begin{itemize}[leftmargin=2em, itemsep=0.5em]
+    \item \textbf{Entities and Primary Keys:}
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \textbf{BOOK}: Identified by \underline{ISBN}. Attributes include Title, Pub\_Date, Price, Book\_Class, and Num\_Pages.
+        \item \textbf{AUTHOR}: Identified by \underline{Author\_Code}. Attributes include Name.
+        \item \textbf{PUBLISHER}: Identified by \underline{Pub\_Code}. Attributes include Name.
+        \item \textbf{SUBJECT}: Identified by \underline{Subj\_Name}. 
+        \item \textbf{BOOK\_COPY}: Identified by \underline{Accession\_No}. A strong entity as accession numbers are globally unique in a library system.
+        \item \textbf{BORROWER}: Identified by \underline{Borrower\_No}. Attributes include Name, Address, and Status\_Flag.
+        \item \textbf{BORROWER\_CLASS}: Identified by \underline{Class\_Name} (e.g., junior, adult, organisation). Attributes include Loan\_Limit and Loan\_Period. Extracted into a separate entity to enforce the business rule that limits depend strictly on classification.
+    \end{itemize}
+
+    \item \textbf{Relationships and Cardinalities:}
+    \begin{itemize}[label={--}, itemsep=2pt]
+        \item \textbf{Published\_By}: N:1 between BOOK and PUBLISHER.
+        \item \textbf{Written\_By}: M:N between BOOK and AUTHOR.
+        \item \textbf{Covers}: M:N between BOOK and SUBJECT.
+        \item \textbf{Has\_Copy}: 1:N between BOOK and BOOK\_COPY. BOOK\_COPY has total participation.
+        \item \textbf{Borrows}: M:N between BORROWER and BOOK\_COPY. Incorporates the automatically recorded attribute \textit{Return\_Date}.
+        \item \textbf{Reserves}: M:N between BORROWER and BOOK.
+        \item \textbf{Has\_Type}: N:1 between BORROWER and BORROWER\_CLASS.
+    \end{itemize}
+\end{itemize}
+
+\vspace{1em}
+\subsection*{2. Entity-Relationship Diagram}
+\vspace{1em}
+
+\begin{center}
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=3cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.6, minimum width=3.2cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
+]
+
+    % ================= ENTITIES =================
+    \node[entity] (PUBLISHER) at (-6, 7) {PUBLISHER};
+    \node[entity] (AUTHOR) at (6, 7) {AUTHOR};
+    \node[entity] (BOOK) at (0, 0) {BOOK};
+    \node[entity] (SUBJECT) at (-8, 0) {SUBJECT};
+    \node[entity] (BOOKCOPY) at (8, 0) {BOOK\_COPY};
+    \node[entity] (BORROWER) at (0, -8) {BORROWER};
+    \node[entity] (BORRCLASS) at (0, -13) {BORROWER\_CLASS};
+
+    % ================= RELATIONSHIPS =================
+    \node[relationship] (PUB_REL) at (-3, 3.5) {Published\_By};
+    \node[relationship] (AUTH_REL) at (3, 3.5) {Written\_By};
+    \node[relationship] (SUBJ_REL) at (-4, 0) {Covers};
+    \node[relationship] (COPY_REL) at (4, 0) {Has\_Copy};
+    \node[relationship] (RES_REL) at (-4, -4) {Reserves};
+    \node[relationship] (LOAN_REL) at (4, -4) {Borrows};
+    \node[relationship] (BELONGS) at (0, -10.5) {Has\_Type};
+
+    % ================= CONNECTIONS WITH MULTIPLICITIES =================
+    
+    % PUBLISHER - BOOK
+    \draw (PUBLISHER) -- (PUB_REL) node[midway, above right=1pt, font=\bfseries] {1};
+    \draw (PUB_REL) -- (BOOK) node[midway, below left=1pt, font=\bfseries] {N};
+
+    % AUTHOR - BOOK
+    \draw (AUTHOR) -- (AUTH_REL) node[midway, above left=1pt, font=\bfseries] {M};
+    \draw (AUTH_REL) -- (BOOK) node[midway, below right=1pt, font=\bfseries] {N};
+
+    % SUBJECT - BOOK
+    \draw (SUBJECT) -- (SUBJ_REL) node[midway, above=2pt, font=\bfseries] {N};
+    \draw (SUBJ_REL) -- (BOOK) node[midway, above=2pt, font=\bfseries] {M};
+
+    % BOOK - BOOK_COPY (Total Participation for BOOK_COPY)
+    \draw (BOOK) -- (COPY_REL) node[midway, above=2pt, font=\bfseries] {1};
+    \draw[double, thick] (COPY_REL) -- (BOOKCOPY) node[midway, above=2pt, font=\bfseries] {N};
+
+    % BORROWER - RESERVES - BOOK
+    \draw (BOOK) -- (RES_REL) node[midway, above right=1pt, font=\bfseries] {N};
+    \draw (RES_REL) -- (BORROWER) node[midway, below right=1pt, font=\bfseries] {M};
+
+    % BORROWER - LOANS - BOOK_COPY
+    \draw (BOOKCOPY) -- (LOAN_REL) node[midway, above left=1pt, font=\bfseries] {N};
+    \draw (LOAN_REL) -- (BORROWER) node[midway, below left=1pt, font=\bfseries] {M};
+
+    % BORROWER - CLASSIFICATION
+    \draw (BORROWER) -- (BELONGS) node[midway, right=2pt, font=\bfseries] {N};
+    \draw (BELONGS) -- (BORRCLASS) node[midway, right=2pt, font=\bfseries] {1};
+
+
+    % ================= ATTRIBUTES =================
+
+    % PUBLISHER Attributes
+    \node[attribute] (p_id) at (-6, 9) {\underline{Pub\_Code}};
+    \node[attribute] (p_name) at (-8.5, 7) {Name};
+    \draw (PUBLISHER) -- (p_id);
+    \draw (PUBLISHER) -- (p_name);
+
+    % AUTHOR Attributes
+    \node[attribute] (a_id) at (6, 9) {\underline{Author\_Code}};
+    \node[attribute] (a_name) at (8.5, 7) {Name};
+    \draw (AUTHOR) -- (a_id);
+    \draw (AUTHOR) -- (a_name);
+
+    % SUBJECT Attributes
+    \node[attribute] (s_name) at (-8, 2) {\underline{Subj\_Name}};
+    \draw (SUBJECT) -- (s_name);
+
+    % BOOK_COPY Attributes
+    \node[attribute] (bc_acc) at (8, 2) {\underline{Accession\_No}};
+    \draw (BOOKCOPY) -- (bc_acc);
+
+    % BOOK Attributes (Distributed safely in open sectors)
+    \node[attribute] (b_isbn) at (0, 2.2) {\underline{ISBN}};
+    \node[attribute] (b_title) at (-3, 1.5) {Title};
+    \node[attribute] (b_pubdate) at (-3, -1.5) {Pub\_Date};
+    \node[attribute] (b_price) at (3, 1.5) {Price};
+    \node[attribute] (b_pages) at (3, -1.5) {Num\_Pages};
+    \node[attribute] (b_class) at (0, -2.2) {Book\_Class};
+    
+    \draw (BOOK) -- (b_isbn);
+    \draw (BOOK) -- (b_title);
+    \draw (BOOK) -- (b_pubdate);
+    \draw (BOOK) -- (b_price);
+    \draw (BOOK) -- (b_pages);
+    \draw (BOOK) -- (b_class);
+
+    % LOAN Relationship Attribute
+    \node[attribute] (l_ret) at (6.5, -4.8) {Return\_Date};
+    \draw (LOAN_REL) -- (l_ret);
+
+    % BORROWER Attributes (Distributed away from connecting edges)
+    \node[attribute] (br_id) at (-4.2, -7) {\underline{Borrower\_No}};
+    \node[attribute] (br_name) at (-4.2, -9) {Name};
+    \node[attribute] (br_addr) at (4.2, -7) {Address};
+    \node[attribute] (br_status) at (4.2, -9) {Status\_Flag};
+    
+    \draw (BORROWER) -- (br_id);
+    \draw (BORROWER) -- (br_name);
+    \draw (BORROWER) -- (br_addr);
+    \draw (BORROWER) -- (br_status);
+
+    % BORROWER_CLASS Attributes
+    \node[attribute] (bc_name) at (-4.2, -13) {\underline{Class\_Name}};
+    \node[attribute] (bc_limit) at (4.2, -13) {Loan\_Limit};
+    \node[attribute] (bc_period) at (0, -15) {Loan\_Period};
+    
+    \draw (BORRCLASS) -- (bc_name);
+    \draw (BORRCLASS) -- (bc_limit);
+    \draw (BORRCLASS) -- (bc_period);
+
+\end{tikzpicture}
+}
+\end{center}
+
+\end{tcolorbox}
+
 \item You have been asked to design an employee tracking database for a company. They want to track information about employees, the employee's job history, and their certifications. Employee information includes first name, middle initials, last name, social security number, address, city, state, zip, home phone and email address. Job history would include job title, job description, pay grade, pay range, salary and date of promotion. For certifications, they want certification type and date achieved. An employee can have multiple jobs over time (i.e., Analyst, Sr.\ Analyst, QA Administrator). Employees can also earn certifications necessary for their jobs.
 \begin{enumerate}
    
@@ -1719,10 +3711,141 @@ Draw an Entity-Relationship (ER) diagram to represent the Library data requireme
 \item Translate your ER diagram into a relational schema. Select approaches that yield the fewest number of relations; merge relations where appropriate. Specify the key of each relation in your schema.
 \mk{10}
 \end{enumerate}
+\yr{CSE 303 | L-3/T-1 | 2011--12}
 
- \yr{CSE 303 | L-3/T-1 | 2011--12}
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
 
-%% Q3
+\subsection*{Part (a): Entity-Relationship (ER) Diagram}
+
+\textbf{Design Assumptions \& Rules Applied:}
+\begin{itemize}[leftmargin=2em, itemsep=0.5em]
+    \item \textbf{EMPLOYEE} is the core strong entity, uniquely identified by its Primary Key, \textbf{SSN}. 
+    \item \textbf{JOB\_HISTORY} is modeled as a \textbf{Weak Entity} dependent on \textbf{EMPLOYEE}. An employee's job history instances cannot exist without the employee. The partial key is \textit{Date\_of\_Promotion}.
+    \item \textbf{CERTIFICATION} is also modeled as a \textbf{Weak Entity} dependent on \textbf{EMPLOYEE}. The partial key is a composite of \textit{Cert\_Type} and \textit{Date\_Achieved} to account for employees potentially renewing or re-earning the same certification over time.
+    \item Identifying relationships (\textbf{Has\_Job} and \textbf{Earns\_Cert}) feature \textbf{total participation} (represented by double lines) from the weak entities.
+    \item Partial keys of weak entities are denoted using \textit{italics}.
+\end{itemize}
+
+\vspace{1.5em}
+\begin{center}
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    weak entity/.style={draw, double, double distance=1.5pt, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    identifying relationship/.style={draw, double, double distance=1.5pt, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
+]
+
+    % ================= ENTITIES & RELATIONSHIPS =================
+    \node[entity] (EMP) at (0, 0) {EMPLOYEE};
+    \node[weak entity] (JOB) at (0, -7.5) {JOB\_HISTORY};
+    \node[weak entity] (CERT) at (9, 0) {CERTIFICATION};
+
+    \node[identifying relationship] (HAS_JOB) at (0, -3.8) {Has\_Job};
+    \node[identifying relationship] (HAS_CERT) at (4.5, 0) {Earns\_Cert};
+
+    % ================= CONNECTIONS =================
+    \draw (EMP) -- (HAS_JOB) node[midway, right, font=\bfseries] {1};
+    \draw[double, double distance=1.5pt] (HAS_JOB) -- (JOB) node[midway, right, font=\bfseries] {N};
+
+    \draw (EMP) -- (HAS_CERT) node[midway, above, font=\bfseries] {1};
+    \draw[double, double distance=1.5pt] (HAS_CERT) -- (CERT) node[midway, above, font=\bfseries] {N};
+
+    % ================= EMPLOYEE ATTRIBUTES =================
+    \node[attribute] (SSN) at (-2.5, 3) {\underline{SSN}};
+    \node[attribute] (FNAME) at (-0.5, 3) {FName};
+    \node[attribute] (MIN) at (1.5, 3) {MIN};
+    \node[attribute] (LNAME) at (3.5, 3) {LName};
+    \node[attribute] (PHONE) at (3.5, -2) {Home\_Phone};
+    \node[attribute] (EMAIL) at (3.5, 1.8) {Email};
+    
+    % Composite Address
+    \node[attribute] (ADDR) at (-4, -1) {Address};
+    \node[attribute] (STREET) at (-6.5, -0.2) {Street};
+    \node[attribute] (CITY) at (-7, -1.2) {City};
+    \node[attribute] (STATE) at (-6.5, -2.2) {State};
+    \node[attribute] (ZIP) at (-4, -2.8) {Zip};
+
+    \draw (EMP) -- (SSN);
+    \draw (EMP) -- (FNAME);
+    \draw (EMP) -- (MIN);
+    \draw (EMP) -- (LNAME);
+    \draw (EMP) -- (PHONE);
+    \draw (EMP) -- (EMAIL);
+    \draw (EMP) -- (ADDR);
+    \draw (ADDR) -- (STREET);
+    \draw (ADDR) -- (CITY);
+    \draw (ADDR) -- (STATE);
+    \draw (ADDR) -- (ZIP);
+
+    % ================= JOB_HISTORY ATTRIBUTES =================
+    \node[attribute] (DPROM) at (4, -6.5) {\textit{Date\_Promoted}};
+    \node[attribute] (JTITLE) at (-4.5, -6) {Job\_Title};
+    \node[attribute] (JDESC) at (-5, -7.2) {Job\_Desc};
+    \node[attribute] (PGRADE) at (-4.5, -8.5) {Pay\_Grade};
+    \node[attribute] (PRANGE) at (-2.5, -9.5) {Pay\_Range};
+    \node[attribute] (SALARY) at (2.5, -9.5) {Salary};
+
+    \draw (JOB) -- (DPROM);
+    \draw (JOB) -- (JTITLE);
+    \draw (JOB) -- (JDESC);
+    \draw (JOB) -- (PGRADE);
+    \draw (JOB) -- (PRANGE);
+    \draw (JOB) -- (SALARY);
+
+    % ================= CERTIFICATION ATTRIBUTES =================
+    \node[attribute] (CTYPE) at (8, 2.5) {\textit{Cert\_Type}};
+    \node[attribute] (CACH) at (11.5, 1.5) {\textit{Date\_Achieved}};
+
+    \draw (CERT) -- (CTYPE);
+    \draw (CERT) -- (CACH);
+
+\end{tikzpicture}
+}
+\end{center}
+
+\vspace{1em}
+\rule{\linewidth}{0.4pt}
+\vspace{1em}
+
+\subsection*{Part (b): Relational Schema}
+
+To yield the fewest number of relations, we apply the standard mapping rule for weak entities: the weak entity relation absorbs the primary key of its identifying strong owner entity. This eliminates the need for separate tables to represent the identifying relationships. The result is exactly \textbf{three} optimally consolidated relations.
+
+\vspace{1em}
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{@{} p{3.2cm} p{8.5cm} p{3.5cm} @{}}
+\toprule
+\textbf{Relation} & \textbf{Attributes \small (Primary Key Underlined)} & \textbf{Foreign Keys (FK)} \\
+\midrule
+\textbf{EMPLOYEE} & 
+\underline{SSN}, FName, MIN, LName, Street, City, State, Zip, Home\_Phone, Email & 
+\textit{None} \\
+
+\textbf{JOB\_HISTORY} & 
+\underline{SSN}, \underline{Date\_Promoted}, Job\_Title, Job\_Desc, Pay\_Grade, Pay\_Range, Salary & 
+\textbf{SSN} references \textbf{EMPLOYEE}(SSN) \\
+
+\textbf{CERTIFICATION} & 
+\underline{SSN}, \underline{Cert\_Type}, \underline{Date\_Achieved} & 
+\textbf{SSN} references \textbf{EMPLOYEE}(SSN) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+\textbf{Schema Properties:}
+\begin{itemize}[leftmargin=2em, itemsep=0.3em]
+    \item \textbf{EMPLOYEE:} Contains only non-multivalued attributes belonging directly to the employee.
+    \item \textbf{JOB\_HISTORY:} The composite primary key \texttt{(\underline{SSN}, \underline{Date\_Promoted})} ensures that a single employee can have multiple unique job histories recorded over time without collision.
+    \item \textbf{CERTIFICATION:} The composite primary key \texttt{(\underline{SSN}, \underline{Cert\_Type}, \underline{Date\_Achieved})} allows an employee to hold multiple certifications, as well as repeatedly earn the same certification on different dates.
+\end{itemize}
+
+\end{tcolorbox}
+
 \item Consider the following scenario of a hospital:
 
 \begin{itemize}[leftmargin=1.5em,itemsep=2pt]
@@ -1735,6 +3858,176 @@ Draw an Entity-Relationship (ER) diagram to represent the Library data requireme
 
 Draw ER diagrams to show the relationships among entities of the hospital management system.
 \mk{25} \yr{CSE 215 | L-3/T-1 | 2010--11}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity-Relationship (ER) Conceptual Design}
+
+Based on the hospital scenario provided, the system can be modeled using the following entities, attributes, and relationships.
+
+\subsubsection*{Entities and Attributes}
+\begin{itemize}[leftmargin=2em, itemsep=0.3em]
+    \item \textbf{STAFF (Superclass):} Generalizes common attributes for all hospital workers. 
+    \begin{itemize}
+        \item \textit{Attributes:} \underline{Staff\_ID} (Primary Key), Name, Grade, Is\_PartTime, OT\_Rate.
+    \end{itemize}
+    \item \textbf{DOCTOR (Subclass of STAFF):} Inherits from STAFF.
+    \begin{itemize}
+        \item \textit{Attributes:} Specialty.
+    \end{itemize}
+    \item \textbf{ASSISTANT (Subclass of STAFF):} Inherits from STAFF. Represents healthcare assistants.
+    \begin{itemize}
+        \item \textit{Attributes:} Shift.
+    \end{itemize}
+    \item \textbf{PATIENT:} Represents individuals admitted for treatment.
+    \begin{itemize}
+        \item \textit{Attributes:} \underline{Patient\_ID} (Primary Key), Name, Date\_Admitted, \textbf{\textit{Cost\_Per\_Week}} (Derived Attribute: calculated from drug unit costs and dosage frequencies).
+    \end{itemize}
+    \item \textbf{WARD:} The physical location where patients are treated.
+    \begin{itemize}
+        \item \textit{Attributes:} \underline{Ward\_No} (Primary Key), Ward\_Name, Capacity.
+    \end{itemize}
+    \item \textbf{DRUG:} Information regarding medicinal treatments.
+    \begin{itemize}
+        \item \textit{Attributes:} \underline{Drug\_Code} (Primary Key), Drug\_Name, Unit\_Cost.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection*{Relationships and Cardinalities}
+\begin{itemize}[leftmargin=2em, itemsep=0.3em]
+    \item \textbf{Admitted\_In (PATIENT $\rightarrow$ WARD):} \textbf{N:1}. Multiple patients are admitted to a single ward.
+    \item \textbf{Assigned\_To (ASSISTANT $\rightarrow$ WARD):} \textbf{M:1}. Multiple healthcare assistants are associated with one specific ward.
+    \item \textbf{Treats (DOCTOR $\rightarrow$ PATIENT):} \textbf{M:N}. A doctor treats multiple patients. A patient is usually assigned one doctor, but can have two (hence, inherently M:N).
+    \item \textbf{Attends (ASSISTANT $\rightarrow$ PATIENT):} \textbf{M:N}. Assistants attend to multiple patients, and a patient is attended by multiple assistants.
+    \item \textbf{Prescribed (PATIENT $\rightarrow$ DRUG):} \textbf{M:N}. A patient takes multiple drugs, and a drug is given to multiple patients. 
+    \begin{itemize}
+        \item \textit{Relationship Attributes:} Times\_Per\_Day, Duration.
+    \end{itemize}
+\end{itemize}
+
+\vspace{1em}
+\subsection*{2. Entity-Relationship (ER) Diagram}
+\vspace{0.5em}
+
+\begin{center}
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    derived attribute/.style={draw, dashed, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    isa/.style={draw, circle, minimum size=1.2cm, align=center, fill=white, font=\bfseries}
+]
+
+    % ================= ENTITIES =================
+    \node[entity] (PATIENT) at (0, 0) {PATIENT};
+    \node[entity] (WARD) at (6, 5) {WARD};
+    \node[entity] (DRUG) at (6, -5) {DRUG};
+    
+    \node[entity] (STAFF) at (-12, 0) {STAFF};
+    \node[entity] (ASSISTANT) at (-6, 5) {ASSISTANT};
+    \node[entity] (DOCTOR) at (-6, -5) {DOCTOR};
+
+    % ================= IS-A HIERARCHY =================
+    \node[isa] (ISA) at (-9, 0) {IS-A};
+    \draw (STAFF) -- (ISA);
+    \draw (ISA) -- (ASSISTANT);
+    \draw (ISA) -- (DOCTOR);
+    
+    % ================= RELATIONSHIPS =================
+    \node[relationship] (ADMITTED) at (3, 2.5) {Admitted\_In};
+    \node[relationship] (PRESCRIBED) at (3, -2.5) {Prescribed};
+    \node[relationship] (ASSIGNED) at (0, 5) {Assigned\_To};
+    \node[relationship] (ATTENDS) at (-3, 2.5) {Attends};
+    \node[relationship] (TREATS) at (-3, -2.5) {Treats};
+
+    % ================= CONNECTIONS & CARDINALITIES =================
+    
+    % ASSISTANT -> WARD
+    \draw (ASSISTANT) -- (ASSIGNED) node[midway, above=1pt, font=\bfseries] {M};
+    \draw (ASSIGNED) -- (WARD) node[midway, above=1pt, font=\bfseries] {1};
+
+    % PATIENT -> WARD
+    \draw (PATIENT) -- (ADMITTED) node[midway, above left=1pt, font=\bfseries] {N};
+    \draw (ADMITTED) -- (WARD) node[midway, below right=1pt, font=\bfseries] {1};
+
+    % PATIENT -> DRUG
+    \draw (PATIENT) -- (PRESCRIBED) node[midway, below left=1pt, font=\bfseries] {M};
+    \draw (PRESCRIBED) -- (DRUG) node[midway, above right=1pt, font=\bfseries] {N};
+
+    % DOCTOR -> PATIENT
+    \draw (DOCTOR) -- (TREATS) node[midway, below right=1pt, font=\bfseries] {M};
+    \draw (TREATS) -- (PATIENT) node[midway, above left=1pt, font=\bfseries] {N};
+
+    % ASSISTANT -> PATIENT
+    \draw (ASSISTANT) -- (ATTENDS) node[midway, above right=1pt, font=\bfseries] {M};
+    \draw (ATTENDS) -- (PATIENT) node[midway, below left=1pt, font=\bfseries] {N};
+
+    % ================= ATTRIBUTES =================
+    
+    % STAFF Attributes
+    \node[attribute] (st_id) at (-14.5, 0) {\underline{Staff\_ID}};
+    \node[attribute] (st_name) at (-13.5, 1.8) {Name};
+    \node[attribute] (st_grade) at (-13.5, -1.8) {Grade};
+    \node[attribute] (st_pt) at (-11.5, 2) {Is\_PartTime};
+    \node[attribute] (st_ot) at (-11.5, -2) {OT\_Rate};
+    
+    \draw (STAFF) -- (st_id);
+    \draw (STAFF) -- (st_name);
+    \draw (STAFF) -- (st_grade);
+    \draw (STAFF) -- (st_pt);
+    \draw (STAFF) -- (st_ot);
+
+    % DOCTOR Attributes
+    \node[attribute] (doc_spec) at (-6, -6.8) {Specialty};
+    \draw (DOCTOR) -- (doc_spec);
+
+    % ASSISTANT Attributes
+    \node[attribute] (ast_shift) at (-6, 6.8) {Shift};
+    \draw (ASSISTANT) -- (ast_shift);
+
+    % PATIENT Attributes
+    \node[attribute] (p_id) at (-1.8, -1.2) {\underline{Patient\_ID}};
+    \node[attribute] (p_name) at (0, 1.8) {Name};
+    \node[attribute] (p_date) at (0, -1.8) {Date\_Admitted};
+    \node[derived attribute] (p_cost) at (1.8, 1.2) {Cost\_Per\_Week};
+    
+    \draw (PATIENT) -- (p_id);
+    \draw (PATIENT) -- (p_name);
+    \draw (PATIENT) -- (p_date);
+    \draw (PATIENT) -- (p_cost);
+
+    % WARD Attributes
+    \node[attribute] (w_no) at (6, 6.8) {\underline{Ward\_No}};
+    \node[attribute] (w_name) at (8.2, 5.8) {Ward\_Name};
+    \node[attribute] (w_cap) at (8.2, 4.2) {Capacity};
+    
+    \draw (WARD) -- (w_no);
+    \draw (WARD) -- (w_name);
+    \draw (WARD) -- (w_cap);
+
+    % DRUG Attributes
+    \node[attribute] (d_code) at (6, -6.8) {\underline{Drug\_Code}};
+    \node[attribute] (d_name) at (8.2, -5.8) {Drug\_Name};
+    \node[attribute] (d_cost) at (8.2, -4.2) {Unit\_Cost};
+    
+    \draw (DRUG) -- (d_code);
+    \draw (DRUG) -- (d_name);
+    \draw (DRUG) -- (d_cost);
+
+    % PRESCRIBED Relationship Attributes
+    \node[attribute] (r_times) at (4.5, -1.2) {Times\_Per\_Day};
+    \node[attribute] (r_dur) at (1.5, -4) {Duration};
+    
+    \draw (PRESCRIBED) -- (r_times);
+    \draw (PRESCRIBED) -- (r_dur);
+
+\end{tikzpicture}
+}
+\end{center}
+
+\end{tcolorbox}
 
 %% Q2
 \end{enumerate}
@@ -1749,13 +4042,347 @@ Draw ER diagrams to show the relationships among entities of the hospital manage
 \item Write the general procedure to convert a ternary relationship to binary relationships.
 \mk{8} \yr{CSE 215 | L-2/T-1 | 2024--25}
 
-%% Q26 — 2024-25 total vs partial participation using ER diagram example
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{Conversion of a Ternary Relationship to Binary Relationships}
+
+In database design, a \textbf{ternary relationship} exists when three distinct entities participate in a single relationship. However, many implementation data models (and some design tools) restrict relationships to be strictly \textbf{binary} (degree 2). To resolve this, a ternary relationship must be decomposed into equivalent binary relationships using an \textbf{associative entity} (or weak entity).
+
+\subsubsection*{General Procedure}
+
+The systematic procedure to convert a ternary relationship $R$ connecting three entity types $A$, $B$, and $C$ into binary relationships involves the following steps:
+
+\begin{enumerate}
+    \item \textbf{Create an Associative Entity:} 
+    Create a new entity type, let's call it $E_R$, to represent the ternary relationship. This new entity is inherently existence-dependent on the original entities, often making it a weak entity.
+    
+    \item \textbf{Establish Binary Relationships:} 
+    Remove the original ternary relationship $R$. Create three new binary relationships (e.g., $R_A$, $R_B$, and $R_C$) that connect the newly created associative entity $E_R$ to each of the three original participating entities $A$, $B$, and $C$.
+    
+    \item \textbf{Assign Cardinalities:} 
+    The relationship between the original entities and the new associative entity will always be \textbf{1:N} (One-to-Many). 
+    \begin{itemize}
+        \item The original entities ($A$, $B$, and $C$) will have a cardinality of \textbf{1}.
+        \item The associative entity ($E_R$) will have a cardinality of \textbf{N} in all three binary relationships.
+    \end{itemize}
+    
+    \item \textbf{Migrate Attributes:} 
+    Any descriptive attributes that originally belonged to the ternary relationship $R$ must be moved to the new associative entity $E_R$.
+    
+    \item \textbf{Define the Primary Key:} 
+    The primary key of the new associative entity $E_R$ is formed by the combination (concatenation) of the primary keys of the participating entities $A$, $B$, and $C$. If $R$ had its own partial key or discriminators, they are also included.
+    \[ PK(E_R) = PK(A) \cup PK(B) \cup PK(C) \]
+\end{enumerate}
+
+\vspace{1em}
+\subsubsection*{Visual Representation (ER Diagram Conversion)}
+
+The following diagram illustrates the transformation from a ternary relationship to three binary relationships linked by an associative entity.
+
+\vspace{1em}
+\begin{center}
+\resizebox{0.9\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
+    associative/.style={draw, double, double distance=1.5pt, rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, fill=gray!10, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
+    id_relationship/.style={draw, double, double distance=1.5pt, diamond, aspect=1.5, minimum width=2cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
+    label_style/.style={font=\bfseries, text=black}
+]
+
+    % ================= TERNARY (BEFORE) =================
+    \node[font=\bfseries\Large] at (0, 3) {Before: Ternary Relationship};
+
+    \node[entity] (A1) at (-4, 0) {Entity A};
+    \node[entity] (B1) at (4, 0) {Entity B};
+    \node[entity] (C1) at (0, -3) {Entity C};
+    \node[relationship] (R1) at (0, 0) {R};
+
+    \draw (A1) -- (R1) node[midway, above, label_style] {M};
+    \draw (B1) -- (R1) node[midway, above, label_style] {N};
+    \draw (C1) -- (R1) node[midway, right, label_style] {P};
+
+    % Separator Line
+    \draw[dashed, draw=gray, line width=1pt] (-6, -4.5) -- (6, -4.5);
+
+    % ================= BINARY (AFTER) =================
+    \node[font=\bfseries\Large] at (0, -5.5) {After: Binary Equivalent};
+
+    \node[entity] (A2) at (-5.5, -8) {Entity A};
+    \node[entity] (B2) at (5.5, -8) {Entity B};
+    \node[entity] (C2) at (0, -11.5) {Entity C};
+    
+    \node[associative] (ER) at (0, -8) {Associative\\Entity $E_R$};
+    
+    \node[id_relationship] (RA) at (-2.8, -8) {$R_A$};
+    \node[id_relationship] (RB) at (2.8, -8) {$R_B$};
+    \node[id_relationship] (RC) at (0, -9.8) {$R_C$};
+
+    % Connections and Cardinalities for A
+    \draw (A2) -- (RA) node[midway, above, label_style] {1};
+    \draw[double, double distance=1.5pt] (RA) -- (ER) node[midway, above, label_style] {N};
+
+    % Connections and Cardinalities for B
+    \draw (B2) -- (RB) node[midway, above, label_style] {1};
+    \draw[double, double distance=1.5pt] (RB) -- (ER) node[midway, above, label_style] {N};
+
+    % Connections and Cardinalities for C
+    \draw (C2) -- (RC) node[midway, right, label_style] {1};
+    \draw[double, double distance=1.5pt] (RC) -- (ER) node[midway, right, label_style] {N};
+
+\end{tikzpicture}
+}
+\end{center}
+
+\vspace{1em}
+\subsubsection*{Relational Schema Mapping (Example)}
+
+If the entities $A$, $B$, and $C$ have primary keys $A\_ID$, $B\_ID$, and $C\_ID$ respectively, and the ternary relationship $R$ has an attribute \textit{Date}, the resulting relational schema will be:
+
+\begin{itemize}
+    \item \textbf{Entity A:} ( \underline{A\_ID}, \dots )
+    \item \textbf{Entity B:} ( \underline{B\_ID}, \dots )
+    \item \textbf{Entity C:} ( \underline{C\_ID}, \dots )
+    \item \textbf{Associative Entity $\mathbf{E_R}$:} ( \underline{A\_ID}, \underline{B\_ID}, \underline{C\_ID}, Date )
+\end{itemize}
+\textit{Note: In the associative entity $E_R$, the combination of foreign keys ($A\_ID$, $B\_ID$, $C\_ID$) serves as its composite primary key.}
+
+\end{tcolorbox}
+
 \item Explain the concept of total and partial participation of entities in a relationship set using an example ER diagram.
 \mk{10} \yr{CSE 215 | L-2/T-1 | 2024--25}
 
-%% Q27 — 2024-25 composite and multivalued attributes in ER-to-relational conversion
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{Participation Constraints in Entity-Relationship (ER) Models}
+
+In an ER model, a \textbf{participation constraint} (also known as a minimum cardinality constraint) specifies whether the existence of an entity depends on its being related to another entity via a relationship type. It defines the minimum number of relationship instances that each entity must participate in. 
+
+There are two types of participation constraints: \textbf{Total} and \textbf{Partial}.
+
+\subsubsection*{1. Total Participation (Existence Dependency)}
+\begin{itemize}
+    \item \textbf{Definition:} An entity set has total participation in a relationship set if \textbf{every} entity in the entity set is associated with at least one entity in the other entity set through that relationship.
+    \item \textbf{Explanation:} The existence of the entity dictates that it must be related to something else. If an entity does not participate in the relationship, it cannot exist in the database.
+    \item \textbf{Notation:} Represented by a \textbf{double line} connecting the entity rectangle to the relationship diamond.
+\end{itemize}
+
+\subsubsection*{2. Partial Participation}
+\begin{itemize}
+    \item \textbf{Definition:} An entity set has partial participation if \textbf{only some} entities in the entity set are associated with entities in the other entity set.
+    \item \textbf{Explanation:} Participation is optional. An entity can exist in the database without participating in the relationship.
+    \item \textbf{Notation:} Represented by a \textbf{single line} connecting the entity rectangle to the relationship diamond.
+\end{itemize}
+
+\vspace{1em}
+\subsubsection*{Example Scenario}
+
+Consider the entities \textbf{EMPLOYEE} and \textbf{DEPARTMENT}, and the relationship \textbf{Manages}:
+\begin{itemize}
+    \item Not every employee is a manager. Therefore, the participation of \textbf{EMPLOYEE} in the \textbf{Manages} relationship is \textbf{partial}.
+    \item However, every department must have a manager to function. Therefore, the participation of \textbf{DEPARTMENT} in the \textbf{Manages} relationship is \textbf{total}.
+\end{itemize}
+
+\vspace{1em}
+\begin{center}
+\resizebox{0.85\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=3cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=3cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.8cm, align=center, fill=white, font=\footnotesize}
+]
+
+    % Entities and Relationship
+    \node[entity] (EMP) at (-5, 0) {EMPLOYEE};
+    \node[relationship] (MANAGES) at (0, 0) {Manages};
+    \node[entity] (DEPT) at (5, 0) {DEPARTMENT};
+
+    % Relationships links (Partial and Total)
+    % Partial participation (Single line)
+    \draw (EMP) -- (MANAGES) node[midway, above, font=\bfseries] {1};
+    \node[font=\footnotesize, text=gray!80!black] at (-2.5, -0.4) {Partial};
+    
+    % Total participation (Double line)
+    \draw[double, double distance=2pt] (MANAGES) -- (DEPT) node[midway, above, font=\bfseries] {1};
+    \node[font=\footnotesize, text=gray!80!black] at (2.5, -0.4) {Total};
+
+    % Attributes for EMPLOYEE
+    \node[attribute] (E_ID) at (-6.5, 2.5) {\underline{Emp\_ID}};
+    \node[attribute] (E_NAME) at (-3.5, 2.5) {Name};
+    
+    \draw (EMP) -- (E_ID);
+    \draw (EMP) -- (E_NAME);
+
+    % Attributes for DEPARTMENT
+    \node[attribute] (D_NO) at (3.5, 2.5) {\underline{Dept\_No}};
+    \node[attribute] (D_NAME) at (6.5, 2.5) {Dept\_Name};
+    
+    \draw (DEPT) -- (D_NO);
+    \draw (DEPT) -- (D_NAME);
+
+\end{tikzpicture}
+}
+\end{center}
+\vspace{1em}
+
+\subsubsection*{Comparison Table}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{} l p{6cm} p{6cm} @{}}
+\toprule
+\textbf{Feature} & \textbf{Total Participation} & \textbf{Partial Participation} \\
+\midrule
+\textbf{Mandatory/Optional} & Mandatory (must participate) & Optional (may or may not participate) \\
+\textbf{Existence Dependency} & Yes. Entity cannot exist without the relationship. & No. Entity can exist independently of the relationship. \\
+\textbf{ER Notation} & Double continuous line & Single continuous line \\
+\textbf{Minimum Cardinality} & Minimum constraint is $\ge 1$ & Minimum constraint is $0$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{tcolorbox}
+
 \item How are composite attributes and multivalued attributes handled when an ER model is transformed into a relational database schema? Explain with examples.
 \mk{10} \yr{CSE 215 | L-2/T-1 | 2024--25}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{Transformation of Composite and Multivalued Attributes}
+
+When mapping an Entity-Relationship (ER) model to a relational database schema, different types of attributes require distinct transformation rules to satisfy the principles of normalization (specifically First Normal Form, which requires atomic values).
+
+---
+
+\subsubsection*{1. Handling Composite Attributes}
+
+\textbf{Rule:} A composite attribute is \textbf{flattened}. Only its simple, component sub-attributes are included as columns in the resulting relation. The parent composite attribute itself is discarded and does not appear in the relational schema.
+
+\begin{itemize}
+    \item \textbf{Working Principle:} The relational model does not support nested structures or attributes containing sub-attributes. By extracting the leaf-level atomic attributes, the relation remains in First Normal Form (1NF).
+    \item \textbf{Example:} Consider an entity \textbf{EMPLOYEE} with a primary key \textit{Emp\_ID} and a composite attribute \textit{Name} comprising \textit{Fname}, \textit{Minit}, and \textit{Lname}.
+\end{itemize}
+
+\vspace{0.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
+]
+    % ER Diagram
+    \node[font=\bfseries] at (0, 2.5) {ER Diagram};
+    
+    \node[entity] (emp) at (0, 0) {EMPLOYEE};
+    \node[attribute] (eid) at (-3, 0) {\underline{Emp\_ID}};
+    \node[attribute] (name) at (3, 0) {Name};
+    
+    \node[attribute] (fname) at (2, 1.5) {Fname};
+    \node[attribute] (minit) at (4, 1.5) {Minit};
+    \node[attribute] (lname) at (5, 0) {Lname};
+
+    \draw (emp) -- (eid);
+    \draw (emp) -- (name);
+    \draw (name) -- (fname);
+    \draw (name) -- (minit);
+    \draw (name) -- (lname);
+
+    % Relational Schema
+    \node[font=\bfseries] at (0, -2) {Relational Schema};
+    
+    \node at (0, -3) {
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{|c|c|c|c|}
+        \hline
+        \cellcolor{gray!20}\textbf{\underline{Emp\_ID}} & \textbf{Fname} & \textbf{Minit} & \textbf{Lname} \\
+        \hline
+        \end{tabular}
+    };
+\end{tikzpicture}
+\end{center}
+
+---
+
+\subsubsection*{2. Handling Multivalued Attributes}
+
+\textbf{Rule:} A multivalued attribute cannot be stored in a single column because it violates 1NF. It is transformed by creating a \textbf{new, separate relation} (table). 
+
+\begin{itemize}
+    \item \textbf{Working Principle:} 
+    \begin{enumerate}
+        \item Create a new relation to hold the multivalued data.
+        \item Include a column for the multivalued attribute itself.
+        \item Add the primary key of the parent entity as a \textbf{Foreign Key (FK)} in this new relation.
+        \item The \textbf{Primary Key (PK)} of the new relation is formed by the \textbf{combination} of the foreign key and the multivalued attribute.
+    \end{enumerate}
+    \item \textbf{Example:} Consider an entity \textbf{EMPLOYEE} with a primary key \textit{Emp\_ID} and a multivalued attribute \textit{Phone}.
+\end{itemize}
+
+\vspace{0.5em}
+\begin{center}
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    multi_attribute/.style={draw, double, double distance=1.5pt, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
+]
+    % ER Diagram
+    \node[font=\bfseries] at (0, 2) {ER Diagram};
+    
+    \node[entity] (emp) at (0, 0) {EMPLOYEE};
+    \node[attribute] (eid) at (-3, 0) {\underline{Emp\_ID}};
+    \node[multi_attribute] (phone) at (3, 0) {Phone};
+
+    \draw (emp) -- (eid);
+    \draw (emp) -- (phone);
+
+    % Relational Schema
+    \node[font=\bfseries] at (0, -2) {Relational Schema};
+    
+    \node[align=left] at (0, -3.5) {
+        \textbf{EMPLOYEE}\\
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{|c|}
+        \hline
+        \cellcolor{gray!20}\textbf{\underline{Emp\_ID}} \\
+        \hline
+        \end{tabular}
+        
+        \vspace{0.5em}
+        \textbf{EMP\_PHONE}\\
+        \renewcommand{\arraystretch}{1.5}
+        \begin{tabular}{|c|c|}
+        \hline
+        \cellcolor{gray!20}\textbf{\underline{Emp\_ID}} (FK) & \cellcolor{gray!20}\textbf{\underline{Phone}} \\
+        \hline
+        \end{tabular}
+    };
+    
+    % Foreign key constraint arrow (using tikz overlays conceptually within standard coords)
+    \draw[->, rounded corners] (-1.3, -3.8) -- (-2.5, -3.8) -- (-2.5, -2.85) -- (-1, -2.85);
+
+\end{tikzpicture}
+\end{center}
+
+---
+
+\subsubsection*{Summary Comparison}
+
+\begin{center}
+\begin{tabular}{@{} p{3.5cm} p{6cm} p{5.5cm} @{}}
+\toprule
+\textbf{Attribute Type} & \textbf{Transformation Action} & \textbf{Result in Schema} \\
+\midrule
+\textbf{Composite} & Flatten the components. Drop the parent attribute. & Additional columns in the \textit{same} original table. \\
+\addlinespace
+\textbf{Multivalued} & Create a completely new relation. & A \textit{new} table linked via a Foreign Key, forming a composite Primary Key. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{tcolorbox}
 
 \item A library keeps records of current loans of books to borrowers. Each borrower is identified by a borrower number; each copy of a book by an accession number. The library may hold more than one copy of any given book. Borrower name and address are stored for communications. Book information includes: title, author name(s), publisher name, publication date, ISBN, purchase price, classification (reference or fiction), and number of pages. A book may be written by multiple authors but published by a single publisher. The library uses unique in-house codes for authors and publishers. A book may cover multiple subjects; borrowers can use an online catalogue to select texts by subject, title, or author. There are restrictions on the number of books a borrower may have on loan and the loan period, depending on borrower classification (junior, adult, or organization). When a book is borrowed, the return date is automatically recorded. Other borrowers may reserve books currently on loan; the reservation date is recorded. A borrower status flag is maintained --- borrowers who hold overdue books or have reached their loan limit are flagged to prevent further borrowings.
 \begin{enumerate}
@@ -1764,11 +4391,265 @@ Draw ER diagrams to show the relationships among entities of the hospital manage
 \end{enumerate}
 \mk{26} \yr{CSE 215 | L-2/T-1 | 2023--24}
 
-%% Q24 — 2023-24 view vs materialized view + disjoint specialization diagram
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Entity-Relationship (ER) Diagram}
+
+Based on the library requirements, the conceptual data model involves central entities like \textbf{BOOK}, \textbf{COPY}, and \textbf{BORROWER}. Standard normalization rules are applied to extract \textbf{AUTHOR}, \textbf{PUBLISHER}, and \textbf{SUBJECT} into separate entities to accommodate their respective relationships (M:N for authors and subjects, 1:N for publishers). 
+
+\vspace{1em}
+\begin{center}
+\resizebox{\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.5, minimum width=2.8cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    derived_attribute/.style={draw, dashed, ellipse, minimum width=2.2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
+    card/.style={font=\bfseries, text=black}
+]
+
+    % ================= ENTITIES =================
+    \node[entity] (BOOK) at (0, 0) {BOOK};
+    \node[entity] (PUB) at (0, 6) {PUBLISHER};
+    \node[entity] (AUTH) at (-8, 3) {AUTHOR};
+    \node[entity] (SUBJ) at (8, 3) {SUBJECT};
+    \node[entity] (COPY) at (-6, -4) {COPY};
+    \node[entity] (BORR) at (0, -8) {BORROWER};
+
+    % ================= RELATIONSHIPS =================
+    \node[relationship] (PUB_BY) at (0, 3) {Published\_By};
+    \node[relationship] (WRIT_BY) at (-4, 1.5) {Written\_By};
+    \node[relationship] (HAS_SUBJ) at (4, 1.5) {Has\_Subject};
+    \node[relationship] (HAS_COPY) at (-3, -2) {Has\_Copy};
+    \node[relationship] (LOANS) at (-3, -6) {Loans};
+    \node[relationship] (RESERVES) at (4, -4) {Reserves};
+
+    % ================= EDGES & CARDINALITIES =================
+    
+    % Publisher to Book (1:N)
+    \draw (PUB) -- (PUB_BY) node[midway, left, card] {1};
+    \draw (PUB_BY) -- (BOOK) node[midway, left, card] {N};
+
+    % Author to Book (M:N)
+    \draw (AUTH) -- (WRIT_BY) node[midway, above left, card] {M};
+    \draw (WRIT_BY) -- (BOOK) node[midway, below right, card] {N};
+
+    % Subject to Book (M:N)
+    \draw (SUBJ) -- (HAS_SUBJ) node[midway, above right, card] {M};
+    \draw (HAS_SUBJ) -- (BOOK) node[midway, below left, card] {N};
+
+    % Book to Copy (1:N)
+    \draw (BOOK) -- (HAS_COPY) node[midway, above right, card] {1};
+    \draw (HAS_COPY) -- (COPY) node[midway, below left, card] {N};
+
+    % Copy to Borrower (Loans M:N)
+    \draw (COPY) -- (LOANS) node[midway, below left, card] {M};
+    \draw (LOANS) -- (BORR) node[midway, below right, card] {N};
+
+    % Book to Borrower (Reserves M:N)
+    \draw (BOOK) -- (RESERVES) node[midway, above right, card] {M};
+    \draw (RESERVES) -- (BORR) node[midway, below left, card] {N};
+
+    % ================= ATTRIBUTES =================
+    
+    % PUBLISHER Attributes
+    \node[attribute] (pub_code) at (-3, 6) {\underline{Pub\_Code}};
+    \node[attribute] (pub_name) at (3, 6) {Pub\_Name};
+    \draw (PUB) -- (pub_code);
+    \draw (PUB) -- (pub_name);
+
+    % AUTHOR Attributes
+    \node[attribute] (auth_code) at (-8, 4.8) {\underline{Auth\_Code}};
+    \node[attribute] (auth_name) at (-11, 3) {Auth\_Name};
+    \draw (AUTH) -- (auth_code);
+    \draw (AUTH) -- (auth_name);
+
+    % SUBJECT Attributes
+    \node[attribute] (sub_name) at (8, 4.8) {\underline{Sub\_Name}};
+    \draw (SUBJ) -- (sub_name);
+
+    % BOOK Attributes
+    \node[attribute] (isbn) at (-1.8, 1.8) {\underline{ISBN}};
+    \node[attribute] (title) at (-2.2, -0.2) {Title};
+    \node[attribute] (pages) at (-1.5, -1.5) {Num\_Pages};
+    \node[attribute] (price) at (1.5, -1.5) {Price};
+    \node[attribute] (class) at (2.4, -0.2) {Classification};
+    \node[attribute] (pdate) at (1.8, 1.8) {Pub\_Date};
+    
+    \draw (BOOK) -- (isbn);
+    \draw (BOOK) -- (title);
+    \draw (BOOK) -- (pages);
+    \draw (BOOK) -- (price);
+    \draw (BOOK) -- (class);
+    \draw (BOOK) -- (pdate);
+
+    % COPY Attributes
+    \node[attribute] (acc_no) at (-9, -4) {\underline{Accession\_No}};
+    \draw (COPY) -- (acc_no);
+
+    % BORROWER Attributes
+    \node[attribute] (bor_no) at (-3.5, -9) {\underline{Borrower\_No}};
+    \node[attribute] (bor_name) at (0, -10) {Name};
+    \node[attribute] (bor_add) at (3.5, -9) {Address};
+    \node[attribute] (bor_class) at (3.5, -7.5) {Borrower\_Class};
+    \node[derived_attribute] (bor_status) at (-3.5, -7.5) {Borrower\_Status};
+    
+    \draw (BORR) -- (bor_no);
+    \draw (BORR) -- (bor_name);
+    \draw (BORR) -- (bor_add);
+    \draw (BORR) -- (bor_class);
+    \draw (BORR) -- (bor_status);
+
+    % Relationship Attributes
+    \node[derived_attribute] (ret_date) at (-5.5, -7) {Return\_Date};
+    \draw (LOANS) -- (ret_date);
+    
+    \node[attribute] (res_date) at (6.5, -5) {Reservation\_Date};
+    \draw (RESERVES) -- (res_date);
+
+\end{tikzpicture}
+}
+\end{center}
+
+\vspace{1em}
+\subsection*{2. Derived Attributes and Schema for Business Rules}
+
+In the given scenario, some data does not need to be hard-stored as static values but can be logically derived at runtime using established business rules. 
+
+\subsubsection*{Identified Derived Attributes}
+\begin{enumerate}
+    \item \textbf{Return\_Date} (on the \textit{Loans} relationship):\\
+    When a book is borrowed, the return date is calculated by adding the designated \textit{Loan\_Period} (based on the borrower's classification) to the current checkout date. 
+    \item \textbf{Borrower\_Status} (on the \textit{BORROWER} entity):\\
+    This is a status flag derived by checking two conditions:
+    \begin{itemize}
+        \item Has the borrower exceeded their \textit{Max\_Loan\_Limit}?
+        \item Does the borrower currently hold any loans where the \textit{Return\_Date} is strictly less than the current date (overdue)?
+    \end{itemize}
+\end{enumerate}
+
+\subsubsection*{Schema Description for Business Rules}
+To elegantly implement the limits based on the borrower classification (junior, adult, or organization), we create a \textbf{lookup schema} (reference table) that stores these constraints.
+
+\begin{lstlisting}[language=SQL]
+-- Relational Schema definition to store the business rules
+CREATE TABLE Borrower_Class_Rules (
+    Borrower_Class VARCHAR(20) PRIMARY KEY,
+    Max_Loan_Limit INT NOT NULL,
+    Loan_Period_Days INT NOT NULL
+);
+\end{lstlisting}
+
+\textbf{Relational Representation:} \\
+\textbf{BORROWER\_CLASS\_RULES} ( \underline{Borrower\_Class}, Max\_Loan\_Limit, Loan\_Period\_Days )
+
+\vspace{0.5em}
+\textit{\textbf{Working Principle:}} When processing a loan, the DBMS retrieves the \texttt{Loan\_Period\_Days} for the user's \texttt{Borrower\_Class} from this rule table to derive the \texttt{Return\_Date}. Simultaneously, the system compares the user's current active loans against the \texttt{Max\_Loan\_Limit} to compute the \texttt{Borrower\_Status} flag.
+
+\end{tcolorbox}
+
 \item What is the difference between a view and a materialized view? Draw an example diagram of a disjoint specialization.
 \mk{10} \yr{CSE 215 | L-2/T-1 | 2023--24}
 
-%% Q25 — 2024-25 ternary to binary relationship conversion procedure
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+
+\subsection*{1. Difference Between a View and a Materialized View}
+
+In database management systems, both \textbf{Views} and \textbf{Materialized Views} are utilized to simplify complex queries, enhance security, and present a customized schema perspective to users. However, their underlying working principles and storage mechanisms differ significantly.
+
+\begin{itemize}
+    \item \textbf{View (Virtual View):} A view is a logical, virtual table defined by a SQL query. It does not store any data physically on the disk. Every time a view is queried, the DBMS dynamically executes the underlying SQL query against the base tables to fetch the current data.
+    \item \textbf{Materialized View:} A materialized view is a database object that physically stores the result set of its defining query on the disk. Because the data is pre-computed and stored, querying a materialized view is significantly faster. However, it requires periodic or triggered refreshing to synchronize its data with the underlying base tables.
+\end{itemize}
+
+\vspace{0.5em}
+\subsubsection*{Comparison Table}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{} p{3.5cm} p{5.5cm} p{5.5cm} @{}}
+\toprule
+\textbf{Feature} & \textbf{Standard View} & \textbf{Materialized View} \\
+\midrule
+\textbf{Storage} & Virtual; stores only the query definition, not the data. & Physical; stores both the query definition and the actual data. \\
+\textbf{Performance} & Slower for complex queries (computed on the fly at runtime). & Faster (data is pre-computed and retrieved directly from disk). \\
+\textbf{Data Freshness} & Always up-to-date with the base tables. & May contain stale data unless it is actively refreshed. \\
+\textbf{Storage Cost} & Negligible (only metadata is stored). & High (consumes disk space proportional to the result set). \\
+\textbf{Primary Use Case} & Security (hiding columns/rows), simplifying complex joins for users. & Data warehousing, caching expensive aggregations, business intelligence. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\subsection*{2. Disjoint Specialization in EER Modeling}
+
+In the Enhanced Entity-Relationship (EER) model, \textbf{specialization} is the process of defining a set of subclasses from a single superclass. A \textbf{disjoint specialization} specifies a constraint where an entity from the superclass can belong to \textbf{at most one} subclass. It is impossible for an entity to be a member of multiple subclasses simultaneously.
+
+\textbf{Example Scenario:}
+Consider a banking system where an \textbf{ACCOUNT} can be either a \textbf{SAVINGS\_ACCOUNT} or a \textbf{CHECKING\_ACCOUNT}. An account cannot be both simultaneously. This requires a disjoint constraint (denoted by a circle containing a \textbf{d}). Additionally, if every account \textit{must} be categorized as one of these two (Total Specialization), we use a double line connecting the superclass to the disjoint circle.
+
+\vspace{1em}
+\begin{center}
+\resizebox{0.85\textwidth}{!}{
+\begin{tikzpicture}[
+    thick,
+    entity/.style={draw, rectangle, rounded corners=3pt, minimum width=3.5cm, minimum height=1.2cm, align=center, fill=white, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.8cm, align=center, fill=white, font=\footnotesize},
+    d_node/.style={draw, circle, minimum size=0.9cm, align=center, fill=white, font=\bfseries\large}
+]
+
+    % ================= SUPERCLASS =================
+    \node[entity] (ACC) at (0, 3) {ACCOUNT};
+    
+    % Superclass Attributes
+    \node[attribute] (ano) at (-3.5, 4.5) {\underline{Acc\_No}};
+    \node[attribute] (bal) at (3.5, 4.5) {Balance};
+    \node[attribute] (odate) at (0, 5) {Open\_Date};
+    
+    \draw (ACC) -- (ano);
+    \draw (ACC) -- (bal);
+    \draw (ACC) -- (odate);
+
+    % ================= DISJOINT NODE =================
+    \node[d_node] (D) at (0, 0.5) {d};
+    
+    % Total Specialization (Double Line from Superclass to circle)
+    \draw[double, double distance=2pt] (ACC) -- (D);
+    \node[font=\footnotesize, text=gray!80!black] at (1.5, 1.7) {Total \& Disjoint};
+
+    % ================= SUBCLASSES =================
+    \node[entity] (SAV) at (-4, -2.5) {SAVINGS\_ACCOUNT};
+    \node[entity] (CHK) at (4, -2.5) {CHECKING\_ACCOUNT};
+
+    % Subclass Attributes
+    \node[attribute] (irate) at (-4, -4.5) {Interest\_Rate};
+    \draw (SAV) -- (irate);
+    
+    \node[attribute] (odlimit) at (4, -4.5) {Overdraft\_Limit};
+    \draw (CHK) -- (odlimit);
+
+    % ================= HIERARCHY CONNECTIONS =================
+    % Orthogonal routing for clean EER structure
+    \draw (D) -- (0, -1);
+    \draw (0, -1) -| (SAV.north);
+    \draw (0, -1) -| (CHK.north);
+
+    % Subset symbols for Subclasses (Standard EER notation)
+    \node[font=\Large] at (-2, -1) {$\subset$};
+    \node[font=\Large] at (2, -1) {$\subset$};
+
+\end{tikzpicture}
+}
+\end{center}
+\vspace{0.5em}
+\textbf{Note on the Diagram:} The double line from \textbf{ACCOUNT} to the \textbf{d} circle denotes \textit{total participation} (every account must be a specialized type). The \textbf{d} ensures \textit{disjointness} (an account cannot be both). The $\subset$ symbols denote the subset relationship (subclasses inherit from the superclass).
+
+\end{tcolorbox}
+
 \item YouTube is a very popular platform for hosting videos. People create channels and
 upload videos on that. Sometimes the creators can batch up the videos into playlists.
 Videos can be free to view or behind paywall which requires subscription to YouTube.
@@ -1793,7 +4674,7 @@ They should also be able to comment on other peoples comments.
   \item \textbf{Subscription system:} Creators should be able to mark some videos as premium (i.e.,
 only subscribed users can view). Users should be able to buy subscriptions up to some
 end date.
-%% Q21 — 2022-23 YouTube ERD to relational schemas
+
 \item Implement relational schemas for each ERD you designed in this question.
 \mk{15} \yr{CSE 215 | L-2/T-1 | 2022--23}
 \end{enumerate}

@@ -6762,8 +6762,7 @@ Let $A$ denote the growing set of edges in the MST forest. Initially, $A = \empt
 
 The algorithm terminates here because we have successfully selected $|V| - 1 = 7$ edges, spanning all 8 vertices without any cycles.
 
-\begin{table}[H]
-\centering
+\begin{center}
 \begin{tabular}{ccccc}
 \hline
 \textbf{Kruskal Step} & \textbf{Edge Selected} & \textbf{Weight} & \textbf{Cut Used ($S$)} & \textbf{Light Edge Verification} \\ \hline
@@ -6775,7 +6774,7 @@ The algorithm terminates here because we have successfully selected $|V| - 1 = 7
 6 & $(g, h)$ & 3 & $\{h\}$ & $3 = \min(3, 6)$ \\
 7 & $(d, e)$ & 4 & $\{e\}$ & $4 = \min(5, 4, 6)$ \\ \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 \end{tcolorbox}
 
@@ -6992,8 +6991,7 @@ At each step, we extract the vertex $u$ with the minimum key from $Q$. Then, we 
 
 The table below summarizes the value of $Q$ prior to extraction, the extracted node $u$, and the final state of all $v.key$ values at the end of that step. Once a vertex is extracted from $Q$, its key is fixed (denoted with an asterisk $*$).
 
-\begin{table}[H]
-\centering
+\begin{center}
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{llcccccccc}
 \hline
@@ -7008,7 +7006,7 @@ $\mathbf{g}$ & $\{e, h\}$ & 0* & 2* & 2* & 2* & 4 & 3* & 2* & 3 \\
 $\mathbf{h}$ & $\{e\}$ & 0* & 2* & 2* & 2* & 4 & 3* & 2* & 3* \\
 $\mathbf{e}$ & $\emptyset$ & 0* & 2* & 2* & 2* & 4* & 3* & 2* & 3* \\ \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 \end{tcolorbox}
 
@@ -7272,8 +7270,7 @@ Kruskal's algorithm operates by sorting all edges in ascending order of their we
 
 \textbf{Step 2: Iteratively select edges.}
 
-\begin{table}[H]
-\centering
+\begin{center}
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{|c|c|l|c|}
 \hline
@@ -7287,7 +7284,7 @@ $EF$ & $3$ & \textbf{Add} (Does not form a cycle) & $4$ \\
 $AC$ & $4$ & \textbf{Add} (Does not form a cycle) & $5$ \\
 \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 \textit{We stop here because the MST has reached $V - 1 = 5$ edges.}
 
@@ -7303,8 +7300,7 @@ Prim's algorithm builds the MST by maintaining a set of visited vertices and gre
 
 \textbf{Initialization:} Visited set $V_{mst} = \{A\}$.
 
-\begin{table}[H]
-\centering
+\begin{center}
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{|c|l|l|c|c|}
 \hline
@@ -7317,7 +7313,7 @@ Prim's algorithm builds the MST by maintaining a set of visited vertices and gre
 5 & $\{A, C, B, D, E\}$ & $\mathbf{EF(3)}, BF(4)$ \quad \textit{(DE forms cycle)} & $EF$ & $3$ \\
 \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 \textbf{MST Edges:} $\{AC, CB, BD, BE, EF\}$\\
 \textbf{Total Cost:} $4 + 2 + 1 + 3 + 3 = \mathbf{13}$
@@ -7829,8 +7825,7 @@ We are given a directed graph with vertices $V = \{A, B, C, D, E, F\}$ and root 
 \subsubsection*{Step 1: Identify Minimum Incoming Edges}
 We evaluate all incoming directed edges for each non-root node $v \in \{B, C, D, E, F\}$ and pick the one with the minimal weight:
 
-\begin{table}[H]
-\centering
+\begin{center}
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{|c|l|c|c|}
 \hline
@@ -7847,7 +7842,7 @@ We evaluate all incoming directed edges for each non-root node $v \in \{B, C, D,
 \textbf{F} & $\mathbf{CF(9)}$ & $CF$ & $9$ \\
 \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 \subsubsection*{Step 2: Cycle Detection Analysis}
 Let us trace the tracking paths constructed exclusively by our optimal selections $\{EB, AC, FD, CE, CF\}$ starting from the root node $A$:
@@ -7995,8 +7990,7 @@ The physical constraints (depot sending capacities and zone receiving limits) ac
 
 We initialize the flow $f = 0$ on all edges. We iteratively find augmenting paths from $S$ to $T$ in the residual graph until no such paths exist. The bottleneck capacity of a path is $\Delta = \min(C_{residual}(u, v))$ for all edges $(u, v)$ in the path.
 
-\begin{table}[H]
-\centering
+\begin{center}
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{|c|l|c|c|c|}
 \hline
@@ -8023,7 +8017,7 @@ We initialize the flow $f = 0$ on all edges. We iteratively find augmenting path
 \multicolumn{5}{|p{14cm}|}{\textit{Updates:} $C_f(S \to D_3) = 0$ (Saturated), $C_f(Z_2 \to T) = 0$ (Saturated). $D_3$ and $Z_2$ maxed out.} \\
 \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 At this point, all edges leaving the source $S$ ($S \to D_1$, $S \to D_2$, $S \to D_3$) are saturated (residual capacities are 0). Thus, no more augmenting paths can be found.
 
@@ -16426,8 +16420,7 @@ If the deletion shortens the height of $T_1$ from $h-1$ to $h-2$, the imbalance 
 
 When deleting a node in an AVL tree, we first apply standard Binary Search Tree deletion rules. Then, we retrace the path from the deep deletion point up toward the root, updating balance factors. If any node $X$ is found with a balance factor of $+2$ or $-2$, let $Y$ be its taller child, and $Z$ be the taller child of $Y$. This yields **four distinct structural cases**:
 
-\begin{table}[H]
-\centering
+\begin{center}
 \renewcommand{\arraystretch}{1.4}
 \small
 \begin{tabular}{|l|l|l|p{6.5cm}|}
@@ -16438,7 +16431,7 @@ When deleting a node in an AVL tree, we first apply standard Binary Search Tree 
 \textbf{Right-Right (RR)} & $-2$ & $-1$ or $0$ & \textbf{Single Left Rotation} around node $X$. \\ \hline
 \textbf{Right-Left (RL)} & $-2$ & $+1$ & \textbf{Double Rotation:} Right Rotate around $Y$, then Left Rotate around $X$. \\ \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 \begin{tcolorbox}[colback=yellow!5,colframe=yellow!60!black,title=\textbf{Crucial Distinction: Deletion vs. Insertion}]
 Unlike insertion—where a single structural fix always restores the pre-insertion height of the entire tree—a rotation after a deletion can **shorten the overall height of the processed subtree**. This height reduction can introduce new imbalances further up the tree. Consequently, rebalancing may cascade upward, requiring up to $\mathcal{O}(\log n)$ rotations in the worst-case scenario.
@@ -21457,8 +21450,7 @@ Therefore, $H_2$ must strictly contain more nodes than $H_1$, proving the statem
 \subsubsection*{Intuition via Binary Representation}
 A fundamental property of a binomial heap with $N$ nodes is its one-to-one mapping with the binary representation of the integer $N$. Specifically, a binomial tree $B_k$ is present in the heap if and only if the $k$-th bit of $N$ (using 0-based indexing from right to left) is $1$.
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{|l|l|l|}
         \hline
@@ -21470,7 +21462,7 @@ A fundamental property of a binomial heap with $N$ nodes is its one-to-one mappi
         Minimum possible value & $10\dots0_2 = 2^m$ & $10\dots0_2 = 2^{m+1}$ \\
         \hline
     \end{tabular}
-\end{table}
+\end{center}
 
 Because adding a new, more significant bit (position $m+1$) to a binary number intrinsically results in a value larger than \textit{any} possible combination of lower-order bits (positions $0$ through $m$), the node count $N_2$ inherently dominates $N_1$.
 
@@ -28214,14 +28206,13 @@ The following diagram illustrates how the components interface with one another.
 
 To illustrate this framework clearly, let us look at the classic Traveling Salesperson Problem:
 
-\begin{table}[H]
-\centering
+\begin{center}
 \begin{tabular}{p{7cm} | p{7cm}}
 \hline
 \textbf{Optimization Variant ($\mathcal{O}_{TSP}$)} & \textbf{Decision Variant ($\mathcal{D}_{TSP}$)} \\ \hline
 Given a complete graph $G=(V,E)$ with edge weights $w(e)$, find a Hamiltonian cycle that \textbf{minimizes} the total edge weight. & Given a complete graph $G=(V,E)$ with edge weights $w(e)$ and a threshold $k$, is there a Hamiltonian cycle with total weight \textbf{$\leq k$}? \\ \hline
 \end{tabular}
-\end{table}
+\end{center}
 
 \begin{enumerate}
     \item \textbf{NP-Membership:} A certificate $y$ is an ordered sequence of vertices. Verification checks if the sequence visits every vertex exactly once, returns to the start, and sums the weights to verify if $\text{Total Cost} \leq k$. This runs in linear time $O(|V|)$, proving $\mathcal{D}_{TSP} \in \text{NP}$.
@@ -32325,9 +32316,8 @@ Since $\text{\textit{Best}} = 6$, which matches the absolute upper bound of tota
 
 The branch and bound search systematically explored the state space and found an optimal truth assignment that satisfies \textbf{all 6 clauses} simultaneously.
 
-\begin{table}[H]
-\centering
-\caption{Optimal Variable Assignment and Clause Verification}
+\begin{center}
+\textbf{Optimal Variable Assignment and Clause Verification}
 \begin{tabular}{ccccccc}
 \toprule
 \textbf{Variable} & \textbf{Value} & \quad & \textbf{Clause} & \textbf{Structure} & \textbf{Evaluation} & \textbf{Status} \\
@@ -32340,7 +32330,7 @@ $z$ & \texttt{False} (0) & & $C_4$ & $y \vee \bar{z}$                    & $0 \v
     &                    & & $C_6$ & $\bar{w} \vee \bar{x}$              & $1 \vee 0$               & \textbf{Satisfied} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{center}
 
 \textbf{Conclusion:} The maximum number of satisfiable clauses is \textbf{6}. The specific assignment tracking down to node $P_{11}$ is:
 \begin{equation}
