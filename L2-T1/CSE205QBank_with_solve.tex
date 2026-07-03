@@ -152,7 +152,7 @@
   {\normalsize\textcolor{dgray}{Department of Computer Science \& Engineering}}\\[18pt]
   \textcolor{cA}{\rule{\textwidth}{1pt}}\\[14pt]
   
-  {\fontsize{22}{28}\selectfont\bfseries\textcolor{cA}{Digital Logic Design Question Bank}}\\[8pt]
+  {\fontsize{22}{28}\selectfont\bfseries\textcolor{cA}{Digital Logic Design Question Bank\\With Answers}}\\[8pt]
   {\fontsize{14}{18}\selectfont\textcolor{dgray}{CSE 205 $\cdot$ Digital Logic Design}}\\[4pt]
   \textcolor{cA}{\rule{\textwidth}{0.5pt}}\\[14pt]
   
@@ -3513,9 +3513,9 @@ To implement $F$ directly using standard logic gates, we require:
 
 \begin{center}
 \begin{circuitikz}[thick, scale=0.9, transform shape]
-    % NOT Gates
-    \node[not port] (notX) at (3, 4.5) {};
-    \node[not port] (notY) at (3, 2.5) {};
+    % NOT Gates (Y-coordinates adjusted to prevent overlap with the horizontal y-input wire)
+    \node[not port] (notX) at (3, 3.8) {};
+    \node[not port] (notY) at (3, 2.0) {};
     
     % AND Gates
     \node[and port] (and1) at (6.5, 5) {};
@@ -3530,14 +3530,14 @@ To implement $F$ directly using standard logic gates, we require:
     \draw (x_branch) |- (notX.in);
     \fill (x_branch) circle (1.5pt);
     
-    \draw (0, 4.72) node[left] {$y$} -- ++(0.5,0) coordinate(y_branch) |- (and1.in 2);
+    \draw (0, 4.72) node[left] {$y$} -- ++(0.5,0) coordinate(y_branch) -- (and1.in 2);
     \draw (y_branch) |- (notY.in);
     \fill (y_branch) circle (1.5pt);
 
     % Wiring complements to AND gates
     \draw (notX.out) |- (and2.in 1);
     
-    \draw (notY.out) -- ++(0.5,0) coordinate(ybar_branch) |- (and2.in 2);
+    \draw (notY.out) -- ++(0.7,0) coordinate(ybar_branch) |- (and2.in 2);
     \draw (ybar_branch) |- (and3.in 1);
     \fill (ybar_branch) circle (1.5pt);
 
@@ -3573,7 +3573,7 @@ This equation dictates a two-level NAND structure. Additionally, the complements
 \begin{center}
 \begin{circuitikz}[thick, scale=0.9, transform shape]
     % NAND Gates acting as NOTs
-    \node[nand port] (invX) at (3, 4.5) {};
+    \node[nand port] (invX) at (3, 4) {};
     \node[nand port] (invY) at (3, 2.5) {};
     
     % First Level NAND Gates
@@ -3619,6 +3619,7 @@ This equation dictates a two-level NAND structure. Additionally, the complements
     \draw (nandOut.out) -- ++(1,0) node[right] {$F$};
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
