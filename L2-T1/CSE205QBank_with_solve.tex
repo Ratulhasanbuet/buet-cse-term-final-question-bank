@@ -2701,7 +2701,7 @@ Consider $F(A,B,C) = \sum m(0,1) + \sum d(2,3)$. Without don't-cares, $m_0$ and 
     \minterms{0,1}
     \indeterminants{2,3}
     \maxterms{4,5,6,7}
-    \implicant{0}{3}
+    \implicant{0}{2}
 \end{karnaugh-map}
 \end{center}
 
@@ -6513,21 +6513,22 @@ We populate the map with $1$ for the minterms, $d$ for the don't care conditions
     \indeterminants{11,20,22}
     
     % Groupings for x1 = 0 map
-    \implicantedge{0}{0}{8}{8} % Group 1 (Corners Left): 0, 8
-    \implicantedge{2}{2}{10}{10} % Group 1 (Corners Right): 2, 10 (Together they form the corner group)
+    
+    \implicantcorner 
     \implicant{4}{6}        % Group 2: 4, 5, 7, 6
     \implicant{2}{10}       % Group 3: 2, 6, 14, 10
     
     % Groupings for x1 = 1 map
     \implicant{17}{21}      % Group 5: 17, 21
-    \implicant{29}{31}      % Group 6: 29, 31
+    \implicant{29}{31}      % Group 6: 29,
+
+    \implicant{2}{6}[0,1]
     
     % Cross-map Groupings (spanning both x1=0 and x1=1)
     % Logically forms Group 4: 2, 6, 18, 22
-    \implicant{2}{6}        % Map 0 part
-    \implicant{18}{22}      % Map 1 part
 \end{karnaugh-map}
 \end{center}
+
 
 \vspace{1em}
 \textbf{3. Algebraic Foundation of Reduction Steps}
@@ -6721,43 +6722,44 @@ For the $b=0$ map, the cell indices match the global minterm values directly (0 
 \end{itemize}
 
 \begin{center}
-\begin{minipage}{0.45\textwidth}
-\centering
-\textbf{Map 0: $a=0, b=0$} \\
+\textbf{Map for $a=0$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$ef$][$cd$]
-    % Minterms & Don't cares for b=0
+\begin{karnaugh-map}[4][4][2][$ef$][$cd$][$b \ (a=0)$]
+    % ==========================================
+    % Map 0: b=0 (Local indices: 0 to 15)
+    % ==========================================
     \minterms{1,2,3,5,7,11,13}
     \indeterminants{6}
+    
+    % ==========================================
+    % Map 1: b=1 (Global indices: 16 to 31)
+    % Local minterm + 16 = Global index
+    % ==========================================
+    \minterms{17,19,23,29,31}
+    \indeterminants{20,24,25,26,27}
+    
     \autoterms[0]
     
-    % Groupings for Map 0
-    \implicant{3}{6} % Quad G1: 2, 3, 6, 7
-    \implicant{1}{7} % Quad G4: 1, 3, 5, 7
-    \implicant{1}{3} % Half of 3D Quad G3: 1, 3
-    \implicantedge{3}{3}{11}{11} % Half of 3D Quad G2: 3, 11
-    \implicant{13}{13} % Half of 3D Pair G5: 13
-\end{karnaugh-map}
-\end{minipage}
-\hfill
-\begin{minipage}{0.45\textwidth}
-\centering
-\textbf{Map 1: $a=0, b=1$} \\
-\vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$ef$][$cd$]
-    % Minterms & Don't cares for b=1
-    \minterms{1,3,7,13,15}
-    \indeterminants{4,8,9,10,11}
-    \autoterms[0]
+    % ==========================================
+    % Groupings
+    % ==========================================
+    % Quad G1 (Local to b=0): 2, 3, 6, 7
+    \implicant{3}{6}
+\implicantedge{3}{3}{11}{11}[0,1]    
+    % Quad G4 (Local to b=0): 1, 3, 5, 7
+    \implicant{1}{7}
     
-    % Groupings for Map 1
-    \implicant{3}{11} % Quad G6: 3, 7, 15, 11 (Global 19, 23, 31, 27)
-    \implicant{1}{3} % Half of 3D Quad G3: 1, 3 (Global 17, 19)
-    \implicantedge{3}{3}{11}{11} % Half of 3D Quad G2: 3, 11 (Global 19, 27)
-    \implicant{13}{13} % Half of 3D Pair G5: 13 (Global 29)
+    % Quad G6 (Local to b=1): 19, 23, 31, 27
+    \implicant{19}{27}
+    
+    % 3D Quad G3 (Spans b=0 and b=1): 1, 3 and 17, 19
+    \implicant{1}{3}[0,1] 
+    \implicant{13}{13}[0,1]
+
+    
 \end{karnaugh-map}
-\end{minipage}
 \end{center}
+
 
 \vspace{1em}
 \textbf{3. Prime Implicants \& Boolean Term Derivation}
@@ -8508,13 +8510,19 @@ We plot the minterms for $B_1$ ($\Sigma m(2,3,4,5)$) on a K-map.
 \textbf{For LSB ($B_0$):}
 We plot the minterms for $B_0$ ($\Sigma m(1,2,4,7)$) on a K-map.
 
+
 \begin{center}
 \begin{karnaugh-map}[4][2][1][$G_1 G_0$][$G_2$]
     \minterms{1,2,4,7}
+    \implicant{1}{1}
+    \implicant{2}{2}
+    \implicant{4}{4}
+    \implicant{7}{7}
     \autoterms[0]
 \end{karnaugh-map}
 \end{center}
-The resulting "checkerboard" pattern indicates a multi-variable XOR relationship:
+
+The resulting ``checkerboard" pattern indicates a multi-variable XOR relationship:
 \begin{align*}
     B_0 &= \overline{G_2}\overline{G_1}G_0 + \overline{G_2}G_1\overline{G_0} + G_2\overline{G_1}\overline{G_0} + G_2G_1G_0 \\
     B_0 &= \overline{G_2}(\overline{G_1}G_0 + G_1\overline{G_0}) + G_2(\overline{G_1}\overline{G_0} + G_1G_0) \quad &&\text{(Distributive Law)} \\
@@ -8625,9 +8633,9 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
     \vspace{0.5em}
     \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
         \minterms{14,15}
-        \autoterms[0]
-        \terms{1,2,4,7,8,9}{d}
+        \indeterminants{1,2,4,7,8,9}
         \implicant{15}{14}
+        \autoterms[0]
     \end{karnaugh-map}
     \\[0.5em]
     \textbf{Group 1 (Red):} $ABC$ \\
@@ -8641,8 +8649,8 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
     \vspace{0.5em}
     \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
         \minterms{10,11,12,13}
+        \indeterminants{1,2,4,7,8,9}
         \autoterms[0]
-        \terms{1,2,4,7,8,9}{d}
         \implicant{12}{9}
         \implicant{8}{10}
     \end{karnaugh-map}
@@ -8662,8 +8670,8 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
     \vspace{0.5em}
     \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
         \minterms{5,6,12,13}
+        \indeterminants{1,2,4,7,8,9}
         \autoterms[0]
-        \terms{1,2,4,7,8,9}{d}
         \implicant{4}{13}
         \implicant{4}{6}
     \end{karnaugh-map}
@@ -8680,8 +8688,8 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
     \vspace{0.5em}
     \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
         \minterms{3,6,11,13,15}
+        \indeterminants{1,2,4,7,8,9}
         \autoterms[0]
-        \terms{1,2,4,7,8,9}{d}
         \implicant{13}{11}
         \implicant{3}{6}
     \end{karnaugh-map}
@@ -9757,6 +9765,10 @@ The minterms for $\mathrm{Diff}$ are $\sum m(1, 2, 4, 7)$.
 \begin{karnaugh-map}[4][2][1][$y B_{in}$][$x$]
     \minterms{1,2,4,7}
     \autoterms[0]
+    \implicant{1}{1}
+    \implicant{2}{2}
+    \implicant{4}{4}
+    \implicant{7}{7}
 \end{karnaugh-map}
 \end{center}
 
@@ -10132,60 +10144,87 @@ We introduce a control mode line, \textbf{$M$}, and add an \textbf{XOR gate} at 
 \textbf{\textcolor{cD}{3. Four-Bit Adder-Subtractor Circuit Diagram}}
 
 \begin{center}
-\begin{circuitikz}[line width=0.8pt]
-    % Mode Line M
-    \draw (-1.5, 2.5) node[left] {Mode $M$} -- (12, 2.5) -- (12, -3) -- (11.25, -3);
+\begin{tikzpicture}[
+    thick,
+    >=latex,
+    every node/.style={font=\normalsize},
+    gate/.style={draw, fill=cyan!10, thick},
+    fa/.style={gate, minimum width=1.6cm, minimum height=1.6cm, font=\large}
+]
 
-    % Draw Full Adder Blocks
-    \node[draw, thick, minimum width=1.5cm, minimum height=2cm, fill=white] (FA3) at (0,-3) {\textbf{FA 3}};
-    \node[draw, thick, minimum width=1.5cm, minimum height=2cm, fill=white] (FA2) at (3.5,-3) {\textbf{FA 2}};
-    \node[draw, thick, minimum width=1.5cm, minimum height=2cm, fill=white] (FA1) at (7,-3) {\textbf{FA 1}};
-    \node[draw, thick, minimum width=1.5cm, minimum height=2cm, fill=white] (FA0) at (10.5,-3) {\textbf{FA 0}};
+% 1. Draw Full Adder blocks
+\foreach \i/\x in {3/0, 2/3.5, 1/7, 0/10.5} {
+    \node[fa] (FA\i) at (\x, 0) {$FA$};
+}
 
-    % Carry Connections
-    \draw[->] (FA0.west) -- (FA1.east) node[midway, above] {$C_1$};
-    \draw[->] (FA1.west) -- (FA2.east) node[midway, above] {$C_2$};
-    \draw[->] (FA2.west) -- (FA3.east) node[midway, above] {$C_3$};
-    \draw[<-] (FA0.east) -- (12, -3) node[midway, above] {$C_0$};
-    \draw[->] (FA3.west) -- ++(-1.5,0) node[left] {$C_4$ ($C_{out}$)};
+% 2. Draw XOR gates for inputs
+\tikzstyle{myxor} = [american xor port, rotate=-90, gate]
+\foreach \i/\x in {3/0, 2/3.5, 1/7, 0/10.5} {
+    \node[myxor] (XOR\i) at (\x-0.4, 2.5) {};
+}
 
-    % --- FA0 Connections ---
-    \draw[<-] (10.1, -2) -- (10.1, 1.5) node[above] {$A_0$};
-    \node[xor port, rotate=-90, scale=0.7] (X0) at (10.9, -0.2) {};
-    \draw (X0.out) -- (10.9, -2);
-    \draw[<-] (X0.in 2) -- ++(0, 1.2) node[above] {$B_0$};
-    \draw (X0.in 1) -- ++(0, 0.4) |- (11.5, 2.5); 
-    \fill (11.5, 2.5) circle (1.5pt);
-    \draw[->] (10.5, -4) -- ++(0, -1) node[below] {$S_0$};
+% 3. Inputs A_i and B_i, and Sum outputs
+\foreach \i/\x in {3/0, 2/3.5, 1/7, 0/10.5} {
+    % B_i to left input of rotated XOR (which is 'in 2')
+    \draw[-latex] (XOR\i.in 2 |- 0, 5) node[above] {$B_\i$} -- (XOR\i.in 2);
+    % A_i directly to FA
+    \draw[-latex] (\x+0.4, 5) node[above] {$A_\i$} -- (\x+0.4, 0 |- FA\i.north);
+    % XOR output to FA
+    \draw[-latex] (XOR\i.out) -- (XOR\i.out |- FA\i.north);
+    % S_i output
+    \draw[-latex] (FA\i.south) -- ++(0, -1.6) node[below] {$S_\i$};
+}
 
-    % --- FA1 Connections ---
-    \draw[<-] (6.6, -2) -- (6.6, 1.5) node[above] {$A_1$};
-    \node[xor port, rotate=-90, scale=0.7] (X1) at (7.4, -0.2) {};
-    \draw (X1.out) -- (7.4, -2);
-    \draw[<-] (X1.in 2) -- ++(0, 1.2) node[above] {$B_1$};
-    \draw (X1.in 1) -- ++(0, 0.4) |- (8.0, 2.5); 
-    \fill (8.0, 2.5) circle (1.5pt);
-    \draw[->] (7.0, -4) -- ++(0, -1) node[below] {$S_1$};
+% 4. Mode (M) line and its connections
+\draw (12.2, 4.2) node[right] {$M$} -- (11.5, 4.2) coordinate (M0);
+\fill (M0) circle (1.5pt);
+\draw (M0) -- (11.5, 0);
+\draw[-latex] (11.5, 0) -- (FA0.east) node[pos=0.7, above] {$C_0$};
 
-    % --- FA2 Connections ---
-    \draw[<-] (3.1, -2) -- (3.1, 1.5) node[above] {$A_2$};
-    \node[xor port, rotate=-90, scale=0.7] (X2) at (3.9, -0.2) {};
-    \draw (X2.out) -- (3.9, -2);
-    \draw[<-] (X2.in 2) -- ++(0, 1.2) node[above] {$B_2$};
-    \draw (X2.in 1) -- ++(0, 0.4) |- (4.5, 2.5); 
-    \fill (4.5, 2.5) circle (1.5pt);
-    \draw[->] (3.5, -4) -- ++(0, -1) node[below] {$S_2$};
+% Horizontal M wire routing
+\coordinate (MX0) at (XOR0.in 1 |- 0, 4.2);
+\coordinate (MX1) at (XOR1.in 1 |- 0, 4.2);
+\coordinate (MX2) at (XOR2.in 1 |- 0, 4.2);
+\coordinate (MX3) at (XOR3.in 1 |- 0, 4.2);
 
-    % --- FA3 Connections ---
-    \draw[<-] (-0.4, -2) -- (-0.4, 1.5) node[above] {$A_3$};
-    \node[xor port, rotate=-90, scale=0.7] (X3) at (0.4, -0.2) {};
-    \draw (X3.out) -- (0.4, -2);
-    \draw[<-] (X3.in 2) -- ++(0, 1.2) node[above] {$B_3$};
-    \draw (X3.in 1) -- ++(0, 0.4) |- (1.0, 2.5); 
-    \fill (1.0, 2.5) circle (1.5pt);
-    \draw[->] (0.0, -4) -- ++(0, -1) node[below] {$S_3$};
+\draw (M0) -- (MX0); \fill (MX0) circle (1.5pt);
+\draw (MX0) -- (MX1); \fill (MX1) circle (1.5pt);
+\draw (MX1) -- (MX2); \fill (MX2) circle (1.5pt);
+\draw (MX2) -- (MX3); % No dot on the last connection
 
-\end{circuitikz}
+% Vertical drops to right input of rotated XOR (which is 'in 1')
+\draw[-latex] (MX0) -- (XOR0.in 1);
+\draw[-latex] (MX1) -- (XOR1.in 1);
+\draw[-latex] (MX2) -- (XOR2.in 1);
+\draw[-latex] (MX3) -- (XOR3.in 1);
+
+% 5. Carry wires between FAs
+\draw[-latex] (FA0.west) -- (FA1.east) node[midway, above] {$C_1$};
+\draw[-latex] (FA1.west) -- (FA2.east) node[midway, above] {$C_2$};
+
+% C3 connection with a dot for overflow detection
+\coordinate (C3dot) at (1.75, 0);
+\draw[-latex] (FA2.west) -- (FA3.east) node[midway, above] {$C_3$};
+\fill (C3dot) circle (1.5pt);
+
+% C4 connection and final Carry out
+\coordinate (C4dot) at (-1.5, 0);
+\draw (FA3.west) -- (C4dot) node[above] {$C_4$};
+\fill (C4dot) circle (1.5pt);
+\draw (C4dot) -- ++(-1.5, 0) node[left] {$C$};
+
+% 6. Overflow XOR gate (V)
+% Using xscale=-1 to orient the gate pointing to the left
+\node[american xor port, xscale=-1, gate] (XV) at (-3.2, -2.5) {};
+\draw (XV.out) -- ++(-0.8, 0) node[left] {$V$};
+
+% Route C4 to V (top input of XV, which is 'in 1')
+\draw[-latex] (C4dot) -- (C4dot |- XV.in 1) -- (XV.in 1);
+
+% Route C3 to V (bottom input of XV, which is 'in 2')
+\draw[-latex] (C3dot) -- (C3dot |- XV.in 2) -- (XV.in 2);
+
+\end{tikzpicture}
 \end{center}
 
 \end{tcolorbox}
@@ -21367,57 +21406,105 @@ $\uparrow$ (Rising)  & 1                       & 1 (Set)                        
 \item Consider a sequential circuit. Let the current values be: $\mathrm{CLK}=1$, $D=1$, $Q=1$, $Q'=0$. If the value of $D$ changes from 1 to 0 after the ``Hold Time'' ends and CLK remains unchanged at~1, what will be the values of $Q$ and $Q'$?
 
 \begin{center}
-  \begin{tikzpicture}[thick, >=latex, circuitikz/nand/.style={nand port, scale=1.1}]
+\begin{tikzpicture}[
+    thick,
+    >=latex,
+    every node/.style={font=\normalsize},
+    gate/.style={fill=cyan!10}
+]
 
-    % ================= গেইটগুলো বসানো (Gates) =================
-    % বাম দিকের ৪টি গেইট (U1 থেকে U4)
-    \node[nand port, number inputs=2] (U1) at (0, 4) {};
-    \node[nand port, number inputs=2] (U2) at (0, 1.5) {};
-    \node[nand port, number inputs=3] (U3) at (0, -1.5) {};
-    \node[nand port, number inputs=2] (U4) at (0, -4) {};
+% ==========================
+% GATE PLACEMENT
+% ==========================
 
-    % ডান দিকের আউটপুট ল্যাচ গেইট (U5 ও U6)
-    \node[nand port, number inputs=2] (U5) at (4.5, 1.5) {};
-    \node[nand port, number inputs=2] (U6) at (4.5, -1.5) {};
+% Right SR Latch (N5, N6)
+\node[american nand port, gate] (N5) at (6, 1.5) {};
+\node[american nand port, gate] (N6) at (6, -1.5) {};
 
-    % ================= ইনপুট ও আউটপুট টেক্সট =================
-    \node[left] (CLK) at (-6, 0) {$CLK$};
-    \node[left] (D)   at (-4, -4.28) {$D$}; 
+% Middle Control Gates (N2, N3)
+% Placed such that outputs align perfectly with the inputs of the SR latch
+\node[american nand port, gate] (N2) at (0, 1.78) {};
+\node[american nand port, gate] (N3) at (0, -1.78) {};
 
-    \node[right] (Q) at (6, 1.5) {$Q$};
-    \node[right] (Qbar) at (6, -1.5) {$\overline{Q}$};
+% Input Stage Gates (N1, N4)
+\node[american nand port, gate] (N1) at (0, 4.0) {};
+\node[american nand port, gate] (N4) at (0, -4.0) {};
 
-    % ================= কানেকশন (Wiring) =================
 
-    % CLK সিগন্যাল
-    \draw (CLK) -- (-4, 0) node[circ](clk_split){} |- (U2.in 2);
-    \draw (clk_split) |- (U3.in 2);
+% ==========================
+% ROUTING: RIGHT SR LATCH (N5 & N6)
+% ==========================
 
-    % D সিগন্যাল
-    \draw (D) -- (U4.in 2);
+% Q and Q' Outputs
+\draw[thick] (N5.out) -- (8.5, 1.5) node[right] {$Q$};
+\draw[thick] (N6.out) -- (8.5, -1.5) node[right] {$Q'$};
 
-    % U1 এর আউটপুট থেকে U2 এর টপ ইনপুট
-    \draw (U1.out) -- ++(0.2,0) -- (U2.in 1);
+% Q Feedback to N6
+\fill (7.2, 1.5) circle (2pt);
+\draw[thick] (7.2, 1.5) -- (7.2, 0.2) -- (4.2, 0.2) |- (N6.in 1);
 
-    % U2 এর আউটপুট এবং এর ফিডব্যাক ব্রাঞ্চগুলো
-    \draw (U2.out) -- (U5.in 1);
-    \draw (U2.out) -- ++(0, 1) -| ([xshift=-1cm]U1.in 1) -- (U1.in 1);
-    \draw (U2.out) -- ++(0, -0.8) -| ([xshift=-1cm]U3.in 1) -- (U3.in 1);
+% Q' Feedback to N5
+\fill (7.6, -1.5) circle (2pt);
+\draw[thick] (7.6, -1.5) -- (7.6, -0.2) -- (4.4, -0.2) |- (N5.in 2);
 
-    % U3 এর আউটপুট এবং এর ফিডব্যাক ব্রাঞ্চগুলো
-    \draw (U3.out) -- (U6.in 2);
-    \draw (U3.out) -- ++(0, -1) -| ([xshift=-1.2cm]U4.in 1) -- (U4.in 1);
 
-    % U4 এর আউটপুট এবং এর ফিডব্যাক ব্রাঞ্চগুলো
-    \draw (U4.out) -- ++(0.8,0) node[circ](u4_out){};
-    \draw (u4_out) -- ++(0, 0.8) -| ([xshift=-1.4cm]U3.in 3) -- (U3.in 3);
-    \draw (U1.in 2) -- (-3.5 , 3.75) --( -3.5, -5.5 ) -- ( 0.97, -5.5 ) -- (0.97, -4);
-    % U5 এবং U6 এর আউটপুট ল্যাচ ক্রস-কাপলিং
-    \draw (U5.out) -- ++(0.5,0) node[circ](q_split){} -- (Q);
-    \draw (U6.out) -- ++(0.5,0) node[circ](qbar_split){} -- (Qbar);
+% ==========================
+% ROUTING: MIDDLE TO RIGHT (S & R)
+% ==========================
 
-    \draw (q_split) -- ++(0, -1.2) -| ([xshift=-0.5cm]U6.in 1) -- (U6.in 1);
-    \draw (qbar_split) -- ++(0, 1.2) -| ([xshift=-0.7cm]U5.in 2) -- (U5.in 2);
+% S Line (N2 out to N5 in)
+\draw[thick] (N2.out) -- (N5.in 1) node[midway, above] {$S$};
+\fill (1.6, 1.78) circle (2pt); % Connection dot for N2 feedback
+
+% R Line (N3 out to N6 in)
+\draw[thick] (N3.out) -- (N6.in 2) node[midway, above] {$R$};
+\fill (1.6, -1.78) circle (2pt); % Connection dot for N3 feedback
+
+
+% ==========================
+% ROUTING: N1 & N2 CROSS-COUPLING
+% ==========================
+
+% N1 Output to N2 Top Input
+\draw[thick] (N1.out) -- (1.2, 4.0) -- (1.2, 2.7) -- (-1.5, 2.7) |- (N2.in 1);
+
+% N2 Output to N1 Bottom Input
+\draw[thick] (1.6, 1.78) -- (1.6, 2.9) -- (-1.6, 2.9) |- (N1.in 2);
+
+
+% ==========================
+% ROUTING: N3 & N4 CROSS-COUPLING
+% ==========================
+
+% N3 Output to N4 Top Input
+\draw[thick] (1.6, -1.78) -- (1.6, -2.9) -- (-1.6, -2.9) |- (N4.in 1);
+
+% N4 Output to N3 Bottom Input (and branching to Global Feedback)
+\draw[thick] (N4.out) -- (1.2, -4.0);
+\fill (1.2, -4.0) circle (2pt);
+\draw[thick] (1.2, -4.0) -- (1.2, -2.7) -- (-1.5, -2.7) |- (N3.in 2);
+
+
+% ==========================
+% ROUTING: GLOBAL FEEDBACK (N4 to N1)
+% ==========================
+
+% Outer far-left feedback loop from N4 output to N1 top input
+\draw[thick] (1.2, -4.0) -- (1.2, -5.0) -- (-3.5, -5.0) |- (N1.in 1);
+
+
+% ==========================
+% ROUTING: INPUT SIGNALS (Clk & D)
+% ==========================
+
+% Clk Input
+\draw[thick] (-4.5, 0) node[left] {$Clk$} -- (-2.5, 0);
+\fill (-2.5, 0) circle (2pt);
+\draw[thick] (-2.5, 0) |- (N2.in 2);
+\draw[thick] (-2.5, 0) |- (N3.in 1);
+
+% D Input
+\draw[thick] (-4.5, -4.28) node[left] {$D$} -- (N4.in 2);
 
 \end{tikzpicture}
 \end{center}
@@ -21433,7 +21520,6 @@ $\uparrow$ (Rising)  & 1                       & 1 (Set)                        
 
 \begin{enumerate}
 
-%% -- Q1: Differences between latch and flip-flop --
 \item Write the differences between a latch and a flip-flop.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
@@ -33237,8 +33323,7 @@ If a standard ring counter is initialized incorrectly due to power-up transients
 
 For a 4-bit ring counter, the $2^4 = 16$ possible states break down into the following disjoint cycles. If initialized incorrectly, the counter suffers from \textbf{lockout}, indefinitely trapped in an invalid sequence without ever reaching the valid counting sequence:
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{llc}
         \toprule
@@ -33252,7 +33337,7 @@ For a 4-bit ring counter, the $2^4 = 16$ possible states break down into the fol
         All Ones & $1111 \circlearrowleft$ & 1 \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \vspace{0.3cm}
 
@@ -33359,8 +33444,7 @@ First, we determine the required flip-flop inputs to transition between the desi
     \item $0 \rightarrow 1 \implies J=1, K=X$ \qquad $\vert$ \qquad $1 \rightarrow 1 \implies J=X, K=0$
 \end{itemize}
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|cc|cc|cc}
         \toprule
@@ -33374,8 +33458,8 @@ First, we determine the required flip-flop inputs to transition between the desi
         \bottomrule
     \end{tabular}
     \vspace{0.2cm}
-    \caption*{Note: Unused states $0 (000), 3 (011), 4 (100),$ and $6 (110)$ are treated as Don't Cares ($X$) for map minimization.}
-\end{table}
+    \textbf{Note: Unused states $0 (000), 3 (011), 4 (100),$ and $6 (110)$ are treated as Don't Cares ($X$) for map minimization.}
+\end{center}
 
 \subsection*{B. Karnaugh Map Minimization}
 We plot the excitation columns into $4 \times 2$ Karnaugh maps to find the simplest Boolean expressions.
@@ -33617,8 +33701,7 @@ To derive the combinational logic for the flip-flops, we use the respective exci
     \item \textbf{D FF ($Q_0$):} $D_0 = Q_0^+$ (Directly follows the Next State)
 \end{itemize}
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|cc|c|c|c}
         \toprule
@@ -33636,7 +33719,7 @@ To derive the combinational logic for the flip-flops, we use the respective exci
         1 & 1 & 0 & X & X & X & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textcolor{red}{Invalid (State 6)} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 Notice a remarkable mathematical property of this sequence: $Q_1$ toggles state on \textit{every single} valid transition! Thus, $T_1 = 1$.
 
@@ -33847,8 +33930,7 @@ To determine the inputs for the SR flip-flops, we use the standard SR excitation
     \item $1 \to 1 \implies S=X, R=0$
 \end{itemize}
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|cc|cc|cc|c}
         \toprule
@@ -33866,7 +33948,7 @@ To determine the inputs for the SR flip-flops, we use the standard SR excitation
         1 & 1 & 0 & X & X & X & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textcolor{red}{Invalid (State 6)} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \section*{3. Karnaugh Map Minimization}
 We map the excitation signals to 3-variable Karnaugh Maps (inputs $Q_2, Q_1, Q_0$).
@@ -34100,8 +34182,7 @@ We are strictly designing this using \textbf{SR Flip-Flops}. The unused states a
 To determine the combinational logic for the flip-flops, we use the SR excitation table rules: 
 ($0 \to 0 \implies 0,X$), ($0 \to 1 \implies 1,0$), ($1 \to 0 \implies 0,1$), ($1 \to 1 \implies X,0$).
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|cc|cc|cc|c}
         \toprule
@@ -34118,7 +34199,7 @@ To determine the combinational logic for the flip-flops, we use the SR excitatio
         1 & 1 & 1 & X & X & X & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textbf{X} & \textcolor{red}{Invalid (State 7)} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \section*{3. Karnaugh Map Minimization}
 We map the excitation signals to 3-variable Karnaugh Maps (inputs $Q_2, Q_1, Q_0$). 
@@ -34368,8 +34449,7 @@ The unused states are $0$, $3$, and $6$. The prompt specifies that no measures n
 \section*{2. State Transition and Excitation Table}
 For a D Flip-Flop, the excitation input is equal to the next state ($D = Q^+$). We construct the table based on the required sequence.
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|ccc|c}
         \toprule
@@ -34386,7 +34466,7 @@ For a D Flip-Flop, the excitation input is equal to the next state ($D = Q^+$). 
         1 & 1 & 1 & 0 & 1 & 0 & \textbf{0} & \textbf{1} & \textbf{0} & Sequence ($7 \to 2$) \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \section*{3. Karnaugh Map Minimization}
 We plot the excitation equations into 3-variable K-maps to derive the minimal sum-of-products (SOP) expressions.
@@ -34741,8 +34821,7 @@ To ensure self-correction, any invalid state ($0, 3, 4, 6$) must transition to t
 \section*{2. State Transition and Excitation Table}
 The excitation for a T flip-flop is defined by $T = Q \oplus Q^+$.
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|ccc|c}
         \toprule
@@ -34760,7 +34839,7 @@ The excitation for a T flip-flop is defined by $T = Q \oplus Q^+$.
         1 & 1 & 0 & 1 & 1 & 1 & \textbf{0} & \textbf{0} & \textbf{1} & \textcolor{red}{Recovery (6 $\to$ 7)} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \section*{3. Karnaugh Map Minimization}
 We extract the Boolean functions for $T_2, T_1,$ and $T_0$ from the table.
@@ -34957,8 +35036,7 @@ The problem requires that any invalid state ($0, 3, 5, 6$) transition to the \te
 The excitation table for a JK flip-flop is governed by: 
 $(0 \to 0: J=0, K=X)$, $(0 \to 1: J=1, K=X)$, $(1 \to 0: J=X, K=1)$, $(1 \to 1: J=X, K=0)$.
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|cc|cc|cc|c}
         \toprule
@@ -34976,7 +35054,7 @@ $(0 \to 0: J=0, K=X)$, $(0 \to 1: J=1, K=X)$, $(1 \to 0: J=X, K=1)$, $(1 \to 1: 
         1 & 1 & 0 & 1 & 1 & 1 & \textbf{X} & \textbf{0} & \textbf{X} & \textbf{0} & \textbf{1} & \textbf{X} & \textcolor{red}{Recovery ($6 \to 7$)} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \section*{3. Karnaugh Map Minimization}
 We derive the minimized Boolean expressions for $J$ and $K$ for each flip-flop.
@@ -35211,8 +35289,7 @@ The states $2 \, (010_2)$ and $5 \, (101_2)$ are not part of the valid sequence.
 \section*{2. State Transition and Excitation Table}
 For a T flip-flop, the excitation input is given by $T = Q \oplus Q^+$. The required logic level is $1$ if the state toggles, and $0$ if it remains the same.
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccc|ccc|ccc|c}
         \toprule
@@ -35230,7 +35307,7 @@ For a T flip-flop, the excitation input is given by $T = Q \oplus Q^+$. The requ
         1 & 0 & 1 & X & X & X & \textbf{X} & \textbf{X} & \textbf{X} & \textcolor{red}{Invalid (State 5)} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \section*{3. Karnaugh Map Minimization}
 We plot the $T_2, T_1$, and $T_0$ functions into 3-variable Karnaugh Maps using variables $Q_2, Q_1, Q_0$.
@@ -39168,8 +39245,7 @@ The internal connections are documented below:
     \item \textbf{T/C Flag (XOR array)}: `T` = True (XOR with 0), `C` = Complemented (XOR with 1).
 \end{itemize}
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.3}
     \begin{tabular}{lccccccccc}
         \toprule
@@ -39187,7 +39263,7 @@ The internal connections are documented below:
         \multicolumn{4}{r}{\textbf{Output Form (T/C):}} && \textcolor{cH}{\textbf{C}} & \textbf{T} & \textcolor{cH}{\textbf{C}} & \textcolor{cH}{\textbf{C}} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \end{tcolorbox}
 
@@ -40160,8 +40236,7 @@ Whenever the input $x=0$, the machine holds its state. When $x=1$, it advances. 
 \textbf{2. State Transition \& Excitation Table} \\
 Using D flip-flops, the next state equations are simply $D_1 = Q_1(t+1)$ and $D_0 = Q_0(t+1)$.
 
-\begin{table}[H]
-    \centering
+\begin{center}
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{ccccccc}
         \toprule
@@ -40179,7 +40254,7 @@ Using D flip-flops, the next state equations are simply $D_1 = Q_1(t+1)$ and $D_
         1 & 1 & 1 & \text{d} & \text{d} & \text{d} \\
         \bottomrule
     \end{tabular}
-\end{table}
+\end{center}
 
 \vspace{1em}
 \textbf{3. Karnaugh Map Minimization} \\
