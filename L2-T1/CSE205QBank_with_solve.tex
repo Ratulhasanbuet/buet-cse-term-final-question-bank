@@ -2900,9 +2900,212 @@ From both the algebraic derivation and the truth table, the function equals $1$ 
 \mk{16} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+\subsection*{1. Karnaugh Map \& Simplification}
+To simplify the Boolean function $F(w,x,y,z) = \Sigma\,(0,1,2,4,5,6,8,9,12,13,14)$, we map the minterms onto a 4-variable Karnaugh Map. 
+
+\begin{center}
+\begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+    \minterms{0,1,2,4,5,6,8,9,12,13,14}
+    \autoterms[0]
+    
+    % Group 1: 8 cells covering columns 00 and 01 -> y'
+    \implicant{0}{9}
+    
+    % Group 2: 4 cells covering corners of top two rows -> w'z'
+    \implicantedge{0}{4}{2}{6}
+    
+    % Group 3: 4 cells covering corners of middle two rows -> xz'
+    \implicantedge{4}{12}{6}{14}
+\end{karnaugh-map}
+\end{center}
+
+\vspace{0.5em}
+From the Karnaugh Map, we identify three essential prime implicants by forming the largest possible groups of $1$s:
+\begin{itemize}
+    \item \textbf{Group 1} (Red/Largest block): An octet spanning columns 00 and 01. The variables $w, x,$ and $z$ change state, leaving only $y=0$. This yields the term \textcolor{cF}{$\mathbf{y'}$}.
+    \item \textbf{Group 2} (Green/Top edges): A quad spanning rows 00, 01 and columns 00, 10. The variables $x$ and $y$ change state, leaving $w=0$ and $z=0$. This yields the term \textcolor{cF}{$\mathbf{w'z'}$}.
+    \item \textbf{Group 3} (Blue/Middle edges): A quad spanning rows 01, 11 and columns 00, 10. The variables $w$ and $y$ change state, leaving $x=1$ and $z=0$. This yields the term \textcolor{cF}{$\mathbf{xz'}$}.
+\end{itemize}
+
+The minimized Sum of Products (SOP) expression is:
+\begin{equation*}
+    F = \textcolor{cF}{y'} + \textcolor{cF}{w'z'} + \textcolor{cF}{xz'}
+\end{equation*}
+
+---
+
+\subsection*{2. Algebraic Conversion to NAND-NAND Form}
+To implement the circuit using \textbf{only} NAND gates, we must convert the SOP expression by applying Boolean algebra rules—specifically the Involution Law (Double Negation) and De Morgan's Laws.
+
+\begin{align*}
+    F &= y' + w'z' + xz' \\
+    F &= \overline{\overline{y' + w'z' + xz'}} \quad && \text{(Involution Law: $A = \overline{\overline{A}}$)} \\
+    F &= \overline{\overline{y'} \cdot \overline{w'z'} \cdot \overline{xz'}} \quad && \text{(De Morgan's Law: $\overline{A + B + C} = \overline{A} \cdot \overline{B} \cdot \overline{C}$)} \\
+    F &= \overline{y \cdot \overline{w'z'} \cdot \overline{xz'}} \quad && \text{(Involution Law: $\overline{y'} = y$)}
+\end{align*}
+
+This final expression indicates that $F$ can be synthesized using:
+\begin{enumerate}
+    \item 2-input NAND gates with tied inputs to act as inverters for $w \to w'$ and $z \to z'$.
+    \item 2-input NAND gates to generate the partial products $\overline{w'z'}$ and $\overline{xz'}$.
+    \item A single 3-input NAND gate to combine $y$ and the two partial products.
+\end{enumerate}
+
+---
+
+\subsection*{3. Logic Circuit Implementation (NAND Only)}
+Below is the structural circuit diagram derived directly from the factored NAND expression. Note how the uncomplemented input $y$ is fed directly into the final stage, gracefully saving an inverter.
+
+
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[circuitikz/logic ports=american, thick]
+    
+    % Input Labels
+    \node[left] at (0, 6.5) {$w$};
+    \node[left] at (0, 5.0) {$z$};
+    \node[left] at (0, 4) {$x$};
+    \node[left] at (0, 2.0) {$y$};
+
+    % Level 1: Inverters (Constructed using 2-input NAND gates)
+    \node[nand port, scale=0.8] (notw) at (2.5, 6.5) {};
+    \draw (0, 6.5) -- (1, 6.5);
+    \fill (1, 6.5) circle (1.5pt);
+    \draw (1, 6.5) |- (notw.in 1);
+    \draw (1, 6.5) |- (notw.in 2);
+    \node[above] at (notw.out) {$w'$};
+
+    \node[nand port, scale=0.8] (notz) at (2.5, 5.0) {};
+    \draw (0, 5.0) -- (1, 5.0);
+    \fill (1, 5.0) circle (1.5pt);
+    \draw (1, 5.0) |- (notz.in 1);
+    \draw (1, 5.0) |- (notz.in 2);
+    \node[above] at (notz.out) {$z'$};
+
+    % Level 2: Partial Product NANDs
+    \node[nand port] (nand1) at (5.5, 5.75) {};
+    \node[nand port] (nand2) at (5.5, 3.75) {};
+
+    % Routing for nand1 (w'z')
+    \draw (notw.out) -- (4, 6.5) |- (nand1.in 1);
+    \draw (notz.out) -- (3.5, 5.0);
+    \fill (3.5, 5.0) circle (1.5pt); % Branch point for z'
+    \draw (3.5, 5.0) |- (nand1.in 2);
+
+    % Routing for nand2 (xz')
+    \draw (0, 4)  |- (nand2.in 1);
+    \draw (3.5, 5.0) |- (nand2.in 2);
+
+    % Level 3: Final 3-input NAND gate
+    \node[nand port, number inputs=3] (final) at (8.5, 4.75) {};
+
+    % Routing to the final gate
+    \draw (nand1.out) -- (7, 5.75) |- (final.in 1) node[pos=0.5, above] {$\overline{w'z'}$};
+    \draw (0, 2.0) -- (7, 2.0) |- (final.in 2); % Input y fed directly
+    \draw (nand2.out) -- (7, 3.75) |- (final.in 3) node[pos=0.5, below] {$\overline{xz'}$};
+
+    % Output
+    \draw (final.out) -- (9.5, 4.75) node[right] {\textbf{$F$}};
+
+\end{tikzpicture}
+\end{center}
+
+
+\end{tcolorbox}
+
 \item Implement $F(x,y,z) = x'y'z' + xyz'$ using two-level forms of logic by using NAND-AND gates. Assume that the complement of $x$, $y$ and $z$ are readily available.
 \mk{14} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+\subsection*{1. Theoretical Basis for NAND-AND Implementation}
+A two-level \textbf{NAND-AND} logic circuit generates a Product of Sums (POS) conceptually, but more accurately, it implements the complement of a Sum of Products (SOP) expression. 
+Let the target function be $F$. If we determine the simplified SOP expression for its complement, $F'$, such that $F' = P_1 + P_2 + \dots + P_k$, we can recover $F$ by complementing $F'$:
+\begin{equation*}
+    F = (F')' = \overline{P_1 + P_2 + \dots + P_k} = \overline{P_1} \cdot \overline{P_2} \dots \overline{P_k}
+\end{equation*}
+By De Morgan's Law, this resulting expression is a product (AND operation at Level 2) of inverted product terms (NAND operations at Level 1). 
+
+---
+
+\subsection*{2. Algebraic Derivation of $F'$}
+We are given the Boolean function $F(x,y,z) = x'y'z' + xyz'$. We first find and simplify its complement $F'$ using Boolean algebra:
+
+\begin{align*}
+    F' &= \overline{x'y'z' + xyz'} \\
+       &= \overline{(x'y'z')} \cdot \overline{(xyz')} \quad && \text{(De Morgan's Law: $\overline{A+B} = \overline{A} \cdot \overline{B}$)} \\
+       &= (x + y + z) \cdot (x' + y' + z') \quad && \text{(De Morgan's Law: $\overline{ABC} = \overline{A} + \overline{B} + \overline{C}$)} \\
+       &= (x + y + z) \cdot (x' + y' + z) \quad && \text{(Correction: Complement of $z'$ is $z$)} \\
+       &= x x' + x y' + x z + y x' + y y' + y z + z x' + z y' + z z \quad && \text{(Distributive Law)} \\
+       &= 0 + x y' + x z + x' y + 0 + y z + x' z + y' z + z \quad && \text{(Complementarity: $AA'=0$, Idempotent: $AA=A$)} \\
+       &= x y' + x' y + x z + y z + x' z + y' z + z \quad && \text{(Identity Law: $A + 0 = A$)} \\
+       &= x y' + x' y + z(x + y + x' + y' + 1) \quad && \text{(Distributive Law / Factoring out $z$)} \\
+       &= x y' + x' y + z(1) \quad && \text{(Dominance Law: $A + 1 = 1$)} \\
+       &= z + x' y + x y' \quad && \text{(Identity Law: $A \cdot 1 = A$)}
+\end{align*}
+The simplified Sum of Products for the complement is $F' = z + x'y + xy'$.
+
+---
+
+\subsection*{3. Conversion to NAND-AND Form}
+Now, we complement $F'$ to obtain $F$ in the desired NAND-AND structure:
+
+\begin{align*}
+    F &= (F')' \\
+      &= \overline{z + x'y + xy'} \\
+      &= \overline{z} \cdot \overline{x'y} \cdot \overline{xy'} \quad && \text{(De Morgan's Law)}
+\end{align*}
+
+Given the problem statement that the complement of $z$ ($z'$) is readily available, we can substitute $\overline{z} = z'$ directly. This prevents the need for a 1-input NAND gate to act as an inverter. The final expression perfectly matches a two-level NAND-AND architecture:
+\begin{equation*}
+    \textcolor{cF}{\mathbf{F = z' \cdot \overline{x'y} \cdot \overline{xy'}}}
+\end{equation*}
+\begin{itemize}
+    \item \textbf{Level 1 (NAND):} Two 2-input NAND gates generating $\overline{x'y}$ and $\overline{xy'}$.
+    \item \textbf{Level 2 (AND):} One 3-input AND gate multiplying $z'$, $\overline{x'y}$, and $\overline{xy'}$.
+\end{itemize}
+
+---
+
+\subsection*{4. Logic Circuit Diagram}
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[circuitikz/logic ports=american, thick]
+    
+    % Level 1: Two 2-input NAND gates
+    \node[nand port] (nand1) at (3, 1.5) {};
+    \node[nand port] (nand2) at (3, -1.5) {};
+
+    % Draw inputs to NAND 1
+    \draw (nand1.in 1) -- ++(-2,0) node[left] {$x'$};
+    \draw (nand1.in 2) -- ++(-2,0) node[left] {$y$};
+
+    % Draw inputs to NAND 2
+    \draw (nand2.in 1) -- ++(-2,0) node[left] {$x$};
+    \draw (nand2.in 2) -- ++(-2,0) node[left] {$y'$};
+
+    % Level 2: One 3-input AND gate
+    \node[and port, number inputs=3] (and1) at (7, 0) {};
+
+    % Route outputs of Level 1 (NAND) into Level 2 (AND)
+    \draw (nand1.out) -- (5, 1.5) |- (and1.in 1);
+    \node[above] at (4.5, 1.5) {$\overline{x'y}$};
+    
+    \draw (nand2.out) -- (5, -1.5) |- (and1.in 3);
+    \node[below] at (4.5, -1.5) {$\overline{xy'}$};
+
+    % Route literal z' directly into the middle input of the AND gate
+    \draw (and1.in 2) -- ++(-6,0) node[left] {$z'$};
+
+    % Output F
+    \draw (and1.out) -- (8.5, 0) node[right] {\textbf{$F$}};
+
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
 
 \item Express $f(A,B,C,D) = \Sigma\,(0,4,8,9,10,11,12,14)$ with the two-level forms of logic ``NAND-AND'' and ``OR-NAND''.
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2018--19}
@@ -8369,6 +8572,9 @@ To find the simplified Boolean equation, we map the minterms onto a 3-variable K
 \begin{center}
 \begin{karnaugh-map}[4][2][1][$BC$][$A$]
     \minterms{3,5,6}
+    \implicant{3}{3}
+    \implicant{5}{5}
+    \implicant{6}{6}
     \autoterms[0]
 \end{karnaugh-map}
 \end{center}
@@ -12634,7 +12840,7 @@ The circuit routes the incoming carry from the previous Half Adder directly into
 \begin{center}
 \begin{circuitikz}[scale=1, transform shape]
     % Define Half Adder block style
-    \tikzset{ha/.style={draw=cD, thick, rectangle, minimum height=2.2cm, minimum width=1.6cm, fill=white, rounded corners=3pt, font=\large\bfseries}}
+    \tikzset{ha/.style={draw=cD, thick, rectangle, minimum height=2.5cm, minimum width=2cm, fill=white, rounded corners=3pt, font=\large\bfseries}}
 
     % Instantiate 4 Half Adders
     \node[ha] (HA0) at (9,0) {HA};
@@ -12647,7 +12853,7 @@ The circuit routes the incoming carry from the previous Half Adder directly into
         \node[below, font=\scriptsize, text=gray] at (HA\i.north) {In};
         \node[left, font=\scriptsize, text=gray] at (HA\i.east) {In};
         \node[above, font=\scriptsize, text=gray] at (HA\i.south) {Sum};
-        \node[right, font=\scriptsize, text=gray] at (HA\i.west) {$C_{out}$};
+        \node[right, font=\scriptsize, text=gray,scale=0.9] at (HA\i.west) {$C_{out}$};
     }
 
     % HA0 Connections (LSB)
@@ -12719,13 +12925,14 @@ Notice that these reduced equations, $S_i = A_i \oplus C_i$ and $C_{i+1} = A_i \
 
 The circuit diagram below illustrates the implementation. The incoming carry from the previous Half Adder is routed directly into one of the inputs of the next Half Adder. The LSB Half Adder receives a constant Logic High ($1$) as its secondary input to inject the $+1$ value.
 
+
 \vspace{0.6cm}
 \begin{center}
 \begin{circuitikz}[scale=1, transform shape]
     % Define Half Adder block style
-    \tikzset{ha/.style={draw=cD, thick, rectangle, minimum height=2.2cm, minimum width=1.6cm, fill=white, rounded corners=3pt, font=\large\bfseries}}
+    \tikzset{ha/.style={draw=cD, thick, rectangle, minimum height=2.5cm, minimum width=2cm, fill=white, rounded corners=3pt, font=\large\bfseries}}
 
-    % Instantiate 4 Half Adders (Right to Left for standard binary weighting)
+    % Instantiate 4 Half Adders
     \node[ha] (HA0) at (9,0) {HA};
     \node[ha] (HA1) at (6,0) {HA};
     \node[ha] (HA2) at (3,0) {HA};
@@ -12736,7 +12943,7 @@ The circuit diagram below illustrates the implementation. The incoming carry fro
         \node[below, font=\scriptsize, text=gray] at (HA\i.north) {In};
         \node[left, font=\scriptsize, text=gray] at (HA\i.east) {In};
         \node[above, font=\scriptsize, text=gray] at (HA\i.south) {Sum};
-        \node[right, font=\scriptsize, text=gray] at (HA\i.west) {$C_{out}$};
+        \node[right, font=\scriptsize, text=gray,scale=0.9] at (HA\i.west) {$C_{out}$};
     }
 
     % HA0 Connections (LSB)
@@ -12762,6 +12969,7 @@ The circuit diagram below illustrates the implementation. The incoming carry fro
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -17264,9 +17472,9 @@ The MUX has an active-low enable $\overline{EN}$. For the multiplexer to functio
     \draw (-1, 1) node[circle,fill,inner sep=1.2pt]{} -- (2, 1);
 
     % Selectors
-    \draw (2.5, -0.5) -- (2.5, -1.5) node[below] {$S_2 \ (w)$};
-    \draw (3.5, -0.5) -- (3.5, -1.5) node[below] {$S_1 \ (x)$};
-    \draw (4.5, -0.5) -- (4.5, -1.5) node[below] {$S_0 \ (y)$};
+    \draw (2.5, -0.5) -- (2.5, -1.5) node[below,scale=0.7] {$S_2 \ (w)$};
+    \draw (3.5, -0.5) -- (3.5, -1.5) node[below,scale=0.7] {$S_1 \ (x)$};
+    \draw (4.5, -0.5) -- (4.5, -1.5) node[below,scale=0.7] {$S_0 \ (y)$};
 
     % Active-Low Enable Pin
     \node[ocirc] (en_node) at (3.5, 9.5) {};
@@ -18868,8 +19076,9 @@ To avoid clutter in the main routing, we independently generate the intermediate
 
 The final implementation utilizing four instances of the given Logic Circuit block. The generated signals from the sub-circuit are applied directly to the $A,B,C,D$ input nodes.
 
+
 \begin{center}
-\begin{tikzpicture}[>=latex, font=\normalsize, scale=0.9, transform shape]
+\begin{tikzpicture}[>=latex, font=\normalsize, y=1.4cm, scale=0.9, transform shape]
 
     % Loop to create the 4 identically structured MUX blocks
     \foreach \i/\y/\inA/\inB/\inC/\inD in {
@@ -18924,6 +19133,7 @@ The final implementation utilizing four instances of the given Logic Circuit blo
     }
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -20181,46 +20391,71 @@ The JK flip-flop was specifically designed to resolve the undefined state of the
 In a JK flip-flop, the $J$ input acts like $S$ (Set), and the $K$ input acts like $R$ (Reset). The internal logic dynamically masks the input that would attempt to drive the flip-flop into a state it is already in, thereby preventing the $S=R=1$ condition internally.
 
 \begin{center}
-\begin{circuitikz}[thick, scale=0.9, transform shape]
-    % Input AND gates
-    \node[and port, number inputs=3] (andJ) at (0, 1.5) {};
-    \node[and port, number inputs=3] (andK) at (0, -1.5) {};
+\begin{tikzpicture}[
+    >=latex,
+    thick,
+    font=\sffamily,
+    scale=1,
+    transform shape
+]
+    % ====================================================
+    % INPUT AND GATES
+    % ====================================================
+    \node[and port, number inputs=3, anchor=out] (andJ) at (0.5, 1.5) {};
+    \node[and port, number inputs=3, anchor=out] (andK) at (0.5, -1.5) {};
     
-    % Input Labels
-    \draw (andJ.in 1) -- ++(-1,0) node[left, font=\bfseries] {$J$};
-    \draw (andK.in 3) -- ++(-1,0) node[left, font=\bfseries] {$K$};
+    % ====================================================
+    % SR LATCH CORE
+    % ====================================================
+    \draw[thick, fill=white] (1.5, -2.5) rectangle (4.5, 2.5);
+    \node[font=\bfseries] at (3, 0) {SR Latch};
+    
+    % Internal Latch Pins
+    \node[right, font=\bfseries] at (1.5, 1.5) {S};
+    \node[right, font=\bfseries] at (1.5, -1.5) {R};
+    \node[left, font=\bfseries] at (4.5, 1.5) {Q};
+    \node[left, font=\bfseries] at (4.5, -1.5) {$\overline{Q}$};
+    
+    % Connections from ANDs to SR Latch
+    \draw[thick] (andJ.out) -- (1.5, 1.5);
+    \draw[thick] (andK.out) -- (1.5, -1.5);
+    
+    % ====================================================
+    % EXTERNAL INPUTS (J, K, CLK)
+    % ====================================================
+    % J & K Labels extended outward to avoid feedback wires
+    \draw[thick] (andJ.in 1) -- ++(-2,0) node[left, font=\bfseries] {J};
+    \draw[thick] (andK.in 3) -- ++(-2,0) node[left, font=\bfseries] {K};
     
     % Clock Routing
-    \draw (andJ.in 2) -- ++(-0.5,0) coordinate (clk_j);
-    \draw (andK.in 2) -- ++(-0.5,0) coordinate (clk_k);
-    \draw (clk_j) -- (clk_k) node[midway, left, font=\bfseries] {$CLK$};
-    \fill (clk_j |- clk_k) ++(0, 1.5) circle(2pt); % junction dot for clock
+    \draw[thick] (andJ.in 2) -- ++(-1,0) coordinate (clk_j);
+    \draw[thick] (andK.in 2) -- ++(-1,0) coordinate (clk_k);
+    \draw[thick] (clk_j) -- (clk_k);
     
-    % SR Core Latch Representation
-    \draw[thick, fill=white] (2, -2.5) rectangle (4, 2.5);
-    \node[font=\bfseries] at (3, 0) {SR Latch};
-    \node[right] at (2, 1.5) {$S$};
-    \node[right] at (2, -1.5) {$R$};
-    \node[left] at (4, 1.5) {$Q$};
-    \node[left] at (4, -1.5) {$\overline{Q}$};
+    % Global Clock Pin
+    \fill (clk_j |- 0,0) circle(2pt) coordinate (clk_mid);
+    \draw[thick] (clk_mid) -- ++(-1.5,0) node[left, font=\bfseries] {CLK};
     
-    % Connections from AND to SR Latch
-    \draw (andJ.out) -- (2, 1.5);
-    \draw (andK.out) -- (2, -1.5);
+    % ====================================================
+    % OUTPUTS & FEEDBACK ROUTING
+    % ====================================================
+    % Main Q and Q-bar lines
+    \draw[thick] (4.5, 1.5) -- (6.5, 1.5) coordinate (Qout) node[right, font=\bfseries] {Q};
+    \draw[thick] (4.5, -1.5) -- (6.5, -1.5) coordinate (Qbarout) node[right, font=\bfseries] {$\overline{Q}$};
     
-    % Outputs
-    \draw (1, 1.5) -- (5, 1.5) coordinate (Qout) node[right, font=\bfseries, text=cE] {$Q$};
-    \draw (1, -1.5) -- (5, -1.5) coordinate (Qbarout) node[right, font=\bfseries] {$\overline{Q}$};
+    % Tap Points for Feedback
+    \fill (5.5, 1.5) coordinate (fb_Q) circle(2pt);
+    \fill (5.5, -1.5) coordinate (fb_Qbar) circle(2pt);
     
-    % Feedback Loops
-    \fill (4.5, 1.5) coordinate (fb_Q) circle(2pt);
-    \fill (4.5, -1.5) coordinate (fb_Qbar) circle(2pt);
+    % Q back to K's AND gate (Bottom)
+    % Routes up, over, and down behind the J input label
+    \draw[thick] (fb_Q) -- (5.5, 3.5) -- (-1.5, 3.5) |- (andK.in 1);
     
-    % Q back to K's AND gate
-    \draw (fb_Q) -- (4.5, 3) -- (-1.5, 3) |- (andK.in 1);
-    % Q_bar back to J's AND gate
-    \draw (fb_Qbar) -- (4.5, -3) -- (-1.5, -3) |- (andJ.in 3);
-\end{circuitikz}
+    % Q_bar back to J's AND gate (Top)
+    % Routes down, under, and up behind the K input label
+    \draw[thick] (fb_Qbar) -- (5.5, -3.5) -- (-1.2, -3.5) |- (andJ.in 3);
+
+\end{tikzpicture}
 \end{center}
 
 \vspace{0.3cm}
@@ -21307,6 +21542,7 @@ A \textbf{Master-Slave D Flip-Flop} is built by cascading two level-sensitive D 
 
 In this configuration, the Master latch receives an \textit{inverted} clock signal, while the Slave latch receives the \textit{direct} clock signal. This makes the entire flip-flop \textcolor{cE}{\textbf{positive edge-triggered}}.
 
+
 \begin{center}
 \begin{circuitikz}[>=latex]
     % Master Latch Block
@@ -21318,10 +21554,10 @@ In this configuration, the Master latch receives an \textit{inverted} clock sign
     \draw[thick, <-] ([yshift=0.8cm]master.west) -- ++(-1.5,0) node[left] {$D$};
     
     % Clock Line Routing
-    \draw[thick] (-1.5, -2.5) node[left] {\textbf{CLK}} -- (4.6, -2.5) coordinate(clk_end);
+    \draw[thick] (-4.5, -2.5) node[left] {\textbf{CLK}} -- (2.6, -2.5) coordinate(clk_end);
     
     % Master Clock Connection (Inverted)
-    \draw[thick] (-0.5, -2.5) coordinate(clk_m) |- ++(0.3, 0.5) node[not port, anchor=in, scale=0.6] (notm) {};
+    \draw[thick] (-3.5, -2.5) coordinate(clk_m) |- ++(0.3, 0.5) node[not port, anchor=in, scale=0.6] (notm) {};
     \fill (clk_m) circle (2pt);
     \draw[thick, ->] (notm.out) |- ([yshift=-0.8cm]master.west);
     
@@ -21347,6 +21583,7 @@ In this configuration, the Master latch receives an \textit{inverted} clock sign
     \node[left, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]slave.east) {$\overline{Q}$};
 \end{circuitikz}
 \end{center}
+
 
 \vspace{1em}
 \textbf{\large 2. Principle of Operation}
@@ -21511,6 +21748,71 @@ $\uparrow$ (Rising)  & 1                       & 1 (Set)                        
 
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+To determine the final values of $Q$ and $Q'$, we must rigorously trace the logic levels through the six NAND gates (labeled $N_1$ through $N_6$). The circuit represents a modified or faulty edge-triggered D flip-flop master-slave configuration, notably lacking the standard locking cross-coupling from $N_2$ to $N_3$.
+
+We will analyze the circuit in three discrete steps:
+
+\subsection*{Step 1: Establish the Initial Steady State}
+Given the initial conditions: $\mathrm{CLK}=1$, $D=1$, $Q=1$, and $Q'=0$.
+The output stage consisting of gates $N_5$ and $N_6$ forms an active-low $\overline{S}$-$\overline{R}$ latch. Let us define the intermediate signals driving this latch as $S = N_2$ and $R = N_3$. 
+To hold the state $Q=1, Q'=0$, the inputs to the latch must be $S=0$ and $R=1$. 
+
+We can verify the internal nodes ($N_1, N_2, N_3, N_4$) at this initial state:
+\begin{align*}
+N_2 &= 0 \implies \text{Since } N_2 = \overline{N_1 \cdot \mathrm{CLK}} \text{ and } \mathrm{CLK}=1, \text{ we must have } N_1 = 1. \\
+N_3 &= 1 \implies \text{Since } N_3 = \overline{N_4 \cdot \mathrm{CLK}} \text{ and } \mathrm{CLK}=1, \text{ we must have } N_4 = 0. \\
+N_4 &= 0 \implies \text{Since } N_4 = \overline{N_3 \cdot D}, \text{ checking with } N_3=1, D=1 \implies \overline{1 \cdot 1} = 0 \text{ (Consistent)}. \\
+N_1 &= 1 \implies \text{Since } N_1 = \overline{N_2 \cdot N_4}, \text{ checking with } N_2=0, N_4=0 \implies \overline{0 \cdot 0} = 1 \text{ (Consistent)}.
+\end{align*}
+\textbf{Initial Internal State:} $N_1=1, N_2=0, N_3=1, N_4=0$.
+
+\subsection*{Step 2: Evaluate the Transition ($D$ changes $1 \to 0$)}
+The input $D$ falls to $0$ while $\mathrm{CLK}$ remains locked at $1$. We propagate this change through the input gates:
+
+\begin{align*}
+N_4 &= \overline{N_3 \cdot D} \\
+    &= \overline{1 \cdot 0} = \textcolor{cF}{\mathbf{1}} \quad && \text{(Output of $N_4$ transitions from $0 \to 1$)} 
+\end{align*}
+
+This new value of $N_4 = 1$ simultaneously feeds into $N_1$ and $N_3$. Let us re-evaluate them:
+\begin{align*}
+N_3 &= \overline{\mathrm{CLK} \cdot N_4} \\
+    &= \overline{1 \cdot 1} = \textcolor{cF}{\mathbf{0}} \quad && \text{(Output of $N_3$, our $R$ signal, transitions from $1 \to 0$)} \\
+\\
+N_1 &= \overline{N_2 \cdot N_4} \\
+    &= \overline{0 \cdot 1} = \mathbf{1} \quad && \text{(Output of $N_1$ holds its previous state)} \\
+\\
+N_2 &= \overline{N_1 \cdot \mathrm{CLK}} \\
+    &= \overline{1 \cdot 1} = \mathbf{0} \quad && \text{(Output of $N_2$, our $S$ signal, holds its previous state)}
+\end{align*}
+
+\subsection*{Step 3: Resolve the Final Output Latch ($Q, Q'$)}
+Following the transition, the signals driving the output $\overline{S}$-$\overline{R}$ latch are now $S (N_2) = 0$ and $R (N_3) = 0$. 
+Applying these to the output NAND gates:
+\begin{align*}
+Q   &= \overline{S \cdot Q'} = \overline{0 \cdot Q'} = \textcolor{cF}{\mathbf{1}} \\
+Q'  &= \overline{R \cdot Q}  = \overline{0 \cdot Q}  = \textcolor{cF}{\mathbf{1}} 
+\end{align*}
+
+\vspace{1em}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{cc|cccc|cc}
+\toprule
+\textbf{Phase} & $\mathbf{D}$ Input & $\mathbf{N_4}$ & $\mathbf{N_1}$ & $\mathbf{N_3}$ ($R$) & $\mathbf{N_2}$ ($S$) & $\mathbf{Q}$ & $\mathbf{Q'}$ \\
+\midrule
+Initial ($\mathrm{CLK}=1$) & $1$ & $0$ & $1$ & $1$ & $0$ & $1$ & $0$ \\
+Post-Transition ($\mathrm{CLK}=1$) & $0$ & $1$ & $1$ & \textcolor{cF}{\textbf{0}} & $0$ & \textcolor{cF}{\textbf{1}} & \textcolor{cF}{\textbf{1}} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+
+\textbf{Final Values:} Both outputs are forced logically high, yielding $\mathbf{Q = 1}$ and $\mathbf{Q' = 1}$.
+
+\end{tcolorbox}
 
 \end{enumerate}
 
@@ -21643,124 +21945,9 @@ The resulting equation, \textcolor{cE}{$\mathbf{Q_{n+1} = T \oplus Q_n}$}, is ex
 This logically confirms that tying the $J$ and $K$ inputs together creates a fully functional T flip-flop.
 \end{tcolorbox}
 
-\item Construct a JK flip-flop using a T flip-flop and basic gates.
-\mk{6} \yr{CSE 205 | L-2/T-1 | 2023--24}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
-To design a \textbf{JK flip-flop} using a \textbf{T flip-flop} and basic logic gates, we must determine the combinational logic required at the $T$ input. This logic must translate the $J$, $K$, and current state ($Q_n$) into the appropriate toggle signal ($T$) so that the flip-flop mimics the transitions of a JK flip-flop.
-
-\subsubsection*{1. Conversion Table Formulation}
-We begin by establishing the required state transitions for a JK flip-flop and using the excitation table of a T flip-flop to determine the necessary $T$ input. 
-\begin{itemize}
-    \item \textbf{T Flip-Flop Excitation Rule:} $T = Q_n \oplus Q_{n+1}$ (i.e., $T=1$ if the state changes, $T=0$ if it remains the same).
-\end{itemize}
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{} ccc | c || c @{}}
-\toprule
-\multicolumn{3}{c|}{\textbf{JK Flip-Flop Inputs \& State}} & \textbf{Next State} & \textbf{Required T Input} \\
-$J$ & $K$ & $Q_n$ (Current) & $Q_{n+1}$ (Target) & $T$ ($Q_n \oplus Q_{n+1}$) \\
-\midrule
-0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 1 & 0 \\
-0 & 1 & 0 & 0 & 0 \\
-0 & 1 & 1 & 0 & 1 \\
-1 & 0 & 0 & 1 & 1 \\
-1 & 0 & 1 & 1 & 0 \\
-1 & 1 & 0 & 1 & 1 \\
-1 & 1 & 1 & 0 & 1 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\subsubsection*{2. Boolean Mathematical Derivation}
-From the conversion table, we can write the standard Sum-of-Products (SOP) expression for $T(J, K, Q_n)$ by identifying the rows where $T = 1$:
-\begin{align*}
-    T &= \Sigma m(3, 4, 6, 7) \\
-    T &= \overline{J}K Q_n + J\overline{K}\overline{Q_n} + JK\overline{Q_n} + JKQ_n \quad &&\text{(Standard SOP form)}
-\end{align*}
-
-Now, we perform step-by-step Boolean simplification:
-\begin{align*}
-    T &= J\overline{K}\overline{Q_n} + JK\overline{Q_n} + \overline{J}KQ_n + JKQ_n \quad &&\text{(Commutative Law - Grouping terms)} \\
-    T &= J\overline{Q_n}(\overline{K} + K) + KQ_n(\overline{J} + J) \quad &&\text{(Distributive Law)} \\
-    T &= J\overline{Q_n}(1) + KQ_n(1) \quad &&\text{(Complementarity Law: } A + \overline{A} = 1 \text{)} \\
-    \textcolor{cE}{\mathbf{T}} &\textcolor{cE}{\mathbf{= J\overline{Q_n} + KQ_n}} \quad &&\text{(Identity Law)}
-\end{align*}
-
-\textit{Alternative Verification via Characteristic Equations:}
-\begin{align*}
-    Q_{n+1} (\text{T FF}) &= T \oplus Q_n \\
-    Q_{n+1} (\text{JK FF}) &= J\overline{Q_n} + \overline{K}Q_n \\
-    \text{Equating the two: } T \oplus Q_n &= J\overline{Q_n} + \overline{K}Q_n \\
-    \text{XORing both sides by } Q_n: T &= (J\overline{Q_n} + \overline{K}Q_n) \oplus Q_n \\
-    T &= (J\overline{Q_n} + \overline{K}Q_n)\overline{Q_n} + \overline{(J\overline{Q_n} + \overline{K}Q_n)}Q_n \quad &&\text{(XOR Expansion)} \\
-    T &= J\overline{Q_n} + (\overline{J} + Q_n)(K + \overline{Q_n})Q_n \quad &&\text{(De Morgan's \& ANDing)} \\
-    T &= J\overline{Q_n} + (\overline{J}K + \overline{J}\overline{Q_n} + KQ_n + 0)Q_n \quad &&\text{(Distributive Law)} \\
-    T &= J\overline{Q_n} + \overline{J}KQ_n + 0 + KQ_n \quad &&\text{(Idempotent \& Annulment)} \\
-    T &= J\overline{Q_n} + KQ_n(\overline{J} + 1) = J\overline{Q_n} + KQ_n \quad &&\text{(Absorption Law)}
-\end{align*}
-Both approaches yield the exact same required combinational logic for $T$.
-
-\vspace{1em}
-\subsubsection*{3. Logic Circuit Realization}
-Based on the derived equation \textcolor{cE}{$\mathbf{T = J\overline{Q_n} + KQ_n}$}, the circuit requires:
-\begin{itemize}
-    \item One T Flip-Flop.
-    \item Two 2-input AND gates (to compute $J \cdot \overline{Q_n}$ and $K \cdot Q_n$).
-    \item One 2-input OR gate (to sum the products).
-\end{itemize}
-
-\begin{center}
-\begin{tikzpicture}[scale=1.1, transform shape]
-    % T flip flop block
-    \draw[thick, fill=cE!5, draw=cE] (5,-1.5) rectangle (7,1.5);
-    \node[font=\bfseries, text=cE] at (6, 1) {T FF};
-    
-    % Pins inside T FF
-    \node[right, font=\bfseries] at (5, 0) {T};
-    \node[right, font=\bfseries] at (5, -1) {CLK};
-    \node[left, font=\bfseries] at (7, 0.5) {Q};
-    \node[left, font=\bfseries] at (7, -0.5) {$\overline{\text{Q}}$};
-    
-    % Clock Edge Symbol
-    \draw[thick] (5,-0.8) -- (5.2,-1) -- (5,-1.2);
-    
-    % Logic gates
-    \node[and port] (and1) at (1, 1.5) {};
-    \node[and port] (and2) at (1, -1.5) {};
-    \node[or port] (or1) at (3.5, 0) {};
-    
-    % Input Labels (J, K)
-    \draw (and1.in 1) -- ++(-0.5,0) node[left] {\textbf{J}};
-    \draw (and2.in 2) -- ++(-0.5,0) node[left] {\textbf{K}};
-    
-    % Connections from ANDs to OR
-    \draw (and1.out) -| (or1.in 1);
-    \draw (and2.out) -| (or1.in 2);
-    \draw (or1.out) -- (5,0); % OR out to T input
-    
-    % Feedback Connection: Qbar to AND1 (J * Qbar)
-    \draw[thick] (7, -0.5) -- (8, -0.5) -- (8, 2.5) -- (-0.5, 2.5) |- (and1.in 2);
-    \fill (7.5, -0.5) circle (2pt); % Junction dot for Qbar wire
-    
-    % Feedback Connection: Q to AND2 (K * Q)
-    \draw[thick] (7, 0.5) -- (7.5, 0.5) -- (7.5, -2.5) -- (-0.5, -2.5) |- (and2.in 1);
-    \fill (7, 0.5) ++(0.5,0) circle (2pt); % Junction dot for Q wire
-    
-    % Output wire extensions
-    \draw[thick] (7, 0.5) -- (8.5, 0.5) node[right] {\textbf{Q}};
-    \draw[thick] (7, -0.5) -- (8.5, -0.5) node[right] {$\mathbf{\overline{Q}}$};
-    
-    % Clock Connection
-    \draw (5,-1) -- ++(-5.5,0) node[left] {\textbf{CLK}};
-\end{tikzpicture}
-\end{center}
-\end{tcolorbox}
 
 \item Construct a JK flip-flop from a T flip-flop and necessary gates. Show all the steps of this construction process.
-\mk{11} \yr{CSE 205 | L-2/T-1 | 2022--23}
+\mk{11} \yr{CSE 205 | L-2/T-1 | 2023--24, 2022--23, 2016--17}
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 To construct a \textbf{JK flip-flop} (the target) using a \textbf{T flip-flop} (the available hardware) and basic logic gates, we must design a combinational circuit that generates the appropriate $T$ input based on the $J$ and $K$ inputs and the current state $Q_n$. 
@@ -21823,50 +22010,83 @@ Using the derived Boolean equation, the combinational logic requires two AND gat
 
 \vspace{1em}
 \begin{center}
-\begin{tikzpicture}[scale=1.1, transform shape]
-    % T flip flop block
-    \draw[thick, fill=cE!5, draw=cE] (5,-1.5) rectangle (7,1.5);
-    \node[font=\bfseries, text=cE] at (6, 1) {T FF};
+
+\begin{tikzpicture}[
+    >=latex,
+    thick,
+    font=\sffamily,
+    scale=1,
+    transform shape
+]
+
+    % ====================================================
+    % T FLIP-FLOP COMPONENT
+    % ====================================================
+    % Main Box
+    \draw[thick, fill=white] (4.5, -1.5) rectangle (6.5, 1.5);
+    \node[font=\bfseries] at (5.5, 1) {T FF};
     
-    % Pins inside T FF
-    \node[right, font=\bfseries] at (5, 0) {T};
-    \node[right, font=\bfseries] at (5, -1) {CLK};
-    \node[left, font=\bfseries] at (7, 0.5) {Q};
-    \node[left, font=\bfseries] at (7, -0.5) {$\overline{\text{Q}}$};
+    % Input / Output Labels inside FF
+    \node[right, font=\bfseries] at (4.5, 0.5) {T};
+    \node[right, font=\bfseries] at (4.5, -0.8) {CLK};
+    \node[left, font=\bfseries] at (6.5, 0.5) {Q};
+    \node[left, font=\bfseries] at (6.5, -0.5) {$\overline{Q}$};
     
-    % Clock Edge Symbol
-    \draw[thick] (5,-0.8) -- (5.2,-1) -- (5,-1.2);
+    % Positive Edge Clock Triangle
+    \draw[thick] (4.5, -0.6) -- (4.75, -0.8) -- (4.5, -1.0);
+
+    % ====================================================
+    % LOGIC GATES FOR J-K TO T CONVERSION (T = JQ' + KQ)
+    % ====================================================
+    % AND gates for the products
+    \node[and port, anchor=out] (and1) at (0, 2.5) {};
+    \node[and port, anchor=out] (and2) at (0, -2.5) {};
     
-    % Logic gates
-    \node[and port] (and1) at (1, 1) {};
-    \node[and port] (and2) at (1, -1) {};
-    \node[or port] (or1) at (3.5, 0) {};
+    % OR gate to combine products
+    \node[or port, anchor=out] (or1) at (2.5, 0.5) {};
     
-    % Input Labels (J, K)
-    \draw (and1.in 1) -- ++(-1,0) node[left] {\textbf{J}};
-    \draw (and2.in 2) -- ++(-1,0) node[left] {\textbf{K}};
+    % Connect ANDs to OR
+    \draw[thick] (and1.out) -- ++(0.8,0) |- (or1.in 1);
+    \draw[thick] (and2.out) -- ++(0.8,0) |- (or1.in 2);
     
-    % Connections from ANDs to OR
-    \draw (and1.out) -| (or1.in 1);
-    \draw (and2.out) -| (or1.in 2);
-    \draw (or1.out) -- (5,0); % OR out to T input
+    % Connect OR to T input
+    \draw[thick] (or1.out) -- (4.5, 0.5);
+
+    % ====================================================
+    % FLIP-FLOP OUTPUTS & FEEDBACK ROUTING
+    % ====================================================
+    % Q Output Line
+    \draw[thick] (6.5, 0.5) -- (9, 0.5) node[right, font=\bfseries] {$Q$};
     
-    % Feedback Connection: Qbar to AND1 (J * Qbar)
-    \draw[thick] (7, -0.5) -- (8, -0.5) -- (8, 2.5) -- (-1.2, 2.5) |- (and1.in 2);
-    \fill (7.5, -0.5) circle (2pt); % Junction dot for Qbar wire
+    % Q-bar Output Line
+    \draw[thick] (6.5, -0.5) -- (9, -0.5) node[right, font=\bfseries] {$\overline{Q}$};
     
-    % Feedback Connection: Q to AND2 (K * Q)
-    \draw[thick] (7, 0.5) -- (7.5, 0.5) -- (7.5, -2.5) -- (-1.2, -2.5) |- (and2.in 1);
-    \fill (7.5, 0.5) circle (2pt); % Junction dot for Q wire
+    % Feedback: Q to AND2 (K * Q)
+    % Taps from top output, routes completely above and around to avoid logic gates
+    \fill (7.5, 0.5) circle (2.5pt);
+    \draw[thick] (7.5, 0.5) -- (7.5, 4.0) -- (-2.5, 4.0) |- (and2.in 1);
     
-    % Output wire extensions
-    \draw[thick] (7, 0.5) -- (9, 0.5) node[right] {\textbf{Q}};
-    \draw[thick] (7, -0.5) -- (9, -0.5) node[right] {$\mathbf{\overline{Q}}$};
+    % Feedback: Q-bar to AND1 (J * Q')
+    % Taps from bottom output, routes completely below and around to avoid logic gates
+    \fill (7.0, -0.5) circle (2.5pt);
+    \draw[thick] (7.0, -0.5) -- (7.0, -4.0) -- (-2.0, -4.0) |- (and1.in 2);
+
+    % ====================================================
+    % EXTERNAL INPUTS (J, K, CLK)
+    % ====================================================
+    % J Input
+    \draw[thick] (and1.in 1) -- ++(-3,0) coordinate (J_in) node[left, font=\bfseries] {J};
     
-    % Clock Connection
-    \draw (5,-1) -- ++(-6,0) node[left] {\textbf{CLK}};
+    % K Input
+    \draw[thick] (and2.in 2) -- (J_in |- and2.in 2) node[left, font=\bfseries] {K};
+    
+    % Global Clock Input
+    \draw[thick] (4.5, -0.8) -- (J_in |- 0, -0.8) node[left, font=\bfseries] {CLK};
+
 \end{tikzpicture}
+
 \end{center}
+
 \end{tcolorbox}
 
 \item Design a D flip-flop using a T flip-flop and gates.
@@ -21959,113 +22179,7 @@ Based on the derived equation \textcolor{cE}{$\mathbf{T = D \oplus Q_n}$}, the c
 \end{center}
 \end{tcolorbox}
 
-\item Design a JK Flip-Flop using a T Flip-Flop and basic gates.
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
-To design a \textbf{JK flip-flop} (the target device) using a \textbf{T flip-flop} (the available device) and basic logic gates, we must design a combinational logic circuit that determines the required $T$ input based on the external $J$ and $K$ inputs as well as the current state $Q_n$.
-
-\subsubsection*{1. Excitation and Conversion Table}
-First, we determine the required state transitions for a JK flip-flop and map them to the corresponding excitation requirements of a T flip-flop.
-\begin{itemize}
-    \item \textbf{JK Flip-Flop Target Behavior:} $Q_{n+1} = J\overline{Q_n} + \overline{K}Q_n$
-    \item \textbf{T Flip-Flop Excitation Rule:} To change state, $T=1$. To hold state, $T=0$. Mathematically, $T = Q_n \oplus Q_{n+1}$.
-\end{itemize}
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{} ccc | c || c @{}}
-\toprule
-\multicolumn{3}{c|}{\textbf{External Inputs \& Current State}} & \textbf{Next State} & \textbf{Required T Input} \\
-$J$ & $K$ & $Q_n$ & $Q_{n+1}$ & $T = Q_n \oplus Q_{n+1}$ \\
-\midrule
-0 & 0 & 0 & 0 & \textcolor{cE}{\textbf{0}} \\
-0 & 0 & 1 & 1 & \textcolor{cE}{\textbf{0}} \\
-0 & 1 & 0 & 0 & \textcolor{cE}{\textbf{0}} \\
-0 & 1 & 1 & 0 & \textcolor{cE}{\textbf{1}} \\
-1 & 0 & 0 & 1 & \textcolor{cE}{\textbf{1}} \\
-1 & 0 & 1 & 1 & \textcolor{cE}{\textbf{0}} \\
-1 & 1 & 0 & 1 & \textcolor{cE}{\textbf{1}} \\
-1 & 1 & 1 & 0 & \textcolor{cE}{\textbf{1}} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\subsubsection*{2. Boolean Simplification using Karnaugh Map}
-From the conversion table, the minterms for which $T = 1$ are $m(3, 4, 6, 7)$. We plot these on a 3-variable Karnaugh Map to find the minimized expression for $T(J, K, Q_n)$.
-
-\begin{center}
-\begin{karnaugh-map}[4][2][1][$KQ_n$][$J$]
-    \minterms{3,4,6,7}
-    \maxterms{0,1,2,5}
-    \implicantedge{4}{4}{6}{6} % Correct wrap-around grouping for J\bar{Q_n}
-    \implicant{3}{7}           % Vertical grouping for KQ_n
-\end{karnaugh-map}
-\end{center}
-
-\textbf{Groupings \& Derivation:}
-\begin{align*}
-    \text{Horizontal Pair (Cells 4, 6)} &\implies J\overline{Q_n} \\
-    \text{Vertical Pair (Cells 3, 7)} &\implies KQ_n \\
-    \intertext{Applying the logical OR to these prime implicants provides the final minimal equation:}
-    \textcolor{cE}{\mathbf{T}} &\textcolor{cE}{\mathbf{= J\overline{Q_n} + KQ_n}}
-\end{align*}
-
-\subsubsection*{3. Logic Circuit Realization}
-The derived Boolean equation indicates that the input to the T flip-flop must be driven by an AND-OR logic structure. Specifically, we require:
-\begin{itemize}
-    \item Two 2-input AND gates (for $J\overline{Q_n}$ and $KQ_n$).
-    \item One 2-input OR gate to sum the product terms.
-    \item Feedback connections from the outputs $Q$ and $\overline{Q}$ to the inputs of the AND gates.
-\end{itemize}
-
-\vspace{1em}
-\begin{center}
-\begin{tikzpicture}[scale=1.1, transform shape]
-    % T flip flop block
-    \draw[thick, fill=cE!5, draw=cE] (5,-1.5) rectangle (7,1.5);
-    \node[font=\bfseries, text=cE] at (6, 1) {T FF};
-    
-    % Pins inside T FF
-    \node[right, font=\bfseries] at (5, 0) {T};
-    \node[right, font=\bfseries] at (5, -1) {CLK};
-    \node[left, font=\bfseries] at (7, 0.5) {Q};
-    \node[left, font=\bfseries] at (7, -0.5) {$\overline{\text{Q}}$};
-    
-    % Clock Edge Symbol
-    \draw[thick] (5,-0.8) -- (5.2,-1) -- (5,-1.2);
-    
-    % Logic gates
-    \node[and port] (and1) at (1, 1.5) {};
-    \node[and port] (and2) at (1, -1.5) {};
-    \node[or port] (or1) at (3.5, 0) {};
-    
-    % Input Labels (J, K)
-    \draw (and1.in 1) -- ++(-0.5,0) node[left] {\textbf{J}};
-    \draw (and2.in 2) -- ++(-0.5,0) node[left] {\textbf{K}};
-    
-    % Connections from ANDs to OR
-    \draw (and1.out) -| (or1.in 1);
-    \draw (and2.out) -| (or1.in 2);
-    \draw (or1.out) -- (5,0); % OR out to T input
-    
-    % Feedback Connection: Qbar to AND1 (J * Qbar)
-    \draw[thick] (7, -0.5) -- (8, -0.5) -- (8, 2.5) -- (-0.5, 2.5) |- (and1.in 2);
-    \fill (7.5, -0.5) circle (2pt); % Junction dot for Qbar wire
-    
-    % Feedback Connection: Q to AND2 (K * Q)
-    \draw[thick] (7, 0.5) -- (7.5, 0.5) -- (7.5, -2.5) -- (-0.5, -2.5) |- (and2.in 1);
-    \fill (7, 0.5) ++(0.5,0) circle (2pt); % Junction dot for Q wire
-    
-    % Output wire extensions
-    \draw[thick] (7, 0.5) -- (8.5, 0.5) node[right] {\textbf{Q}};
-    \draw[thick] (7, -0.5) -- (8.5, -0.5) node[right] {$\mathbf{\overline{Q}}$};
-    
-    % Clock Connection
-    \draw (5,-1) -- ++(-5.5,0) node[left] {\textbf{CLK}};
-\end{tikzpicture}
-\end{center}
-\end{tcolorbox}
 
 \item Design a SR Flip-Flop using a D Flip-Flop and a $4\times1$ MUX.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
@@ -22296,7 +22410,7 @@ To build this, we feed the output of the combinational logic $J\overline{Q_n} + 
 
     % CLK
     \draw[thick] (6, -1.0) -- (6.3, -1.2) -- (6, -1.4);
-    \draw[thick] (0, -1.2) node[left, font=\bfseries] {CLK} -- (6, -1.2);
+    \draw[thick] (0, 0) node[left, font=\bfseries] {CLK} |- (6, -1.2);
     
     % Gates
     \node[and port] (and1) at (3, 2.0) {};
@@ -22394,7 +22508,7 @@ We implement the Boolean equation $T = J\overline{Q_n} + KQ_n$ using standard lo
 
     % CLK
     \draw[thick] (6, -1.0) -- (6.3, -1.2) -- (6, -1.4);
-    \draw[thick] (0, -1.2) node[left, font=\bfseries] {CLK} -- (6, -1.2);
+    \draw[thick] (1.5, -1.2) node[left, font=\bfseries] {CLK} -- (6, -1.2);
     
     % Gates
     \node[and port] (and1) at (3, 2.0) {};
@@ -22409,7 +22523,7 @@ We implement the Boolean equation $T = J\overline{Q_n} + KQ_n$ using standard lo
     \draw[thick] (and2.out) |- (or1.in 2);
     
     % J to AND1 (in 1)
-    \draw[thick] (and1.in 1) -- ++(-2.5,0) node[left, font=\bfseries] {$J$};
+    \draw[thick] (and1.in 1) -- ++(-2,0) node[left, font=\bfseries] {$J$};
     
     % K to AND2 (in 2)
     \draw[thick] (and2.in 2) -- ++(-2.5,0) node[left, font=\bfseries] {$K$};
@@ -24436,7 +24550,7 @@ To maintain a clean and perfectly readable schematic, we utilize modular connect
     \draw (Q0) -- ++(0.5,0) node[right, font=\scriptsize] {$Q_0$};
     
     % Clock Network
-    \node[left, font=\bfseries] (CLK) at (4.5, -2) {Clock};
+    \node[left, font=\bfseries] (CLK) at (4.8, -2) {Clock};
     \draw (CLK) |- (C1);
     \draw (CLK) |- (C0);
 
@@ -32226,7 +32340,7 @@ The schematic below illustrates the complete 7-bit Mod-100 ripple down counter. 
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.85, transform shape]
+\begin{circuitikz}[scale=0.85, x=1.3cm, transform shape]
     
     % Draw 7 Flip-Flops
     \foreach \i in {0,1,2,3,4,5,6} {
@@ -32328,7 +32442,7 @@ Below is the complete schematic for the four-bit asynchronous countdown counter.
         
         % Internal Labels
         \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0,0.6)$) {T};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0.2,-0.6)$) {CLK};
+        \node[right, font=\sffamily\bfseries, scale=0.6] at ($(FF\i.west)+(0.2,-0.6)$) {CLK};
         \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0,0.6)$) {$Q_\i$};
         \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0,-0.6)$) {$\overline{Q}_\i$};
         
@@ -32579,66 +32693,97 @@ Below is the structured schematic of the BCD Ripple Down Counter incorporating t
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
-    
-    % Draw 4 D Flip-Flops
-    \foreach \i in {0,1,2,3} {
-        \node[draw, rectangle, rounded corners=2pt, minimum width=1.8cm, minimum height=3cm, thick, fill=white] (FF\i) at (\i*4, 0) {};
-        
-        % Pin Labels
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.8)$) {D};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, -0.2)$) {CLK};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.8)$) {$Q_\i$};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.8)$) {$\overline{Q}_\i$};
-        \node[above, font=\sffamily\scriptsize] at ($(FF\i.south)$) {$\overline{\text{CLR}}$};
-        
-        % Positive Edge Clock Triangle
-        \draw[thick] ($(FF\i.west)+(0,-0.4)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
-        
-        % D to Q_bar connection (Toggle configuration)
-        \draw[thick, blue] ($(FF\i.east)+(0, -0.8)$) -- ++(0.4,0) -- ++(0, -1.2) -- ++(-2.4, 0) |- ($(FF\i.west)+(0, 0.8)$);
-        
-        % Active Low CLR input pin
-        \draw[thick] ($(FF\i.south)$) -- ++(0,-0.4) coordinate (CLR\i);
-    }
-    
-    % Main Clock
-    \draw[thick] ($(FF0.west)+(-1.5,-0.2)$) node[left, font=\sffamily\bfseries] {Main Clock} -- ($(FF0.west)+(0,-0.2)$);
-    
-    % Ripple Clocks (Q to CLK)
-    \foreach \i/\j in {0/1, 1/2, 2/3} {
-        \draw[thick, cG] ($(FF\i.east)+(0, 0.8)$) -- ++(0.8,0) |- ($(FF\j.west)+(0,-0.2)$);
-        \fill[cG] ($(FF\i.east)+(0.6, 0.8)$) circle (2pt) coordinate (tap\i);
-    }
-    \fill[cG] ($(FF3.east)+(0.6, 0.8)$) circle (2pt) coordinate (tap3);
-    
-    % Q Outputs to top
-    \foreach \i in {0,1,2,3} {
-        \draw[thick, cG] (tap\i) -- ++(0, 1.5) node[above, font=\sffamily\bfseries] {$Q_\i$};
-    }
-    
-    % Truncation Logic (3-Input NAND)
-    \node[nand port, scale=0.7, number inputs=3] (NAND) at (8, -4) {};
-    
-    % Connecting Q3, Q2, Q1 to NAND
-    \draw[thick] (tap3) ++(0, 0.5) coordinate (t3) -- ++(1.5,0) |- (NAND.in 1);
-    \draw[thick] (tap2) ++(0, 0.3) coordinate (t2) -- ++(0.5,0) |- (NAND.in 2);
-    \draw[thick] (tap1) ++(0, 0.1) coordinate (t1) -- ++(-0.5,0) |- (NAND.in 3);
-    
-    \fill[cG] (t3) circle (2pt);
-    \fill[cG] (t2) circle (2pt);
-    \fill[cG] (t1) circle (2pt);
-    
-    % NAND Output to CLR1 and CLR2
-    \draw[thick] (NAND.out) -- ++(0.5,0) coordinate (nandout) -- (nandout |- CLR2) -- (CLR2);
-    \draw[thick] (nandout |- CLR2) -- (nandout |- CLR1) -- (CLR1);
-    \fill (nandout |- CLR2) circle (2pt);
-    
-    % Tie CLR0 and CLR3 to Logic 1
-    \draw[thick, red] (CLR0) -- ++(0,-0.5) node[below, font=\sffamily\bfseries] {Logic 1 (HIGH)};
-    \draw[thick, red] (CLR3) -- ++(0,-0.5) node[below, font=\sffamily\bfseries] {Logic 1 (HIGH)};
 
-\end{circuitikz}
+\begin{tikzpicture}[
+    >=latex,
+    thick,
+    font=\sffamily,
+    scale=1,
+    transform shape
+]
+
+% ==================== VCC RAIL ====================
+\draw (-1.5, -1.5) -- (16.5, -1.5) node[right, font=\bfseries] {Logic 1 (+5V)};
+
+% ==================== FLIP-FLOP GENERATION ====================
+% Loop to draw the 4 D Flip-Flops
+\foreach \i/\x in {0/0, 1/4.5, 2/9, 3/13.5} {
+    
+    % FF Main Box
+    \draw [thick, fill=white, rounded corners=2pt] (\x, 0) rectangle (\x+2, 3);
+    
+    % FF Identifier Label
+    \node [font=\bfseries] at (\x+1, 1.5) {FF\i};
+    
+    % Inner Pin Labels
+    \node [right, font=\bfseries, scale=0.8] at (\x, 2.2) {D};
+    \node [left, font=\bfseries, scale=0.8] at (\x+2, 2.2) {$Q_\i$};
+    \node [left, font=\bfseries, scale=0.8] at (\x+2, 0.8) {$\overline{Q}_\i$};
+    
+    % Positive Edge Clock Triangle
+    \draw [thick] (\x, 1.0) -- (\x+0.3, 0.8) -- (\x, 0.6);
+    
+    % Active-Low CLR Pin and Bubble
+    \draw [thick] (\x+1, -0.15) circle (0.15);
+    \node [above, font=\bfseries, scale=0.7] at (\x+1, 0) {CLR};
+    
+    % D-FF Feedback Wire (Q-bar to D) to act as Toggle
+    \draw [thick] (\x+2, 0.8) -- (\x+2.4, 0.8) -- (\x+2.4, -0.8) -- (\x-0.4, -0.8) -- (\x-0.4, 2.2) -- (\x, 2.2);
+}
+
+% ==================== CLOCK ROUTING ====================
+% External Clock to FF0
+\draw [thick] (-1.5, 0.8) -- (0, 0.8) node[pos=0, left, font=\bfseries] {CLK};
+
+% Inter-stage Clock Routing (Q of previous stage to CLK of next stage for DOWN count)
+\foreach \i/\x in {0/0, 1/4.5, 2/9} {
+    \draw [thick] (\x+2, 2.2) -- (\x+3.1, 2.2) -- (\x+3.1, 0.8) -- (\x+4.5, 0.8);
+    \fill (\x+3.1, 2.2) circle (2pt);
+    
+    % Vertical Output Line for Q_i
+    \draw [thick] (\x+3.1, 2.2) -- (\x+3.1, 4.5) node[above, font=\bfseries] {$Q_\i$};
+}
+
+% Vertical Output Line for Q_3 (No next stage)
+\draw [thick] (13.5+2, 2.2) -- (13.5+3.1, 2.2) -- (13.5+3.1, 4.5) node[above, font=\bfseries] {$Q_3$};
+
+
+% ==================== MODULO-10 (BCD) RESET LOGIC ====================
+% In a down counter, state rolls over from 0000 to 1111 (15). 
+% We need it to roll over to 1001 (9). 
+% Detecting Q3=1 and Q2=1 clears Q2 and Q1 to force 1001.
+
+% NAND Gate to detect Q3 and Q2 (Using xscale=-1 to point left for clean routing)
+\node [nand port, xscale=-1] (nand) at (11.5, -4.2) {};
+
+% Tap Q2 (at x=12.1)
+\fill (12.1, 3.5) circle (2pt);
+\draw [thick] (12.1, 3.5) -- (13, 3.5) |- (nand.in 1);
+
+% Tap Q3 (at x=16.6)
+\fill (16.6, 3.5) circle (2pt);
+\draw [thick] (16.6, 3.5) -- (17.5, 3.5) -- (17.5, -4.48) -- (nand.in 2);
+
+% Active-Low CLR Bus (Horizontal)
+\draw [thick] (nand.out) -- (10.5, -4.2) -- (10.5, -2.5) -- (5.5, -2.5);
+\fill (5.5, -2.5) circle (2pt);
+\fill (10.0, -2.5) circle (2pt);
+
+% Connecting CLR of FF1 and FF2 to the NAND Output Bus
+\draw [thick] (5.5, -0.3) -- (5.5, -2.5);
+\draw [thick] (10.0, -0.3) -- (10.0, -2.5);
+
+% Connecting CLR of FF0 and FF3 to Logic 1 (VCC)
+\draw [thick] (1.0, -0.3) -- (1.0, -1.5);
+\fill (1.0, -1.5) circle (2pt);
+
+\draw [thick] (14.5, -0.3) -- (14.5, -1.5);
+\fill (14.5, -1.5) circle (2pt);
+
+\end{tikzpicture}
+
+
+
 \end{center}
 \vspace{0.3cm}
 
@@ -32708,69 +32853,90 @@ Below is the schematic for the Mod-12 counter. The asynchronous clear bus spans 
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
-    
-    % Draw 4 JK Flip-Flops
-    \foreach \i in {0,1,2,3} {
-        \node[draw, rectangle, rounded corners=2pt, minimum width=1.6cm, minimum height=2.8cm, thick, fill=white] (FF\i) at (\i*3.5, 0) {};
-        
-        % Pin Labels
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.8)$) {J};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, -0.8)$) {K};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0)$) {CLK};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.8)$) {$Q_\i$};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.8)$) {$\overline{Q}_\i$};
-        \node[above, font=\sffamily\scriptsize] at ($(FF\i.south)$) {$\overline{\text{CLR}}$};
-        
-        % Negative Edge Clock Triangle and Bubble
-        \draw[thick] ($(FF\i.west)+(0,-0.2)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
-        \draw[thick, fill=white] ($(FF\i.west)+(-0.1, 0)$) circle (0.1);
-        
-        % CLR input pins dropped down
-        \draw[thick] ($(FF\i.south)$) -- ++(0,-0.8) coordinate (CLR\i);
-    }
-    
-    % Common Logic 1 (HIGH) Line
-    \draw[thick, cG] (-1.5, 2.2) node[left, font=\sffamily\bfseries] {Logic 1 (HIGH)} -- (11.5, 2.2);
-    \foreach \i in {0,1,2,3} {
-        \draw[thick, cG] ($(FF\i.west)+(0, 0.8)$) -- ++(-0.4,0) coordinate (Jtap\i) -- (Jtap\i |- 0, 2.2);
-        \draw[thick, cG] ($(FF\i.west)+(0, -0.8)$) -- ++(-0.6,0) coordinate (Ktap\i) -- (Ktap\i |- 0, 2.2);
-        \fill[cG] (Jtap\i |- 0, 2.2) circle (2pt);
-        \fill[cG] (Ktap\i |- 0, 2.2) circle (2pt);
-    }
-    
-    % Main External Clock
-    \draw[thick] ($(FF0.west)+(-1.5,0)$) node[left, font=\sffamily\bfseries] {Main Clock} -- ($(FF0.west)+(-0.2,0)$);
-    
-    % Ripple Clocks (Q_i to CLK_{i+1})
-    \foreach \i/\j in {0/1, 1/2, 2/3} {
-        \draw[thick] ($(FF\i.east)+(0, 0.8)$) -- ++(0.6,0) coordinate (Qtap\i) |- ($(FF\j.west)+(-0.2,0)$);
-        \fill (Qtap\i) circle (2pt);
-    }
-    \draw[thick] ($(FF3.east)+(0, 0.8)$) -- ++(0.6,0) coordinate (Qtap3);
-    
-    % Q Outputs routed upwards
-    \foreach \i in {0,1,2,3} {
-        \draw[thick, cG] (Qtap\i) -- ++(0, 1.2) node[above, font=\sffamily\bfseries] {$Q_\i$};
-    }
-    
-    % Truncation Logic (2-Input NAND for Q3 and Q2)
-    \node[nand port, scale=0.8] (NAND) at (8.5, -3.5) {};
-    
-    % Route Q3 and Q2 to NAND inputs
-    \draw[thick] (Qtap3) ++(0, 0.6) coordinate (t3) -- ++(1,0) |- (NAND.in 1);
-    \draw[thick] (Qtap2) ++(0, 0.3) coordinate (t2) -- ++(0.7,0) |- (NAND.in 2);
-    \fill[cG] (t3) circle (2pt);
-    \fill[cG] (t2) circle (2pt);
-    
-    % Route NAND output to the Asynchronous Clear Bus
-    \draw[thick] (NAND.out) -- ++(2.8,0) |- (-0.5, -2.2); % Loops around to feed the bus
-    \foreach \i in {0,1,2,3} {
-        \draw[thick] (CLR\i) -- (CLR\i |- 0, -2.2);
-        \fill (CLR\i |- 0, -2.2) circle (2pt);
-    }
 
-\end{circuitikz}
+
+\begin{tikzpicture}[
+    >=latex,
+    thick,
+    font=\sffamily,
+    scale=1,
+    transform shape
+]
+
+% ==================== GLOBAL VCC RAIL ====================
+\draw (-1.8, 2.5) -- (10.5, 2.5) node[right, font=\bfseries] {Logic 1(HIGH)};
+
+% ==================== FLIP-FLOP GENERATION ====================
+% Loop to draw the 3 JK Flip-Flops
+\foreach \i/\xpos in {0/0, 1/4.5, 2/9} {
+    
+    % FF Main Box
+    \draw [thick,rounded corners=2pt] (\xpos-1.2, -1.2) rectangle (\xpos+1.2, 1.2);
+    
+    % FF Identifier Label
+    \node [font=\bfseries] at (\xpos, 1.6) {FF\i};
+    
+    % Inner Pin Labels
+    \node [right, font=\bfseries] at (\xpos-1.2, 0.6) {J};
+    \node [right, font=\bfseries] at (\xpos-1.2, -0.6) {K};
+    \node [left, font=\bfseries] at (\xpos+1.2, 0.6) {$Q_\i$};
+    \node [left, font=\bfseries] at (\xpos+1.2, -0.6) {$\overline{Q}_\i$};
+    
+    % Positive Edge Clock Triangle
+    \draw [thick] (\xpos-1.2, 0.2) -- (\xpos-0.9, 0) -- (\xpos-1.2, -0.2);
+    
+    % Active-Low CLR Pin and Bubble
+    \draw [thick] (\xpos, -1.35) circle (0.15);
+    \node [above right=0.05 and 0.05, font=\scriptsize, text=black!80] at (\xpos, -1.2) {CLR};
+    
+    % Dropdown wire to CLR Bus
+    \draw [thick] (\xpos, -1.5) -- (\xpos, -2.5);
+    \fill (\xpos, -2.5) circle (2pt);
+}
+
+% ==================== J & K CONNECTIONS TO VCC ====================
+\foreach \xpos in {0, 4.5, 9} {
+    \draw (\xpos-1.2, 0.6) -- (\xpos-1.8, 0.6) -- (\xpos-1.8, 2.5);
+    \draw (\xpos-1.2, -0.6) -- (\xpos-1.8, -0.6) -- (\xpos-1.8, 0.6);
+    \fill (\xpos-1.8, 0.6) circle (2pt);
+    \fill (\xpos-1.8, 2.5) circle (2pt);
+}
+
+% ==================== CLOCK ROUTING ====================
+% External Clock to FF0
+\draw (-3.2, 0) -- (-1.2, 0) node[pos=0, left, font=\bfseries] {CLK};
+
+% FF0 \bar{Q}_0 to FF1 CLK (Positive edge triggered UP counter)
+\draw (1.2, -0.6) -- (2.25, -0.6) -- (2.25, 0) -- (3.3, 0);
+
+% FF1 \bar{Q}_1 to FF2 CLK
+\draw (5.7, -0.6) -- (6.75, -0.6) -- (6.75, 0) -- (7.8, 0);
+
+
+% ==================== OUTPUT ROUTING (Q0, Q1, Q2) ====================
+\draw (1.2, 0.6) -- (2, 0.6) node[right, font=\bfseries] {$Q_0$};
+\draw (5.7, 0.6) -- (6.2, 0.6) node[right, font=\bfseries] {$Q_1$};
+\draw (10.2, 0.6) -- (11.5, 0.6) node[right, font=\bfseries] {$Q_2$};
+
+
+% ==================== MODULO-6 RESET LOGIC ====================
+% Modulo-6 requires resetting at state 6 (110) => Q2=1, Q1=1, Q0=0
+\node [nand port] (nand) at (8.2, -4.5) {};
+
+% Route Q1 to NAND Input 1
+\fill (6.2, 0.6) circle (2pt);
+\draw (6.2, 0.6) |- (nand.in 1);
+
+% Route Q2 to NAND Input 2
+\fill (10.7, 0.6) circle (2pt);
+% Route down, back left to avoid overlapping, then into NAND
+\draw (10.7, 0.6) |- (6.6, -5.3) |- (nand.in 2);
+
+% NAND Output to Universal CLR Bus
+\draw (nand.out) -| (10.0, -2.5) -- (0, -2.5);
+
+\end{tikzpicture}
+
 \end{center}
 \vspace{0.3cm}
 
@@ -32841,67 +33007,90 @@ Below is the schematic for the MOD-12 ripple up counter. Note the clock routing 
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.95, transform shape]
-    
-    % Draw 4 JK Flip-Flops
-    \foreach \i in {0,1,2,3} {
-        \node[draw, rectangle, rounded corners=2pt, minimum width=1.6cm, minimum height=2.8cm, thick, fill=white] (FF\i) at (\i*3.8, 0) {};
-        
-        % Pin Labels
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.8)$) {J};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, -0.8)$) {K};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0)$) {CLK};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.8)$) {$Q_\i$};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.8)$) {$\overline{Q}_\i$};
-        \node[above, font=\sffamily\scriptsize] at ($(FF\i.south)$) {$\overline{\text{CLR}}$};
-        
-        % Positive Edge Clock Triangle (No Bubble)
-        \draw[thick] ($(FF\i.west)+(0,-0.2)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
-        
-        % CLR input pins dropped down
-        \draw[thick] ($(FF\i.south)$) -- ++(0,-0.8) coordinate (CLR\i);
-    }
-    
-    % Common Logic 1 (HIGH) Line for J and K
-    \draw[thick, cG] (-1.5, 2.2) node[left, font=\sffamily\bfseries] {Logic 1 (HIGH)} -- (12.5, 2.2);
-    \foreach \i in {0,1,2,3} {
-        \draw[thick, cG] ($(FF\i.west)+(0, 0.8)$) -- ++(-0.4,0) coordinate (Jtap\i) -- (Jtap\i |- 0, 2.2);
-        \draw[thick, cG] ($(FF\i.west)+(0, -0.8)$) -- ++(-0.6,0) coordinate (Ktap\i) -- (Ktap\i |- 0, 2.2);
-        \fill[cG] (Jtap\i |- 0, 2.2) circle (2pt);
-        \fill[cG] (Ktap\i |- 0, 2.2) circle (2pt);
-    }
-    
-    % Main External Clock to FF0
-    \draw[thick] ($(FF0.west)+(-1.8,0)$) node[left, font=\sffamily\bfseries] {Main Clock} -- ($(FF0.west)+(0,0)$);
-    
-    % Ripple Clocks (Q_bar_i to CLK_{i+1})
-    \foreach \i/\j in {0/1, 1/2, 2/3} {
-        \draw[thick, blue] ($(FF\i.east)+(0, -0.8)$) -- ++(0.6,0) |- ($(FF\j.west)+(0,0)$);
-        \fill[blue] ($(FF\i.east)+(0.6, -0.8)$) circle (2pt);
-    }
-    
-    % Q Outputs routed upwards
-    \foreach \i in {0,1,2,3} {
-        \draw[thick] ($(FF\i.east)+(0, 0.8)$) -- ++(0.6,0) coordinate (Qtap\i) -- ++(0, 1.2) node[above, font=\sffamily\bfseries] {$Q_\i$};
-    }
-    
-    % Truncation Logic (2-Input NAND for Q3 and Q2)
-    \node[nand port, scale=0.8] (NAND) at (9.5, -3.5) {};
-    
-    % Route Q3 and Q2 to NAND inputs
-    \draw[thick] (Qtap3) ++(0, 0.6) coordinate (t3) -- ++(1,0) |- (NAND.in 1);
-    \draw[thick] (Qtap2) ++(0, 0.3) coordinate (t2) -- ++(1,0) |- (NAND.in 2);
-    \fill (Qtap3) circle (2pt);
-    \fill (Qtap2) circle (2pt);
-    
-    % Route NAND output to the Asynchronous Clear Bus
-    \draw[thick, red] (NAND.out) -- ++(0.5,0) |- (-0.5, -2.2) node[above right, font=\sffamily\scriptsize] {Active-Low Reset Bus};
-    \foreach \i in {0,1,2,3} {
-        \draw[thick, red] (CLR\i) -- (CLR\i |- 0, -2.2);
-        \fill[red] (CLR\i |- 0, -2.2) circle (2pt);
-    }
 
-\end{circuitikz}
+
+\begin{tikzpicture}[
+    >=latex,
+    thick,
+    font=\sffamily,
+    scale=1,
+    transform shape
+]
+
+% ==================== GLOBAL VCC RAIL ====================
+\draw (-1.8, 2.5) -- (10.5, 2.5) node[right, font=\bfseries] {Logic 1(HIGH)};
+
+% ==================== FLIP-FLOP GENERATION ====================
+% Loop to draw the 3 JK Flip-Flops
+\foreach \i/\xpos in {0/0, 1/4.5, 2/9} {
+    
+    % FF Main Box
+    \draw [thick,rounded corners=2pt] (\xpos-1.2, -1.2) rectangle (\xpos+1.2, 1.2);
+    
+    % FF Identifier Label
+    \node [font=\bfseries] at (\xpos, 1.6) {FF\i};
+    
+    % Inner Pin Labels
+    \node [right, font=\bfseries] at (\xpos-1.2, 0.6) {J};
+    \node [right, font=\bfseries] at (\xpos-1.2, -0.6) {K};
+    \node [left, font=\bfseries] at (\xpos+1.2, 0.6) {$Q_\i$};
+    \node [left, font=\bfseries] at (\xpos+1.2, -0.6) {$\overline{Q}_\i$};
+    
+    % Positive Edge Clock Triangle
+    \draw [thick] (\xpos-1.2, 0.2) -- (\xpos-0.9, 0) -- (\xpos-1.2, -0.2);
+    
+    % Active-Low CLR Pin and Bubble
+    \draw [thick] (\xpos, -1.35) circle (0.15);
+    \node [above right=0.05 and 0.05, font=\scriptsize, text=black!80] at (\xpos, -1.2) {CLR};
+    
+    % Dropdown wire to CLR Bus
+    \draw [thick] (\xpos, -1.5) -- (\xpos, -2.5);
+    \fill (\xpos, -2.5) circle (2pt);
+}
+
+% ==================== J & K CONNECTIONS TO VCC ====================
+\foreach \xpos in {0, 4.5, 9} {
+    \draw (\xpos-1.2, 0.6) -- (\xpos-1.8, 0.6) -- (\xpos-1.8, 2.5);
+    \draw (\xpos-1.2, -0.6) -- (\xpos-1.8, -0.6) -- (\xpos-1.8, 0.6);
+    \fill (\xpos-1.8, 0.6) circle (2pt);
+    \fill (\xpos-1.8, 2.5) circle (2pt);
+}
+
+% ==================== CLOCK ROUTING ====================
+% External Clock to FF0
+\draw (-3.2, 0) -- (-1.2, 0) node[pos=0, left, font=\bfseries] {CLK};
+
+% FF0 \bar{Q}_0 to FF1 CLK (Positive edge triggered UP counter)
+\draw (1.2, -0.6) -- (2.25, -0.6) -- (2.25, 0) -- (3.3, 0);
+
+% FF1 \bar{Q}_1 to FF2 CLK
+\draw (5.7, -0.6) -- (6.75, -0.6) -- (6.75, 0) -- (7.8, 0);
+
+
+% ==================== OUTPUT ROUTING (Q0, Q1, Q2) ====================
+\draw (1.2, 0.6) -- (2, 0.6) node[right, font=\bfseries] {$Q_0$};
+\draw (5.7, 0.6) -- (6.2, 0.6) node[right, font=\bfseries] {$Q_1$};
+\draw (10.2, 0.6) -- (11.5, 0.6) node[right, font=\bfseries] {$Q_2$};
+
+
+% ==================== MODULO-6 RESET LOGIC ====================
+% Modulo-6 requires resetting at state 6 (110) => Q2=1, Q1=1, Q0=0
+\node [nand port] (nand) at (8.2, -4.5) {};
+
+% Route Q1 to NAND Input 1
+\fill (6.2, 0.6) circle (2pt);
+\draw (6.2, 0.6) |- (nand.in 1);
+
+% Route Q2 to NAND Input 2
+\fill (10.7, 0.6) circle (2pt);
+% Route down, back left to avoid overlapping, then into NAND
+\draw (10.7, 0.6) |- (6.6, -5.3) |- (nand.in 2);
+
+% NAND Output to Universal CLR Bus
+\draw (nand.out) -| (10.0, -2.5) -- (0, -2.5);
+
+\end{tikzpicture}
+
 \end{center}
 \vspace{0.3cm}
 
@@ -33080,68 +33269,90 @@ When the counter reaches $110_2$, the NAND output drops to $0$, immediately clea
 
 \vspace{0.4cm}
 \begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
+
+
+\begin{tikzpicture}[
+    >=latex,
+    thick,
+    font=\sffamily,
+    scale=1,
+    transform shape
+]
+
+% ==================== GLOBAL VCC RAIL ====================
+\draw (-1.8, 2.5) -- (10.5, 2.5) node[right, font=\bfseries] {Logic 1(HIGH)};
+
+% ==================== FLIP-FLOP GENERATION ====================
+% Loop to draw the 3 JK Flip-Flops
+\foreach \i/\xpos in {0/0, 1/4.5, 2/9} {
     
-    % Draw 3 JK Flip-Flops
-    \foreach \i in {0,1,2} {
-        \node[draw, rectangle, rounded corners=2pt, minimum width=1.6cm, minimum height=2.8cm, thick, fill=white] (FF\i) at (\i*4, 0) {};
-        
-        % Pin Labels
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.8)$) {J};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, -0.8)$) {K};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0)$) {CLK};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.8)$) {$Q_\i$};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.8)$) {$\overline{Q}_\i$};
-        \node[above, font=\sffamily\scriptsize] at ($(FF\i.south)$) {$\overline{\text{CLR}}$};
-        
-        % Positive Edge Clock Triangle (No Bubble)
-        \draw[thick] ($(FF\i.west)+(0,-0.2)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
-        
-        % CLR input pins dropped down
-        \draw[thick] ($(FF\i.south)$) -- ++(0,-0.6) coordinate (CLR\i);
-    }
+    % FF Main Box
+    \draw [thick,rounded corners=2pt] (\xpos-1.2, -1.2) rectangle (\xpos+1.2, 1.2);
     
-    % Common Logic 1 (HIGH) Line for J and K
-    \draw[thick, cG] (-1.5, 2.2) node[left, font=\sffamily\bfseries] {Logic 1 (HIGH)} -- (8.5, 2.2);
-    \foreach \i in {0,1,2} {
-        \draw[thick, cG] ($(FF\i.west)+(0, 0.8)$) -- ++(-0.4,0) coordinate (Jtap\i) -- (Jtap\i |- 0, 2.2);
-        \draw[thick, cG] ($(FF\i.west)+(0, -0.8)$) -- ++(-0.6,0) coordinate (Ktap\i) -- (Ktap\i |- 0, 2.2);
-        \fill[cG] (Jtap\i |- 0, 2.2) circle (2pt);
-        \fill[cG] (Ktap\i |- 0, 2.2) circle (2pt);
-    }
+    % FF Identifier Label
+    \node [font=\bfseries] at (\xpos, 1.6) {FF\i};
     
-    % Main External Clock to FF0
-    \draw[thick] ($(FF0.west)+(-1.8,0)$) node[left, font=\sffamily\bfseries] {Main Clock} -- ($(FF0.west)+(0,0)$);
+    % Inner Pin Labels
+    \node [right, font=\bfseries] at (\xpos-1.2, 0.6) {J};
+    \node [right, font=\bfseries] at (\xpos-1.2, -0.6) {K};
+    \node [left, font=\bfseries] at (\xpos+1.2, 0.6) {$Q_\i$};
+    \node [left, font=\bfseries] at (\xpos+1.2, -0.6) {$\overline{Q}_\i$};
     
-    % Ripple Clocks (Q_bar_i to CLK_{i+1})
-    \foreach \i/\j in {0/1, 1/2} {
-        \draw[thick, blue] ($(FF\i.east)+(0, -0.8)$) -- ++(0.6,0) |- ($(FF\j.west)+(0,0)$);
-        \fill[blue] ($(FF\i.east)+(0.6, -0.8)$) circle (2pt);
-    }
+    % Positive Edge Clock Triangle
+    \draw [thick] (\xpos-1.2, 0.2) -- (\xpos-0.9, 0) -- (\xpos-1.2, -0.2);
     
-    % Q Outputs routed upwards
-    \foreach \i in {0,1,2} {
-        \draw[thick] ($(FF\i.east)+(0, 0.8)$) -- ++(0.6,0) coordinate (Qtap\i) -- ++(0, 1.2) node[above, font=\sffamily\bfseries] {$Q_\i$};
-    }
-    \fill (Qtap1) circle (2pt);
-    \fill (Qtap2) circle (2pt);
+    % Active-Low CLR Pin and Bubble
+    \draw [thick] (\xpos, -1.35) circle (0.15);
+    \node [above right=0.05 and 0.05, font=\scriptsize, text=black!80] at (\xpos, -1.2) {CLR};
     
-    % Truncation Logic (2-Input NAND for Q2 and Q1)
-    \node[nand port, scale=0.8] (NAND) at (6.5, -3) {};
-    
-    % Route Q2 and Q1 to NAND inputs
-    \draw[thick] (Qtap2) ++(0, 0.6) coordinate (t2) -- ++(1,0) |- (NAND.in 1);
-    \draw[thick] (Qtap1) ++(0, 0.3) coordinate (t1) -- ++(1.4,0) |- (NAND.in 2);
-    \fill[cG] (t2) circle (2pt);
-    \fill[cG] (t1) circle (2pt);
-    
-    % Route NAND output to the Asynchronous Clear Bus
-    \draw[thick, red] (NAND.out) -- ++(0.5,0) |- (-0.5, -1.8) node[above right, font=\sffamily\scriptsize] {Active-Low Reset Bus};
-    \foreach \i in {0,1,2} {
-        \draw[thick, red] (CLR\i) -- (CLR\i |- 0, -1.8);
-        \fill[red] (CLR\i |- 0, -1.8) circle (2pt);
-    }
-\end{circuitikz}
+    % Dropdown wire to CLR Bus
+    \draw [thick] (\xpos, -1.5) -- (\xpos, -2.5);
+    \fill (\xpos, -2.5) circle (2pt);
+}
+
+% ==================== J & K CONNECTIONS TO VCC ====================
+\foreach \xpos in {0, 4.5, 9} {
+    \draw (\xpos-1.2, 0.6) -- (\xpos-1.8, 0.6) -- (\xpos-1.8, 2.5);
+    \draw (\xpos-1.2, -0.6) -- (\xpos-1.8, -0.6) -- (\xpos-1.8, 0.6);
+    \fill (\xpos-1.8, 0.6) circle (2pt);
+    \fill (\xpos-1.8, 2.5) circle (2pt);
+}
+
+% ==================== CLOCK ROUTING ====================
+% External Clock to FF0
+\draw (-3.2, 0) -- (-1.2, 0) node[pos=0, left, font=\bfseries] {CLK};
+
+% FF0 \bar{Q}_0 to FF1 CLK (Positive edge triggered UP counter)
+\draw (1.2, -0.6) -- (2.25, -0.6) -- (2.25, 0) -- (3.3, 0);
+
+% FF1 \bar{Q}_1 to FF2 CLK
+\draw (5.7, -0.6) -- (6.75, -0.6) -- (6.75, 0) -- (7.8, 0);
+
+
+% ==================== OUTPUT ROUTING (Q0, Q1, Q2) ====================
+\draw (1.2, 0.6) -- (2, 0.6) node[right, font=\bfseries] {$Q_0$};
+\draw (5.7, 0.6) -- (6.2, 0.6) node[right, font=\bfseries] {$Q_1$};
+\draw (10.2, 0.6) -- (11.5, 0.6) node[right, font=\bfseries] {$Q_2$};
+
+
+% ==================== MODULO-6 RESET LOGIC ====================
+% Modulo-6 requires resetting at state 6 (110) => Q2=1, Q1=1, Q0=0
+\node [nand port] (nand) at (8.2, -4.5) {};
+
+% Route Q1 to NAND Input 1
+\fill (6.2, 0.6) circle (2pt);
+\draw (6.2, 0.6) |- (nand.in 1);
+
+% Route Q2 to NAND Input 2
+\fill (10.7, 0.6) circle (2pt);
+% Route down, back left to avoid overlapping, then into NAND
+\draw (10.7, 0.6) |- (6.6, -5.3) |- (nand.in 2);
+
+% NAND Output to Universal CLR Bus
+\draw (nand.out) -| (10.0, -2.5) -- (0, -2.5);
+
+\end{tikzpicture}
+
 \end{center}
 \vspace{0.3cm}
 
@@ -34367,7 +34578,7 @@ Both invalid states safely transition back into the valid sequence. The counter 
     % ----------------------------------------------------
     % Logic for FF1: S1 = \overline{Q_1} * (Q_2 \oplus Q_0), R1 = Q1
     % ----------------------------------------------------
-    \node[xor port, scale=0.6] (X1) at ($(FF1.west) + (-2.8, 1.1)$) {};
+    \node[xor port, scale=0.6] (X1) at ($(FF1.west) + (-2.8, 1.6)$) {};
     \node[left, font=\sffamily\scriptsize] at (X1.in 1) {$Q_2$};
     \node[left, font=\sffamily\scriptsize] at (X1.in 2) {$Q_0$};
     
@@ -34536,58 +34747,77 @@ Using the derived equations, the schematic is drawn utilizing three D flip-flops
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
+\begin{circuitikz}[scale=0.9,x=1.2cm,  transform shape]
     
-    % Draw the 3 D Flip-Flops
-    \foreach \i/\x in {2/0, 1/5.5, 0/11} {
-        \node[draw, rectangle, rounded corners=2pt, minimum width=1.6cm, minimum height=3.2cm, thick, fill=white] (FF\i) at (\x, 0) {};
+    % Define custom color for 'cG' to ensure no compilation errors
+    \colorlet{cG}{green!50!black}
+    
+    % Draw 3 T Flip-Flops (Increased spacing to x=0, 7, 14 to avoid overlaps)
+    \foreach \i/\x in {2/0, 1/7, 0/14} {
+        \node[draw, rectangle, rounded corners=2pt, minimum width=1.6cm, minimum height=3cm, thick, fill=white] (FF\i) at (\x, 0) {};
         
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.8)$) {D};
+        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.5)$) {T};
         \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, -0.5)$) {CLK};
         
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.8)$) {$Q_\i$};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.8)$) {$\overline{Q}_\i$};
+        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.6)$) {$Q_\i$};
+        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.6)$) {$\overline{Q}_\i$};
         
-        % Clock Triangle
-        \draw[thick] ($(FF\i.west)+(0,-0.7)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
+        % Positive Edge Clock Triangle
+        \draw[thick] ($(FF\i.west)+(0,-0.3)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
     }
     
-    % FF Labels
+    % FFs Top Labels
     \node[above, font=\sffamily\bfseries, text=cG] at (FF2.north) {FF2 (MSB)};
     \node[above, font=\sffamily\bfseries, text=cG] at (FF1.north) {FF1};
     \node[above, font=\sffamily\bfseries, text=cG] at (FF0.north) {FF0 (LSB)};
 
     % ----------------------------------------------------
-    % Logic for FF2: D2 = \overline{Q_1}
+    % Logic for T2 = (\overline{Q_2}Q_1) + (Q_1 Q_0)
     % ----------------------------------------------------
-    \draw[thick, cG] ($(FF2.west) + (-1.5, 0.8)$) node[left, font=\sffamily\scriptsize, text=black] {$\overline{Q_1}$} -- ($(FF2.west) + (0, 0.8)$);
+    \node[or port, scale=0.8] (O2) at ($(FF2.west) + (-2, 0.5)$) {};
+    \draw[thick, cG] (O2.out) -- ($(FF2.west) + (0, 0.5)$);
+    
+    \node[and port, scale=0.7] (A2_1) at ($(O2.west) + (-0.8, 0.5)$) {};
+    \node[left, font=\sffamily\scriptsize] at (A2_1.in 1) {$\overline{Q_2}$};
+    \node[left, font=\sffamily\scriptsize] at (A2_1.in 2) {$Q_1$};
+    
+    \node[and port, scale=0.7] (A2_2) at ($(O2.west) + (-0.8, -0.5)$) {};
+    \node[left, font=\sffamily\scriptsize] at (A2_2.in 1) {$Q_1$};
+    \node[left, font=\sffamily\scriptsize] at (A2_2.in 2) {$Q_0$};
+    
+    \draw[thick] (A2_1.out) -| (O2.in 1);
+    \draw[thick] (A2_2.out) -| (O2.in 2);
 
     % ----------------------------------------------------
-    % Logic for FF1: D1 = Q_2 * Q_0
+    % Logic for T1 = (\overline{Q_2}Q_1) + Q_0
     % ----------------------------------------------------
-    \node[and port, scale=0.7] (A1) at ($(FF1.west) + (-1.5, 0.8)$) {};
-    \draw[thick, cG] (A1.out) -- ($(FF1.west) + (0, 0.8)$);
-    \node[left, font=\sffamily\scriptsize] at (A1.in 1) {$Q_2$};
-    \node[left, font=\sffamily\scriptsize] at (A1.in 2) {$Q_0$};
+    \node[or port, scale=0.8] (O1) at ($(FF1.west) + (-2, 0.5)$) {};
+    \draw[thick, cG] (O1.out) -- ($(FF1.west) + (0, 0.5)$);
+    
+    \node[and port, scale=0.7] (A1_1) at ($(O1.west) + (-1, 1)$) {};
+    \node[left, font=\sffamily\scriptsize] at (A1_1.in 1) {$\overline{Q_2}$};
+    \node[left, font=\sffamily\scriptsize] at (A1_1.in 2) {$Q_1$};
+    
+    \draw[thick] (A1_1.out) -| (O1.in 1);
+    \draw[thick] ($(O1.in 2) + (-1.5, 0)$) node[left, font=\sffamily\scriptsize] {$Q_0$} -- (O1.in 2);
 
     % ----------------------------------------------------
-    % Logic for FF0: D0 = \overline{Q_0} + (Q_2 * \overline{Q_1})
+    % Logic for T0 = (\overline{Q_2}\overline{Q_1}) + \overline{Q_0}
     % ----------------------------------------------------
-    \node[or port, scale=0.7] (O1) at ($(FF0.west) + (-1.5, 0.8)$) {};
-    \draw[thick, cG] (O1.out) -- ($(FF0.west) + (0, 0.8)$);
+    \node[or port, scale=0.8] (O0) at ($(FF0.west) + (-2, 0.5)$) {};
+    \draw[thick, cG] (O0.out) -- ($(FF0.west) + (0, 0.5)$);
     
-    \node[and port, scale=0.6] (A2) at ($(O1.in 2) + (-1.2, -0.1)$) {};
-    \draw[thick, cG] (A2.out) -| (O1.in 2);
+    \node[and port, scale=0.7] (A0_1) at ($(O0.west) + (-0.5, -2)$) {};
+    \node[left, font=\sffamily\scriptsize] at (A0_1.in 1) {$\overline{Q_2}$};
+    \node[left, font=\sffamily\scriptsize] at (A0_1.in 2) {$\overline{Q_1}$};
     
-    \node[left, font=\sffamily\scriptsize] at (O1.in 1) {$\overline{Q_0}$};
-    \node[left, font=\sffamily\scriptsize] at (A2.in 1) {$Q_2$};
-    \node[left, font=\sffamily\scriptsize] at (A2.in 2) {$\overline{Q_1}$};
+    \draw[thick] (A0_1.out) -| (O0.in 2);
+    \draw[thick] ($(O0.in 1) + (-1.5, 0)$) node[left, font=\sffamily\scriptsize] {$\overline{Q_0}$} -- (O0.in 1);
 
     % ----------------------------------------------------
     % Global Clock Routing
     % ----------------------------------------------------
-    \draw[thick, blue] (-2.5, -2.5) node[left, font=\sffamily\bfseries] {Global CLK} -- (11.5, -2.5);
-    
+    \draw[thick, blue] (-4.5, -2.5) node[left, font=\sffamily\bfseries] {Global CLK} -- (14.5, -2.5);
     \foreach \i in {2,1,0} {
         \draw[thick, blue] ($(FF\i.west)+(0,-0.5)$) -- ++(-0.6,0) coordinate (clk\i) -- (clk\i |- 0, -2.5);
         \fill[blue] (clk\i |- 0, -2.5) circle (2pt);
@@ -34595,8 +34825,8 @@ Using the derived equations, the schematic is drawn utilizing three D flip-flops
     
     % Output Arrows
     \foreach \i in {2,1,0} {
-        \draw[thick, ->] ($(FF\i.east)+(0, 0.8)$) -- ++(0.6,0) node[right, font=\sffamily\bfseries] {$Q_\i$};
-        \draw[thick, ->] ($(FF\i.east)+(0, -0.8)$) -- ++(0.6,0) node[right, font=\sffamily\bfseries] {$\overline{Q}_\i$};
+        \draw[thick, ->] ($(FF\i.east)+(0, 0.6)$) -- ++(1.2,0) node[right, font=\sffamily\bfseries] {$Q_\i$};
+        \draw[thick, ->] ($(FF\i.east)+(0, -0.6)$) -- ++(1.2,0) node[right, font=\sffamily\bfseries] {$\overline{Q}_\i$};
     }
 
 \end{circuitikz}
@@ -34900,87 +35130,113 @@ Notice that the product term $\mathbf{\overline{Q_2}Q_1}$ is shared between $T_2
 To maintain a pristine, cross-talk-free schematic, local input tags are used to route signals into the logic gates feeding the T inputs.
 
 \vspace{0.5cm}
-\begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
-    
-    % Draw 3 T Flip-Flops
-    \foreach \i/\x in {2/0, 1/5, 0/10} {
-        \node[draw, rectangle, rounded corners=2pt, minimum width=1.6cm, minimum height=3cm, thick, fill=white] (FF\i) at (\x, 0) {};
+
+\begin{tikzpicture}[
+    >=latex,
+    thick,
+    font=\sffamily,
+    scale=1,
+    transform shape
+]
+    % Set IEEE logic gates
+    \ctikzset{logic ports=ieee}
+
+    % ====================================================
+    % DRAW FLIP-FLOPS
+    % ====================================================
+    % FF2 at x=0, FF1 at x=7, FF0 at x=14
+    \foreach \i/\x/\label in {2/0/MSB, 1/7/, 0/14/LSB} {
         
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.5)$) {T};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, -0.5)$) {CLK};
+        % Main rectangular body
+        \node[draw, rectangle, rounded corners=2pt, minimum width=1.8cm, minimum height=3.5cm, fill=white] (FF\i) at (\x, 0) {};
         
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.6)$) {$Q_\i$};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.6)$) {$\overline{Q}_\i$};
+        % Top Label
+        \node[above, font=\bfseries] at (FF\i.north) {FF\i \ifx\label\empty\else\space(\label)\fi};
+        
+        % Inner Pin Labels
+        \node[right, font=\bfseries] at ($(FF\i.west)+(0, 0.8)$) {T};
+        \node[right, font=\bfseries] at ($(FF\i.west)+(0, -0.8)$) {CLK};
+        
+        \node[left, font=\bfseries] at ($(FF\i.east)+(0, 0.8)$) {$Q_\i$};
+        \node[left, font=\bfseries] at ($(FF\i.east)+(0, -0.8)$) {$\overline{Q}_\i$};
         
         % Positive Edge Clock Triangle
-        \draw[thick] ($(FF\i.west)+(0,-0.3)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
+        \draw[thick] ($(FF\i.west)+(0,-0.6)$) -- ++(0.25,-0.2) -- ++(-0.25,-0.2);
+        
+        % Output Arrows
+        \draw[thick, ->] ($(FF\i.east)+(0, 0.8)$) -- ++(1,0) node[right, font=\bfseries] {$Q_\i$};
+        \draw[thick, ->] ($(FF\i.east)+(0, -0.8)$) -- ++(1,0) node[right, font=\bfseries] {$\overline{Q}_\i$};
     }
-    
-    % FFs Top Labels
-    \node[above, font=\sffamily\bfseries, text=cG] at (FF2.north) {FF2 (MSB)};
-    \node[above, font=\sffamily\bfseries, text=cG] at (FF1.north) {FF1};
-    \node[above, font=\sffamily\bfseries, text=cG] at (FF0.north) {FF0 (LSB)};
 
-    % ----------------------------------------------------
-    % Logic for T2 = (\overline{Q_2}Q_1) + (Q_1 Q_0)
-    % ----------------------------------------------------
-    \node[or port, scale=0.8] (O2) at ($(FF2.west) + (-1.5, 0.5)$) {};
-    \draw[thick, cG] (O2.out) -- ($(FF2.west) + (0, 0.5)$);
+    % ====================================================
+    % LOGIC FOR FF2: T2 = (\overline{Q}_2 Q_1) + (Q_1 Q_0)
+    % ====================================================
+    \node[or port, anchor=out] (O2) at ($(FF2.west) + (-1.0, 0.8)$) {};
+    \draw[thick] (O2.out) -- ($(FF2.west) + (0, 0.8)$);
     
-    \node[and port, scale=0.7] (A2_1) at ($(O2.west) + (-1.5, 0.5)$) {};
-    \node[left, font=\sffamily\scriptsize] at (A2_1.in 1) {$\overline{Q_2}$};
-    \node[left, font=\sffamily\scriptsize] at (A2_1.in 2) {$Q_1$};
+    \node[and port, anchor=out] (A2_1) at ($(O2.in 1) + (-1.2, 0.6)$) {};
+    \node[and port, anchor=out] (A2_2) at ($(O2.in 2) + (-1.2, -0.6)$) {};
     
-    \node[and port, scale=0.7] (A2_2) at ($(O2.west) + (-1.5, -0.5)$) {};
-    \node[left, font=\sffamily\scriptsize] at (A2_2.in 1) {$Q_1$};
-    \node[left, font=\sffamily\scriptsize] at (A2_2.in 2) {$Q_0$};
+    % Route AND outputs to OR inputs orthogonally
+    \draw[thick] (A2_1.out) -- ++(0.6,0) |- (O2.in 1);
+    \draw[thick] (A2_2.out) -- ++(0.6,0) |- (O2.in 2);
     
-    \draw[thick] (A2_1.out) -| (O2.in 1);
-    \draw[thick] (A2_2.out) -| (O2.in 2);
+    % Input labels for A2_1
+    \draw[thick] (A2_1.in 1) -- ++(-0.6,0) node[left, font=\scriptsize] {$\overline{Q}_2$};
+    \draw[thick] (A2_1.in 2) -- ++(-0.6,0) node[left, font=\scriptsize] {$Q_1$};
+    
+    % Input labels for A2_2
+    \draw[thick] (A2_2.in 1) -- ++(-0.6,0) node[left, font=\scriptsize] {$Q_1$};
+    \draw[thick] (A2_2.in 2) -- ++(-0.6,0) node[left, font=\scriptsize] {$Q_0$};
 
-    % ----------------------------------------------------
-    % Logic for T1 = (\overline{Q_2}Q_1) + Q_0
-    % ----------------------------------------------------
-    \node[or port, scale=0.8] (O1) at ($(FF1.west) + (-1.5, 0.5)$) {};
-    \draw[thick, cG] (O1.out) -- ($(FF1.west) + (0, 0.5)$);
+    % ====================================================
+    % LOGIC FOR FF1: T1 = (\overline{Q}_2 Q_1) + Q_0
+    % ====================================================
+    \node[or port, anchor=out] (O1) at ($(FF1.west) + (-1.0, 0.8)$) {};
+    \draw[thick] (O1.out) -- ($(FF1.west) + (0, 0.8)$);
     
-    \node[and port, scale=0.7] (A1_1) at ($(O1.west) + (-1.5, 0.5)$) {};
-    \node[left, font=\sffamily\scriptsize] at (A1_1.in 1) {$\overline{Q_2}$};
-    \node[left, font=\sffamily\scriptsize] at (A1_1.in 2) {$Q_1$};
+    \node[and port, anchor=out] (A1_1) at ($(O1.in 1) + (-1.2, 2.6)$) {};
     
-    \draw[thick] (A1_1.out) -| (O1.in 1);
-    \draw[thick] ($(O1.in 2) + (-1.5, 0)$) node[left, font=\sffamily\scriptsize] {$Q_0$} -- (O1.in 2);
+    % Route AND output to OR input 1
+    \draw[thick] (A1_1.out) -- ++(0.6,0) |- (O1.in 1);
+    
+    % Direct Q0 input to OR input 2
+    \draw[thick] (O1.in 2) -- ++(-2.88,0) node[left, font=\scriptsize] {$Q_0$};
+    
+    % Input labels for A1_1
+    \draw[thick] (A1_1.in 1) -- ++(-0.6,0) node[left, font=\scriptsize] {$\overline{Q}_2$};
+    \draw[thick] (A1_1.in 2) -- ++(-0.6,0) node[left, font=\scriptsize] {$Q_1$};
 
-    % ----------------------------------------------------
-    % Logic for T0 = (\overline{Q_2}\overline{Q_1}) + \overline{Q_0}
-    % ----------------------------------------------------
-    \node[or port, scale=0.8] (O0) at ($(FF0.west) + (-1.5, 0.5)$) {};
-    \draw[thick, cG] (O0.out) -- ($(FF0.west) + (0, 0.5)$);
+    % ====================================================
+    % LOGIC FOR FF0: T0 = (\overline{Q}_2 \overline{Q}_1) + \overline{Q}_0
+    % ====================================================
+    \node[or port, anchor=out] (O0) at ($(FF0.west) + (-1.0, 0.8)$) {};
+    \draw[thick] (O0.out) -- ($(FF0.west) + (0, 0.8)$);
     
-    \node[and port, scale=0.7] (A0_1) at ($(O0.west) + (-1.5, -0.5)$) {};
-    \node[left, font=\sffamily\scriptsize] at (A0_1.in 1) {$\overline{Q_2}$};
-    \node[left, font=\sffamily\scriptsize] at (A0_1.in 2) {$\overline{Q_1}$};
+    \node[and port, anchor=out] (A0_1) at ($(O0.in 2) + (-1, 3)$) {};
     
-    \draw[thick] (A0_1.out) -| (O0.in 2);
-    \draw[thick] ($(O0.in 1) + (-1.5, 0)$) node[left, font=\sffamily\scriptsize] {$\overline{Q_0}$} -- (O0.in 1);
+    % Route AND output to OR input 2
+    \draw[thick] (A0_1.out) -- ++(0.6,0) |- (O0.in 2);
+    
+    % Direct Q0-bar input to OR input 1
+    \draw[thick] (O0.in 1) -- ++(-2.88,0) node[left, font=\scriptsize] {$\overline{Q}_0$};
+    
+    % Input labels for A0_1
+    \draw[thick] (A0_1.in 1) -- ++(-0.6,0) node[left, font=\scriptsize] {$\overline{Q}_2$};
+    \draw[thick] (A0_1.in 2) -- ++(-0.6,0) node[left, font=\scriptsize] {$\overline{Q}_1$};
 
-    % ----------------------------------------------------
-    % Global Clock Routing
-    % ----------------------------------------------------
-    \draw[thick, blue] (-2.5, -2.5) node[left, font=\sffamily\bfseries] {Global CLK} -- (10.5, -2.5);
+    % ====================================================
+    % GLOBAL CLOCK ROUTING
+    % ====================================================
+    \draw[thick, blue] (-5, -2.5) node[left, font=\bfseries] {Global CLK} -- (15, -2.5);
+    
     \foreach \i in {2,1,0} {
-        \draw[thick, blue] ($(FF\i.west)+(0,-0.5)$) -- ++(-0.6,0) coordinate (clk\i) -- (clk\i |- 0, -2.5);
-        \fill[blue] (clk\i |- 0, -2.5) circle (2pt);
-    }
-    
-    % Output Arrows
-    \foreach \i in {2,1,0} {
-        \draw[thick, ->] ($(FF\i.east)+(0, 0.6)$) -- ++(0.8,0) node[right, font=\sffamily\bfseries] {$Q_\i$};
+        \draw[thick, blue] ($(FF\i.west)+(0,-0.8)$) -- ++(-0.8,0) coordinate (clk\i) -- (clk\i |- 0, -2.5);
+        \fill[blue] (clk\i |- 0, -2.5) circle (2.5pt);
     }
 
-\end{circuitikz}
-\end{center}
+\end{tikzpicture}
+
 
 \end{tcolorbox}
 
@@ -35161,9 +35417,10 @@ We derive the minimized Boolean expressions for $J$ and $K$ for each flip-flop.
 \section*{4. Circuit Diagram}
 Local labels are assigned as inputs to the combinational logic logic gates to avoid crossed wires and maintain clarity.
 
+
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.95, transform shape]
+\begin{circuitikz}[scale=0.95,x=1.5cm,  transform shape]
     
     % Draw 3 JK Flip-Flops
     \foreach \i/\x in {2/0, 1/5, 0/10} {
@@ -35241,6 +35498,7 @@ Local labels are assigned as inputs to the combinational logic logic gates to av
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -35373,28 +35631,29 @@ Applying the definitions of Exclusive-OR (XOR) and Exclusive-NOR (XNOR), we can 
 \section*{4. Circuit Diagram}
 Local text nodes are used at the inputs of the combinational gates to represent connections from the flip-flop outputs, minimizing messy intersecting wires and preserving clarity.
 
+
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.95, transform shape]
+\begin{circuitikz}[scale=0.95,x=1.4cm, transform shape]
     
     % Draw 3 T Flip-Flops
     \foreach \i/\x in {2/0, 1/5, 0/10} {
         \node[draw, rectangle, rounded corners=2pt, minimum width=1.6cm, minimum height=3cm, thick, fill=white] (FF\i) at (\x, 0) {};
         
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, 0.5)$) {T};
-        \node[right, font=\sffamily\bfseries] at ($(FF\i.west)+(0, -0.5)$) {CLK};
+        \node[right] at ($(FF\i.west)+(0, 0.5)$) {T};
+        \node[right] at ($(FF\i.west)+(0, -0.5)$) {CLK};
         
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, 0.6)$) {$Q_\i$};
-        \node[left, font=\sffamily\bfseries] at ($(FF\i.east)+(0, -0.6)$) {$\overline{Q}_\i$};
+        \node[left] at ($(FF\i.east)+(0, 0.6)$) {$Q_\i$};
+        \node[left] at ($(FF\i.east)+(0, -0.6)$) {$\overline{Q}_\i$};
         
         % Positive Edge Clock Triangle
         \draw[thick] ($(FF\i.west)+(0,-0.3)$) -- ++(0.2,0.2) -- ++(-0.2,0.2);
     }
     
     % FFs Top Labels
-    \node[above, font=\sffamily\bfseries, text=cG] at (FF2.north) {FF2 (MSB)};
-    \node[above, font=\sffamily\bfseries, text=cG] at (FF1.north) {FF1};
-    \node[above, font=\sffamily\bfseries, text=cG] at (FF0.north) {FF0 (LSB)};
+    \node[above, text=cG] at (FF2.north) {FF2 (MSB)};
+    \node[above,text=cG] at (FF1.north) {FF1};
+    \node[above, text=cG] at (FF0.north) {FF0 (LSB)};
 
     % ----------------------------------------------------
     % Logic for T2 = Q2 \oplus Q1 (XOR)
@@ -35423,7 +35682,7 @@ Local text nodes are used at the inputs of the combinational gates to represent 
     % ----------------------------------------------------
     % Global Clock Routing
     % ----------------------------------------------------
-    \draw[thick, blue] (-2.5, -2.5) node[left, font=\sffamily\bfseries] {Global CLK} -- (10.5, -2.5);
+    \draw[thick, blue] (-2.5, -2.5) node[left] {Global CLK} -- (10.5, -2.5);
     \foreach \i in {2,1,0} {
         \draw[thick, blue] ($(FF\i.west)+(0,-0.5)$) -- ++(-0.6,0) coordinate (clk\i) -- (clk\i |- 0, -2.5);
         \fill[blue] (clk\i |- 0, -2.5) circle (2pt);
@@ -35431,11 +35690,12 @@ Local text nodes are used at the inputs of the combinational gates to represent 
     
     % Output Arrows
     \foreach \i in {2,1,0} {
-        \draw[thick, ->] ($(FF\i.east)+(0, 0.6)$) -- ++(0.8,0) node[right, font=\sffamily\bfseries] {$Q_\i$};
+        \draw[thick, ->] ($(FF\i.east)+(0, 0.6)$) -- ++(0.8,0) node[right] {$Q_\i$};
     }
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -35682,9 +35942,9 @@ Based on the derived excitation equations, the complete circuit diagram uses thr
 
     % Common Clock Line
     \draw[thick, color=blue] (-4, -2) -- (12, -2) node[right, text=black] {\textbf{CLK}};
-    \draw[->, thick, color=blue] (-4, -2) -| (FF2.west|-0,-0.05);
-    \draw[->, thick, color=blue] (3.5, -2) -| (FF1.west|-0,-0.05);
-    \draw[->, thick, color=blue] (9.5, -2) -| (FF0.west|-0,-0.05);
+    \draw[->, thick, color=blue] (-2, -2) |- (FF2.west|-0,-0.05);
+    \draw[->, thick, color=blue] (4, -2) |- (FF1.west|-0,-0.05);
+    \draw[->, thick, color=blue] (10, -2) |- (FF0.west|-0,-0.05);
     
     % Short lines to indicate outputs explicitly 
     \draw (FF2.east|-0,0.75) -- ++(0.5,0);
@@ -35840,8 +36100,9 @@ Using the values from the state table, we plot the K-maps for each $J$ and $K$ i
 \subsubsection*{\textcolor{cG}{3. Logic Circuit Diagram}}
 The derived Boolean equations govern the input logic for each of the three JK flip-flops. All flip-flops share a common clock (synchronous operation).
 
+
 \begin{center}
-\begin{circuitikz}[>=stealth, thick]
+\begin{circuitikz}[>=stealth, thick, x=1.3cm]
 
     % Flip-Flop 2 (MSB)
     \node[draw, minimum width=1.5cm, minimum height=2.6cm, fill=white] (FF2) at (0,0) {};
@@ -35902,9 +36163,9 @@ The derived Boolean equations govern the input logic for each of the three JK fl
 
     % Clock Routing
     \draw[thick] (-4, -2.5) node[left] {\textbf{CLK}} -- (11.5, -2.5);
-    \draw[->, thick] (-4, -2.5) -| (FF2.west|-0,-0.2);
-    \draw[->, thick] (3.0, -2.5) -| (FF1.west|-0,-0.2);
-    \draw[->, thick] (9.0, -2.5) -| (FF0.west|-0,-0.2);
+    \draw[->, thick] (-2, -2.5) |- (FF2.west|-0,-0.2);
+    \draw[->, thick] (4.0, -2.5) |- (FF1.west|-0,-0.2);
+    \draw[->, thick] (10.0, -2.5) |- (FF0.west|-0,-0.2);
     
     % Explicit Output Indicators
     \draw (FF2.east|-0,0.75) -- ++(0.5,0);
@@ -35916,6 +36177,7 @@ The derived Boolean equations govern the input logic for each of the three JK fl
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -37558,74 +37820,86 @@ Below is the complete architectural schematic of the 4-bit universal shift regis
 \vspace{4mm}
 
 \begin{center}
+
 \begin{tikzpicture}[scale=0.9, transform shape, >=latex]
 
-  % Define Styles
-  \tikzset{
-    mux/.style={draw=cG, fill=cG!8, rectangle, minimum width=2.4cm, minimum height=3.5cm, line width=1pt, align=center, font=\small\bfseries},
-    jkff/.style={draw=black, fill=gray!5, rectangle, minimum width=1.6cm, minimum height=2.4cm, line width=1pt, align=center, font=\small\bfseries}
-  }
-
-  % Loop to create the 4 stages (i = 3 down to 0)
-  \foreach \i/\posx/\inR/\inL in {3/0/SI_R/Q_2, 2/4.5/Q_3/Q_1, 1/9/Q_2/Q_0, 0/13.5/Q_1/SI_L} {
-    
-    % MUX Node
-    \node[mux] (mux\i) at (\posx, 3.5) {4$\times$1\\MUX\\Stage \i};
-    
-    % MUX Inputs (0, 1, 2, 3) drawn on the top edge
-    \foreach \pin/\idx in {-0.9/0, -0.3/1, 0.3/2, 0.9/3} {
-      \draw[<-, line width=0.8pt] ($(mux\i.north) + (\pin, 0)$) -- ++(0, 0.6);
-      \node[below, font=\tiny, text=gray] at ($(mux\i.north) + (\pin, 0)$) {\idx};
+    % ==================== STYLES ====================
+    \tikzset{
+        mux/.style={draw=cG, fill=cG!8, rectangle, minimum width=2.4cm, minimum height=2.6cm, line width=1pt, align=center, font=\small\bfseries},
+        jkff/.style={draw=black, fill=gray!5, rectangle, minimum width=1.8cm, minimum height=2.4cm, line width=1pt, align=center, font=\small\bfseries}
     }
-    
-    % Labels for MUX Inputs based on Table
-    \node[above, font=\scriptsize] at ($(mux\i.north) + (-0.9, 0.6)$) {$Q_\i$};
-    \node[above, font=\scriptsize] at ($(mux\i.north) + (-0.3, 0.6)$) {$\inR$};
-    \node[above, font=\scriptsize] at ($(mux\i.north) + (0.3, 0.6)$) {$\inL$};
-    \node[above, font=\scriptsize] at ($(mux\i.north) + (0.9, 0.6)$) {$I_\i$};
 
-    % JK Flip-Flop Node
-    \node[jkff] (ff\i) at (\posx, -1) {JK-FF \i\\[0.3em]($Q_\i$)};
-    
-    % FF pin labels manually placed for clarity
-    \node[right, font=\scriptsize] at ($(ff\i.west) + (0, 0.6)$) {J};
-    \node[right, font=\scriptsize] at ($(ff\i.west) + (0, -0.6)$) {K};
-    \node[left, font=\scriptsize] at ($(ff\i.east) + (0, 0.6)$) {$Q$};
-    \node[left, font=\scriptsize] at ($(ff\i.east) + (0, -0.6)$) {$\overline{Q}$};
-    
-    % Connect MUX output to J
-    \draw[line width=1.2pt] (mux\i.south) -- ++(0, -0.6) coordinate (split\i);
-    \draw[->, line width=1.2pt] (split\i) |- ($(ff\i.west) + (0, 0.6)$);
-    
-    % Connect MUX output to Inverter, then to K
-    \node[not port, scale=0.5] (not\i) at (\posx - 1.2, -1.6) {};
-    \draw[line width=1.2pt] (split\i) -| (not\i.in);
-    \draw[->, line width=1.2pt] (not\i.out) |- ($(ff\i.west) + (0, -0.6)$);
-    \fill (split\i) circle (2pt);
-
-    % Outputs of FF
-    \draw[->, line width=1.2pt] ($(ff\i.east) + (0, 0.6)$) -- ++(0.7, 0) node[right, font=\small] {$Q_\i$};
-    \draw[->, line width=1.2pt] ($(ff\i.east) + (0, -0.6)$) -- ++(0.7, 0) node[right, font=\small] {$\overline{Q}_\i$};
-  }
-
-  % ==================== GLOBAL CONTROLS ====================
-  % Mode Selection Bus (S1, S0)
-  \node[draw=cG, fill=cG!15, rectangle, minimum width=15cm, minimum height=0.6cm, line width=1pt, font=\small\bfseries] (selbus) at (6.75, -4) {Mode Select Lines Bus: $S_1, S_0$};
+    % ==================== GLOBAL CONTROLS ====================
+    % Mode Selection Bus (S1, S0) repositioned to avoid overlap
+    \node[draw=cG, fill=cG!15, rectangle, minimum width=18cm, minimum height=0.6cm, line width=1pt, font=\small\bfseries] 
+        (selbus) at (6.75, 2.6) {Mode Select Lines Bus: $S_1, S_0$};
   
-  \foreach \i in {3, 2, 1, 0} {
-      \draw[->, line width=1pt, cG] (\i*4.5, -3.7) -- (\i*4.5, -2.2) -- (\i*4.5+1.2, -2.2) |- (mux\i.east) node[near end, above, font=\scriptsize, text=black] {$S_1, S_0$};
-  }
+    % Common Clock Line repositioned below FFs
+    \draw[line width=1.2pt, blue] (-1.5, -3) -- (15.5, -3) node[right, font=\small\bfseries] {CLK};
 
-  % Common Clock Line
-  \draw[line width=1pt, blue] (-1.5, -3) -- (14.5, -3) node[right, font=\small\bfseries] {CLK};
-  
-  \foreach \i in {3, 2, 1, 0} {
-      \draw[->, line width=1pt, blue] (\i*4.5, -3) -- (\i*4.5, -2.2); % to bottom of FF
-      % Dynamic Clock Triangle Identifiers on FF
-      \draw[line width=1pt, blue] (\i*4.5 - 0.15, -2.2) -- (\i*4.5 + 0.15, -2.2) -- (\i*4.5, -2.0) -- cycle;
-  }
+    % ==================== STAGE LOOP ====================
+    % Loop to create the 4 stages (i = 3 down to 0)
+    \foreach \i/\posx/\inR/\inL in {3/0/SI_R/Q_2, 2/4.5/Q_3/Q_1, 1/9/Q_2/Q_0, 0/13.5/Q_1/SI_L} {
+    
+        % ---------- MUX Node ----------
+        \node[mux] (mux\i) at (\posx, 4.6) {4$\times$1\\MUX\\Stage \i};
+        
+        % MUX Inputs (0, 1, 2, 3) drawn on the top edge
+        \foreach \pin/\idx in {-0.9/0, -0.3/1, 0.3/2, 0.9/3} {
+            \draw[<-, line width=1pt] ($(mux\i.north) + (\pin, 0)$) -- ++(0, 0.7);
+            \node[below, font=\tiny, text=gray] at ($(mux\i.north) + (\pin, 0)$) {\idx};
+        }
+        
+        % Labels for MUX Inputs based on Table
+        \node[above, font=\scriptsize] at ($(mux\i.north) + (-0.9, 0.7)$) {$Q_\i$};
+        \node[above, font=\scriptsize] at ($(mux\i.north) + (-0.3, 0.7)$) {$\inR$};
+        \node[above, font=\scriptsize] at ($(mux\i.north) + (0.3, 0.7)$) {$\inL$};
+        \node[above, font=\scriptsize] at ($(mux\i.north) + (0.9, 0.7)$) {$I_\i$};
+
+        % MUX Select Lines Connection
+        \draw[->, line width=1pt, cG] ($(selbus.north) - (6.75, 0) + (\posx+1.8, 0)$) |- (mux\i.east) 
+            node[near end, above, font=\scriptsize, text=black] {$S_1, S_0$};
+        \fill[cG] ($(selbus.north) - (6.75, 0) + (\posx+1.8, 0)$) circle (2pt);
+
+        % ---------- JK Flip-Flop Node ----------
+        \node[jkff] (ff\i) at (\posx, 0) {JK-FF \i\\[0.3em]($Q_\i$)};
+        
+        % FF pin labels
+        \node[right, font=\scriptsize] at ($(ff\i.west) + (0, 0.6)$) {J};
+        \node[right, font=\scriptsize] at ($(ff\i.west) + (0, -0.6)$) {K};
+        \node[left, font=\scriptsize] at ($(ff\i.east) + (0, 0.6)$) {$Q$};
+        \node[left, font=\scriptsize] at ($(ff\i.east) + (0, -0.6)$) {$\overline{Q}$};
+        
+        % FF Clock Connection
+        \draw[->, line width=1.2pt, blue] (\posx, -3) -- (\posx, -1.2);
+        \fill[blue] (\posx, -3) circle (2pt);
+        % Clock Triangle
+        \draw[line width=1pt, blue] (\posx - 0.15, -1.2) -- (\posx + 0.15, -1.2) -- (\posx, -0.9) -- cycle;
+        
+        % ---------- Routing MUX to FF (J and K) ----------
+        % Drop main line from MUX
+        \draw[line width=1.2pt] (mux\i.south) -- (\posx, 1.8) coordinate (split\i);
+        \fill (split\i) circle (2pt);
+        
+        % Inverter for K input
+        \node[not port, scale=0.55] (not\i) at (\posx - 1.6, -0.6) {};
+        
+        % Route to K (via inverter)
+        \draw[line width=1.2pt] (split\i) -| (not\i.in);
+        \draw[->, line width=1.2pt] (not\i.out) -- ($(ff\i.west) + (0, -0.6)$);
+        
+        % Route to J
+        \coordinate (j_drop) at (\posx - 0.9, 1.8);
+        \fill (j_drop) circle (2pt);
+        \draw[->, line width=1.2pt] (j_drop) -- ($(ff\i.west) + (0, 0.6)$);
+
+        % ---------- FF Outputs ----------
+        \draw[->, line width=1.2pt] ($(ff\i.east) + (0, 0.6)$) -- ++(0.6, 0) node[right, font=\small] {$Q_\i$};
+        \draw[->, line width=1.2pt] ($(ff\i.east) + (0, -0.6)$) -- ++(0.6, 0) node[right, font=\small] {$\overline{Q}_\i$};
+    }
 
 \end{tikzpicture}
+
 \end{center}
 
 \end{tcolorbox}

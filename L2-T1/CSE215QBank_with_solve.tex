@@ -493,10 +493,10 @@ Data abstraction is typically implemented using the \textbf{Three-Schema Archite
     \draw[dashed, gray!80] (-6, -2) -- (7.5, -2);
 
     % Level Labels
-    \node[leveltext] at (-4, 4) {1. View (External) Level};
-    \node[leveltext] at (-4, 1.5) {2. Logical (Conceptual) Level};
-    \node[leveltext] at (-4, -1) {3. Physical (Internal) Level};
-    \node[leveltext] at (-4, -3.5) {Physical Storage};
+    \node[leveltext] at (-5, 4) {1. View (External) Level};
+    \node[leveltext] at (-6, 1.5) {2. Logical (Conceptual) Level};
+    \node[leveltext] at (-5, -1) {3. Physical (Internal) Level};
+    \node[leveltext] at (-5, -3.5) {Physical Storage};
 
     % View Level Nodes
     \node[box, minimum width=2.5cm] (v1) at (-0.5, 4) {View 1 \\ \normalfont\small (e.g., HR Dept)};
@@ -1873,38 +1873,44 @@ CREATE TABLE Employees OF EmployeeType (
 \subsection*{4. Visualizing Object References}
 
 \vspace{1em}
+
 \begin{center}
-\begin{tikzpicture}[
-    thick,
-    cell/.style={draw, rectangle, minimum height=0.7cm, align=center, fill=white, font=\small},
-    head/.style={draw, rectangle, minimum height=0.7cm, align=center, fill=black!10, font=\small\bfseries},
-    arrow/.style={->, >=latex, thick, rounded corners=4pt, blue!70!black}
-]
-    % Employees Table Setup
-    \node[font=\bfseries] at (-2, 2) {Employees Table (Source)};
-    \node[head, minimum width=1.5cm] (eid) at (-4.25, 1.2) {Emp\_ID};
-    \node[head, minimum width=2.5cm] (enm) at (-2.25, 1.2) {Name};
-    \node[head, minimum width=2.5cm] (ewf) at (0.25, 1.2) {Works\_For};
+    % ------ Employees Table (Source) ------
+    \begin{minipage}[t]{0.45\textwidth}
+        \centering
+        \textbf{Employees Table (Source)}\\[0.5em]
+        \renewcommand{\arraystretch}{1.3} % Adds a little vertical padding
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \rowcolor{black!10} 
+            \textbf{Emp\_ID} & \textbf{Name} & \textbf{Works\_For} \\
+            \hline
+            101 & Alice & \cellcolor{blue!5}\textit{0x9A4F...} \\
+            \hline
+        \end{tabular}
+    \end{minipage}\hfill
+    % ------ Departments Table (Target) ------
+    \begin{minipage}[t]{0.5\textwidth}
+        \centering
+        \textbf{Departments Table (Target)}\\[0.5em]
+        \renewcommand{\arraystretch}{1.3}
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \rowcolor{black!10} 
+            \textbf{OID (System)} & \textbf{Dept\_No} & \textbf{Dept\_Name} \\
+            \hline
+            \cellcolor{blue!5}\textit{0x9A4F...} & 10 & Research \\
+            \hline
+        \end{tabular}
+    \end{minipage}
+
+    \vspace{1.5em}
     
-    \node[cell, minimum width=1.5cm] (r1_id) at (-4.25, 0.5) {101};
-    \node[cell, minimum width=2.5cm] (r1_nm) at (-2.25, 0.5) {Alice};
-    \node[cell, minimum width=2.5cm, fill=blue!5] (r1_wf) at (0.25, 0.5) {\itshape 0x9A4F...}; % OID value
-
-    % Departments Table Setup
-    \node[font=\bfseries] at (4.5, 2) {Departments Table (Target)};
-    \node[head, minimum width=2.5cm] (doid) at (3.5, 1.2) {OID (System)};
-    \node[head, minimum width=1.5cm] (dno) at (5.5, 1.2) {Dept\_No};
-    \node[head, minimum width=2cm] (dnm) at (7.25, 1.2) {Dept\_Name};
-
-    \node[cell, minimum width=2.5cm, fill=blue!5] (r2_oid) at (3.5, 0.5) {\itshape 0x9A4F...};
-    \node[cell, minimum width=1.5cm] (r2_no) at (5.5, 0.5) {10};
-    \node[cell, minimum width=2cm] (r2_nm) at (7.25, 0.5) {Research};
-
-    % Reference Arrow
-    \draw[arrow] (r1_wf.south) -- +(0,-0.5) -| (r2_oid.south) node[pos=0.25, above, font=\footnotesize\bfseries, text=black] {Dereference (Pointer Traversal)};
-
-\end{tikzpicture}
+    % ------ Reference Indicator ------
+    \textbf{0x9A4F...} $\xrightarrow{\hspace{1cm} \text{Dereference (Pointer Traversal)} \hspace{1cm}}$ \textbf{0x9A4F...}
+    
 \end{center}
+
 \vspace{1em}
 
 \subsection*{5. Query Processing Using Reference Types}
@@ -2047,37 +2053,38 @@ To convert a strong and weak entity relationship into a relational database sche
 
 \vspace{1em}
 \begin{center}
-\begin{tikzpicture}[x=1cm, y=1cm, thick]
-    % Styles
-    \tikzset{
-        tablebox/.style={draw, rectangle, minimum height=0.9cm, align=center, fill=white},
-        tablename/.style={draw, rectangle, minimum height=0.9cm, align=center, fill=black!10, font=\bfseries}
-    }
+    % Increase row height for a spacious, readable look
+    \renewcommand{\arraystretch}{1.8} 
+    % Sans-serif font often looks cleaner for database schemas
+    \sffamily 
 
-    % EMPLOYEE Table
-    \node[tablename, minimum width=2.5cm] at (1.25, 2.5) {EMPLOYEE};
-    \node[tablebox, minimum width=2.5cm, font=\bfseries] (pk_emp) at (3.75, 2.5) {\underline{Emp\_ID}};
-    \node[tablebox, minimum width=2.5cm] at (6.25, 2.5) {Name};
+    % ------ EMPLOYEE Table ------
+    \begin{tabular}{|>{\columncolor{black!10}\bfseries\centering\arraybackslash}m{2.8cm}|>{\centering\arraybackslash}m{2.8cm}|>{\centering\arraybackslash}m{2.8cm}|}
+        \hline
+        EMPLOYEE & \underline{\textbf{Emp\_ID}} & Name \\
+        \hline
+    \end{tabular}
 
-    % DEPENDENT Table
-    \node[tablename, minimum width=2.5cm] at (1.25, 0.5) {DEPENDENT};
-    \node[tablebox, minimum width=2.5cm, font=\bfseries, align=center] (fk_dep) at (3.75, 0.5) {\underline{Emp\_ID} \\[-0.5ex] \normalfont\scriptsize (FK)};
-    \node[tablebox, minimum width=2.5cm, font=\bfseries] at (6.25, 0.5) {\underline{Dep\_Name}};
-    \node[tablebox, minimum width=2.5cm] at (8.75, 0.5) {Relation};
+    \vspace{1.5em}
 
-    % Foreign Key Arrow
-    \draw[->, >=latex, rounded corners=3pt] (fk_dep.north) -- (3.75, 1.5) -| (pk_emp.south);
-
-    % Note
-    \node[anchor=west, font=\footnotesize\itshape] at (0, -0.7) {* Note: The primary key of DEPENDENT is composite: (Emp\_ID, Dep\_Name).};
-
-\end{tikzpicture}
+    % ------ DEPENDENT Table ------
+    \begin{tabular}{|>{\columncolor{black!10}\bfseries\centering\arraybackslash}m{2.8cm}|>{\centering\arraybackslash}m{2.8cm}|>{\centering\arraybackslash}m{2.8cm}|>{\centering\arraybackslash}m{2.8cm}|}
+        \hline
+        DEPENDENT & \underline{\textbf{Emp\_ID}} \newline \scriptsize(FK) & \underline{\textbf{Dep\_Name}} & Relation \\
+        \hline
+    \end{tabular}
+    
 \end{center}
 
-\vspace{1em}
-\hrule
 \vspace{0.5em}
-\noindent\textbf{Exam Tip:} When mapping a weak entity, you do \textbf{not} create a separate relation (table) for the identifying relationship (e.g., the "Has" diamond). The relationship is implicitly managed by the foreign key placed inside the weak entity's table.
+
+% ------ Notes and Relationships ------
+\begin{flushleft}
+    \footnotesize\textit{* \textbf{Note:} The primary key of DEPENDENT is composite: (\textbf{Emp\_ID}, \textbf{Dep\_Name}).}\\
+    \footnotesize\textit{** \textbf{Foreign Key Mapping:} DEPENDENT.\textbf{Emp\_ID} $\rightarrow$ EMPLOYEE.\textbf{Emp\_ID}}
+\end{flushleft}
+
+\vspace{1em}
 
 \end{tcolorbox}
 
@@ -2322,6 +2329,7 @@ Consider an \texttt{EMPLOYEE} entity that tracks the employee's ID, Name, and mu
 
 To map this to a relational schema and conform to 1NF, we decompose the entity into two distinct tables: \texttt{EMPLOYEE} and \texttt{EMP\_SKILL}.
 
+
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
@@ -2341,11 +2349,12 @@ To map this to a relational schema and conform to 1NF, we decompose the entity i
     \node[header, minimum width=4cm] (t2c2) at (6, -2) {\underline{Skill} (PK)};
 
     % Foreign Key Arrow
-    \draw[->, thick, rounded corners] (t2c1.south) -- +(0,-0.5) -| (t1c1.south);
+    \draw[->, thick, rounded corners] (t2c1.south) -- ++(0,-0.5) --++(-3,0)|- (t1c1.west);
     \node[font=\footnotesize, right] at (2.2, -3.2) {Foreign Key relates back to EMPLOYEE};
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{1em}
 
 \textbf{Explanation of the Mapping:}
@@ -4330,49 +4339,63 @@ When mapping an Entity-Relationship (ER) model to a relational database schema, 
 
 \vspace{0.5em}
 \begin{center}
-\begin{tikzpicture}[
-    thick,
-    entity/.style={draw, rectangle, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
-    attribute/.style={draw, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize},
-    multi_attribute/.style={draw, double, double distance=1.5pt, ellipse, minimum width=2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
-]
-    % ER Diagram
-    \node[font=\bfseries] at (0, 2) {ER Diagram};
+    % ==========================================
+    % PART 1: ER DIAGRAM (Using TikZ)
+    % ==========================================
+    \textbf{\Large ER Diagram}\\[1.5em]
     
-    \node[entity] (emp) at (0, 0) {EMPLOYEE};
-    \node[attribute] (eid) at (-3, 0) {\underline{Emp\_ID}};
-    \node[multi_attribute] (phone) at (3, 0) {Phone};
+    \begin{tikzpicture}[
+        thick,
+        entity/.style={draw, rectangle, rounded corners,minimum width=2.8cm, minimum height=1cm, align=center, fill=black!5, font=\bfseries},
+        attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.7cm, align=center, rounded corners,fill=white, font=\footnotesize},
+        multi_attribute/.style={draw, rounded corners,double, double distance=1.5pt, ellipse, minimum width=2.2cm, minimum height=0.7cm, align=center, fill=white, font=\footnotesize}
+    ]
+        % Nodes
+        \node[entity] (emp) at (0, 0) {EMPLOYEE};
+        \node[attribute] (eid) at (-3.5, 0) {\underline{Emp\_ID}};
+        \node[multi_attribute] (phone) at (3.5, 0) {Phone};
 
-    \draw (emp) -- (eid);
-    \draw (emp) -- (phone);
+        % Edges
+        \draw (emp) -- (eid);
+        \draw (emp) -- (phone);
+    \end{tikzpicture}
 
-    % Relational Schema
-    \node[font=\bfseries] at (0, -2) {Relational Schema};
+    \vspace{3em}
+
+    % ==========================================
+    % PART 2: RELATIONAL SCHEMA (Using Tabular)
+    % ==========================================
+    \textbf{\Large Relational Schema}\\[1.5em]
     
-    \node[align=left] at (0, -3.5) {
-        \textbf{EMPLOYEE}\\
-        \renewcommand{\arraystretch}{1.5}
-        \begin{tabular}{|c|}
-        \hline
-        \cellcolor{gray!20}\textbf{\underline{Emp\_ID}} \\
-        \hline
-        \end{tabular}
-        
-        \vspace{0.5em}
-        \textbf{EMP\_PHONE}\\
-        \renewcommand{\arraystretch}{1.5}
-        \begin{tabular}{|c|c|}
-        \hline
-        \cellcolor{gray!20}\textbf{\underline{Emp\_ID}} (FK) & \cellcolor{gray!20}\textbf{\underline{Phone}} \\
-        \hline
-        \end{tabular}
-    };
-    
-    % Foreign key constraint arrow (using tikz overlays conceptually within standard coords)
-    \draw[->, rounded corners] (-1.3, -3.8) -- (-2.5, -3.8) -- (-2.5, -2.85) -- (-1, -2.85);
+    \renewcommand{\arraystretch}{1.8} % Spacious rows
 
-\end{tikzpicture}
+    % EMPLOYEE Table
+    \begin{tabular}{|>{\columncolor{black!10}\bfseries\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}|}
+        \hline
+        EMPLOYEE & \underline{\textbf{Emp\_ID}} \\
+        \hline
+    \end{tabular}
+
+    \vspace{1.5em}
+    
+    % EMP_PHONE Table (Multi-valued attribute mapped to a new table)
+    \begin{tabular}{|>{\columncolor{black!10}\bfseries\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}|}
+        \hline
+        EMP\_PHONE & \underline{\textbf{Emp\_ID}} \newline \scriptsize(FK) & \underline{\textbf{Phone}} \\
+        \hline
+    \end{tabular}
+
 \end{center}
+
+\vspace{0.5em}
+
+% ==========================================
+% PART 3: SCHEMA CONSTRAINTS & NOTES
+% ==========================================
+\begin{flushleft}
+    \footnotesize\textit{* \textbf{Composite Primary Key:} The primary key for EMP\_PHONE is (\textbf{Emp\_ID}, \textbf{Phone}).}\\
+    \footnotesize\textit{** \textbf{Foreign Key Mapping:} EMP\_PHONE.\textbf{Emp\_ID} $\rightarrow$ EMPLOYEE.\textbf{Emp\_ID}}
+\end{flushleft}
 
 ---
 
@@ -5242,8 +5265,11 @@ To establish exact operational boundaries and clear cardinality mapping within t
 
 \vspace{0.5cm}
 
+
+
 \begin{center}
 \begin{tikzpicture}[
+x=1.3cm,
     entity/.style={rectangle, draw, thick, minimum width=2.2cm, minimum height=0.8cm, align=center, rounded corners=3pt, font=\small\bfseries},
     attribute/.style={ellipse, draw, thick, align=center, minimum width=1.5cm, minimum height=0.6cm, font=\footnotesize},
     relationship/.style={diamond, draw, thick, aspect=1.5, align=center, minimum width=2cm, minimum height=0.8cm, font=\small},
@@ -5717,6 +5743,7 @@ To maximize symmetry and minimize line crossings, a hierarchical vertical layout
 
 \begin{center}
 \begin{tikzpicture}[
+x=1.3cm,
     entity/.style={draw, rectangle, thick, minimum width=2.3cm, minimum height=0.9cm, align=center, rounded corners=2pt, font=\small\bfseries},
     relationship/.style={draw, diamond, thick, aspect=1.8, minimum width=2.2cm, minimum height=0.9cm, align=center, font=\small\bfseries},
     attribute/.style={draw, ellipse, thick, minimum width=1.6cm, minimum height=0.7cm, align=center, font=\footnotesize},
@@ -5941,8 +5968,9 @@ In Entity-Relationship (E/R) modeling, a ternary (3-way) relationship connects t
 \vspace{0.5cm}
 
 \begin{center}
-\resizebox{\textwidth}{!}{%
+
 \begin{tikzpicture}[
+y=1.3cm,
     entity/.style={rectangle, draw, thick, minimum width=2.5cm, minimum height=1cm, align=center, rounded corners=3pt, font=\bfseries},
     relationship/.style={diamond, draw, thick, aspect=1.5, minimum width=2.5cm, minimum height=1.5cm, align=center},
     attribute/.style={ellipse, draw, thick, align=center, minimum width=1.5cm, minimum height=0.7cm, font=\small},
@@ -6042,9 +6070,9 @@ In Entity-Relationship (E/R) modeling, a ternary (3-way) relationship connects t
     \draw[line] (MajorsIn) -- node[right, pos=0.8] {1} (Dept);
 
     % Grad Recursive Relationship
-    \node[relationship] (Advises) at (9.5, -1.5) {Advises};
-    \draw[line] (Grad.east) -- node[below, pos=0.6] {Junior (N)} (9.5, -5) -- (Advises.south);
-    \draw[line] (Grad.north) -| node[above, pos=0.8] {Senior (1)} (Advises.north);
+    \node[relationship] (Advises) at (9.5, -0.5) {Advises};
+    \draw[line] (Grad.east) -- node[below, pos=0.6] {Junior (N)} (9.5, -5) -- (Advises.east);
+    \draw[line] (Grad.north) -| node[above, pos=0.8] {Senior (1)} (Advises.south);
 
     % Ternary Relationship (Prof, Proj, Grad)
     \node[relationship] (SupWork) at (0, -1) {Supervises\\\_Work};
@@ -6053,8 +6081,9 @@ In Entity-Relationship (E/R) modeling, a ternary (3-way) relationship connects t
     \draw[line] (Grad.north west) -- node[below left, pos=0.8] {N} (SupWork.south east);
 
 \end{tikzpicture}
-}
 \end{center}
+
+
 
 \vspace{0.5cm}
 
@@ -6141,59 +6170,75 @@ The ER diagram is mapped to the following normalized relational schemas. Primary
 
 \begin{center}
 \begin{tikzpicture}[
-    thick,
-    entity/.style={draw, rectangle, rounded corners=3pt, minimum width=2.5cm, minimum height=1cm, align=center, font=\bfseries},
-    relationship/.style={draw, diamond, aspect=1.2, minimum width=2cm, minimum height=1.5cm, align=center},
-    attribute/.style={draw, ellipse, minimum width=1.8cm, minimum height=0.8cm, align=center, font=\small},
-    isa/.style={draw, regular polygon, regular polygon sides=3, minimum size=0.8cm, inner sep=0pt, align=center, font=\small\bfseries}
+    thick,x=1.2cm, 
+    entity/.style={draw, rectangle, rounded corners=3pt, minimum width=2.8cm, minimum height=1.1cm, align=center, font=\bfseries},
+    relationship/.style={draw, diamond, aspect=1.3, minimum width=2.5cm, minimum height=1.3cm, align=center, font=\bfseries},
+    attribute/.style={draw, ellipse, minimum width=2.2cm, minimum height=0.9cm, align=center, font=\small},
+    isa/.style={draw, regular polygon, regular polygon sides=3, minimum size=0.9cm, inner sep=0pt, align=center, font=\small\bfseries}
 ]
 
-    % --- Superclass ---
+    % ==========================================
+    % 1. SUPERCLASS (EMPLOYEE) & ATTRIBUTES
+    % ==========================================
     \node[entity] (Employee) at (0, 0) {Employee};
 
-    % --- Attributes for Employee ---
-    \node[attribute] (emp_id) at (1.5, 2.5) {\underline{emp\_id}};
-    \node[attribute] (name) at (-1.5, 2.5) {name};
-    \node[attribute] (mobile) at (-3.5, 1.5) {mobile};
-    \node[attribute] (email) at (3.5, 1.5) {email};
-    \node[attribute] (address) at (4.5, 0) {address};
+    % Left-side attributes
+    \node[attribute] (emp_id) at (-4, 1.5) {\underline{emp\_id}};
+    \node[attribute] (name) at (-4, -0.2) {name};
+    
+    % Right-side attributes
+    \node[attribute] (mobile) at (4, 1.5) {mobile};
+    \node[attribute] (email) at (4, -0.2) {email};
+    \node[attribute] (address) at (0, 2) {address};
 
+    % Attribute connections
     \draw (Employee) -- (emp_id);
     \draw (Employee) -- (name);
     \draw (Employee) -- (mobile);
     \draw (Employee) -- (email);
     \draw (Employee) -- (address);
 
-    % --- Recursive Relationship ---
-    \node[relationship] (Manages) at (-5, 0) {Manages};
+    % ==========================================
+    % 2. RECURSIVE RELATIONSHIP (MANAGES)
+    % ==========================================
+    % Positioned safely on the far left to eliminate crowded edge overlaps
+    \node[relationship] (Manages) at (-5.5, -2.5) {Manages};
     
-    % Manager Role (1)
-    \draw (Employee.200) -- node[below] {1} node[above=2pt, pos=0.15, font=\scriptsize\itshape] {manager} (Manages.340);
-    % Subordinate Role (N)
-    \draw (Employee.160) -- node[above] {N} node[below=2pt, pos=0.15, font=\scriptsize\itshape] {subordinate} (Manages.20);
+    % Manager Link (1)
+    \draw (Employee.west) -- ++(-1.5,0) |- node[left, pos=0.25, font=\small] {1} 
+          node[above right, pos=0.85, font=\scriptsize\itshape] {manager} (Manages.north);
+          
+    % Subordinate Link (N)
+    \draw (Employee.195) -- ++(-1.1,0) |- node[left, pos=0.25, font=\small] {N} 
+          node[below right, pos=0.85, font=\scriptsize\itshape] {subordinate} (Manages.east);
 
-    % --- Specialization (ISA) ---
-    \node[isa] (isa) at (0, -2) {d};
+    % ==========================================
+    % 3. SPECIALIZATION (ISA)
+    % ==========================================
+    \node[isa] (isa) at (0, -2.5) {d};
     
-    % Total Specialization (Double Line)
-    \draw[double, double distance=2pt] (Employee.south) -- (isa.north);
+    % Total Specialization -> Double Line
+    \draw[double, double distance=2.5pt] (Employee.south) -- (isa.north);
 
-    % --- Subclasses ---
-    \node[entity] (Tech) at (-3.5, -4) {Technical};
-    \node[entity] (NonTech) at (3.5, -4) {Non-Technical};
+    % ==========================================
+    % 4. SUBCLASSES & THEIR ATTRIBUTES
+    % ==========================================
+    \node[entity] (Tech) at (-4, -4.5) {Technical};
+    \node[entity] (NonTech) at (4, -4.5) {Non-Technical};
 
-    % Connect Subclasses to ISA
-    \draw (isa.south) -- (0, -3) -| (Tech.north);
-    \draw (isa.south) -- (0, -3) -| (NonTech.north);
+    % Orthogonal structural connections to the ISA triangle
+    \draw (isa.south) -- (0, -3.5) -| (Tech.north);
+    \draw (isa.south) -- (0, -3.5) -| (NonTech.north);
 
-    % --- Attributes for Subclasses ---
-    \node[attribute] (trade) at (-5.5, -5.5) {trade};
-    \node[attribute] (texp) at (-1.5, -5.5) {year\_of\_exp};
+    % Technical Attributes (Balanced Below)
+    \node[attribute] (trade) at (-6, -6.2) {trade};
+    \node[attribute] (texp) at (-2, -6.2) {year\_of\_exp};
     \draw (Tech) -- (trade);
     \draw (Tech) -- (texp);
 
-    \node[attribute] (deg) at (1.5, -5.5) {highest\_degree};
-    \node[attribute] (nexp) at (5.5, -5.5) {year\_of\_exp};
+    % Non-Technical Attributes (Balanced Below)
+    \node[attribute] (deg) at (2, -6.2) {highest\_degree};
+    \node[attribute] (nexp) at (6, -6.2) {year\_of\_exp};
     \draw (NonTech) -- (deg);
     \draw (NonTech) -- (nexp);
 
@@ -6434,7 +6479,7 @@ This yields a minimum of \textbf{5 relational schemas}. Primary keys are \underl
 \section*{3. Relational Schema Diagram}
 \begin{center}
 \begin{tikzpicture}[
-    >=Stealth,
+    >=Stealth,x=1.4cm,
     table/.style={
         draw, thick, rectangle, rounded corners=3pt,
         align=center, minimum height=0.8cm, font=\small\ttfamily,
@@ -7394,11 +7439,11 @@ The publication-quality relational schema design layout below shows tables, unde
         node[pos=0.15, above, font=\tiny\itshape] {FK};
 
     \draw[->, >=stealth, dashed, line width=0.8pt] 
-        ([yshift=0.1cm]BuysTab.two west) -- ++(-0.8, 0) |- ([yshift=0.2cm]ProductTab.two west)
+        ([yshift=0.1cm]BuysTab.two west) -- ++(-3, 0) |- ([yshift=0.2cm]ProductTab.two west)
         node[pos=0.2, left, font=\tiny\itshape] {FK};
 
     \draw[->, >=stealth, dashed, line width=0.8pt] 
-        ([yshift=-0.2cm]BuysTab.two west) -- ++(-1.2, 0) -- ++(0, -1.2) -- ++(7.5, 0) |- ([yshift=0.2cm]PersonTab.two east)
+        ([yshift=-0.2cm]BuysTab.two west) -- ++(-1.2, 0) -- ++(0, -1.2) -- ++(15, 0) |- ([yshift=0.2cm]PersonTab.two east)
         node[pos=0.1, below, font=\tiny\itshape] {FK};
 
 \end{tikzpicture}
@@ -7579,34 +7624,62 @@ In physical database design, developers face a architectural choice: compute the
 Below is the conceptual mapping showing how a derived attribute (\textit{total\_cost}) is computed from stored base attributes (\textit{quantity} and \textit{unit\_price}), along with the dual operational mechanics of keeping it physically persisted in a table.
 
 \begin{center}
+
 \begin{tikzpicture}[
-    thick,
-    box/.style={rectangle, draw, minimum width=3cm, minimum height=1cm, align=center, rounded corners=3pt},
-    ellipse_node/.style={ellipse, draw, dashed, minimum width=2.2cm, minimum height=0.8cm, align=center},
-    std_ellipse/.style={ellipse, draw, minimum width=2.2cm, minimum height=0.8cm, align=center},
-    arrow/.style={->, >=stealth, line width=1pt}
+thick,
+entity/.style={rectangle, draw, minimum width=3.5cm, minimum height=1cm, align=center, rounded corners=3pt, font=\bfseries},
+attribute/.style={ellipse, draw, minimum width=2.5cm, minimum height=0.9cm, align=center, font=\small},
+derived/.style={ellipse, draw, dashed, minimum width=2.5cm, minimum height=0.9cm, align=center, font=\small},
+op_box/.style={rectangle, draw, minimum width=3.5cm, minimum height=1cm, align=center, rounded corners=3pt, font=\small},
+arrow/.style={->, >=stealth, line width=1pt}
 ]
 
-    % Structural Entity & Attributes Layout
-    \node[box] (Order) at (0,0) {\textbf{OrderLineItem}};
-    \node[std_ellipse] (Qty) at (-3,1.5) {quantity};
-    \node[std_ellipse] (Price) at (0,2) {unit\_price};
-    \node[ellipse_node] (Total) at (3,1.5) {\textbf{total\_cost}};
+% ==========================================
+% 1. ENTITY & ATTRIBUTES
+% ==========================================
+\node[entity] (Order) at (0, 1.5) {OrderLineItem};
 
-    \draw (Order) -- (Qty);
-    \draw (Order) -- (Price);
-    \draw (Order) -- (Total);
+\node[attribute] (Price) at (-4, 3) {unit\_price};
+\node[attribute] (Qty) at (-4, 0) {quantity};
+\node[derived] (Total) at (4, 1.5) {\textbf{total\_cost}};
 
-    % Operational Mechanics Flow
-    \node[box, font=\small] (Trigger) at (3,-2) {Database Trigger /\\ Materialized Log};
-    \node[box, font=\small] (Storage) at (-3,-2) {Base Table \\ Physical Storage};
+\draw (Order) -- (Price);
+\draw (Order) -- (Qty);
+\draw (Order) -- (Total);
 
-    \draw[arrow] (Qty) -- (Trigger) node[midway, left, font=\tiny] {On Insert/Update};
-    \draw[arrow] (Price) -- (Trigger);
-    \draw[arrow] (Trigger) -- (Total) node[midway, right, font=\tiny] {Persists Value};
-    \draw[arrow] (Total) |- (Storage) node[pos=0.3, below, font=\tiny] {Consumes Disk Bytes};
+% ==========================================
+% 2. OPERATIONAL MECHANICS NODES
+% ==========================================
+\node[op_box] (Trigger) at (0, -2) {Database Trigger /\\ Materialized Log};
+\node[op_box] (Storage) at (0, -5) {Base Table \\ Physical Storage};
 
-\end{tikzpicture}
+% ==========================================
+% 3. PLANAR FLOW ROUTING (No Intersections)
+% ==========================================
+
+% Flow from Quantity to Trigger
+\draw[arrow, rounded corners=5pt] (Qty.south) 
+    -- (Qty.south |- Trigger.165) 
+    -- node[above, font=\scriptsize] {On Insert/Update} (Trigger.165);
+
+% Flow from Unit Price to Trigger (Nested outside Quantity)
+\draw[arrow, rounded corners=5pt] (Price.west) 
+    -- ++(-1.2, 0) coordinate (p1) 
+    -- (p1 |- Trigger.195) 
+    -- (Trigger.195);
+
+% Flow from Trigger to Total Cost
+\draw[arrow, rounded corners=5pt] (Trigger.15) 
+    -- node[above, font=\scriptsize] {Persists Value} (Trigger.15 -| Total.south) 
+    -- (Total.south);
+
+% Flow from Total Cost to Storage (Routes safely down the right flank)
+\draw[arrow, rounded corners=5pt] (Total.east) 
+    -- ++(1.2, 0) coordinate (t1) 
+    -- node[right, font=\scriptsize] {Consumes Disk Bytes} (t1 |- Storage.east) 
+    -- (Storage.east);
+\end{tikzpicture}    
+
 \end{center}
 
 \vspace{0.3cm}
@@ -9860,9 +9933,10 @@ Answer the following queries in SQL:
 
 Before formulating the SQL queries, it is helpful to visualize the database schema and the relationships between the tables. We assume that \texttt{book\_id} in the \texttt{AuthorOfBook} table is a foreign key referencing \texttt{isbn} in the \texttt{Books} table.
 
+
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth, 
     node distance=2.5cm and 3cm,
     table/.style={draw=black!80, thick, rounded corners=3pt, fill=white, inner sep=8pt, align=left, font=\sffamily\small},
     fk_line/.style={->, thick, draw=black!70, dashed},
@@ -9880,20 +9954,20 @@ Before formulating the SQL queries, it is helpful to visualize the database sche
     copies\_sold
 };
 
-\node[table, right=4cm of books] (publisher) {
+\node[table, right=6cm of books] (publisher) {
     \textbf{Publisher}\\
     \underline{publisher\_id}\\
     name\\
     address
 };
 
-\node[table, above=2cm of books] (aob) {
+\node[table, above=3cm of books] (aob) {
     \textbf{AuthorOfBook}\\
     \underline{book\_id} \textit{(FK)}\\
     \underline{author\_id} \textit{(FK)}
 };
 
-\node[table, right=4cm of aob] (author) {
+\node[table, right=6cm of aob] (author) {
     \textbf{Author}\\
     \underline{author\_id}\\
     name\\
@@ -9902,11 +9976,12 @@ Before formulating the SQL queries, it is helpful to visualize the database sche
 
 % Foreign Key Relationships
 \draw[fk_line] (books.east) -- node[label_box] {publisher\_id = publisher\_id} (publisher.west);
-\draw[fk_line] (aob.west) -| node[label_box, near start, above] {book\_id = isbn} (books.north);
+\draw[fk_line] (aob.south) -- node[label_box, near start, above] {book\_id = isbn} (books.north);
 \draw[fk_line] (aob.east) -- node[label_box] {author\_id = author\_id} (author.west);
 
 \end{tikzpicture}
 \end{center}
+
 
 \vspace{1em}
 
@@ -10028,13 +10103,13 @@ Before writing the queries, let us visualize the relationships between the table
     CGPA
 };
 
-\node[table, right=3cm of student] (takes) {
+\node[table, right=5cm of student] (takes) {
     \textbf{takes}\\
     \underline{course\_number} \textit{(FK)}\\
     \underline{student\_id} \textit{(FK)}
 };
 
-\node[table, right=3cm of takes] (course) {
+\node[table, right=5cm of takes] (course) {
     \textbf{course}\\
     \underline{course\_number}\\
     title\\
@@ -10395,25 +10470,30 @@ Write the following SQL queries:
 The given schema models a textbook generalization/specialization hierarchy where \texttt{Product} acts as the superclass entity and \texttt{PC}, \texttt{Laptop}, and \texttt{Printer} act as subclass entities. The \texttt{model} attribute serves as the primary key across all relations and as a foreign key in the subclass relations pointing back to \texttt{Product}.
 
 \begin{center}
+    
 \begin{tikzpicture}[
-    >=stealth,
-    node distance=2.5cm and 1cm,
-    table/.style={draw=black!80, thick, rounded corners=3pt, fill=white, inner sep=8pt, align=left, font=\sffamily\small},
-    fk_line/.style={->, thick, draw=black!70, dashed},
-    label_box/.style={fill=white, inner sep=2pt, font=\scriptsize\ttfamily}
+thick,
+>=stealth,
+table/.style={draw=black!85, thick, rounded corners=4pt, fill=white, inner sep=10pt, align=left, font=\sffamily\small, minimum width=3.2cm},
+fk_line/.style={->, thick, draw=black!75, dashed, rounded corners=3pt},
+label_box/.style={fill=white, inner sep=3pt, font=\scriptsize\ttfamily}
 ]
 
-% Superclass Table
-\node[table] (product) {
-    \textbf{Product}\\
+% ==========================================
+% 1. SUPERCLASS TABLE
+% ==========================================
+\node[table] (product) at (0, 0) {
+    \textbf{Product}\\[5pt]
     \underline{model} \textit{(PK)}\\
     maker\\
     type
 };
 
-% Subclass Tables
-\node[table, below left=2.5cm and -1.5cm of product] (pc) {
-    \textbf{PC}\\
+% ==========================================
+% 2. SUBCLASS TABLES
+% ==========================================
+\node[table] (pc) at (-5.5, -5) {
+    \textbf{PC}\\[5pt]
     \underline{model} \textit{(PK, FK)}\\
     speed\\
     ram\\
@@ -10421,8 +10501,8 @@ The given schema models a textbook generalization/specialization hierarchy where
     price
 };
 
-\node[table, below=2.5cm of product] (laptop) {
-    \textbf{Laptop}\\
+\node[table] (laptop) at (0, -5) {
+    \textbf{Laptop}\\[5pt]
     \underline{model} \textit{(PK, FK)}\\
     speed\\
     ram\\
@@ -10431,22 +10511,36 @@ The given schema models a textbook generalization/specialization hierarchy where
     price
 };
 
-\node[table, below right=2.5cm and -1.5cm of product] (printer) {
-    \textbf{Printer}\\
+\node[table] (printer) at (5.5, -5) {
+    \textbf{Printer}\\[5pt]
     \underline{model} \textit{(PK, FK)}\\
     color\\
     type\\
     price
 };
 
-% Foreign Key Relationships
-\draw[fk_line] (pc.north) -- ++(0,0.8) -| node[label_box, near start, above] {model = model} (product.south);
-\draw[fk_line] (laptop.north) -- (product.south);
-\draw[fk_line] (printer.north) -- ++(0,0.8) -| (product.south);
+% ==========================================
+% 3. FOREIGN KEY RELATIONSHIPS & ROUTING
+% ==========================================
 
+% PC -> Product (Routed to the left flank of the parent)
+\draw[fk_line] (pc.north) 
+    -- ++(0, 1.8) 
+    -| ([xshift=-1.5cm]product.south) 
+    node[label_box, pos=0.25, above] {model = model};
+
+% Laptop -> Product (Directly up the center)
+\draw[fk_line] (laptop.north) 
+    -- (product.south) 
+    node[label_box, midway] {model = model};
+
+% Printer -> Product (Routed to the right flank of the parent)
+\draw[fk_line] (printer.north) 
+    -- ++(0, 1.8) 
+    -| ([xshift=1.5cm]product.south) 
+    node[label_box, pos=0.25, above] {model = model};
 \end{tikzpicture}
 \end{center}
-
 \vspace{1em}
 
 \subsection*{SQL Queries}
@@ -10870,8 +10964,8 @@ When a referenced (parent) row is updated or deleted, the database must decide w
 \begin{tikzpicture}[
     >=stealth,
     node distance=1.5cm and 2.5cm,
-    block/.style={rectangle, draw=black!80, thick, rounded corners=3pt, fill=white, minimum width=3cm, minimum height=1cm, align=center, font=\sffamily\small},
-    effect/.style={rectangle, draw=black!80, thick, dashed, rounded corners=3pt, fill=black!5, minimum width=3cm, minimum height=1cm, align=center, font=\sffamily\small},
+    block/.style={rectangle, draw=black!80, thick, rounded corners=3pt, fill=white, minimum width=3cm, minimum height=1cm, align=center, font=\small},
+    effect/.style={rectangle, draw=black!80, thick, dashed, rounded corners=3pt, fill=black!5, minimum width=3cm, minimum height=1cm, align=center, font=\small},
     arrow/.style={->, thick, draw=black!80}
 ]
 
@@ -12025,7 +12119,7 @@ To facilitate accurate SQL query construction, we first visualize the relational
         \end{tabular}
     };
 
-    \node[table] (purchase) at (0, 0) {
+    \node[table] (purchase) at (-1, 0) {
         \begin{tabular}{l l l l}
         \multicolumn{4}{c}{\cellcolor{gray!20}\textbf{Purchase}} \\
         \hline
@@ -12033,7 +12127,7 @@ To facilitate accurate SQL query construction, we first visualize the relational
         \end{tabular}
     };
 
-    \node[table] (product) at (8, 0) {
+    \node[table] (product) at (9, 0) {
         \begin{tabular}{l l l l l l}
         \multicolumn{6}{c}{\cellcolor{gray!20}\textbf{Product}} \\
         \hline
@@ -12178,7 +12272,7 @@ To compute the outputs for the given relational algebra expressions, we break do
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,y=1.5cm, 
     op/.style={circle, draw, thick, minimum size=1.2cm, align=center, fill=blue!5},
     rel/.style={rectangle, draw, thick, minimum width=1.5cm, minimum height=0.6cm, align=center, fill=gray!20, font=\small},
     level distance=1.5cm,
@@ -12320,7 +12414,7 @@ Before constructing the relational algebra queries, it is crucial to map out the
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.5cm,
     table/.style={rectangle, draw, thick, rounded corners=3pt, minimum height=0.8cm, fill=white, align=center, font=\small},
     link/.style={->, thick, rounded corners=4pt, draw=blue!80!black}
 ]
@@ -12447,7 +12541,7 @@ First, let's visualize the schema and the relationships between the relations to
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.5cm,
     table/.style={rectangle, draw, thick, rounded corners=3pt, minimum height=0.8cm, fill=white, align=center, font=\small},
     link/.style={->, thick, rounded corners=4pt, draw=blue!80!black}
 ]
@@ -12708,7 +12802,7 @@ To visualize how the DBMS query optimizer might process Query 5, the following t
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,y=1.3cm,
     op/.style={circle, draw, thick, minimum size=1.4cm, align=center, fill=gray!10, font=\normalsize},
     rel/.style={rectangle, draw, thick, rounded corners=3pt, minimum width=2cm, minimum height=0.6cm, align=center, fill=gray!20, font=\small\ttfamily},
     level distance=1.8cm,
@@ -12780,6 +12874,8 @@ WHERE c.customer_id = a.account_id
 
 To construct the correct Relational Algebra expressions, we first visualize the database schema. This highlights the primary keys (underlined) and the specific foreign key references (indicated by directed arrows) as described in the problem statement.
 
+
+
 \begin{center}
 \begin{tikzpicture}[
     >=stealth,
@@ -12788,42 +12884,52 @@ To construct the correct Relational Algebra expressions, we first visualize the 
 ]
     % Entities setup manually for optimal layout
     \node[table] (customer) at (0, 3.5) {
-        \begin{tabular}{l l l}
-        \multicolumn{3}{c}{\cellcolor{gray!20}\textbf{customer}} \\
+        \begin{tabular}{l}
+        \multicolumn{1}{c}{\cellcolor{gray!20}\textbf{customer}} \\
         \hline
-        \textbf{\underline{customer\_id}} & customer\_name & customer\_address \\
+        \textbf{\underline{customer\_id}} \\
+        customer\_name \\
+        customer\_address \\
         \end{tabular}
     };
 
     \node[table] (loan) at (8, 3.5) {
-        \begin{tabular}{l l l}
-        \multicolumn{3}{c}{\cellcolor{gray!20}\textbf{loan}} \\
+        \begin{tabular}{l}
+        \multicolumn{1}{c}{\cellcolor{gray!20}\textbf{loan}} \\
         \hline
-        \textbf{\underline{loan\_id}} & \textit{customer\_id} & loan\_amount \\
+        \textbf{\underline{loan\_id}} \\
+        \textit{customer\_id} \\
+        loan\_amount \\
         \end{tabular}
     };
 
     \node[table] (account) at (0, 0) {
-        \begin{tabular}{l l l l}
-        \multicolumn{4}{c}{\cellcolor{gray!20}\textbf{account}} \\
+        \begin{tabular}{l}
+        \multicolumn{1}{c}{\cellcolor{gray!20}\textbf{account}} \\
         \hline
-        \textbf{\underline{\textit{account\_id}}} & account\_type & \textit{account\_branch} & account\_balance \\
+        \textbf{\underline{\textit{account\_id}}} \\
+        account\_type \\
+        \textit{account\_branch} \\
+        account\_balance \\
         \end{tabular}
     };
 
     \node[table] (branch) at (8, 0) {
-        \begin{tabular}{l l}
-        \multicolumn{2}{c}{\cellcolor{gray!20}\textbf{branch}} \\
+        \begin{tabular}{l}
+        \multicolumn{1}{c}{\cellcolor{gray!20}\textbf{branch}} \\
         \hline
-        \textbf{\underline{branch\_routing\_number}} & branch\_name \\
+        \textbf{\underline{branch\_routing\_number}} \\
+        branch\_name \\
         \end{tabular}
     };
 
     \node[table] (transaction) at (0, -3.5) {
-        \begin{tabular}{l l l}
-        \multicolumn{3}{c}{\cellcolor{gray!20}\textbf{transaction}} \\
+        \begin{tabular}{l}
+        \multicolumn{1}{c}{\cellcolor{gray!20}\textbf{transaction}} \\
         \hline
-        \textbf{\underline{\textit{account\_id}}} & transaction\_amount & transaction\_date \\
+        \textbf{\underline{\textit{account\_id}}} \\
+        transaction\_amount \\
+        transaction\_date \\
         \end{tabular}
     };
 
@@ -12848,6 +12954,7 @@ To construct the correct Relational Algebra expressions, we first visualize the 
 \end{tikzpicture}
 \captionof*{figure}{\textbf{Figure 1:} Relational Schema of Sonali Bank Limited showing Primary Keys (bold/underlined) and Foreign Keys (italicized and linked).}
 \end{center}
+
 
 \vspace{1em}
 \section*{Relational Algebra Expressions}
@@ -13039,7 +13146,7 @@ To better understand the required relational algebra operations, we first visual
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.4cm,
     table/.style={rectangle, draw, thick, rounded corners=3pt, minimum height=0.8cm, fill=white, align=center, font=\small},
     link/.style={->, thick, rounded corners=4pt, draw=black}
 ]
@@ -13467,7 +13574,7 @@ To better understand the relationships between the entities, we visualize the sc
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.3cm,
     table/.style={rectangle, draw, thick, rounded corners=3pt, minimum width=3cm, fill=white, align=center, font=\small},
     link/.style={->, thick, rounded corners=4pt, draw=black}
 ]
@@ -13601,7 +13708,7 @@ Let's visualize the schema first to clarify the relationships. Note that there i
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.4cm, 
     table/.style={rectangle, draw, thick, rounded corners=3pt, minimum width=2.5cm, fill=white, align=center, font=\small},
     link/.style={->, thick, rounded corners=4pt, draw=black}
 ]
@@ -14557,6 +14664,7 @@ Write necessary constraints to implement the following (answer each independentl
 \section*{Relational Schema Visualization}
 Before implementing the constraints, we can visualize the database schema. The relations follow a standard inheritance (IS-A) structure where \texttt{PC}, \texttt{Laptop}, and \texttt{Printer} act as specialized relations referencing the core \texttt{Product} relation via the \texttt{model} primary key.
 
+
 \begin{center}
 \begin{tikzpicture}[
     >=stealth,
@@ -14580,17 +14688,18 @@ Before implementing the constraints, we can visualize the database schema. The r
 % Nodes
 \node[table, fill=gray!10] (product) {\textbf{Product}(maker, \underline{model}, type)};
 
-\node[table, below left=1.5cm and 0.5cm of product] (pc) {\textbf{PC}(\underline{model}, speed, ram, hd, price)};
-\node[table, below=1.5cm of product] (laptop) {\textbf{Laptop}(\underline{model}, speed, ram, hd, screen, price)};
+\node[table, below left=2.5cm and 0.5cm of product] (pc) {\textbf{PC}(\underline{model}, speed, ram, hd, price)};
+\node[table, below=3.5cm of product] (laptop) {\textbf{Laptop}(\underline{model}, speed, ram, hd, screen, price)};
 \node[table, below right=1.5cm and 0.5cm of product] (printer) {\textbf{Printer}(\underline{model}, color, type, price)};
 
 % Arrows for Foreign Keys
-\draw[->, rounded corners] (pc.north) -- ++(0,0.5) -| (product.south);
+\draw[->, rounded corners] (pc.north) -- ++(0,0.5) |- (product.west);
 \draw[->] (laptop.north) -- (product.south) node[midway, fill=white, label] {References (FK)};
-\draw[->, rounded corners] (printer.north) -- ++(0,0.5) -| (product.south);
+\draw[->, rounded corners] (printer.north) -- ++(0,0.5) |- (product.east);
 
 \end{tikzpicture}
 \end{center}
+
 
 \section*{Implementation of Integrity Constraints}
 In standard SQL, constraints can be formulated using either \textbf{Table-Level \texttt{CHECK} constraints} (for intra-table conditions) or \textbf{Database-Level \texttt{ASSERTION}s} (for complex, cross-table rules). 
@@ -15300,7 +15409,7 @@ Both \texttt{PRIMARY KEY} and \texttt{UNIQUE} constraints are mechanisms used in
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, thick,
+    >=stealth, thick,,x=1.3cm, 
     cell/.style={draw, minimum height=0.8cm, align=center, font=\sffamily\small, inner sep=0pt},
     hdr/.style={cell, fill=gray!20, font=\bfseries\sffamily\small}
 ]
@@ -16018,7 +16127,7 @@ Before writing the constructor functions and schema definitions, we design the t
 The following SQL queries define the types. By defining these UDTs, SQL:99 implicitly generates the constructor functions:
 $F_{construct}(a_1, a_2, \dots, a_n) \rightarrow Instance$
 
-\begin{lstlisting}[language=SQL, basicstyle=\ttfamily\small, keywordstyle=\bfseries]
+\begin{lstlisting}
 -- 1. Create the Base Supertype
 CREATE TYPE Vehicle_Type AS (
     VehicleID INT,
@@ -17671,8 +17780,8 @@ The following diagram illustrates the initial state of the table (First Normal F
 \begin{center}
 \begin{tikzpicture}[
     node distance=0pt,
-    attr/.style={draw, rectangle, minimum height=0.9cm, minimum width=1.75cm, align=center, font=\scriptsize\sffamily, fill=white, thick},
-    pk/.style={attr, fill=black!10, font=\scriptsize\sffamily\bfseries},
+    attr/.style={draw, rectangle, minimum height=0.9cm, minimum width=1.75cm, align=center, font=\scriptsize, fill=white, thick},
+    pk/.style={attr, fill=black!10, font=\scriptsize\bfseries},
     edge/.style={->, thick, >=stealth},
 ]
 
@@ -17697,7 +17806,7 @@ The following diagram illustrates the initial state of the table (First Normal F
     
     % Partial dependencies (Product)
     \draw[-, thick] (prod.south) -- ++(0,-1.4) coordinate (b1);
-    \draw[edge] (b1) -| (label.south) node[pos=0.25, below, font=\scriptsize\bfseries] {Partial Dependency};
+    \draw[edge] (b1) -| (label.south) node[pos=0.25, below, font=\scriptsize] {Partial Dependency};
     \draw[edge] (b1) -| (price.south);
     \draw[edge] (b1) -| (vcode.south);
     \draw[edge] (b1) -| (vname.south);
@@ -17729,7 +17838,7 @@ The final optimized and normalized database schema is presented below:
 \vspace{0.5em}
 \begin{center}
     \renewcommand{\arraystretch}{1.4}
-    \begin{tabular}{@{}llp{8cm}@{}}
+    \begin{tabular}{lll}
         \toprule
         \textbf{Table Name} & \textbf{Schema} & \textbf{Description} \\
         \midrule
@@ -17825,6 +17934,7 @@ To fix the violation in $R_2$, we split it using $AB \to C$:
     \item \textbf{For $R_{2b}(A, B, E)$:} No non-trivial functional dependencies are projected onto this schema. The candidate key is $ABE$. With no dependencies violating the rule, $R_{2b}$ is in \textbf{BCNF}.
 \end{itemize}
 
+
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
@@ -17834,11 +17944,11 @@ To fix the violation in $R_2$, we split it using $AB \to C$:
 ]
     \node[box] (R) {\textbf{Original Schema $R(A, B, C, D, E)$} \\ CK: $ABE$};
     
-    \node[box, below left=of R, xshift=-0.5cm] (R1) {\textbf{Relation $R_1(B, D)$} \\ $B \to D$ \\ \textbf{[BCNF]}};
-    \node[box, below right=of R, xshift=0.5cm] (R2) {\textbf{Relation $R_2(A, B, C, E)$} \\ Violation: $AB \to C$};
+    \node[box, below left=of R] (R1) {\textbf{Relation $R_1(B, D)$} \\ $B \to D$ \\ \textbf{[BCNF]}};
+    \node[box, below right=of R] (R2) {\textbf{Relation $R_2(A, B, C, E)$} \\ Violation: $AB \to C$};
 
-    \node[box, below left=of R2, xshift=-0.5cm] (R2a) {\textbf{Relation $R_{2a}(A, B, C)$} \\ $AB \to C$ \\ \textbf{[BCNF]}};
-    \node[box, below right=of R2, xshift=0.5cm] (R2b) {\textbf{Relation $R_{2b}(A, B, E)$} \\ No FDs \\ \textbf{[BCNF]}};
+    \node[box, below left=of R2] (R2a) {\textbf{Relation $R_{2a}(A, B, C)$} \\ $AB \to C$ \\ \textbf{[BCNF]}};
+    \node[box, below right=of R2] (R2b) {\textbf{Relation $R_{2b}(A, B, E)$} \\ No FDs \\ \textbf{[BCNF]}};
 
     \draw[arrow] (R) -- (R1) node[midway, above left] {via $B \to D$};
     \draw[arrow] (R) -- (R2) node[midway, above right] {Remaining};
@@ -19722,7 +19832,7 @@ The relation is in \textbf{1NF} because all attributes contain atomic values. Th
 
 \vspace{1.5em}
 \begin{center}
-\begin{tikzpicture}[>=stealth]
+\begin{tikzpicture}[x=1.4cm, >=stealth]
     % Node styles
     \tikzset{
         attr/.style={draw, thick, rectangle, minimum height=0.8cm, minimum width=1.6cm, align=center, font=\footnotesize}
@@ -19794,7 +19904,7 @@ The schema diagram below demonstrates the normalized architecture, specifically 
 
 \vspace{1.5em}
 \begin{center}
-\begin{tikzpicture}
+\begin{tikzpicture}[x=1.4cm,thick]
     % Styles for Schema Diagram
     \tikzset{
         cell/.style={draw, thick, rectangle, minimum height=0.8cm, minimum width=2.6cm, align=center, font=\small},
@@ -20601,9 +20711,10 @@ RAID (Redundant Array of Independent Disks) levels 5 and 6 both utilize \textbf{
 \vspace{1em}
 \subsection*{3. Disk Layout Visualization}
 
+
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,y=1.6cm,
     scale=0.9,
     datablock/.style={rectangle, draw, thick, fill=white, minimum width=1.5cm, minimum height=0.7cm, align=center, font=\small\sffamily},
     parityp/.style={rectangle, draw, thick, fill=gray!20, minimum width=1.5cm, minimum height=0.7cm, align=center, font=\small\bfseries\sffamily},
@@ -23144,27 +23255,27 @@ RAID 5 is designed for general-purpose storage where high capacity, good read pe
     % Macro for a disk drive column
     \def\diskcol#1#2#3{
         \node[font=\bfseries, align=center] at (#1, 3.5) {#3};
-        \draw[rounded corners=3pt, fill=white] (#1-0.8, -0.2) rectangle (#1+0.8, 3.0);
+        \draw[rounded corners=3pt, fill=white] (#1-1.2, -0.2) rectangle (#1+1.2, 3.0);
         \draw (#1-0.8, 2.7) -- (#1+0.8, 2.7);
     }
     
     % Macro for a data block
     \def\dblock#1#2#3#4{
-        \draw[fill=#4, rounded corners=1pt] (#1-0.6, #2) rectangle (#1+0.6, #2+0.5);
+        \draw[fill=#4, rounded corners=1pt] (#1-1, #2) rectangle (#1+1, #2+0.5);
         \node[font=\small\bfseries] at (#1, #2+0.25) {#3};
     }
 
     % ----------------- RAID 1 -----------------
     \node[font=\large\bfseries] at (1, 4.5) {RAID 1 (Mirroring)};
     
-    \diskcol{0}{0}{Disk 1}
+    \diskcol{-1}{0}{Disk 1}
     \diskcol{2}{0}{Disk 2}
     
     % Blocks for RAID 1
-    \dblock{0}{2.0}{Block A}{white}
-    \dblock{0}{1.4}{Block B}{white}
-    \dblock{0}{0.8}{Block C}{white}
-    \dblock{0}{0.2}{Block D}{white}
+    \dblock{-1}{2.0}{Block A}{white}
+    \dblock{-1}{1.4}{Block B}{white}
+    \dblock{-1}{0.8}{Block C}{white}
+    \dblock{-1}{0.2}{Block D}{white}
     
     \dblock{2}{2.0}{Block A}{white}
     \dblock{2}{1.4}{Block B}{white}
@@ -23175,33 +23286,33 @@ RAID 5 is designed for general-purpose storage where high capacity, good read pe
     \node[font=\large\bfseries] at (8.5, 4.5) {RAID 5 (Distributed Parity)};
     
     \diskcol{5.5}{0}{Disk 1}
-    \diskcol{7.5}{0}{Disk 2}
-    \diskcol{9.5}{0}{Disk 3}
-    \diskcol{11.5}{0}{Disk 4}
+    \diskcol{8.5}{0}{Disk 2}
+    \diskcol{11.5}{0}{Disk 3}
+    \diskcol{14.5}{0}{Disk 4}
     
     % Blocks for RAID 5 (Row 1)
     \dblock{5.5}{2.0}{Block A1}{white}
-    \dblock{7.5}{2.0}{Block A2}{white}
-    \dblock{9.5}{2.0}{Block A3}{white}
-    \dblock{11.5}{2.0}{Parity A}{gray!30}
+    \dblock{8.5}{2.0}{Block A2}{white}
+    \dblock{11.5}{2.0}{Block A3}{white}
+    \dblock{14.5}{2.0}{Parity A}{gray!30}
     
     % Blocks for RAID 5 (Row 2)
     \dblock{5.5}{1.4}{Block B1}{white}
-    \dblock{7.5}{1.4}{Block B2}{white}
-    \dblock{9.5}{1.4}{Parity B}{gray!30}
-    \dblock{11.5}{1.4}{Block B3}{white}
+    \dblock{8.5}{1.4}{Block B2}{white}
+    \dblock{11.5}{1.4}{Parity B}{gray!30}
+    \dblock{14.5}{1.4}{Block B3}{white}
     
     % Blocks for RAID 5 (Row 3)
     \dblock{5.5}{0.8}{Block C1}{white}
-    \dblock{7.5}{0.8}{Parity C}{gray!30}
-    \dblock{9.5}{0.8}{Block C2}{white}
-    \dblock{11.5}{0.8}{Block C3}{white}
+    \dblock{8.5}{0.8}{Parity C}{gray!30}
+    \dblock{11.5}{0.8}{Block C2}{white}
+    \dblock{14.5}{0.8}{Block C3}{white}
     
     % Blocks for RAID 5 (Row 4)
     \dblock{5.5}{0.2}{Parity D}{gray!30}
-    \dblock{7.5}{0.2}{Block D1}{white}
-    \dblock{9.5}{0.2}{Block D2}{white}
-    \dblock{11.5}{0.2}{Block D3}{white}
+    \dblock{8.5}{0.2}{Block D1}{white}
+    \dblock{11.5}{0.2}{Block D2}{white}
+    \dblock{14.5}{0.2}{Block D3}{white}
 
 \end{tikzpicture}
 \end{center}
@@ -23373,56 +23484,92 @@ To demonstrate the file structure modifications, we assume an initial fixed-leng
 \vspace{0.5cm}
 \subsection*{6. Visual Representation of Data Movement}
 
+
 \begin{center}
-\begin{tikzpicture}[>=stealth, font=\sffamily, thick]
+\begin{tikzpicture}[
+    >=stealth, 
+    thick, x=1.3cm,
+    font=\sffamily\small,
+    % স্টাইল ডেফিনিশন সমূহ
+    normal/.style={draw, rectangle, minimum width=1.2cm, minimum height=0.7cm, align=center, fill=gray!12, draw=gray!60},
+    deleted/.style={draw, rectangle, minimum width=1.2cm, minimum height=0.7cm, align=center, fill=red!15, draw=red!40, text=red!80!black, dashed},
+    moved/.style={draw, rectangle, minimum width=1.2cm, minimum height=0.7cm, align=center, fill=blue!12, draw=blue!40, text=blue!80!black},
+    headerbox/.style={draw, rectangle, minimum height=0.7cm, rounded corners=3pt, fill=green!15, draw=green!60, font=\bfseries\footnotesize, align=center}
+]
 
-    % Define a macro for drawing an array of 8 blocks
-    \def\drawarray#1#2#3{
-        \node[font=\bfseries, anchor=west] at (0, #2+0.8) {#3};
-        \foreach \i in {1,...,8} {
-            \draw[fill=white, rounded corners=1pt] (\i*1.2, #2) rectangle ++(1.2, 0.8);
-            \node[font=\scriptsize, text=gray] at (\i*1.2 + 0.6, #2+1) {\i};
-        }
+    % =========================================================================
+    % --- CASE 1: SHIFTING METHOD ---
+    % =========================================================================
+    \node[font=\bfseries\large, anchor=west] at (0, 5.2) {1. Shifting Method (Delete R3)};
+    
+    % Slot Indices ও বেস ব্লকসমূহ
+    \foreach \i in {1,...,8} {
+        \node[font=\scriptsize\bfseries, text=gray] at (\i*1.3, 4.6) {\i};
+    }
+    \node[normal] (c1_1) at (1.3, 4.0) {R1};
+    \node[normal] (c1_2) at (2.6, 4.0) {R2};
+    \node[deleted] (c1_3) at (3.9, 4.0) {R3};
+    \node[moved] (c1_4) at (5.2, 4.0) {R4};
+    \node[moved] (c1_5) at (6.5, 4.0) {R5};
+    \node[moved] (c1_6) at (7.8, 4.0) {R6};
+    \node[moved] (c1_7) at (9.1, 4.0) {R7};
+    \node[moved] (c1_8) at (10.4, 4.0) {R8};
+
+    % শিফটিং নির্দেশক নিচের অ্যারো সমূহ
+    \foreach \x in {4,5,6,7,8} {
+        \pgfmathsetmacro{\prev}{\x-1}
+        \draw[->, blue!80, thick] (\x*1.3, 3.4) -- (\prev*1.3, 3.4);
     }
 
-    % --- Case 1 ---
-    \drawarray{0}{4}{1. Shifting Method:}
-    \draw[fill=gray!20] (1.2, 4) rectangle ++(1.2, 0.8) node[midway] {R1};
-    \draw[fill=gray!20] (2.4, 4) rectangle ++(1.2, 0.8) node[midway] {R2};
-    \draw[fill=red!20]  (3.6, 4) rectangle ++(1.2, 0.8) node[midway] {R3}; % Deleted
+    % =========================================================================
+    % --- CASE 2: MOVE LAST RECORD METHOD ---
+    % =========================================================================
+    \node[font=\bfseries\large, anchor=west] at (0, 2.2) {2. Move Last Record Method (Delete R3)};
     
-    \foreach \i/\lbl in {4/R4, 5/R5, 6/R6, 7/R7, 8/R8} {
-        \draw[fill=blue!10] (\i*1.2, 4) rectangle ++(1.2, 0.8) node[midway] {\lbl};
-        % Shift arrow
-        \draw[->, blue, very thick] (\i*1.2 + 0.6, 4.2) -- (\i*1.2 - 0.6, 4.2);
+    \foreach \i in {1,...,8} {
+        \node[font=\scriptsize\bfseries, text=gray] at (\i*1.3, 1.6) {\i};
     }
-    
-    % --- Case 2 ---
-    \drawarray{0}{2}{2. Move Last Record Method:}
-    \foreach \i/\lbl in {1/R1, 2/R2, 4/R4, 5/R5, 6/R6, 7/R7} {
-        \draw[fill=gray!20] (\i*1.2, 2) rectangle ++(1.2, 0.8) node[midway] {\lbl};
-    }
-    \draw[fill=red!20]  (3.6, 2) rectangle ++(1.2, 0.8) node[midway] {R3};
-    \draw[fill=blue!10] (9.6, 2) rectangle ++(1.2, 0.8) node[midway] {R8};
-    
-    % Curved arrow for move
-    \draw[->, blue, very thick] (10.2, 2.8) to[out=135, in=45] (4.2, 2.8);
+    \node[normal] at (1.3, 1.0) {R1};
+    \node[normal] at (2.6, 1.0) {R2};
+    \node[deleted] (c2_3) at (3.9, 1.0) {Target};
+    \node[normal] at (5.2, 1.0) {R4};
+    \node[normal] at (6.5, 1.0) {R5};
+    \node[normal] at (7.8, 1.0) {R6};
+    \node[normal] at (9.1, 1.0) {R7};
+    \node[moved] (c2_8) at (10.4, 1.0) {R8};
 
-    % --- Case 3 ---
-    \drawarray{0}{0}{3. Free List (Linked) Method:}
-    \foreach \i/\lbl in {1/R1, 2/R2, 4/R4, 5/R5, 6/R6, 7/R7, 8/R8} {
-        \draw[fill=gray!20] (\i*1.2, 0) rectangle ++(1.2, 0.8) node[midway] {\lbl};
+    % ওপর দিয়ে ঘুরে আসা সুন্দর কার্ভড অ্যারো
+    \draw[->, blue!80!black, very thick] (c2_8.north) .. controls (9.0, 2.5) and (5.5, 2.5) .. (c2_3.north)
+        node[midway, above, font=\scriptsize\bfseries, text=blue!90!black] {Relocate Last Record};
+
+    % =========================================================================
+    % --- CASE 3: FREE LIST (LINKED) METHOD ---
+    % =========================================================================
+    \node[font=\bfseries\large, anchor=west] at (0, -0.8) {3. Free List (Linked) Method};
+    
+    % ইন্ডেক্স নাম্বারসমূহ
+    \foreach \i in {1,...,8} {
+        \node[font=\scriptsize\bfseries, text=gray] at (\i*1.3, -1.4) {\i};
     }
     
-    \draw[fill=red!10, dashed] (3.6, 0) rectangle ++(1.2, 0.8) node[midway, text=red, font=\bfseries] {-1};
+    % হেডার বক্স (আলাদা বামে প্লেস করা হয়েছে ওভারল্যাপ এড়াতে)
+    \node[headerbox] (header) at (0, -2.0) {Header\\(Free: 3)};
     
-    \node[draw, fill=green!10, minimum height=0.6cm, rounded corners=2pt] (header) at (1.5, 0.4) {Header: 3};
-    
-    % Header pointer arrow
-    \draw[->, green!50!black, very thick] (header.east) to[out=0, in=180] (3.6, 0.4);
+    \node[normal] at (1.3, -2.0) {R1};
+    \node[normal] at (2.6, -2.0) {R2};
+    \node[deleted] (c3_3) at (3.9, -2.0) {Next: -1}; % -1 মানে লিস্টের শেষ
+    \node[normal] at (5.2, -2.0) {R4};
+    \node[normal] at (6.5, -2.0) {R5};
+    \node[normal] at (7.8, -2.0) {R6};
+    \node[normal] at (9.1, -2.0) {R7};
+    \node[normal] at (10.4, -2.0) {R8};
+
+    % হেডার থেকে ৩ নম্বর ব্লকে পয়েন্ট করার লিঙ্ক অ্যারো
+    \draw[->, green!50!black, very thick] (header.east) to[out=15, in=165] (c3_3.west);
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -23685,37 +23832,80 @@ To improve performance, techniques must be applied to minimize one or more of th
 
 The following diagram illustrates where each performance optimization is applied within the DBMS and hardware stack.
 
+
+
 \begin{center}
 \begin{tikzpicture}[>=stealth, font=\sffamily, thick]
 
-    % Define styles
-    \tikzstyle{layer} = [draw=black, fill=gray!10, rounded corners=5pt, rectangle, minimum height=1.2cm, minimum width=10cm, align=center, drop shadow={opacity=0.15}]
-    \tikzstyle{tech} = [draw=blue!80!black, fill=blue!5, rounded corners=3pt, rectangle, minimum height=0.7cm, font=\small\bfseries, align=center]
+    % ==========================================
+    % স্টাইল ডেফিনিশন (Style Definitions)
+    % ==========================================
+    \tikzstyle{layer_bg} = [
+        rounded corners=5pt, 
+        rectangle, 
+        minimum height=2.2cm, 
+        minimum width=11cm, 
+        drop shadow={opacity=0.15, shadow xshift=2pt, shadow yshift=-2pt}
+    ]
+    \tikzstyle{tech} = [
+        draw=blue!80!black, 
+        fill=white, % বক্সগুলো সাদা রাখলে ব্যাকগ্রাউন্ডের ওপর ভালো ফুটবে
+        rounded corners=3pt, 
+        rectangle, 
+        minimum height=0.8cm, 
+        minimum width=3.5cm,
+        font=\small\bfseries, 
+        align=center
+    ]
+    \tikzstyle{layer_title} = [font=\bfseries\large]
 
-    % Draw Layers
-    \node[layer, fill=green!5] (dbms) at (0, 6) {\textbf{DBMS / Application Layer}};
-    \node[layer, fill=yellow!10] (os) at (0, 3.5) {\textbf{Operating System / File System Layer}};
-    \node[layer, fill=red!5] (hw) at (0, 0.5) {\textbf{Hardware / Storage Subsystem Layer}};
+    % ==========================================
+    % 1. DBMS / Application Layer
+    % ==========================================
+    % Background
+    \node[layer_bg, fill=green!10, draw=green!60!black] (dbms_bg) at (0, 7.0) {};
+    % Title
+    \node[layer_title, text=green!30!black] at (0, 7.7) {DBMS / Application Layer};
+    % Techniques
+    \node[tech] at (-2.8, 6.6) {Buffer Management\\[-0.5ex]\mdseries\scriptsize(LRU, MRU)};
+    \node[tech] at (2.8, 6.6) {Data Clustering\\[-0.5ex]\mdseries\scriptsize\& Indexing};
 
-    % Draw Techniques (Boxes inside/around layers)
-    % DBMS Layer Techniques
-    \node[tech] (buf) at (-2.5, 6) {Buffer Management\\(LRU, MRU)};
-    \node[tech] (clus) at (2.5, 6) {Data Clustering\\\& Indexing};
+    % ==========================================
+    % 2. Operating System / File System Layer
+    % ==========================================
+    % Background
+    \node[layer_bg, fill=yellow!15, draw=yellow!60!black] (os_bg) at (0, 3.5) {};
+    % Title
+    \node[layer_title, text=orange!80!black] at (0, 4.2) {Operating System / File System Layer};
+    % Techniques
+    \node[tech] at (-2.8, 3.1) {Disk Scheduling\\[-0.5ex]\mdseries\scriptsize(SCAN, SSTF)};
+    \node[tech] at (2.8, 3.1) {Read-Ahead\\[-0.5ex]\mdseries\scriptsize(Prefetching)};
 
-    % OS Layer Techniques
-    \node[tech] (sched) at (-2.5, 3.5) {Disk Scheduling\\(SCAN, SSTF)};
-    \node[tech] (pref) at (2.5, 3.5) {Read-Ahead\\(Prefetching)};
+    % ==========================================
+    % 3. Hardware / Storage Subsystem Layer
+    % ==========================================
+    % Background
+    \node[layer_bg, fill=red!10, draw=red!60!black] (hw_bg) at (0, 0.0) {};
+    % Title
+    \node[layer_title, text=red!60!black] at (0, 0.7) {Hardware / Storage Subsystem Layer};
+    % Techniques
+    \node[tech] at (-2.8, -0.4) {Data Striping\\[-0.5ex]\mdseries\scriptsize(RAID Arrays)};
+    \node[tech] at (2.8, -0.4) {Storage Tiering\\[-0.5ex]\mdseries\scriptsize(SSD Caching)};
 
-    % Hardware Layer Techniques
-    \node[tech] (raid) at (-2.5, 0.5) {Data Striping\\(RAID Arrays)};
-    \node[tech] (tier) at (2.5, 0.5) {Storage Tiering\\(SSD Caching)};
-
-    % Communication Arrows
-    \draw[->, very thick] (0, 5.4) -- (0, 4.1) node[midway, right, font=\scriptsize] {Logical I/O Requests};
-    \draw[->, very thick] (0, 2.9) -- (0, 1.1) node[midway, right, font=\scriptsize] {Physical Block Addresses};
+    % ==========================================
+    % Communication Arrows (যোগাযোগ নির্দেশক তীর)
+    % ==========================================
+    % Arrow 1: DBMS to OS (7.0 - 1.1 = 5.9 is bottom of DBMS, 3.5 + 1.1 = 4.6 is top of OS)
+    \draw[->, very thick, blue!70!black] (0, 5.9) -- (0, 4.6) 
+        node[midway, right=0.1cm, font=\small\bfseries, align=left] {Logical I/O\\Requests};
+        
+    % Arrow 2: OS to HW (3.5 - 1.1 = 2.4 is bottom of OS, 0.0 + 1.1 = 1.1 is top of HW)
+    \draw[->, very thick, blue!70!black] (0, 2.4) -- (0, 1.1) 
+        node[midway, right=0.1cm, font=\small\bfseries, align=left] {Physical Block\\Addresses};
 
 \end{tikzpicture}
 \end{center}
+
 
 \vspace{0.5cm}
 \subsection*{4. Summary of Optimizations and Target Bottlenecks}
@@ -25945,10 +26135,11 @@ Therefore, for an unclustered index to function, it \textbf{must} contain an ent
 
 The following diagram illustrates a hypothetical attempt to create a sparse index on an unclustered attribute (\texttt{Age}) and demonstrates why the search logic breaks down.
 
+
 \vspace{0.5cm}
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, 
+    >=stealth, y=1.5cm, 
     thick,
     rec/.style={draw, minimum width=3.5cm, minimum height=0.6cm, fill=white, font=\small},
     idx/.style={draw, minimum width=1.5cm, minimum height=0.6cm, fill=gray!20, font=\small\bfseries},
@@ -25966,7 +26157,7 @@ The following diagram illustrates a hypothetical attempt to create a sparse inde
     \node[idx] (i2) at (-0.4, -2.4) {Age = 40}; \node[ptr] (p2) at (0.75, -2.4) {$\bullet$};
     
     % Grouping index
-    \draw[thick] (-1.15, 0.3) rectangle (1.15, -2.7);
+    \draw[thick] (-1.5, 0.3) rectangle (1.25, -2.7);
 
     % Data File Nodes (Sorted by ID, Age is random)
     \node[rec] (d1) at (6, 0) {ID=1, \textbf{Age=40}};
@@ -25983,7 +26174,7 @@ The following diagram illustrates a hypothetical attempt to create a sparse inde
     \node[right, font=\footnotesize\bfseries] at (7.9, -0.3) {Block 1};
     
     \draw[thick] (4.1, -1.5) rectangle (7.9, -2.7);
-    \node[right, font=\footnotesize\bfseries] at (7.9, -2.1) {Block 2};
+    \node[right, font=\footnotesize\bfseries] at (3.5, -2.1) {Block 2};
     
     \draw[thick] (4.1, -3.3) rectangle (7.9, -4.5);
     \node[right, font=\footnotesize\bfseries] at (7.9, -3.9) {Block 3};
@@ -26018,12 +26209,108 @@ The following diagram illustrates a hypothetical attempt to create a sparse inde
 \end{tikzpicture}
 \end{center}
 
+
 \end{tcolorbox}
 
 \item Write a short note on bitmap indexing.
 \mk{5} \yr{CSE 303 | L-3/T-1 | 2015--16}
 
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
 
+\subsection*{1. Definition}
+A \textbf{Bitmap Index} is a specialized database indexing structure that uses bitmaps (arrays of bits) to answer queries. Instead of storing row identifiers (RIDs) in a tree structure (like a B+ tree) for every given key, a bitmap index creates a separate bit array for each distinct value of the indexed attribute. In each bit array, a bit is set to `1` if the corresponding row possesses that value, and `0` otherwise.
+
+\subsection*{2. Working Principle}
+Let an attribute $A$ have a domain of $k$ distinct values: $\{v_1, v_2, \dots, v_k\}$. 
+For a table containing $n$ rows, the bitmap index on $A$ consists of $k$ separate bit vectors, each of length $n$. 
+\begin{itemize}
+    \item If the $i$-th row of the table has the value $v_j$ for attribute $A$, the $i$-th bit of the $j$-th bit vector is set to $1$.
+    \item All other bits in the $j$-th bit vector for that row are set to $0$.
+\end{itemize}
+
+\subsection*{3. Visual Representation \& Example}
+Consider an \texttt{Employee} table with a low-cardinality attribute \texttt{Gender} (Values: \texttt{M, F}). The bitmap index creates one bit vector for \texttt{M} and one for \texttt{F}.
+
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.4} 
+    \begin{minipage}[c]{0.28\textwidth}
+        \centering
+        \textbf{Base Table}\\[0.6em]
+        \begin{tabular}{|c|c|}
+            \hline
+            \rowcolor{gray!20} 
+            \textbf{Row ID} & \textbf{Gender} \\ \hline
+            1 & M \\ \hline
+            2 & F \\ \hline
+            3 & F \\ \hline
+            4 & M \\ \hline
+            5 & M \\ \hline
+        \end{tabular}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.22\textwidth}
+        \centering
+        \small{Indexed by}\\[0.2em]
+        $\xrightarrow{\hspace{1.8cm}}$
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.42\textwidth}
+        \centering
+        \textbf{Bitmap Index}\\[0.6em]
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \rowcolor{gray!20} 
+            \textbf{Row ID} & \textbf{$B_M$ (Male)} & \textbf{$B_F$ (Female)} \\ \hline
+            1 & \cellcolor{blue!10}1 & 0 \\ \hline
+            2 & 0 & \cellcolor{blue!10}1 \\ \hline
+            3 & 0 & \cellcolor{blue!10}1 \\ \hline
+            4 & \cellcolor{blue!10}1 & 0 \\ \hline
+            5 & \cellcolor{blue!10}1 & 0 \\ \hline
+        \end{tabular}
+    \end{minipage}
+
+\end{center}
+
+
+\subsection*{4. Query Processing via Boolean Operations}
+One of the core strengths of bitmap indices is that complex predicate evaluations can be resolved purely through hardware-level bitwise boolean operations (\texttt{AND}, \texttt{OR}, \texttt{NOT}) before fetching any data pages.
+\begin{itemize}
+    \item \textbf{Example Query:} Retrieve employees who are Male.
+    \item \textbf{Resolution:} Scan $B_M$. Rows 1, 4, and 5 have the bit set to 1. Only these rows are fetched from the disk.
+    \item \textbf{Multiple Predicates:} If we also had a bitmap for \texttt{Department = IT} as $B_{IT} = 11001$, a query for ``Male AND IT'' simply performs a bitwise \texttt{AND}:
+    \[
+    \begin{array}{r@{\quad}l}
+         B_M : & 10011 \\
+         B_{IT}: & 11001 \\
+         \hline
+         B_M \land B_{IT}: & 10001
+    \end{array}
+    \]
+    The result indicates that only Rows 1 and 5 satisfy both conditions.
+\end{itemize}
+
+\subsection*{5. Properties and Characteristics}
+\begin{itemize}
+    \item \textbf{Low Cardinality Ideal:} Highly efficient for attributes with a small number of distinct values (e.g., gender, marital status, boolean flags).
+    \item \textbf{Sparsity and Compression:} For higher cardinalities, bitmaps become extremely sparse (mostly zeroes). Modern DBMS uses Run-Length Encoding (RLE) to compress these sparse bitmaps, saving significant storage.
+\end{itemize}
+
+\subsection*{6. Advantages vs. Disadvantages}
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}p{0.48\textwidth}p{0.48\textwidth}@{}}
+\toprule
+\textbf{Advantages} & \textbf{Disadvantages} \\
+\midrule
+$\bullet$ Extremely fast evaluation for multiple \texttt{AND}, \texttt{OR}, \texttt{NOT} conditions. & $\bullet$ Terrible performance for high-cardinality data (like SSN, Primary Keys) without compression. \\
+$\bullet$ Highly space-efficient for low-cardinality columns. & $\bullet$ High update overhead. Updating a single row requires locking and rewriting the entire compressed bitmap segment, blocking concurrent writes. \\
+$\bullet$ Ideal for Data Warehousing (OLAP) environments with complex read-heavy analytical queries. & $\bullet$ Poorly suited for Transactional (OLTP) systems with frequent `INSERT/UPDATE/DELETE` operations. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\end{tcolorbox}
 
 \item Given the relation \texttt{employee(emp\_id, name, gender, status)}, create bitmap indices on \texttt{gender} and \texttt{status}.
 \begin{center}
@@ -26107,7 +26394,7 @@ The following diagram illustrates the logical mapping from the base relation to 
 };
 
 % Bitmap Index Gender Node
-\node[box] (idx_gender) at (7, 2.5) {
+\node[box] (idx_gender) at (9, 2.5) {
     \textbf{Bitmap Index: gender}\\[1ex]
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{lc}
@@ -26121,7 +26408,7 @@ The following diagram illustrates the logical mapping from the base relation to 
 };
 
 % Bitmap Index Status Node
-\node[box] (idx_status) at (7, -2.5) {
+\node[box] (idx_status) at (9, -2.5) {
     \textbf{Bitmap Index: status}\\[1ex]
     \renewcommand{\arraystretch}{1.2}
     \begin{tabular}{lc}
@@ -26381,7 +26668,7 @@ Since $10,000,000 \le 39,884,724$, a B$^+$ tree of \textbf{height 3} is sufficie
 
     \begin{center}
     \begin{tikzpicture}[
-        >=stealth, thick,
+        >=stealth, thick,x=1.5cm, 
         node/.style={draw, rectangle, minimum width=2.5cm, minimum height=0.8cm, fill=white, font=\small\bfseries, rounded corners=2pt},
         leaf/.style={draw, rectangle, minimum width=2.5cm, minimum height=0.8cm, fill=gray!10, font=\small\bfseries, rounded corners=2pt},
         arrow/.style={->, shorten >= 2pt, shorten <= 2pt, thick, draw=blue!70!black},
@@ -26407,6 +26694,7 @@ Since $10,000,000 \le 39,884,724$, a B$^+$ tree of \textbf{height 3} is sufficie
         
     \end{tikzpicture}
     \end{center}
+
 
     \vspace{0.3cm}
     \item \textbf{Given a search-key, how many index blocks need to be read in the best and worst cases if we use a hash index instead? Assume the hash index requires at most three overflow blocks.}
@@ -26619,7 +26907,7 @@ We insert the keys sequentially: \textbf{2, 3, 5, 7, 11, 17, 19, 23, 29, 31}.
 \begin{center}
 
   \begin{tikzpicture}[
-  bnode/.style={draw, rectangle, minimum height=0.6cm, inner sep=6pt, font=\sffamily},
+  bnode/.style={draw, rectangle, minimum height=0.6cm, inner sep=6pt},
   >=stealth
 ]
   % 1. Leaf nodes (Bottom Level)
@@ -26701,7 +26989,7 @@ The key 315 is inserted into the leaf node containing $[0278, 0350]$.
 \begin{center}
 \begin{tikzpicture}[
     bnode/.style={draw, rectangle, minimum height=0.6cm, inner sep=5pt, font=\sffamily, thick},
-    >=stealth
+    >=stealth,x=1.4cm
 ]
   % Level 2: Leaves
   \node[bnode] (l1) at (-6,0) {0107};
@@ -26758,7 +27046,7 @@ The key 315 is inserted into the leaf node containing $[0278, 0350]$.
 \begin{center}
 \begin{tikzpicture}[
     bnode/.style={draw, rectangle, minimum height=0.6cm, inner sep=5pt, font=\sffamily, thick},
-    >=stealth
+    >=stealth,x=1.4cm
 ]
   % Level 3: Leaves
   \node[bnode] (l1) at (-6.5,0) {0107};
@@ -26822,7 +27110,7 @@ The key 315 is inserted into the leaf node containing $[0278, 0350]$.
 \begin{center}
 \begin{tikzpicture}[
     bnode/.style={draw, rectangle, minimum height=0.6cm, inner sep=5pt, font=\sffamily, thick},
-    >=stealth
+    >=stealth,x=1.4cm
 ]
   % Level 3: Leaves
   \node[bnode] (l1) at (-6.5,0) {0107};
@@ -26892,7 +27180,7 @@ The key 315 is inserted into the leaf node containing $[0278, 0350]$.
 \begin{center}
 \begin{tikzpicture}[
     bnode/.style={draw, rectangle, minimum height=0.6cm, inner sep=5pt, font=\sffamily, thick},
-    >=stealth
+    >=stealth,x=1.4cm
 ]
   % Level 2: Leaves
   \node[bnode] (l1) at (-5.8,0) {0107};
@@ -26952,7 +27240,7 @@ The key 315 is inserted into the leaf node containing $[0278, 0350]$.
 \begin{center}
 \begin{tikzpicture}[
     bnode/.style={draw, rectangle, minimum height=0.6cm, inner sep=5pt, font=\sffamily, thick},
-    >=stealth
+    >=stealth,x=1.4cm
 ]
   % Level 2: Leaves
   \node[bnode] (l1) at (-5.8,0) {0107};
@@ -28424,6 +28712,7 @@ When a key is removed from a leaf node:
 
 \vspace{1.5em}
 
+
 \begin{center}
     \begin{tikzpicture}[>=stealth, thick, font=\sffamily\small]
         
@@ -28484,7 +28773,8 @@ When a key is removed from a leaf node:
 
         % Leaf 6
         \draw (4.0, 0.8) rectangle (5.2, 1.4);
-        \draw (4.6, 0.8) -- (-4.6, 1.4);
+        % --- Corrected Line Below ---
+        \draw (4.6, 0.8) -- (4.6, 1.4); 
         \node at (4.3, 1.1) {75};
         \node at (4.9, 1.1) {90};
 
@@ -28512,6 +28802,7 @@ When a key is removed from a leaf node:
 
     \end{tikzpicture}
 \end{center}
+
 
 \subsection*{5. Structural Comparison: B-Tree vs. B$^+$ Tree}
 The following architectural table contrasts the primary operating differences between the standard B-tree and the B$^+$ tree:
@@ -29402,7 +29693,7 @@ Insert all the data from the product table above, incrementally using the Produc
 ]
 
 % Global Depth
-\node at (-1, 3.5) {\textbf{Global Depth = 3}};
+\node at (-1, 4.5) {\textbf{Global Depth = 3}};
 
 % Directory
 \node[dir node] (d000) at (0, 2.8) {\texttt{000}};
@@ -29502,7 +29793,7 @@ Insert all the data from the product table above, incrementally using the Produc
 \draw[pointer] (b1.east) -- (o1.west);
 
 % Split Pointer 's'
-\node[font=\bfseries, text=red] (s_ptr) at (-1.5, 1.2) {s = 1};
+\node[font=\bfseries, text=red] (s_ptr) at (-2.5, 1.2) {s = 1};
 \draw[->, very thick, red] (s_ptr.east) -- ([xshift=-1.7cm]b1.west);
 
 % Info
@@ -30152,7 +30443,7 @@ We will construct the dynamic hash index using \textbf{Extendible Hashing}, inde
     % Bucket 0011 (LD=4) -> Points from 0011 (Y = -1.5)
     \node[bucket] (B0011) at (5, -1.5) {\textbf{E003} \hspace{0.2cm} Sajid \hspace{0.45cm} \textcolor{blue}{LD=4}};
     % Overflow for 0011
-    \node[ovbucket] (B0011ov) at (9.5, -1.5) {\textbf{E006} \hspace{0.2cm} Sajid \hspace{0.3cm} \textit{Overflow}};
+    \node[ovbucket] (B0011ov) at (10.5, -1.5) {\textbf{E006} \hspace{0.2cm} Sajid \hspace{0.3cm} \textit{Overflow}};
     \draw[->, dashed] (B0011.east) -- (B0011ov.west);
     
     % Bucket 0100 (LD=4) -> Points from 0100 (Y = -2.0)
@@ -31053,13 +31344,13 @@ Given the external sort-merge algorithm parameters:
 \draw[->, color=green!60!black] (M3.south) -- (F.north);
 
 % Labels for Passes
-\node[passlabel] at (-8, 1.8) {Pass 0:};
+\node[passlabel] at (-10, 1.8) {Pass 0:};
 \node[passdesc]  at (-8, 1.4) {Read 4 blocks,\\sort in memory,\\write 9 runs};
 
-\node[passlabel] at (-8, -1.0) {Pass 1:};
+\node[passlabel] at (-10, -1.0) {Pass 1:};
 \node[passdesc]  at (-8, -1.4) {3-way merge:\\Merge 3 runs of\\4 blocks into\\runs of 12 blocks};
 
-\node[passlabel] at (-8, -3.8) {Pass 2:};
+\node[passlabel] at (-10, -3.8) {Pass 2:};
 \node[passdesc]  at (-8, -4.2) {3-way merge:\\Merge 3 runs of\\12 blocks into\\final relation};
 
 % Dividing Lines
@@ -31248,45 +31539,77 @@ The execution proceeds in two distinct phases:
 \vspace{0.3cm}
 \subsubsection*{4. Visualizing the One-Pass Execution}
 
+
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, thick, node distance=2cm,
-    block/.style={rectangle, draw=black, fill=white, minimum width=2.5cm, minimum height=0.8cm, align=center, font=\small},
-    mem/.style={rectangle, draw=blue!50, dashed, fill=blue!5, inner sep=10pt, align=center},
-    cond/.style={diamond, draw=orange, fill=orange!20, aspect=1.5, align=center, font=\footnotesize, inner sep=2pt},
-    db/.style={cylinder, draw=black, shape border rotate=90, aspect=0.2, fill=gray!20, minimum height=1.5cm, minimum width=2cm, align=center, font=\small\bfseries}
+    >=stealth, 
+    thick, x=1.3cm, 
+    font=\small,
+    % স্টাইল ডেফিনিশন (Style Definitions)
+    block/.style={rectangle, draw=black!70, rounded corners=3pt, fill=white, minimum width=2.5cm, minimum height=0.9cm, align=center},
+    cond/.style={diamond, draw=orange!80!black, fill=orange!15, aspect=1.8, align=center, font=\footnotesize\bfseries, inner sep=2pt},
+    db/.style={cylinder, draw=black!70, shape border rotate=90, aspect=0.25, fill=gray!15, minimum height=1.6cm, minimum width=1.8cm, align=center, font=\small\bfseries},
+    mem_bg/.style={draw=blue!60, fill=blue!5, dashed, rounded corners=8pt, line width=1pt}
 ]
 
-% Disk Storage
-\node[db] (diskR) at (-5, 3) {Disk\\Relation $R$};
-\node[db] (diskS) at (-5, 0) {Disk\\Relation $S$};
+    % ==========================================
+    % 1. Disk Storage (বাম পাশের ডিস্কসমূহ)
+    % ==========================================
+    \node[db] (diskR) at (-5.5, 3) {Disk\\Relation $R$};
+    \node[db] (diskS) at (-5.5, 0) {Disk\\Relation $S$};
 
-% Memory Boundaries
-\node[mem, minimum width=8cm, minimum height=5cm] (memory) at (1, 1.5) {};
-\node[anchor=north east, font=\bfseries\small, text=blue!80] at (memory.north east) {Main Memory ($M$ blocks)};
+    % ==========================================
+    % 2. Main Memory Box (মূল মেমোরি বাউন্ডারি)
+    % ==========================================
+    % মেমোরির পেছনের ব্যাকগ্রাউন্ড বক্স (আকার ও অবস্থান নিখুঁত করা হয়েছে)
+    \draw[mem_bg] (-3.2, -2.5) rectangle (7.8, 4.5);
+    \node[anchor=north east, font=\bfseries, text=blue!80!black] at (7.6, 4.3) {Main Memory ($M$ blocks)};
 
-% In-Memory Data Structures
-\node[block, fill=green!10, minimum height=1.5cm, minimum width=3cm] (hashR) at (1, 3) {Hash Table of $R$\\ \scriptsize (Built entirely in memory)};
+    % ==========================================
+    % 3. In-Memory Data Structures (মেমোরির ভেতরের বক্সসমূহ)
+    % ==========================================
+    % Hash Table - একদম probe ডাইমন্ডের ঠিক ওপরে (X=2) রাখা হয়েছে
+    \node[block, fill=green!10, minimum height=1.4cm] (hashR) at (2, 3) {Hash Table of $R$\\ \scriptsize\mdseries(Built entirely in memory)};
 
-\node[block, fill=yellow!20] (bufS) at (-1, 0) {Input Buffer\\for $S$ (1 block)};
+    \node[block, fill=yellow!20] (bufS) at (-1.5, 0) {Input Buffer\\for $S$ \mdseries(1 block)};
+    
+    \node[cond] (check) at (2, 0) {Is $s \in R$?};
+    
+    \node[block, fill=red!10] (bufOut) at (6, 0) {Output Buffer\\\mdseries(1 block)};
 
-\node[cond] (check) at (2.5, 0) {Is $s \in R$?};
+    % ==========================================
+    % 4. Output Storage (ডান পাশের আউটপুট ডিস্ক)
+    % ==========================================
+    \node[db, fill=green!20, draw=green!60!black] (diskOut) at (10, 0) {Result\\$S - R$};
 
-\node[block, fill=red!10] (bufOut) at (6, 0) {Output Buffer\\(1 block)};
+    % ==========================================
+    % 5. Control Flow & Edges (যোগাযোগ ও তীরচিহ্নসমূহ)
+    % ==========================================
+    % Disk to Memory Arrows
+    \draw[->, blue!70!black] (diskR.east) -- (hashR.west) 
+        node[midway, above, font=\footnotesize\bfseries] {1. Read all $R$};
+        
+    \draw[->, blue!70!black] (diskS.east) -- (bufS.west) 
+        node[midway, below, font=\footnotesize\bfseries] {2. Stream $S$};
 
-\node[db, fill=green!20] (diskOut) at (9, 0) {Result\\$S - R$};
+    % Memory Internal Arrows
+    \draw[->] (bufS.east) -- (check.west) 
+        node[midway, above, font=\footnotesize] {Tuple $s$};
+        
+    % Probe Arrow (এখন একদম সোজা লাইন)
+    \draw[->, dashed, black!70] (check.north) -- (hashR.south) 
+        node[midway, right, font=\footnotesize\bfseries] {Probe};
 
-% Control flow & Edges
-\draw[->] (diskR.east) -- (hashR.west) node[midway, above, font=\footnotesize] {1. Read all $R$};
-\draw[->] (diskS.east) -- (bufS.west) node[midway, below, font=\footnotesize] {2. Stream $S$};
+    % Yes / No Logic Arrows
+    \draw[->, green!60!black, very thick] (check.east) -- (bufOut.west) 
+        node[midway, above, font=\footnotesize\bfseries] {No (Output)};
+        
+    \draw[->, red!60!black, very thick] (check.south) -- ++(0, -1.2) 
+        node[below, font=\footnotesize\bfseries] {Yes (Discard)};
 
-\draw[->] (bufS.east) -- (check.west) node[midway, above, font=\footnotesize] {Tuple $s$};
-\draw[->] (check.north) -- (hashR.south) node[midway, right, font=\footnotesize] {Probe};
-
-\draw[->] (check.east) -- (bufOut.west) node[midway, above, font=\footnotesize\bfseries, text=green!60!black] {No (Output)};
-\draw[->] (check.south) -- +(0, -1) node[below, font=\footnotesize\bfseries, text=red!60!black] {Yes (Discard)};
-
-\draw[->] (bufOut.east) -- (diskOut.west) node[midway, above, font=\footnotesize] {Flush};
+    % Output to Disk
+    \draw[->, thick] (bufOut.east) -- (diskOut.west) 
+        node[midway, above, font=\footnotesize\bfseries] {Flush};
 
 \end{tikzpicture}
 \end{center}
@@ -31484,58 +31807,88 @@ Consider a relation $r$ with $b_r = 108$ blocks and main memory buffer $M = 5$ b
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, thick, node distance=1.5cm and 2cm,
-    block/.style={rectangle, draw=black, rounded corners, fill=blue!10, minimum width=2.5cm, minimum height=0.8cm, align=center, font=\small},
-    mem/.style={rectangle, draw=blue!50, dashed, fill=blue!5, inner sep=10pt, align=center},
-    db/.style={cylinder, draw=black, shape border rotate=90, aspect=0.2, fill=gray!20, minimum height=1.2cm, minimum width=2.5cm, align=center, font=\small\bfseries}
+    >=stealth, y=1.3cm,
+    thick, 
+    font=\small,
+    % স্টাইল ডেফিনিশন (Style Definitions)
+    block/.style={rectangle, draw=black!70, rounded corners=3pt, fill=blue!8, minimum width=2.2cm, minimum height=0.8cm, align=center},
+    mem_bg/.style={draw=blue!60, fill=blue!3, dashed, rounded corners=8pt, line width=1pt},
+    db/.style={cylinder, draw=black!70, shape border rotate=90, aspect=0.25, fill=gray!15, minimum height=1.5cm, minimum width=3cm, align=center, font=\small\bfseries}
 ]
 
-% Disk Storage
-\node[db] (unsorted) at (0, 6) {Unsorted Relation $r$\\($b_r$ blocks)};
+    % ==========================================
+    % 1. Disk Storage (Top)
+    % ==========================================
+    \node[db] (unsorted) at (0, 7.5) {Unsorted Relation $r$\\($b_r$ blocks)};
 
-% Pass 0 Memory
-\node[mem, minimum width=6cm, minimum height=1.5cm] (mem0) at (0, 3.5) {};
-\node[anchor=north west, font=\footnotesize\bfseries, text=blue!80] at (mem0.north west) {Main Memory ($M$ blocks)};
-\node[block, fill=green!10] (sort0) at (0, 3.5) {Internal Sort};
+    % ==========================================
+    % 2. Pass 0: Main Memory
+    % ==========================================
+    % মেমোরি বাউন্ডারি বক্স (নিখুঁত সাইজ ও পজিশন)
+    \draw[mem_bg] (-4.0, 4.6) rectangle (4.0, 6.2);
+    \node[anchor=north west, font=\footnotesize\bfseries, text=blue!80!black] at (-3.9, 6.0) {Main Memory (Pass 0: Generation)};
+    
+    \node[block, fill=green!15] (sort0) at (0, 5.1) {Internal Sort (Create Runs)};
 
-% Initial Runs
-\node[block] (run1) at (-3, 1) {Run 1\\($M$ blocks)};
-\node[block] (run2) at (0, 1) {Run 2\\($M$ blocks)};
-\node[block, draw=none, fill=none] (dots) at (1.5, 1) {\dots};
-\node[block] (runN) at (3, 1) {Run $N$\\($\le M$ blocks)};
+    % ==========================================
+    % 3. Disk Storage (Initial Runs)
+    % ==========================================
+    % সিমেট্রিক অ্যালাইনমেন্টের জন্য X-অক্ষ -3.6, -1.2, 1.2, 3.6 ব্যবহার করা হয়েছে
+    \node[block, fill=white] (run1) at (-3.6, 3.0) {Run 1\\($M$ blocks)};
+    \node[block, fill=white] (run2) at (-1.2, 3.0) {Run 2\\($M$ blocks)};
+    \node[font=\Large\bfseries, text=gray] (dots) at (1.2, 3.0) {\dots};
+    \node[block, fill=white] (runN) at (3.6, 3.0) {Run $N$\\($\le M$ blocks)};
 
-% Pass 1 Memory
-\node[mem, minimum width=8cm, minimum height=2.5cm] (mem1) at (0, -2.5) {};
-\node[anchor=north west, font=\footnotesize\bfseries, text=blue!80] at (mem1.north west) {Main Memory ($M-1$ Input, $1$ Output)};
+    % ==========================================
+    % 4. Pass 1: Merge Phase (Main Memory)
+    % ==========================================
+    \draw[mem_bg] (-4.5, -2.5) rectangle (4.5, 1.5);
+    \node[anchor=north west, font=\footnotesize\bfseries, text=blue!80!black] at (-4.4, 1.3) {Main Memory (Pass 1: $M-1$ Input, $1$ Output Buffer)};
 
-\node[block, fill=yellow!20, minimum width=1.5cm, minimum height=0.6cm] (in1) at (-2.5, -2) {In 1};
-\node[block, fill=yellow!20, minimum width=1.5cm, minimum height=0.6cm] (in2) at (0, -2) {In 2};
-\node[block, draw=none, fill=none] (dots2) at (1.2, -2) {\dots};
-\node[block, fill=yellow!20, minimum width=1.5cm, minimum height=0.6cm] (inM) at (2.5, -2) {In $M-1$};
+    % Input Buffers (সরাসরি Run-গুলোর ঠিক নিচে বসানো হয়েছে)
+    \node[block, fill=yellow!20, minimum height=0.6cm] (in1) at (-3.6, 0.4) {In 1};
+    \node[block, fill=yellow!20, minimum height=0.6cm] (in2) at (-1.2, 0.4) {In 2};
+    \node[font=\Large\bfseries, text=gray] (dots2) at (1.2, 0.4) {\dots};
+    \node[block, fill=yellow!20, minimum height=0.6cm] (inM) at (3.6, 0.4) {In $M-1$};
 
-\node[block, fill=orange!20, minimum width=3cm, minimum height=0.6cm] (merge) at (0, -3.2) {$(M-1)$-way Merge};
+    % Merge Node
+    \node[block, fill=orange!20, minimum width=8.2cm, minimum height=0.8cm] (merge) at (0, -1.2) {$(M-1)$-way Merge};
 
-% Output
-\node[db, fill=green!20] (sorted) at (0, -5.5) {Larger Sorted Runs\\(or Final Result)};
+    % ==========================================
+    % 5. Output Storage (Bottom)
+    % ==========================================
+    \node[db, fill=green!20, draw=green!60!black] (sorted) at (0, -4.5) {Larger Sorted Runs\\(or Final Result)};
 
-% Edges
-\draw[->] (unsorted) -- (sort0) node[midway, right, font=\footnotesize] {Read $M$ blocks};
-\draw[->] (sort0) -- (run1) node[midway, left, font=\footnotesize] {Write};
-\draw[->] (sort0) -- (run2);
-\draw[->] (sort0) -- (runN);
+    % ==========================================
+    % 6. Control Flow & Edges
+    % ==========================================
+    % Unsorted -> Sort
+    \draw[->, blue!70!black, very thick] (unsorted.south) -- (sort0.north) 
+        node[midway, right, font=\footnotesize\bfseries] {Read $M$ blocks};
 
-\draw[->] (run1) -- (in1);
-\draw[->] (run2) -- (in2);
-\draw[->] (runN) -- (inM);
+    % Sort -> Runs (Orthogonal/Manhattan routing for clean fan-out)
+    \draw[->, black!70, rounded corners=3pt] (sort0.south) -- (0, 4.2) -| (run1.north) 
+        node[pos=0.25, above, font=\scriptsize] {Write};
+    \draw[->, black!70, rounded corners=3pt] (sort0.south) -- (0, 4.2) -| (run2.north);
+    \draw[->, black!70, rounded corners=3pt] (sort0.south) -- (0, 4.2) -| (runN.north);
 
-\draw[->] (in1) -- (merge);
-\draw[->] (in2) -- (merge);
-\draw[->] (inM) -- (merge);
+    % Runs -> Input Buffers
+    \draw[->, black!70] (run1.south) -- (in1.north) node[midway, left, font=\scriptsize] {Stream};
+    \draw[->, black!70] (run2.south) -- (in2.north);
+    \draw[->, black!70] (runN.south) -- (inM.north);
 
-\draw[->] (merge) -- (sorted) node[midway, right, font=\footnotesize] {Write chunks};
+    % Input Buffers -> Merge Node
+    \draw[->, black!70] (in1.south) -- (in1.south |- merge.north);
+    \draw[->, black!70] (in2.south) -- (in2.south |- merge.north);
+    \draw[->, black!70] (inM.south) -- (inM.south |- merge.north);
+
+    % Merge Node -> Sorted Output
+    \draw[->, green!60!black, very thick] (merge.south) -- (sorted.north) 
+        node[midway, right, font=\footnotesize\bfseries] {Write chunks};
 
 \end{tikzpicture}
 \end{center}
+
 
 \subsection*{4. Proof of Total Block Transfers}
 
@@ -31685,42 +32038,75 @@ Block Nested Loop Join & $r_1$ (fewest blocks) & 1,200,800 & 1,600 \\
 \vspace{0.4cm}
 \subsubsection*{5. Visualizing Block Nested Loop Join Execution (with $r_1$ as Outer)}
 
+
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, thick,
-    disknode/.style={cylinder, draw=black, shape border rotate=90, aspect=0.25, fill=gray!20, minimum height=1.5cm, minimum width=2cm, align=center, font=\small\bfseries},
-    memnode/.style={rectangle, draw=blue!60, dashed, fill=blue!5, inner sep=10pt},
-    bufnode/.style={rectangle, draw=black, fill=yellow!20, minimum height=0.8cm, minimum width=2.5cm, align=center, font=\small},
-    opnode/.style={circle, draw=black, fill=orange!20, minimum size=1.2cm, align=center, font=\bfseries}
+    >=stealth, 
+    thick, 
+    font=\sffamily\small,
+    % স্টাইল ডেфিনিশন সমূহ (Style Definitions)
+    disknode/.style={cylinder, draw=black!70, shape border rotate=90, aspect=0.25, fill=gray!15, minimum height=1.6cm, minimum width=2.2cm, align=center, font=\small\bfseries},
+    mem_bg/.style={draw=blue!60, fill=blue!3, dashed, rounded corners=8pt, line width=1pt},
+    bufnode/.style={rectangle, draw=black!70, rounded corners=3pt, fill=yellow!20, minimum height=0.8cm, minimum width=2.5cm, align=center},
+    opnode/.style={circle, draw=orange!80!black, fill=orange!15, minimum size=1.2cm, align=center, font=\Large\bfseries}
 ]
 
-% Disks
-\node[disknode] (disk1) at (-4, 2) {$r_1$ Disk\\(800 Blocks)};
-\node[disknode] (disk2) at (-4, -2) {$r_2$ Disk\\(1,500 Blocks)};
+    % ==========================================
+    % 1. Disk Storage (বাম পাশের ইনপুট ডিস্কসমূহ)
+    % ==========================================
+    \node[disknode] (disk1) at (-5.5, 1.6) {$r_1$ Disk\\ \mdseries\scriptsize(800 Blocks)};
+    \node[disknode] (disk2) at (-5.5, -1.6) {$r_2$ Disk\\ \mdseries\scriptsize(1,500 Blocks)};
 
-% Memory Area
-\node[memnode, minimum width=7cm, minimum height=5cm] (mem) at (1, 0) {};
-\node[anchor=north east, font=\footnotesize\bfseries, text=blue!80] at (mem.north east) {Main Memory (Worst-case: 3 Blocks)};
+    % ==========================================
+    % 2. Main Memory Box (মূল মেমোরি বাউন্ডারি)
+    % ==========================================
+    \draw[mem_bg] (-3.2, -2.6) rectangle (5.8, 2.6);
+    \node[anchor=north east, font=\footnotesize\bfseries, text=blue!80!black] at (5.6, 2.4) {Main Memory (Worst-case: 3 Blocks)};
 
-% Buffers in Memory
-\node[bufnode] (buf1) at (1, 1.5) {$r_1$ Block Buffer};
-\node[bufnode] (buf2) at (1, -1.5) {$r_2$ Block Buffer};
-\node[opnode] (join) at (3.5, 0) {$\bowtie$};
-\node[bufnode, fill=green!20, minimum width=2cm] (outbuf) at (1, 0) {Output Buffer};
+    % ==========================================
+    % 3. In-Memory Component Pipeline (বাম থেকে ডানে সাজানো)
+    % ==========================================
+    % Input Buffers
+    \node[bufnode] (buf1) at (-1.5, 1.4) {$r_1$ Block Buffer};
+    \node[bufnode] (buf2) at (-1.5, -1.4) {$r_2$ Block Buffer};
+    
+    % Join Operator (সেন্টার ট্র্যাকে প্রসেসিং)
+    \node[opnode] (join) at (1.5, 0) {$\bowtie$};
+    
+    % Output Buffer (এখন জয়েনের ঠিক পরে পারফেক্ট পজিশনে আছে)
+    \node[bufnode, fill=green!15, draw=green!60!black, minimum width=2.2cm] (outbuf) at (4.2, 0) {Output Buffer};
 
-% Result
-\node[disknode, fill=green!10, minimum height=1.2cm] (result) at (6.5, 0) {Result};
+    % ==========================================
+    % 4. Result Storage (ডান পাশের ফাইনাল ডিস্ক)
+    % ==========================================
+    \node[disknode, fill=green!8, draw=green!60!black, minimum height=1.4cm] (result) at (8.2, 0) {Result\\ \mdseries\scriptsize $r_1 \bowtie r_2$};
 
-% Connections
-\draw[->] (disk1) -- (buf1) node[midway, above, font=\footnotesize] {Read 1 block};
-\draw[->] (disk2) -- (buf2) node[midway, below, font=\footnotesize] {Scan all 1500};
-\draw[->] (buf1.east) -- (join.north west);
-\draw[->] (buf2.east) -- (join.south west);
-\draw[->] (join.west) -- (outbuf.east) node[midway, above, font=\scriptsize] {Match};
-\draw[->] (outbuf.east) to[out=0, in=180] (result.west);
+    % ==========================================
+    % 5. Control Flow & Edges (ডেটা ফ্লো লাইনসমূহ)
+    % ==========================================
+    % Disks to Input Buffers
+    \draw[->, blue!70!black] (disk1.east) -- (buf1.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Read 1 block};
+        
+    \draw[->, blue!70!black] (disk2.east) -- (buf2.west) 
+        node[midway, below, font=\scriptsize\bfseries] {Scan all 1500};
+
+    % Input Buffers to Join Operator (Orthogonal/Manhattan routing for clean looks)
+    \draw[->, black!70, rounded corners=4pt] (buf1.east) -| (join.north)
+        node[pos=0.3, above, font=\scriptsize] {Stream tuples};
+    \draw[->, black!70, rounded corners=4pt] (buf2.east) -| (join.south);
+
+    % Join Operator to Output Buffer
+    \draw[->, thick] (join.east) -- (outbuf.west) 
+        node[midway, above, font=\scriptsize\bfseries, text=orange!80!black] {Match};
+
+    % Output Buffer to Result Disk
+    \draw[->, green!60!black, very thick] (outbuf.east) -- (result.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Flush};
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{0.1cm}
 \textit{Note: The diagram illustrates why BNLJ requires $800 \times 1500$ block reads from $r_2$. For each single block of $r_1$ placed in the buffer, the entire $r_2$ disk must be scanned.}
 
@@ -31884,34 +32270,78 @@ External sorting is required when the data to be sorted does not fit entirely in
 \end{enumerate}
 
 \vspace{1em}
+
 \begin{center}
 \begin{tikzpicture}[
-    node distance=1.2cm and 1cm,
-    box/.style={draw, rectangle, thick, rounded corners=2pt, align=center, minimum height=0.8cm, fill=white},
-    db/.style={draw, cylinder, shape border rotate=90, aspect=0.2, thick, align=center, minimum height=1.5cm, minimum width=2cm, fill=gray!10},
-    arrow/.style={->, thick, >=stealth},
-    lbl/.style={font=\small\bfseries}
+    >=stealth, 
+    thick, x=1.3cm, 
+    font=\sffamily\small,
+    % স্টাইল ডেফিনিশন (Style Definitions)
+    disknode/.style={cylinder, draw=black!70, shape border rotate=90, aspect=0.25, fill=gray!15, minimum height=1.6cm, minimum width=2.4cm, align=center, font=\small\bfseries},
+    mem_bg/.style={draw=blue!60, fill=blue!3, dashed, rounded corners=8pt, line width=1pt},
+    bufnode/.style={rectangle, draw=black!70, rounded corners=3pt, minimum height=1.2cm, align=center}
 ]
 
-    % Phase 1
-    \node[lbl] (p1) {Phase 1: Run Generation};
-    \node[db, below=0.5cm of p1] (unsorted) {Unsorted\\Relation};
-    \node[box, right=1.5cm of unsorted, fill=blue!10] (mem1) {Main Memory\\(Sorts $k$ blocks)};
-    \node[box, right=1.5cm of mem1] (runs) {Sorted Run 1\\Sorted Run 2\\...\\Sorted Run $N_R$};
-
-    \draw[arrow] (unsorted) -- node[above, font=\footnotesize] {Read $k$} (mem1);
-    \draw[arrow] (mem1) -- node[above, font=\footnotesize] {Write} (runs);
-
-    % Phase 2
-    \node[lbl, below=1.5cm of p1] (p2) {Phase 2: Merging};
+    % ==========================================
+    % PHASE 1: RUN GENERATION
+    % ==========================================
+    \node[font=\Large\bfseries, anchor=west] at (-6.8, 5.0) {Phase 1: Run Generation};
     
-    \node[box, right=1cm of p2, yshift=-1.5cm, fill=green!10, text width=2.5cm] (inbuf) {Input Buffers\\($k-1$ blocks)};
-    \node[box, right=1.5cm of inbuf, fill=red!10, text width=2.5cm] (outbuf) {Output Buffer\\(1 block)};
-    \node[db, right=1.5cm of outbuf] (sorted) {Sorted\\Relation};
+    % 1. Input Disk
+    \node[disknode] (unsorted) at (-5.2, 2.8) {Unsorted\\Relation};
 
-    \draw[arrow, dashed] (runs.south) ++(-0.5,0) |- (inbuf.west);
-    \draw[arrow] (inbuf) -- node[above, font=\footnotesize] {Merge} (outbuf);
-    \draw[arrow] (outbuf) -- node[above, font=\footnotesize] {Write} (sorted);
+    % 2. Main Memory (Phase 1)
+    \draw[mem_bg] (-2.8, 1.4) rectangle (2.8, 4.4);
+    \node[anchor=north, font=\footnotesize\bfseries, text=blue!80!black] at (0, 4.2) {Main Memory (Sort Phase)};
+    \node[bufnode, fill=green!15, minimum width=4cm] (sort) at (0, 2.6) {Internal Sort\\($k$ blocks)};
+
+    % 3. Output Disk (Runs)
+    \node[disknode, fill=yellow!15] (runs1) at (5.2, 2.8) {Sorted Runs\\$R_1, R_2, \dots, R_N$};
+
+    % Arrows for Phase 1
+    \draw[->, blue!70!black] (unsorted.east) -- (sort.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Read $k$ blocks};
+    \draw[->, blue!70!black] (sort.east) -- (runs1.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Write runs};
+
+
+    % ==========================================
+    % PHASE TRANSITION (Bridging Arrow)
+    % ==========================================
+    % প্রথম ফেইজের ডেটা যে দ্বিতীয় ফেইজে যাচ্ছে তা বোঝানোর জন্য একটি সুন্দর কানেক্টিং লাইন
+    \draw[->, dashed, very thick, blue!50, rounded corners=10pt] 
+        (runs1.south) -- (5.2, 0.6) -- (-5.2, 0.6) -- (unsorted.south |- -1.0, 0)
+        node[midway, above, font=\small\bfseries, text=blue!80!black] {Pass Generated Runs to Next Phase};
+
+
+    % ==========================================
+    % PHASE 2: MERGING
+    % ==========================================
+    \node[font=\Large\bfseries, anchor=west] at (-6.8, -0.2) {Phase 2: Merging};
+    
+    % 1. Input Disk (Runs from Phase 1)
+    \node[disknode, fill=yellow!15] (runs2) at (-5.2, -2.4) {Sorted Runs\\(From Phase 1)};
+
+    % 2. Main Memory (Phase 2)
+    \draw[mem_bg] (-3.0, -3.8) rectangle (3.0, -1.0);
+    \node[anchor=north, font=\footnotesize\bfseries, text=blue!80!black] at (0, -1.2) {Main Memory (Merge Phase)};
+    
+    % Input & Output Buffers inside Memory
+    \node[bufnode, fill=yellow!20, minimum width=2.4cm] (inbuf) at (-1.4, -2.6) {Input Buffers\\($k-1$ blocks)};
+    \node[bufnode, fill=red!15, minimum width=2.2cm] (outbuf) at (1.5, -2.6) {Output Buffer\\(1 block)};
+
+    % 3. Final Output Disk
+    \node[disknode, fill=green!20, draw=green!60!black] (sorted) at (5.2, -2.4) {Final Sorted\\Relation};
+
+    % Arrows for Phase 2
+    \draw[->, blue!70!black] (runs2.east) -- (inbuf.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Stream};
+        
+    \draw[->, thick, orange!80!black] (inbuf.east) -- (outbuf.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Merge};
+        
+    \draw[->, green!60!black, very thick] (outbuf.east) -- (sorted.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Flush};
 
 \end{tikzpicture}
 \end{center}
@@ -32015,37 +32445,85 @@ The algorithm operates in two phases: \textbf{Pass 1 (Run Generation with Local 
 \end{enumerate}
 
 \vspace{1em}
+
 \begin{center}
 \begin{tikzpicture}[
-    node distance=1.5cm and 1cm,
-    box/.style={draw, rectangle, thick, rounded corners=3pt, align=center, minimum height=0.8cm, fill=white},
-    db/.style={draw, cylinder, shape border rotate=90, aspect=0.25, thick, align=center, minimum height=1.2cm, minimum width=2.2cm, fill=gray!10},
-    arrow/.style={->, thick, >=stealth},
-    lbl/.style={font=\small\bfseries}
+    >=stealth, 
+    thick, x=1.4cm,
+    font=\small,
+    % স্টাইল ডেফিনিশন (Style Definitions)
+    disknode/.style={cylinder, draw=black!70, shape border rotate=90, aspect=0.25, fill=gray!15, minimum height=1.6cm, minimum width=2.4cm, align=center, font=\small\bfseries},
+    mem_bg/.style={draw=blue!60, fill=blue!3, dashed, rounded corners=8pt, line width=1pt},
+    bufnode/.style={rectangle, draw=black!70, rounded corners=3pt, minimum height=1.2cm, align=center}
 ]
 
-    % Phase 1
-    \node[lbl] (p1) {Pass 1: Run Generation};
-    \node[db, below=0.3cm of p1] (unsorted) {Unsorted\\Data};
-    \node[box, right=1.5cm of unsorted, fill=blue!10, text width=3cm] (mem1) {Memory ($M$ blocks)\\Sort \& Drop Local Duplicates};
-    \node[box, right=1.5cm of mem1] (runs) {Run $1$ \\ Run $2$ \\ $\vdots$ \\ Run $k$};
-
-    \draw[arrow] (unsorted) -- node[above, font=\footnotesize] {Read $M$} (mem1);
-    \draw[arrow] (mem1) -- node[above, font=\footnotesize] {Write} (runs);
-
-    % Phase 2
-    \node[lbl, below=2cm of p1] (p2) {Pass 2: Merge \& Global Elimination};
+    % ==========================================
+    % PASS 1: RUN GENERATION
+    % ==========================================
+    \node[font=\Large\bfseries, anchor=west] at (-6.8, 5.0) {Pass 1: Run Generation};
     
-    \node[box, right=1cm of p2, yshift=-1.2cm, fill=green!10, text width=2.5cm] (inbuf) {Input Buffers\\($k \le M-1$)};
-    \node[box, right=1.5cm of inbuf, fill=red!10, text width=3cm] (outbuf) {Output Buffer (1)\\Drop Global Duplicates};
-    \node[db, right=1.5cm of outbuf] (unique) {Final Unique\\Relation};
+    % 1. Input Disk
+    \node[disknode] (unsorted) at (-5.5, 2.8) {Unsorted\\Data};
 
-    \draw[arrow, dashed] (runs.south) ++(-0.5,0) |- (inbuf.west);
-    \draw[arrow] (inbuf) -- node[above, font=\footnotesize] {Merge} (outbuf);
-    \draw[arrow] (outbuf) -- node[above, font=\footnotesize] {Write} (unique);
+    % 2. Main Memory (Pass 1)
+    \draw[mem_bg] (-3.2, 1.5) rectangle (3.2, 4.4);
+    \node[anchor=north, font=\footnotesize\bfseries, text=blue!80!black] at (0, 4.2) {Memory ($M$ blocks)};
+    
+    % Pass 1 Processing Box
+    \node[bufnode, fill=green!15, minimum width=4.5cm] (sort) at (0, 2.6) {1. Internal Sort\\[0.5ex] \textbf{\textcolor{red!70!black}{2. Drop Local Duplicates}}};
+
+    % 3. Output Disk (Runs)
+    \node[disknode, fill=yellow!15] (runs1) at (5.5, 2.8) {Sorted Runs\\$R_1, R_2, \dots, R_k$};
+
+    % Arrows for Pass 1
+    \draw[->, blue!70!black] (unsorted.east) -- (sort.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Read $M$};
+    \draw[->, blue!70!black] (sort.east) -- (runs1.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Write Runs};
+
+
+    % ==========================================
+    % PASS TRANSITION (Bridging Arrow)
+    % ==========================================
+    % প্রথম ফেইজের আউটপুট দ্বিতীয় ফেইজে যাওয়ার নির্দেশক
+    \draw[->, dashed, very thick, blue!50, rounded corners=10pt] 
+        (runs1.south) -- (5.5, 0.6) -- (-5.5, 0.6) -- (-5.5, -1.0)
+        node[midway, above, font=\small\bfseries, text=blue!80!black] {Pass Generated Runs to Next Phase};
+
+
+    % ==========================================
+    % PASS 2: MERGE & GLOBAL ELIMINATION
+    % ==========================================
+    \node[font=\Large\bfseries, anchor=west] at (-6.8, -0.6) {Pass 2: Merge \& Global Elimination};
+    
+    % 1. Input Disk (Runs from Phase 1)
+    \node[disknode, fill=yellow!15] (runs2) at (-5.5, -2.6) {Sorted Runs\\(From Pass 1)};
+
+    % 2. Main Memory (Pass 2)
+    \draw[mem_bg] (-3.4, -4.2) rectangle (3.4, -1.2);
+    \node[anchor=north, font=\footnotesize\bfseries, text=blue!80!black] at (0, -1.4) {Main Memory (Merge Phase)};
+    
+    % Input Buffers
+    \node[bufnode, fill=yellow!20, minimum width=2.4cm] (inbuf) at (-1.8, -2.8) {Input Buffers\\($k \le M-1$)};
+    % Output Buffer (Global Duplicate Drop)
+    \node[bufnode, fill=red!15, minimum width=2.8cm] (outbuf) at (1.8, -2.8) {Output Buffer (1)\\[0.5ex] \textbf{\textcolor{red!70!black}{Drop Global Duplicates}}};
+
+    % 3. Final Output Disk
+    \node[disknode, fill=green!20, draw=green!60!black] (unique) at (5.5, -2.6) {Final Unique\\Relation};
+
+    % Arrows for Pass 2
+    \draw[->, blue!70!black] (runs2.east) -- (inbuf.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Stream};
+        
+    \draw[->, thick, orange!80!black] (inbuf.east) -- (outbuf.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Merge};
+        
+    \draw[->, green!60!black, very thick] (outbuf.east) -- (unique.west) 
+        node[midway, above, font=\scriptsize\bfseries] {Write};
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{1em}
 
 \subsection*{2. Relationship Between Number of Records and Memory Size}
@@ -32813,8 +33291,8 @@ The optimized expression tree evaluates the most restrictive selections early an
 \begin{center}
 \begin{tikzpicture}[
     level distance=1.5cm,
-    level 1/.style={sibling distance=7cm},
-    level 2/.style={sibling distance=6cm},
+    level 1/.style={sibling distance=10cm},
+    level 2/.style={sibling distance=8cm},
     level 3/.style={sibling distance=3.5cm},
     every node/.style={font=\small, align=center},
     op/.style={draw, thick, rounded corners, inner sep=6pt, fill=white},
@@ -33324,78 +33802,90 @@ The following diagram illustrates the fundamental difference in how the inner re
 
 \vspace{0.5cm}
 
+
 \begin{center}
-\begin{tikzpicture}[thick, >=stealth, scale=0.95, transform shape]
+\begin{tikzpicture}[
+    >=stealth, 
+    thick,
+    font=\small,
+    % ==========================================
+    % স্টাইল ডেফিনিশন সমূহ (Style Definitions)
+    % ==========================================
+    title/.style={font=\bfseries\large, align=center},
+    subtitle/.style={font=\small\itshape, text=gray!70!black},
+    rel_lbl/.style={font=\bfseries, text=black!80},
+    % Left Side Styles (Tuple Level)
+    tuple/.style={draw=black!50, rectangle, minimum width=1.8cm, minimum height=0.6cm, fill=white, align=center},
+    active_tuple/.style={draw=blue!70, rectangle, minimum width=1.8cm, minimum height=0.6cm, fill=blue!5, font=\bfseries, text=blue!90!black, align=center},
+    % Right Side Styles (Block Level)
+    block/.style={draw=black!50, rectangle, minimum width=2.4cm, minimum height=1.4cm, fill=gray!5, align=center},
+    active_block/.style={draw=red!70, rectangle, minimum width=2.4cm, minimum height=1.4cm, fill=red!5, font=\bfseries, text=red!90!black, align=center}
+]
 
-    % ==========================================
-    % Left side: Nested Loop Join
-    % ==========================================
-    \node at (1.25, 4.5) {\textbf{Nested-Loop Join}};
-    \node at (1.25, 4.0) {(Tuple-by-Tuple)};
-    
-    % Relation R (Outer)
-    \draw (-1.5, 0) rectangle (0, 3);
-    \node at (-0.75, 3.4) {Outer Rel. $R$};
-    
-    % Tuples in R
-    \draw[fill=gray!20] (-1.5, 2.4) rectangle (0, 2.9);
-    \draw (-1.5, 2.4) -- (0, 2.4);
-    \draw (-1.5, 1.8) -- (0, 1.8);
-    \draw (-1.5, 1.2) -- (0, 1.2);
-    \draw (-1.5, 0.6) -- (0, 0.6);
-    
-    \node at (-0.75, 2.65) {$t_{r1}$};
-    \node at (-0.75, 2.1) {$t_{r2}$};
-    \node at (-0.75, 1.5) {$\vdots$};
-    \node at (-0.75, 0.9) {$t_{rn}$};
-    
-    % Relation S (Inner)
-    \draw (2.5, 0) rectangle (4, 3);
-    \node at (3.25, 3.4) {Inner Rel. $S$};
-    
-    % Scans entire S for ONE tuple
-    \draw[->, blue, shorten >= 2pt] (0, 2.65) -- (2.5, 2.65) node[midway, above, font=\scriptsize] {Scans all of $S$};
-    \draw[->, blue, dashed, shorten >= 2pt] (0, 2.65) -- (2.5, 1.5);
-    \draw[->, blue, dashed, shorten >= 2pt] (0, 2.65) -- (2.5, 0.35);
+    % =========================================================================
+    % LEFT SIDE: NESTED-LOOP JOIN (TUPLE-BY-TUPLE)
+    % =========================================================================
+    \begin{scope}[local bounding box=left_side]
+        % Headers
+        \node[title] (t1) at (0.5, 4.8) {Nested-Loop Join};
+        \node[subtitle, below=0.1cm of t1] {(Tuple-by-Tuple)};
+        
+        % Outer Relation R (Tuple Stack)
+        \node[rel_lbl] at (-1.5, 3.8) {Outer Rel. $R$};
+        \node[active_tuple] (tr1) at (-1.5, 2.8) {$t_{r1}$};
+        \node[tuple] (tr2) at (-1.5, 2.2) {$t_{r2}$};
+        \node[tuple, draw=none] (tr_dots) at (-1.5, 1.6) {$\vdots$};
+        \node[tuple] (trn) at (-1.5, 1.0) {$t_{rn}$};
+        % Outer Boundary
+        \draw[draw=black!60, rounded corners=3pt] (-2.5, 0.6) rectangle (-0.5, 3.2);
 
-    % ==========================================
-    % Divider
-    % ==========================================
-    \draw[dashed, gray] (5, -0.5) -- (5, 5);
-    
-    % ==========================================
-    % Right side: Block Nested Loop Join
-    % ==========================================
-    \node at (9.25, 4.5) {\textbf{Block Nested-Loop Join}};
-    \node at (9.25, 4.0) {(Block-by-Block)};
-    
-    % Relation R (Outer)
-    \draw (6, 0) rectangle (7.5, 3);
-    \node at (6.75, 3.4) {Outer Rel. $R$};
-    
-    % Blocks in R
-    \draw[fill=gray!20] (6, 1.5) rectangle (7.5, 3);
-    \draw (6, 1.5) -- (7.5, 1.5);
-    
-    \node at (6.75, 2.5) {Block $b_{r1}$};
-    \node at (6.75, 2.0) {($t_{r1}, t_{r2}, \dots$)};
-    
-    \node at (6.75, 1.0) {Block $b_{r2}$};
-    \node at (6.75, 0.5) {($t_{rj}, t_{rk}, \dots$)};
-    
-    % Relation S (Inner)
-    \draw (11, 0) rectangle (12.5, 3);
-    \node at (11.75, 3.4) {Inner Rel. $S$};
-    \draw (11, 1.5) -- (12.5, 1.5);
-    \node at (11.75, 2.25) {Block $b_{s1}$};
-    \node at (11.75, 0.75) {Block $b_{s2}$};
-    
-    % Scans S for ONE BLOCK
-    \draw[->, red, thick, shorten >= 2pt] (7.5, 2.25) -- (11, 2.25) node[midway, above, font=\scriptsize, align=center] {Scans all of $S$ \\ \textit{in memory chunks}};
-    \draw[->, red, dashed, thick, shorten >= 2pt] (7.5, 2.25) -- (11, 0.75);
+        % Inner Relation S
+        \node[rel_lbl] at (2.5, 3.8) {Inner Rel. $S$};
+        \node[tuple, minimum height=2.6cm, fill=blue!5, draw=blue!40] (ts) at (2.5, 1.9) {Entire\\Relation\\$S$};
+        
+        % Scanning Arrows with background fill for text readability
+        \draw[->, blue!80!black, line width=1pt] (tr1.east) -- (ts.north west) 
+            node[pos=0.4, fill=white, inner sep=2pt, font=\scriptsize\bfseries, yshift=0.2cm] {Scans all of $S$};
+        \draw[->, blue!80!black, dashed, line width=1pt] (tr1.east) -- (ts.west);
+        \draw[->, blue!80!black, dashed, line width=1pt] (tr1.east) -- (ts.south west);
+    \end{scope}
+
+    % =========================================================================
+    % DIVIDER (মাঝখানের বিভাজক রেখা)
+    % =========================================================================
+    \draw[dashed, gray!50, line width=1pt] (4.5, 0.0) -- (4.5, 5.0);
+
+    % =========================================================================
+    % RIGHT SIDE: BLOCK NESTED-LOOP JOIN (BLOCK-BY-BLOCK)
+    % =========================================================================
+    \begin{scope}[xshift=9cm]
+        % Headers
+        \node[title] (t2) at (0.5, 4.8) {Block Nested-Loop Join};
+        \node[subtitle, below=0.1cm of t2] {(Block-by-Block)};
+        
+        % Outer Relation R (Block Stack)
+        \node[rel_lbl] at (-1.5, 3.8) {Outer Rel. $R$};
+        \node[active_block] (br1) at (-1.5, 2.4) {Block $b_{r1}$\\\mdseries\scriptsize($t_{r1}, t_{r2}, \dots$)};
+        \node[block] (br2) at (-1.5, 1.0) {Block $b_{r2}$\\\mdseries\scriptsize($t_{rj}, t_{rk}, \dots$)};
+        % Outer Boundary
+        \draw[draw=black!60, rounded corners=3pt] (-2.8, 0.2) rectangle (-0.2, 3.2);
+
+        % Inner Relation S (Block Stack)
+        \node[rel_lbl] at (3.0, 3.8) {Inner Rel. $S$};
+        \node[block, fill=red!5, draw=red!40] (bs1) at (3.0, 2.4) {Block $b_{s1}$};
+        \node[block, fill=red!5, draw=red!40] (bs2) at (3.0, 1.0) {Block $b_{s2}$};
+        % Outer Boundary
+        \draw[draw=black!60, rounded corners=3pt] (1.7, 0.2) rectangle (4.3, 3.2);
+
+        % Scanning Arrows with multi-line text masking
+        \draw[->, red!80!black, line width=1.2pt] (br1.east) -- (bs1.west)
+            node[midway, fill=white, inner sep=2pt, font=\scriptsize\bfseries, align=center, yshift=0.35cm] {Scans all of $S$ \\ \textit{in memory chunks}};
+        \draw[->, red!80!black, dashed, line width=1pt] (br1.east) -- (bs2.west);
+    \end{scope}
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -33546,47 +34036,95 @@ Let the two relations to be joined be $R$ (the smaller, \textbf{build} relation)
 The following diagram illustrates the state of the memory and disk during the initial partitioning and probing phases.
 
 \vspace{0.5cm}
+
 \begin{center}
 \begin{tikzpicture}[
-    thick, >=stealth, scale=0.9, transform shape,
-    box/.style={draw, rectangle, rounded corners, align=center},
-    disk/.style={draw, cylinder, shape border rotate=90, aspect=0.25, align=center},
-    mem/.style={draw, rectangle, dashed, fill=gray!5, minimum width=9cm, minimum height=4.5cm},
-    hdd/.style={draw, rectangle, dashed, fill=blue!5, minimum width=9cm, minimum height=2.5cm}
+    >=stealth, 
+    thick, x=1.3cm, 
+    font=\small,
+    % ==========================================
+    % স্টাইল ডেফিনিশন সমূহ (Style Definitions)
+    % ==========================================
+    box/.style={draw=black!70, rectangle, rounded corners=3pt, align=center, minimum height=1.1cm},
+    disknode/.style={cylinder, draw=black!70, shape border rotate=90, aspect=0.22, align=center, font=\small\bfseries},
+    mem_bg/.style={draw=blue!60, fill=blue!3, dashed, rounded corners=8pt, line width=1pt},
+    disk_bg/.style={draw=black!50, fill=gray!5, dashed, rounded corners=8pt, line width=1pt}
 ]
 
-% Background bounds
-\node[mem] (MemoryBox) at (0, 3) {};
-\node at (-3.2, 5) {\textbf{Main Memory (Size $M$)}};
+    % ==========================================
+    % 1. BACKGROUND BOUNDS (মেমোরি ও ডিস্কের বাউন্ডারি বক্স)
+    % ==========================================
+    % Main Memory Box (Top Tier)
+    \draw[mem_bg] (-5.8, 0.6) rectangle (5.8, 4.2);
+    \node[anchor=north west, font=\bfseries, text=blue!80!black] at (-5.6, 4.0) {Main Memory (Size $M$)};
 
-\node[hdd] (DiskBox) at (0, -1.5) {};
-\node at (-3.5, -0.5) {\textbf{Secondary Storage (Disk)}};
+    % Secondary Storage Box (Bottom Tier)
+    \draw[disk_bg] (-5.8, -3.8) rectangle (5.8, -0.8);
+    \node[anchor=north west, font=\bfseries, text=black!80] at (-5.6, -0.4) {Secondary Storage (Disk)};
 
-% Memory Components
-\node[box, fill=yellow!20, minimum width=3.5cm, minimum height=2.5cm] (HashTable) at (-2, 3) {\textbf{Hash Table} \\ \textbf{for $R_0$} \\ \\ (Stays in Memory)};
-\node[box, fill=green!10, minimum width=2cm, minimum height=0.8cm] (InputBuf) at (2.5, 4.5) {Input Buffer};
-\node[box, fill=orange!20, minimum width=1.5cm, minimum height=0.6cm] (Out1) at (1.5, 2.5) {$Buf_1$};
-\node[box, fill=orange!20, minimum width=1.5cm, minimum height=0.6cm] (Out2) at (3.5, 2.5) {$Buf_2$};
-\node at (2.5, 1.8) {\dots $k$ Output Buffers};
 
-% Disk Components
-\node[disk, fill=blue!10, minimum height=1cm, minimum width=1.5cm] (RDisk) at (-4, 4.5) {Input \\ $R \cup S$};
-\node[disk, fill=purple!10, minimum height=1cm, minimum width=1.2cm] (P1) at (1.5, -1.5) {$R_1, S_1$};
-\node[disk, fill=purple!10, minimum height=1cm, minimum width=1.2cm] (P2) at (3.5, -1.5) {$R_2, S_2$};
+    % ==========================================
+    % 2. IN-MEMORY COMPONENTS (Y = 2.2 অক্ষ বরাবর সাজানো)
+    % ==========================================
+    % Left side: In-Memory Hash Table
+    \node[box, fill=yellow!15, minimum width=2.4cm] (HashTable) at (-4.2, 2.2) {\textbf{Hash Table}\\\textbf{for $R_0$}\\\scriptsize(Stays in Memory)};
+    
+    % Center: Central Input Buffer
+    \node[box, fill=green!15, minimum width=2.0cm] (InputBuf) at (-1.0, 2.2) {\textbf{Input Buffer}\\\scriptsize(1 Block)};
+    
+    % Right side: Output Buffers for Disk Partitions
+    \node[box, fill=orange!20, minimum width=1.6cm] (Out1) at (1.8, 2.2) {\textbf{Buf}$_1$\\\scriptsize(Part. 1)};
+    \node[box, fill=orange!20, minimum width=1.6cm] (Out2) at (4.2, 2.2) {\textbf{Buf}$_2$\\\scriptsize(Part. 2)};
+    
+    % Label for remaining buffers
+    \node[text=gray!80!black, font=\scriptsize\bfseries] at (3.0, 1.1) {\dots\ $k$ Output Buffers};
 
-% Arrows
-\draw[->] (RDisk) -- (InputBuf) node[midway, above, font=\small] {Read Block};
-\draw[->] (InputBuf) -- (1.5, 3.8) -| (HashTable) node[pos=0.25, above, font=\small] {If $h_1(key) = 0$};
-\draw[->] (InputBuf) -- (Out1) node[midway, right, font=\small] {$h_1(key) \neq 0$};
-\draw[->] (InputBuf) -- (Out2);
 
-\draw[->] (Out1) -- (P1) node[midway, left, font=\small] {Write to Disk};
-\draw[->] (Out2) -- (P2);
+    % ==========================================
+    % 3. DISK COMPONENTS (Y = -2.4 অক্ষ বরাবর সাজানো)
+    % ==========================================
+    % Immediate Result Disk (Hash Table এর ঠিক নিচে)
+    \node[disknode, fill=green!20, draw=green!60!black, minimum height=1.3cm, minimum width=1.8cm] (ResultDisk) at (-4.2, -2.4) {Immediate Join\\Output\\$R_0 \bowtie S_0$};
 
-\draw[->, very thick, red] (HashTable) -- (-2, 0.5) node[midway, right] {Immediate Join Output ($R_0 \bowtie S_0$)};
+    % Main Input Disk (Input Buffer এর ঠিক নিচে)
+    \node[disknode, fill=blue!15, minimum height=1.3cm, minimum width=2.0cm] (RDisk) at (-1.0, -2.4) {Input Data\\$R \cup S$};
+    
+    % Partition Disks (আউটপুট বাফারগুলোর ঠিক নিচে)
+    \node[disknode, fill=purple!15, minimum height=1.3cm, minimum width=1.6cm] (P1) at (1.8, -2.4) {Partition 1\\$R_1, S_1$};
+    \node[disknode, fill=purple!15, minimum height=1.3cm, minimum width=1.6cm] (P2) at (4.2, -2.4) {Partition 2\\$R_2, S_2$};
+
+
+    % ==========================================
+    % 4. CONTROL FLOW & ARROWS (ক্লিন ডাটা পাইপলাইন)
+    % ==========================================
+    % 1. Disk to Memory Input Stream
+    \draw[->, line width=1.2pt, blue!80!black] (RDisk.north) -- (InputBuf.south) 
+        node[midway, right, font=\scriptsize\bfseries] {Read Block};
+
+    % 2. Demux Logic: If h1(key) == 0 -> Send to Hash Table
+    \draw[->, line width=1pt] (InputBuf.west) -- (HashTable.east) 
+        node[midway, above, font=\scriptsize\bfseries, text=blue!80!black] {$h_1(\text{key}) = 0$};
+
+    % 3. Immediate Join Execution Flow
+    \draw[->, very thick, red!80!black] (HashTable.south) -- (ResultDisk.north) 
+        node[midway, left, font=\scriptsize\bfseries, text=red!80!black, align=right] {Stream\\Output};
+
+    % 4. Demux Logic: If h1(key) != 0 -> Send to Partition Buffers
+    \draw[->, line width=1pt] (InputBuf.east) -- (Out1.west) 
+        node[pos=0.4, above, font=\scriptsize\bfseries] {$h_1(\text{key}) = i$};
+        
+    % Bus branching to reach Buffer 2 without overlapping Buffer 1
+    \draw[->, line width=1pt, rounded corners=4pt] (0.4, 2.2) -- (0.4, 3.1) -| (Out2.north);
+
+    % 5. Flush Buffers to Disk Partitions
+    \draw[->, line width=1pt, dashed, text=purple!80!black] (Out1.south) -- (P1.north) 
+        node[midway, right, font=\scriptsize\bfseries] {Flush};
+    \draw[->, line width=1pt, dashed, text=purple!80!black] (Out2.south) -- (P2.north) 
+        node[midway, right, font=\scriptsize\bfseries] {Flush};
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{0.5cm}
 
 \subsection*{4. Cost Analysis (Memory and I/O)}
@@ -33693,51 +34231,52 @@ The following diagram illustrates the state of main memory during the execution 
 \vspace{0.5cm}
 \begin{center}
 \begin{tikzpicture}[
-    thick, >=stealth, scale=0.9, transform shape,
-    box/.style={draw=black, rectangle, rounded corners, align=center},
-    disk/.style={draw=black, cylinder, shape border rotate=90, aspect=0.25, align=center},
-    mem/.style={draw=black, rectangle, dashed, fill=gray!5, minimum width=11cm, minimum height=6cm},
-    table/.style={draw=black, rectangle, minimum width=3.5cm, minimum height=0.6cm, font=\small}
+    thick, >=stealth, scale=0.9, transform shape,x=1.3cm,
+    box/.style={draw=black, rectangle, rounded corners, align=center, fill=gray!15},
+    disk/.style={draw=black, cylinder, shape border rotate=90, aspect=0.25, align=center, fill=white, minimum height=1.2cm, minimum width=1.5cm},
+    table/.style={draw=black, rectangle, minimum width=3.5cm, minimum height=0.6cm, font=\small, fill=white}
 ]
 
 % Main Memory Boundary
-\node[mem] (Memory) at (0, 3) {};
-\node[anchor=north west, font=\bfseries] at (-5.3, 5.8) {Main Memory (Size $M$)};
-
-% R Chunk Hash Table
-\node[box, fill=gray!20, minimum width=4cm, minimum height=3.5cm] (RTable) at (-2.5, 3) {};
-\node[font=\bfseries] at (-2.5, 4.3) {$R$-Chunk Hash Table};
-\node[font=\scriptsize] at (-2.5, 3.9) {($M-2$ Blocks)};
-
-% Tuples with Flags in R
-\node[table, fill=white] at (-2.5, 3.2) {$r_1$ \quad | \quad \texttt{matched=TRUE}};
-\node[table, fill=white] at (-2.5, 2.5) {$r_2$ \quad | \quad \texttt{matched=FALSE}};
-\node[table, fill=white] at (-2.5, 1.8) {$\dots$ \quad | \quad $\dots$};
-
-% S Input Buffer
-\node[box, fill=gray!15, minimum width=2.5cm, minimum height=1.5cm] (SBuf) at (3.5, 4) {Input Buffer $S$ \\ \scriptsize (1 Block)};
+\draw[dashed, fill=gray!5] (-6.2, -3.5) rectangle (5.2, 3.5);
+\node[anchor=north west, font=\bfseries] at (-6.2, 3.5) {Main Memory (Size $M$)};
 
 % Join Logic Processor
-\node[draw=black, circle, fill=white, minimum size=1.5cm, inner sep=0pt, font=\small\bfseries, align=center] (Join) at (1, 2) {Join \& \\ Pad};
+\node[draw=black, circle, fill=white, minimum size=1.8cm, inner sep=0pt, font=\small\bfseries, align=center] (Join) at (0, 0) {Join \& \\ Pad};
+
+% R Chunk Hash Table Background
+\node[box, fill=gray!20, minimum width=4.5cm, minimum height=4.2cm] (RTable) at (-3.5, -0.2) {};
+\node[font=\bfseries] at (-3.5, 1.4) {$R$-Chunk Hash Table};
+\node[font=\scriptsize] at (-3.5, 1.0) {($M-2$ Blocks)};
+
+% Tuples with Flags in R
+\node[table] at (-3.5, 0.3) {$r_1$ \quad | \quad \texttt{matched=TRUE}};
+\node[table] at (-3.5, -0.5) {$r_2$ \quad | \quad \texttt{matched=FALSE}};
+\node[table] at (-3.5, -1.3) {$\dots$ \quad | \quad $\dots$};
+
+% S Input Buffer
+\node[box, minimum width=2.5cm, minimum height=1.5cm] (SBuf) at (3, 2) {Input Buffer $S$ \\ \scriptsize (1 Block)};
 
 % Output Buffer
-\node[box, fill=gray!15, minimum width=2.5cm, minimum height=1.5cm] (OutBuf) at (3.5, 1.2) {Output Buffer \\ \scriptsize (1 Block)};
+\node[box, minimum width=2.5cm, minimum height=1.5cm] (OutBuf) at (3, -2) {Output Buffer \\ \scriptsize (1 Block)};
 
 % Disks
-\node[disk, fill=white, minimum height=1.2cm, minimum width=1.5cm] (DiskR) at (-5.5, 3) {$R$};
-\node[disk, fill=white, minimum height=1.2cm, minimum width=1.5cm] (DiskS) at (7, 4) {$S$};
-\node[disk, fill=white, minimum height=1.2cm, minimum width=1.5cm] (DiskOut) at (7, 1.2) {Result};
+\node[disk] (DiskR) at (-8.5, -0.2) {$R$};
+\node[disk] (DiskS) at (7.5, 2) {$S$};
+\node[disk] (DiskOut) at (7.5, -2) {Result};
 
 % Flow Arrows
 \draw[->] (DiskR) -- (RTable) node[midway, above, font=\scriptsize, align=center] {Read\\Chunk};
 \draw[->] (DiskS) -- (SBuf) node[midway, above, font=\scriptsize] {Stream};
+
 \draw[->] (SBuf) -- (Join) node[midway, sloped, above, font=\scriptsize] {Probe};
-\draw[->] (RTable) -- (Join);
-\draw[->] (Join) -- (OutBuf) node[midway, above, font=\scriptsize] {Emit};
+\draw[->] (RTable) -- (Join) node[midway, above, font=\scriptsize] {Match};
+\draw[->] (Join) -- (OutBuf) node[midway, sloped, above, font=\scriptsize] {Emit};
+
 \draw[->] (OutBuf) -- (DiskOut) node[midway, above, font=\scriptsize] {Write};
 
-% Special action arrow for LOJ
-\draw[->, dashed] (-2.5, 1.3) |- (0, 0.5) -| (Join) node[pos=0.25, below, font=\scriptsize] {End of $S$ pass: Emit unmatched $R$ with NULLs};
+% Special action arrow for LOJ (Dashed line at the bottom)
+\draw[->, dashed] (RTable.south) |- (0, -3) node[pos=0.75, below, font=\scriptsize] {End of $S$ pass: Emit unmatched $R$ with NULLs} -- (Join.south);
 
 \end{tikzpicture}
 \end{center}
@@ -34460,12 +34999,13 @@ In modern DBMS, multiple users access and modify data simultaneously to maximize
 
 \vspace{0.5cm}
 
+
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
-    thick,
-    state/.style={draw, rectangle, rounded corners=3mm, thick, align=center, minimum width=2.5cm, minimum height=1cm, fill=white},
-    scale=0.9, transform shape
+ >=stealth,
+ thick,x=1.5cm,
+state/.style={draw, rectangle, rounded corners=3mm, thick, align=center, minimum width=2.5cm, minimum height=1cm, fill=white},
+scale=0.9, transform shape
 ]
 
 % Nodes
@@ -34492,6 +35032,8 @@ In modern DBMS, multiple users access and modify data simultaneously to maximize
 
 \end{tikzpicture}
 \end{center}
+
+
 
 \end{tcolorbox}
 
@@ -34900,7 +35442,7 @@ The \textbf{Two-Phase Locking (2PL)} protocol ensures serializability by requiri
     \draw[dashed] (6,0) node[below] {End of Tx};
     
     % Legend
-    \matrix [draw, fill=white, below left] at (7.5, 4.8) {
+    \matrix [draw, fill=white, below left] at (12, 4.8) {
       \draw[blue, thick] (0,0) -- (0.5,0); & \node[font=\footnotesize] {Basic 2PL}; \\
       \draw[red, very thick] (0,0) -- (0.5,0); & \node[font=\footnotesize] {Strict 2PL}; \\
     };
@@ -35146,7 +35688,7 @@ Let us analyze the two cyclical cases using Precedence Graphs:
     
     \draw[->] (T1A) to[bend left=30] node[above, draw=none, font=\small] {A: $r_1 \to w_2$} (T2A);
     \draw[->] (T2A) to[bend left=30] node[below, draw=none, font=\small] {B: $w_2 \to w_1$} (T1A);
-    \node[draw=none, rectangle, below=1cm of T1A, xshift=1.5cm] {\textbf{Cycle Type 1}};
+    \node[draw=none, rectangle, below=2cm of T1A, xshift=1.5cm] {\textbf{Cycle Type 1}};
 
     % Cycle 2
     \node (T1B) at (6,0) {$T_1$};
@@ -35154,7 +35696,7 @@ Let us analyze the two cyclical cases using Precedence Graphs:
     
     \draw[->] (T2B) to[bend right=30] node[above, draw=none, font=\small] {A: $w_2 \to r_1$} (T1B);
     \draw[->] (T1B) to[bend right=30] node[below, draw=none, font=\small] {B: $w_1 \to w_2$} (T2B);
-    \node[draw=none, rectangle, below=1cm of T1B, xshift=1.5cm] {\textbf{Cycle Type 2}};
+    \node[draw=none, rectangle, below=2cm of T1B, xshift=1.5cm] {\textbf{Cycle Type 2}};
 
 \end{tikzpicture}
 \end{center}
@@ -35594,7 +36136,7 @@ The proof that Strict 2PL guarantees ACR follows directly from the lock compatib
 The following sequence diagram illustrates how Strict 2PL physically prevents a transaction from reading uncommitted data, thereby avoiding cascading aborts.
 
 \begin{center}
-\begin{tikzpicture}[>=stealth, thick]
+\begin{tikzpicture}[>=stealth, thick, x=1.3cm]
     
     % Timelines
     \draw[->, very thick] (0, 0) -- (0, -7) node[below, font=\bfseries] {$T_1$ (Writing Transaction)};
@@ -35730,8 +36272,9 @@ We will prove that a 2PL schedule is always conflict-serializable using a proof 
 
 The diagram below visually demonstrates why the Lock Point of $T_1$ must strictly precede the Lock Point of $T_2$ when there is a conflict ($T_1 \to T_2$).
 
+
 \begin{center}
-\begin{tikzpicture}[>=stealth, thick, xscale=1.2, yscale=1.2]
+\begin{tikzpicture}[>=stealth, thick,x=1.3cm, y=1.4cm]
     
     % Grid lines (optional, for planning)
     %\draw[help lines, color=gray!30, dashed] (0,0) grid (10,4);
@@ -35775,6 +36318,7 @@ The diagram below visually demonstrates why the Lock Point of $T_1$ must strictl
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -36308,28 +36852,29 @@ $$\therefore \text{Every schedule that satisfies Strict 2PL must also be ACR.}$$
 The timeline diagram below illustrates how Strict 2PL naturally avoids cascading rollbacks by forcing dependent transactions to wait until the preceding transaction has committed.
 
 \begin{center}
-\begin{tikzpicture}[>=stealth, thick, node distance=2cm]
+\begin{tikzpicture}[>=stealth, thick]
 
     % Time Line
-    \draw[->, ultra thick] (0,0) -- (11,0) node[below right] {\textbf{Time}};
+    \draw[->, ultra thick] (0,0) -- (12.5,0) node[below right] {\textbf{Time}};
 
-    % Transaction 1 (Ti) markers
-    \draw (1,0.1) -- (1,-0.1) node[below] {$xl_i(X)$};
-    \draw (2.5,0.1) -- (2.5,-0.1) node[below] {$w_i(X)$};
-    \draw (8,0.1) -- (8,-0.1) node[below] {$C_i$};
-    \draw (9,0.1) -- (9,-0.1) node[below] {$xu_i(X)$};
+    % Transaction 1 (Ti) markers (Below the line)
+    \draw (1, 0.15) -- (1, -0.15) node[below=4pt] {$xl_i(X)$};
+    \draw (2.5, 0.15) -- (2.5, -0.15) node[below=4pt] {$w_i(X)$};
+    \draw (8, 0.15) -- (8, -0.15) node[below=4pt] {$C_i$};
+    \draw (9, 0.15) -- (9, -0.15) node[below=4pt] {$xu_i(X)$};
 
-    % Transaction 2 (Tj) markers
-    \draw (4,0.1) -- (4,-0.1) node[above=4pt] {\textbf{Request} $sl_j(X)$};
-    \draw (9.5,0.1) -- (9.5,-0.1) node[above=4pt] {\textbf{Acquire} $sl_j(X)$};
-    \draw (10.5,0.1) -- (10.5,-0.1) node[above=4pt] {$r_j(X)$};
+    % Transaction 2 (Tj) markers (Above the line)
+    \draw (4, -0.15) -- (4, 0.15) node[above=4pt] {\textbf{Request} $sl_j(X)$};
+    \draw (9.8, -0.15) -- (9.8, 0.15) node[above=4pt] {\textbf{Acquire} $sl_j(X)$};
+    \draw (11.5, -0.15) -- (11.5, 0.15) node[above=4pt] {$r_j(X)$};
 
-    % Blocking bracket/indicator
-    \draw[snake=ticks, segment length=5pt, red, ultra thick] (4,0.5) -- (9,0.5);
-    \node[red, above] at (6.5,0.6) {\textbf{$T_j$ is BLOCKED (Lock Incompatibility)}};
+    % Blocking bracket/indicator (Using a curly brace for professional look)
+    \draw[thick, red, decorate, decoration={brace, amplitude=6pt}] 
+        (4, 0.8) -- (9, 0.8) 
+        node[midway, above=8pt, font=\bfseries] {$T_j$ is BLOCKED (Lock Incompatibility)};
 
     % Core boundary line
-    \draw[dashed, gray] (8,-1) -- (8,2);
+    \draw[dashed, gray] (8, -1.2) -- (8, 2) node[above, text=black, font=\small] {\textit{Commit Time}};
 
 \end{tikzpicture}
 \end{center}
@@ -37329,20 +37874,24 @@ Recall that \textbf{Shared (Read)} locks are compatible with other Shared locks,
 
 The following diagram represents the internal state of the Lock Table after all 10 instructions have been processed by the Lock Manager.
 
-\vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
     >=stealth,
+    thick,
     node distance=0.8cm and 0.8cm,
-    hashcell/.style={draw, thick, minimum width=1.5cm, minimum height=0.8cm, align=center, font=\bfseries},
+    hashcell/.style={draw, thick, minimum width=1.8cm, minimum height=0.8cm, align=center, font=\bfseries, fill=blue!5},
     itemnode/.style={draw, thick, fill=gray!20, minimum width=1.5cm, minimum height=0.8cm, align=center, font=\bfseries},
-    locknode/.style={draw, thick, rounded corners=3pt, minimum width=1.8cm, minimum height=1.3cm, align=center, font=\small},
+    locknode/.style={draw, thick, rounded corners=3pt, minimum width=1.8cm, minimum height=1.3cm, align=center, font=\small, fill=white},
     arrow/.style={->, thick},
-    label/.style={font=\scriptsize\itshape, text=blue}
+    label/.style={font=\scriptsize\bfseries\itshape, text=red}
 ]
 
-% Draw Hash Directory
-\node[hashcell] (h1) {Index 1};
+% Headers (Properly Aligned Above)
+\node[font=\bfseries\large, align=center] (hashhead) at (0, 1.2) {Hash\\Directory};
+\node[font=\bfseries\large] (queuehead) at (5, 1.2) {Lock Table Queues};
+
+% Draw Hash Directory (Aligned under hashhead)
+\node[hashcell, below=0.4cm of hashhead] (h1) {Index 1};
 \node[hashcell, below=0cm of h1] (h2) {Index 2};
 \node[hashcell, below=0cm of h2] (h3) {Index 3};
 \node[hashcell, below=0cm of h3] (h4) {Index 4};
@@ -37352,7 +37901,7 @@ The following diagram represents the internal state of the Lock Table after all 
 \node[hashcell, below=0cm of h7] (h8) {Index 8};
 
 % --- Bucket 1: Data Item B ---
-\node[itemnode, right=1cm of h1] (itemB) {Item B};
+\node[itemnode, right=1.2cm of h1] (itemB) {Item B};
 \node[locknode, right=0.8cm of itemB] (b1) {\textbf{T2}\\Read\\Granted};
 \node[locknode, right=0.6cm of b1] (b2) {\textbf{T1}\\Read\\Granted};
 \node[locknode, right=0.6cm of b2] (b3) {\textbf{T3}\\Write\\Waiting};
@@ -37363,7 +37912,7 @@ The following diagram represents the internal state of the Lock Table after all 
 \draw[arrow] (b2.east) -- (b3.west);
 
 % --- Bucket 5: Data Item A ---
-\node[itemnode, right=1cm of h5] (itemA) {Item A};
+\node[itemnode, right=1.2cm of h5] (itemA) {Item A};
 \node[locknode, right=0.8cm of itemA] (a1) {\textbf{T1}\\Read\\Granted};
 \node[locknode, right=0.6cm of a1] (a2) {\textbf{T2}\\Read\\Granted};
 \node[locknode, right=0.6cm of a2] (a3) {\textbf{T3}\\Write\\Waiting};
@@ -37376,7 +37925,7 @@ The following diagram represents the internal state of the Lock Table after all 
 \draw[arrow] (a3.east) -- (a4.west);
 
 % --- Bucket 8: Data Item C ---
-\node[itemnode, right=1cm of h8] (itemC) {Item C};
+\node[itemnode, right=1.2cm of h8] (itemC) {Item C};
 \node[locknode, right=0.8cm of itemC] (c1) {\textbf{T1}\\Read\\Granted};
 \node[locknode, right=0.6cm of c1] (c2) {\textbf{T2}\\Read\\Granted};
 \node[locknode, right=0.6cm of c2] (c3) {\textbf{T1}\\Write\\Waiting};
@@ -37384,11 +37933,7 @@ The following diagram represents the internal state of the Lock Table after all 
 \draw[arrow] (h8.east) -- (itemC.west);
 \draw[arrow] (itemC.east) -- (c1.west);
 \draw[arrow] (c1.east) -- (c2.west);
-\draw[arrow] (c2.east) -- node[above, label, yshift=2pt] {Upgrade} (c3.west);
-
-% Table Title
-\node[above=0.8cm of itemA, font=\bfseries\large] {Lock Table Queues};
-\node[above=4cm of h1, font=\bfseries, align=center] {Hash\\Directory};
+\draw[arrow] (c2.east) -- node[above, label, yshift=2pt] {Lock Upgrade} (c3.west);
 
 \end{tikzpicture}
 \end{center}
@@ -37569,10 +38114,13 @@ To achieve efficiency, databases use a technique called \textbf{Lock-Coupling} (
 Consider a B$^+$ tree where Transaction $T_1$ is searching for the value \textbf{30}. The diagram below illustrates how Lock-Coupling operates efficiently by releasing locks early, allowing a concurrent Transaction $T_2$ to immediately follow without waiting for $T_1$ to finish.
 
 \vspace{1.5em}
+
+
 \begin{center}
 \begin{tikzpicture}[
     >=stealth,
-    node distance=1.5cm and 2cm,
+    thick,
+    node distance=1.5cm and 2.2cm,
     bnode/.style={
         draw, thick, fill=white, rounded corners=2pt, 
         minimum height=0.7cm, minimum width=1.5cm, 
@@ -37584,19 +38132,19 @@ Consider a B$^+$ tree where Transaction $T_1$ is searching for the value \textbf
         font=\bfseries, align=center
     },
     edge/.style={->, thick},
-    labeltext/.style={font=\small\color{blue!80!black}, align=left},
+    labeltext/.style={font=\small\bfseries, align=left},
     highlight/.style={draw=red, very thick, fill=red!10}
 ]
 
-% Nodes
-\node[bnode] (root) {[ 50 ]};
-\node[bnode, below left=1.2cm and 2.5cm of root] (int1) {[ 25 ]};
-\node[bnode, below right=1.2cm and 2.5cm of root] (int2) {[ 75 ]};
+% Nodes (Using absolute coordinates for perfect symmetry)
+\node[bnode] (root) at (0, 4) {[ 50 ]};
+\node[bnode] (int1) at (-3, 2) {[ 25 ]};
+\node[bnode] (int2) at (3, 2) {[ 75 ]};
 
-\node[leafnode, below left=1.5cm and 0.8cm of int1] (leaf1) {[ 10 | 20 ]};
-\node[leafnode, below right=1.5cm and 0.8cm of int1] (leaf2) {[ 30 | 40 ]};
-\node[leafnode, below left=1.5cm and 0.8cm of int2] (leaf3) {[ 60 | 70 ]};
-\node[leafnode, below right=1.5cm and 0.8cm of int2] (leaf4) {[ 80 | 90 ]};
+\node[leafnode] (leaf1) at (-4.5, 0) {[ 10 | 20 ]};
+\node[leafnode] (leaf2) at (-1.5, 0) {[ 30 | 40 ]};
+\node[leafnode] (leaf3) at (1.5, 0) {[ 60 | 70 ]};
+\node[leafnode] (leaf4) at (4.5, 0) {[ 80 | 90 ]};
 
 % Edges
 \draw[edge] (root) -- (int1);
@@ -37606,24 +38154,28 @@ Consider a B$^+$ tree where Transaction $T_1$ is searching for the value \textbf
 \draw[edge] (int2) -- (leaf3);
 \draw[edge] (int2) -- (leaf4);
 
-% Lock Coupling Annotations (Crabbing Path for T1)
-\node[labeltext, above=0.3cm of root] (l1) {Step 1: $T_1$ Locks Root (S)};
-\node[labeltext, left=0.3cm of int1] (l2) {Step 2: $T_1$ Locks Child (S)};
-\node[labeltext, right=0.5cm of root, font=\small\color{red!80!black}] (l3) {Step 3: $T_1$ Unlocks Root! \\ (Allows $T_2$ to enter)};
-\node[labeltext, right=0.3cm of leaf2] (l4) {Step 4: $T_1$ Locks Leaf (S) \\ and Unlocks Parent};
+% Lock Coupling Annotations (Re-positioned cleanly)
+\node[labeltext, text=blue!80!black, left=1.2cm of root] (l1) {Step 1: $T_1$ Locks\\Root (S)};
+\node[labeltext, text=red!80!black, right=1.2cm of root] (l3) {Step 3: $T_1$ Unlocks Root!\\(Allows $T_2$ to enter)};
 
-% Annotation arrows
-\draw[->, dashed, blue] (l1) -- (root);
+\node[labeltext, text=blue!80!black, left=0.6cm of int1] (l2) {Step 2: $T_1$ Locks\\Child (S)};
+\node[labeltext, text=blue!80!black,below right=0.6cm of leaf2, anchor=west] (l4) {Step 4: $T_1$ Locks Leaf (S)\\and Unlocks Parent};
+
+% Annotation arrows (Clean, non-overlapping paths with slight bends)
+\draw[->, dashed, blue, bend right=15] (l1) to (root);
+\draw[->, dashed, red, bend left=15] (l3) to (root);
 \draw[->, dashed, blue] (l2) -- (int1);
-\draw[->, dashed, red] (l3) -- (root);
-\draw[->, dashed, blue] (l4) -- (leaf2);
+\draw[->, dashed, blue, bend left=15] (l4) to (leaf2);
 
-% Highlighting the path
-\draw[red, very thick, dashed, ->] (root.south west) -- (int1.north east);
-\draw[red, very thick, dashed, ->] (int1.south east) -- (leaf2.north west);
+% Highlighting the Crabbing/Search path (Shortened to not overlap borders)
+\draw[red, ultra thick, dashed, ->, shorten >=2pt, shorten <=2pt] (root.south west) -- (int1.north east);
+\draw[red, ultra thick, dashed, ->, shorten >=2pt, shorten <=2pt] (int1.south east) -- (leaf2.north west);
 
 \end{tikzpicture}
 \end{center}
+
+
+
 \vspace{1em}
 
 \subsubsection*{5. Summary Comparison}
@@ -38178,9 +38730,10 @@ In a Database Management System (DBMS), the \textbf{Lock Manager} uses a data st
 Based on the provided data items and their hash values, we can construct the corresponding lock table. The hash directory maps to buckets 0 through 5 (assuming a standard array implementation), with buckets 2, 3, and 5 pointing to linked lists of lock control blocks.
 
 \vspace{1.5em}
+
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,y=1.6cm,
     node distance=1.5cm and 2.5cm,
     hashbox/.style={draw, thick, minimum width=1.5cm, minimum height=1.2cm, align=center, font=\Large\bfseries},
     itembox/.style={draw, thick, rounded corners, fill=white, inner sep=4pt, align=left},
@@ -38275,6 +38828,7 @@ Based on the provided data items and their hash values, we can construct the cor
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{1.5em}
 
 \subsubsection*{3. Tabular Representation of the Hash Chains}
@@ -38493,7 +39047,7 @@ Consider two transactions, $T_1$ and $T_2$, and a data item $A$.
 
 \subsubsection*{4. Visualizing the Thomas Write Rule}
 
-The TikZ diagram below illustrates the timeline of the example, highlighting the difference between Basic TO and the Thomas Write Rule when encountering a blind write.
+The diagram below illustrates the timeline of the example, highlighting the difference between Basic TO and the Thomas Write Rule when encountering a blind write.
 
 \vspace{1em}
 \begin{center}
@@ -38721,43 +39275,53 @@ The most common locking protocol uses two fundamental lock modes:
 The following diagram illustrates how the Lock Manager utilizes the compatibility matrix to process incoming requests.
 
 \vspace{1.5em}
+
+
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.4cm,
     node distance=1.5cm and 2cm,
     txn/.style={draw, thick, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=white},
-    mgr/.style={draw, thick, fill=gray!10, minimum width=3cm, minimum height=1.5cm, align=center, font=\bfseries},
-    data/.style={draw, thick, cylinder, shape border rotate=90, aspect=0.25, minimum height=1.5cm, minimum width=1.5cm, align=center},
-    decision/.style={draw, diamond, thick, aspect=1.5, inner sep=2pt, align=center, font=\small\bfseries},
+    mgr/.style={draw, thick, fill=blue!5, minimum width=3.5cm, minimum height=1.5cm, align=center, font=\bfseries},
+    data/.style={draw, thick, cylinder, shape border rotate=90, aspect=0.25, minimum height=1.5cm, minimum width=1.8cm, align=center, fill=gray!10},
+    decision/.style={draw, diamond, thick, aspect=1.5, inner sep=2pt, align=center, font=\small\bfseries, fill=white},
     arrow/.style={->, thick},
-    label/.style={font=\small, text=black}
+    label/.style={font=\small, align=center}
 ]
 
 % Nodes
-\node[txn] (T1) at (-4, 2) {$T_1$\\ (Holds S Lock)};
-\node[txn] (T2) at (-4, -2) {$T_2$\\ (Requests Lock)};
+\node[txn] (T1) at (-4.5, 2) {$T_1$\\ \small (Holds S-Lock)};
+\node[txn] (T2) at (-4.5, -2) {$T_2$\\ \small (Requests Lock)};
 
-\node[data] (DB) at (4, 2) {Data\\Item $A$};
+\node[mgr] (LM) at (0, 0) {Lock Manager\\ \small (Compatibility Matrix)};
 
-\node[mgr] (LM) at (0, 0) {Lock Manager\\(Compatibility Matrix)};
+\node[data] (DB) at (4.5, 2.5) {Data\\Item $A$};
 
-\node[decision] (EvalS) at (4, -1) {Req:\\S Lock?};
-\node[decision] (EvalX) at (4, -3) {Req:\\X Lock?};
+% Decision Nodes vertically aligned
+\node[decision] (EvalS) at (4.5, 0) {Req:\\S-Lock?};
+\node[decision] (EvalX) at (4.5, -3) {Req:\\X-Lock?};
 
-% Edges
-\draw[arrow] (T1.east) -- node[above, label] {Lock currently active} (LM.north west);
-\draw[arrow] (T2.east) -- node[above, label] {New Request} (LM.south west);
+% Edges - Transactions to Lock Manager
+\draw[arrow] (T1.east) -- node[above, sloped, font=\small] {Lock currently active} (LM.north west);
+\draw[arrow] (T2.east) -- node[below, sloped, font=\small] {New Request} (LM.south west);
 
-\draw[arrow, dashed] (LM.north east) -- node[above, label] {Manages} (DB.west);
+% Lock Manager manages Data Item (Dashed line routed cleanly)
+\draw[arrow, dashed, gray] (LM.north) |- node[pos=0.75, above, font=\small, text=black] {Manages} (DB.west);
 
-\draw[arrow] (LM.east) -- (EvalS.west);
-\draw[arrow] (LM.east) -- (EvalX.west);
+% Lock Manager to First Decision
+\draw[arrow] (LM.east) -- node[above, font=\small] {Evaluate} (EvalS.west);
 
+% Decision 1: S-Lock Outcomes
 \draw[arrow, color=green!60!black] (EvalS.north) -- node[right, font=\small\bfseries] {Yes (Granted)} (DB.south);
-\draw[arrow, color=red!70!black] (EvalX.south) -- ++(0,-0.8) node[below, font=\small\bfseries] {No (Blocked/Waiting)};
+\draw[arrow] (EvalS.south) -- node[right, font=\small\bfseries] {No} (EvalX.north);
+
+% Decision 2: X-Lock Outcomes
+\draw[arrow, color=red!70!black] (EvalX.south) -- ++(0,-0.8) node[below, font=\small\bfseries] {Yes (Blocked/Waiting)};
 
 \end{tikzpicture}
 \end{center}
+
+
 \vspace{1.5em}
 
 ---
@@ -40794,7 +41358,7 @@ The combination of these policies defines the complexity of the DBMS recovery su
 \vspace{0.4cm}
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.3cm,y=1.3cm,
     cell/.style={draw=black!70, thick, rounded corners=4pt, align=center, minimum width=5cm, minimum height=2.8cm, fill=white},
     header/.style={font=\bfseries, align=center, minimum width=5cm},
     sideheader/.style={font=\bfseries, align=center, minimum height=2.8cm, rotate=90}

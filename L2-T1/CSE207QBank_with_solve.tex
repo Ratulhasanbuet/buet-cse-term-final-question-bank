@@ -36785,9 +36785,192 @@ The diagram below contrasts how FIFO (BFS) processes the state-space tree compar
 
 \begin{enumerate}
 
-%% Q — 2023-24
 \item Construct the prefix function using the Knuth-Morris-Pratt (KMP) algorithm for the pattern \texttt{ABABC}. Explain how you can use this prefix function to search for this pattern in the text \texttt{ABABABABC}.
 \mk{15} \yr{CSE 207 | L-2/T-1 | 2023--24}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cG!4,colframe=cG,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cG]
+
+The Knuth-Morris-Pratt (KMP) algorithm is a highly efficient string-matching algorithm that achieves linear time complexity. It avoids the redundant comparisons found in the naive approach by preprocessing the pattern to construct a \textbf{Prefix Function} (often called the $\pi$ array or LPS array). 
+
+\subsection*{1. Constructing the Prefix Function ($\pi$ array)}
+
+\textbf{Definition:} The prefix function $\pi[i]$ stores the length of the \textit{longest proper prefix} of the substring $P[0 \dots i]$ that is also a \textit{suffix} of $P[0 \dots i]$. 
+
+\textbf{Intuition:} If a mismatch occurs after matching $i+1$ characters, we already know the exact characters in the text that matched $P[0 \dots i]$. The $\pi$ array tells us how far we can shift the pattern to align its longest valid prefix with the suffix of the text we just matched, preventing us from backtracking in the text string.
+
+Let the pattern be $P = \texttt{ABABC}$ (length $m = 5$). We compute $\pi$ iteratively:
+
+\begin{itemize}
+    \item \textbf{Base Case ($i=0$):} $P[0] = \texttt{A}$. A single character has no proper prefix. \\
+    $\implies \pi[0] = 0$.
+    
+    \item \textbf{Step $i=1$:} $P[1] = \texttt{B}$. The substring is $\texttt{AB}$. The proper prefix is \texttt{A}, suffix is \texttt{B}. No match. \\
+    $\implies \pi[1] = 0$.
+    
+    \item \textbf{Step $i=2$:} $P[2] = \texttt{A}$. The substring is $\texttt{ABA}$. The longest proper prefix that is a suffix is \texttt{A}. \\
+    $\implies \pi[2] = 1$.
+    
+    \item \textbf{Step $i=3$:} $P[3] = \texttt{B}$. The substring is $\texttt{ABAB}$. The longest proper prefix that is a suffix is \texttt{AB}. \\
+    $\implies \pi[3] = 2$.
+    
+    \item \textbf{Step $i=4$:} $P[4] = \texttt{C}$. The substring is $\texttt{ABABC}$. We try to extend the previous match of length 2 (\texttt{AB}). We compare $P[\pi[3]] = P[2] = \texttt{A}$ with $P[4] = \texttt{C}$. Since $\texttt{A} \neq \texttt{C}$, we face a mismatch.
+    \begin{itemize}
+        \item We fall back to the next longest potential match: $\pi[\pi[3]-1] = \pi[1] = 0$.
+        \item We compare $P[0] = \texttt{A}$ with $P[4] = \texttt{C}$. They do not match.
+        \item We have reached length 0, so no prefix matches the suffix. \\
+        $\implies \pi[4] = 0$.
+    \end{itemize}
+\end{itemize}
+
+\begin{center}
+\begin{tikzpicture}[x=1.2cm, y=1cm, font=\sffamily]
+    \node[anchor=east] at (-1, 0.5) {\textbf{Index $i$:}};
+    \node[anchor=east] at (-1, 0) {\textbf{Pattern $P$:}};
+    \node[anchor=east] at (-1, -1) {\textbf{Prefix Array $\pi$:}};
+    
+    \foreach \c [count=\i from 0] in {A, B, A, B, C} {
+        \node[text=gray, font=\footnotesize] at (\i, 0.5) {\i};
+        \node[draw, minimum size=8mm, fill=blue!5, thick] at (\i, 0) {\c};
+    }
+    
+    \foreach \v [count=\i from 0] in {0, 0, 1, 2, 0} {
+        \node[draw, minimum size=8mm, fill=green!10, thick] at (\i, -1) {\v};
+    }
+\end{tikzpicture}
+\end{center}
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{2. Searching for the Pattern in Text ($T$)}
+
+\textbf{How KMP uses the prefix function:} 
+We iterate through the text $T = \texttt{ABABABABC}$ with a pointer $i$, and keep a pointer $j$ for the pattern $P$. If $T[i] == P[j]$, we increment both. If a mismatch occurs ($T[i] \neq P[j]$) and $j > 0$, we \textit{do not backtrack} $i$. Instead, we update $j = \pi[j-1]$. This effectively shifts the pattern to the right, aligning the longest matching prefix without re-evaluating the characters in $T$.
+
+\textbf{Step-by-step Trace on $T = \texttt{ABABABABC}$ ($n = 9$):}
+
+\begin{center}
+\begin{tikzpicture}[x=8.5mm, y=8.5mm, font=\sffamily]
+    % Text T
+    \node[anchor=east] at (-1, 0) {\textbf{Text $T$:}};
+    \foreach \c [count=\i from 0] in {A, B, A, B, A, B, A, B, C} {
+        \node[draw, minimum size=7.5mm, fill=blue!10, thick] at (\i, 0) {\c};
+        \node[text=gray, font=\scriptsize] at (\i, 0.65) {\i};
+    }
+    
+    % Step 1
+    \node[anchor=east] at (-1, -1.5) {\textbf{Step 1:}};
+    \node[anchor=east, text=gray, font=\footnotesize] at (-1, -2.0) {Match fails at $j=4$};
+    \foreach \c [count=\j from 0] in {A, B, A, B} {
+        \node[draw, minimum size=7.5mm, thick, fill=green!20] at (\j, -1.5) {\c};
+    }
+    \node[draw, minimum size=7.5mm, thick, fill=red!20, text=red] (m1) at (4, -1.5) {C};
+    \draw[->, red, very thick] (4, -0.5) -- (m1.north);
+    \node[font=\footnotesize, align=center] at (9, -1.5) {$\pi[3]=2$. Shift pattern \\ so $P[2]$ aligns with $T[4]$.};
+
+    % Step 2
+    \node[anchor=east] at (-1, -3.5) {\textbf{Step 2:}};
+    \node[anchor=east, text=gray, font=\footnotesize] at (-1, -4.0) {Match fails at $j=4$};
+    \foreach \c [count=\j from 0] in {A, B} {
+        \node[draw, minimum size=7.5mm, thick, fill=gray!20] at (\j+2, -3.5) {\c};
+    }
+    \foreach \c [count=\j from 2] in {A, B} {
+        \node[draw, minimum size=7.5mm, thick, fill=green!20] at (\j+2, -3.5) {\c};
+    }
+    \node[draw, minimum size=7.5mm, thick, fill=red!20, text=red] (m2) at (6, -3.5) {C};
+    \draw[->, red, very thick] (6, -0.5) -- (m2.north);
+    \node[font=\footnotesize, align=center] at (9, -3.5) {$\pi[3]=2$. Shift pattern \\ so $P[2]$ aligns with $T[6]$.};
+
+    % Step 3
+    \node[anchor=east] at (-1, -5.5) {\textbf{Step 3:}};
+    \node[anchor=east, text=gray, font=\footnotesize] at (-1, -6.0) {Full match!};
+    \foreach \c [count=\j from 0] in {A, B} {
+        \node[draw, minimum size=7.5mm, thick, fill=gray!20] at (\j+4, -5.5) {\c};
+    }
+    \foreach \c [count=\j from 2] in {A, B, C} {
+        \node[draw, minimum size=7.5mm, thick, fill=green!40] at (\j+4, -5.5) {\c};
+    }
+    \draw[->, green!50!black, very thick] (8, -0.5) -- (8, -5.1);
+    \node[font=\footnotesize, align=center] at (9, -5.5) {$j=5$. Match found! \\ Index $= 8 - 5 + 1 = 4$.};
+\end{tikzpicture}
+\end{center}
+
+\begin{itemize}
+    \item \textbf{Step 1 ($i=0 \dots 4$):} $P[0 \dots 3]$ (\texttt{ABAB}) matches $T[0 \dots 3]$. At $i=4$, $T[4]=\texttt{A} \neq P[4]=\texttt{C}$. 
+    The length of the matched segment is 4, ending at $P[3]$. We look up $\pi[3] = 2$. 
+    We shift the pattern such that $j$ becomes $2$. The next comparison is $T[4]$ vs $P[2]$.
+    
+    \item \textbf{Step 2 ($i=4 \dots 6$):} We resume matching. $T[4 \dots 5]$ matches $P[2 \dots 3]$ (\texttt{AB}). At $i=6$, $T[6]=\texttt{A} \neq P[4]=\texttt{C}$. 
+    Again, mismatch at $j=4$. We look up $\pi[3] = 2$. 
+    We shift the pattern such that $j$ becomes $2$. The next comparison is $T[6]$ vs $P[2]$.
+    
+    \item \textbf{Step 3 ($i=6 \dots 8$):} We resume matching. $T[6 \dots 8]$ matches $P[2 \dots 4]$ (\texttt{ABC}). 
+    Since $j$ reaches $m = 5$, a full match is recorded at index $i - m + 1 = 8 - 5 + 1 = 4$.
+\end{itemize}
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{3. Algorithms}
+
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption{Compute-Prefix-Function($P$)}
+\begin{algorithmic}[1]
+\State $m \gets \text{length}[P]$
+\State Let $\pi[0 \dots m-1]$ be a new array
+\State $\pi[0] \gets 0$
+\State $j \gets 0$ \Comment{Length of previous longest prefix}
+\For{$i \gets 1$ \textbf{to} $m-1$}
+    \While{$j > 0$ \textbf{and} $P[i] \neq P[j]$}
+        \State $j \gets \pi[j-1]$ \Comment{Fallback}
+    \EndWhile
+    \If{$P[i] == P[j]$}
+        \State $j \gets j + 1$
+    \EndIf
+    \State $\pi[i] \gets j$
+\EndFor
+\State \Return $\pi$
+\end{algorithmic}
+\end{algorithm}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption{KMP-Matcher($T, P$)}
+\begin{algorithmic}[1]
+\State $n \gets \text{length}[T]$, $m \gets \text{length}[P]$
+\State $\pi \gets \text{Compute-Prefix-Function}(P)$
+\State $j \gets 0$ \Comment{Characters matched}
+\For{$i \gets 0$ \textbf{to} $n-1$}
+    \While{$j > 0$ \textbf{and} $T[i] \neq P[j]$}
+        \State $j \gets \pi[j-1]$ \Comment{Shift pattern}
+    \EndWhile
+    \If{$T[i] == P[j]$}
+        \State $j \gets j + 1$
+    \EndIf
+    \If{$j == m$}
+        \State \textbf{Print} "Match at index " $i - m + 1$
+        \State $j \gets \pi[j-1]$ \Comment{Look for next matches}
+    \EndIf
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+\end{minipage}
+
+\vspace{1em}
+
+\subsection*{4. Complexity Analysis}
+
+\begin{itemize}
+    \item \textbf{Time Complexity:} 
+    \begin{itemize}
+        \item \textit{Prefix Computation:} $\mathcal{O}(m)$. The `while` loop decrements $j$ (via $\pi[j-1]$), but $j$ is incremented at most $m-1$ times in the `for` loop. Since $j \ge 0$, the total number of decrements across the entire loop is bounded by $m$. Thus, amortized work inside the loop is $\mathcal{O}(1)$.
+        \item \textit{Searching Phase:} $\mathcal{O}(n)$. By the exact same amortized argument, the pointer $j$ is incremented at most $n$ times. The inner `while` loop decreases $j$, meaning it can execute at most $n$ times total across the whole search. 
+        \item \textbf{Total Time Complexity:} $\mathcal{O}(n + m)$.
+    \end{itemize}
+    \item \textbf{Space Complexity:} $\mathcal{O}(m)$ to store the $\pi$ array.
+\end{itemize}
+
+\end{tcolorbox}
 
 \end{enumerate}
 
@@ -36800,6 +36983,127 @@ The diagram below contrasts how FIFO (BFS) processes the state-space tree compar
 \begin{enumerate}
   \item  Suppose you have designed a Monte Carlo Algorithm for a given problem which succeeds with probability $\ge \frac{1}{n^2}$. However, your boss has asked you to achieve at least $(1 - \frac{1}{n})$ success probability. Explain how you can achieve this.
   \mk{10} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+  \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cG!4,colframe=cG,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cG]
+
+\subsection*{1. Intuition and Strategy: Probability Amplification}
+
+The problem describes a \textbf{Monte Carlo Algorithm} that has a relatively low probability of success ($p \ge \frac{1}{n^2}$). To satisfy your boss's requirement of a much higher success probability ($P_{success} \ge 1 - \frac{1}{n}$), we use a standard randomized algorithms technique known as \textbf{Probability Amplification}.
+
+The core idea is simple: \textit{Run the algorithm multiple times independently}. 
+Assuming this is a typical Monte Carlo algorithm with \textit{one-sided error} (i.e., we can easily verify a correct answer if we see one, or false positives are impossible, as in Karger's Min-Cut algorithm), we only need the algorithm to succeed \textbf{at least once} across all our independent runs. 
+
+By running the algorithm $k$ times, the only way the overall process fails is if \textit{every single independent run fails}. Since the runs are independent, the probability of complete failure decays exponentially as $k$ increases. Our goal is to find the minimum number of runs $k$ that drives the failure probability below $\frac{1}{n}$.
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{2. Mathematical Derivation}
+
+Let $A$ be our Monte Carlo algorithm. We are given:
+\[
+\mathbb{P}(A \text{ succeeds in a single run}) \ge \frac{1}{n^2}
+\]
+Therefore, the probability that a single run fails is bounded by:
+\[
+\mathbb{P}(A \text{ fails}) \le 1 - \frac{1}{n^2}
+\]
+
+Let $A'$ be the amplified algorithm that runs $A$ independently $k$ times and returns the successful outcome. $A'$ fails only if all $k$ runs fail. Because the runs are independent, the overall failure probability is the product of individual failure probabilities:
+\[
+\mathbb{P}(A' \text{ fails}) = \prod_{i=1}^{k} \mathbb{P}(A \text{ fails}) \le \left( 1 - \frac{1}{n^2} \right)^k
+\]
+
+We are required to achieve a success probability of at least $1 - \frac{1}{n}$, which means the overall failure probability must be at most $\frac{1}{n}$:
+\[
+\left( 1 - \frac{1}{n^2} \right)^k \le \frac{1}{n}
+\]
+
+To solve for $k$, we use a fundamental inequality in calculus, valid for all $x \in \mathbb{R}$:
+\[
+1 - x \le e^{-x}
+\]
+Substituting $x = \frac{1}{n^2}$, we can bound the failure probability:
+\[
+\left( 1 - \frac{1}{n^2} \right)^k \le \left( e^{-1/n^2} \right)^k = e^{-k/n^2}
+\]
+
+To strictly satisfy our condition, we enforce that the upper bound is less than or equal to our target failure probability:
+\[
+e^{-k/n^2} \le \frac{1}{n}
+\]
+
+Now, we take the natural logarithm ($\ln$) of both sides:
+\begin{align*}
+\ln\left( e^{-k/n^2} \right) &\le \ln\left( \frac{1}{n} \right) \\
+-\frac{k}{n^2} &\le -\ln(n)
+\end{align*}
+
+Multiplying both sides by $-n^2$ (and flipping the inequality sign):
+\[
+\mathbf{k \ge n^2 \ln n}
+\]
+
+\textbf{Conclusion:} By running the algorithm independently $k = \lceil n^2 \ln n \rceil$ times, we guarantee that the overall success probability is at least $1 - \frac{1}{n}$.
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{3. Visualizing the Exponential Decay of Error}
+
+The following graph illustrates how the failure probability drops exponentially with the number of runs $k$, crossing the required threshold when $k \approx n^2 \ln n$.
+
+\begin{center}
+\begin{tikzpicture}[x=1.2cm, y=1.2cm, font=\sffamily, >=stealth]
+    % Axes
+    \draw[->, very thick] (0,0) -- (8,0) node[right] {$k$ (Number of runs)};
+    \draw[->, very thick] (0,0) -- (0,4.5) node[above] {Overall Failure Probability $\mathbb{P}(F_k)$};
+    
+    % Decay Curve
+    \draw[very thick, blue, domain=0:7.5, samples=100] plot (\x, {4*exp(-0.8*\x)}) node[above right, text=blue] {$\le e^{-k/n^2}$};
+    
+    % Threshold line
+    \draw[dashed, red, very thick] (0,1) -- (8,1) node[pos=0.85, above, text=red] {Maximum tolerable error: $\frac{1}{n}$};
+    
+    % Intersection point and projection
+    \filldraw[black] (1.73,1) circle (2.5pt);
+    \draw[dashed, thick] (1.73,1) -- (1.73,0) node[below] {$k = n^2 \ln n$};
+    
+    % Labels
+    \node[below left] at (0,0) {0};
+    \node[left] at (0,4) {1};
+\end{tikzpicture}
+\end{center}
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{4. Formal Amplified Algorithm}
+
+We define the wrapper algorithm that executes the base Monte Carlo algorithm $A$ exactly $\lceil n^2 \ln n \rceil$ times.
+
+\begin{algorithm}[H]
+\caption{Amplified-Monte-Carlo(Input $X$, size $n$)}
+\begin{algorithmic}[1]
+\State $k \gets \lceil n^2 \ln n \rceil$
+\State $best\_solution \gets \text{NULL}$
+\For{$i \gets 1$ \textbf{to} $k$}
+    \State $solution \gets \text{Run-Algorithm}(A, X)$ \Comment{Run the base $\ge \frac{1}{n^2}$ algorithm}
+    \If{\text{Is-Valid-And-Better}(solution, best\_solution)} 
+        \State $best\_solution \gets solution$
+        \State \Comment{If $A$ is a decision problem with one-sided error, we can return YES immediately}
+    \EndIf
+\EndFor
+\State \Return $best\_solution$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection*{5. Complexity Analysis}
+
+Let $T(n)$ be the worst-case time complexity of the original Monte Carlo algorithm $A$, and $S(n)$ be its space complexity.
+\begin{itemize}
+    \item \textbf{Time Complexity:} The base algorithm is executed $k = \mathcal{O}(n^2 \log n)$ times. The verification step (line 5) usually takes $\mathcal{O}(V(n))$ time. Thus, the total time complexity is $\mathcal{O}\Big(n^2 \log n \cdot \big(T(n) + V(n)\big)\Big)$.
+    \item \textbf{Space Complexity:} The space required is dominated by a single run of the algorithm (since runs are independent and memory can be reused) plus the space to store the best solution. The space complexity remains $\mathcal{O}(S(n))$, keeping the memory footprint asymptotically unchanged.
+\end{itemize}
+
+\end{tcolorbox}
   
 \end{enumerate}
 
@@ -36809,6 +37113,158 @@ The diagram below contrasts how FIFO (BFS) processes the state-space tree compar
 \begin{enumerate}
   \item Analyze the running time of the randomized quick sort algorithm.
   \mk{12} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+  \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cG!4,colframe=cG,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cG]
+
+Randomized Quicksort is an elegant modification of the standard Quicksort algorithm. By choosing the pivot element uniformly at random from the subarray, we ensure that the expected running time is $\mathcal{O}(n \log n)$ regardless of the input distribution. This effectively defeats any worst-case input permutations (like already sorted arrays) that would typically degrade deterministic Quicksort to $\mathcal{O}(n^2)$ time.
+
+\subsection*{1. Algorithm and Pseudocode}
+
+The core idea is to swap the last element of the current subarray with a randomly chosen element before performing the standard partition operation.
+
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption{Randomized-Partition($A, p, r$)}
+\begin{algorithmic}[1]
+\State $i \gets \text{Random}(p, r)$
+\State Exchange $A[r]$ with $A[i]$
+\State \Return $\text{Partition}(A, p, r)$
+\end{algorithmic}
+\end{algorithm}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.48\textwidth}
+\begin{algorithm}[H]
+\caption{Randomized-Quicksort($A, p, r$)}
+\begin{algorithmic}[1]
+\If{$p < r$}
+    \State $q \gets \text{Randomized-Partition}(A, p, r)$
+    \State $\text{Randomized-Quicksort}(A, p, q-1)$
+    \State $\text{Randomized-Quicksort}(A, q+1, r)$
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+\end{minipage}
+
+\vspace{1em}
+\textit{Note: The standard \texttt{Partition} function uses $A[r]$ as the pivot, moving elements smaller than the pivot to its left and larger elements to its right, returning the final pivot index.}
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{2. Intuition for Expected Running Time}
+
+The running time of Quicksort is dominated by the time spent in the \texttt{Partition} routine. Each call to \texttt{Partition} takes time linear in the size of the subarray, doing at most one comparison per element against the pivot. Therefore, the total running time is proportional to the \textbf{total number of comparisons} made across all recursive calls. 
+
+Rather than analyzing the recursion tree directly, we can use \textbf{Indicator Random Variables} to compute the expected total number of comparisons. 
+
+\begin{center}
+\begin{tikzpicture}[font=\sffamily, >=stealth, scale=0.9, transform shape]
+    \node[anchor=south] at (5, 1) {\textbf{Visualizing the Set $Z_{ij} = \{z_i, z_{i+1}, \dots, z_j\}$}};
+    
+    % Draw array cells
+    \foreach \x/\label in {0/$z_1$, 1/$\dots$, 2/$z_{i-1}$, 3/$z_i$, 4/$z_{i+1}$, 5/$\dots$, 6/$z_k$, 7/$\dots$, 8/$z_{j-1}$, 9/$z_j$, 10/$z_{j+1}$, 11/$\dots$, 12/$z_n$} {
+        \draw[thick] (\x, 0) rectangle (\x+1, 1);
+        \node at (\x+0.5, 0.5) {\label};
+    }
+    
+    % Highlight z_i and z_j
+    \draw[thick, fill=red!20] (3, 0) rectangle (4, 1);
+    \node at (3.5, 0.5) {$z_i$};
+    \draw[thick, fill=red!20] (9, 0) rectangle (10, 1);
+    \node at (9.5, 0.5) {$z_j$};
+    
+    % Highlight interior Z_ij
+    \draw[thick, fill=blue!10] (4, 0) rectangle (9, 1);
+    \node at (4.5, 0.5) {$z_{i+1}$};
+    \node at (5.5, 0.5) {$\dots$};
+    \node at (6.5, 0.5) {$z_k$};
+    \node at (7.5, 0.5) {$\dots$};
+    \node at (8.5, 0.5) {$z_{j-1}$};
+    
+    % Bracket for Z_ij
+    \draw[decorate, decoration={brace, amplitude=10pt, mirror}, thick] (3, -0.2) -- (10, -0.2) node[midway, below=12pt] {Size of $Z_{ij} = j - i + 1$};
+    
+    % Pointers and text
+    \draw[->, thick, blue] (6.5, 2.5) -- (6.5, 1.2);
+    \node[align=center, blue] at (6.5, 3) {If $z_k$ ($i < k < j$) is chosen as pivot first, \\ $z_i$ and $z_j$ are separated and \textbf{never} compared.};
+    
+    \draw[->, thick, red] (1.5, 2.5) -- (3.5, 1.2);
+    \node[align=center, red] at (1.5, 3) {If $z_i$ is chosen first, \\ it is compared to $z_j$.};
+\end{tikzpicture}
+\end{center}
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{3. Rigorous Expected Time Complexity Proof}
+
+Let $Z = \{z_1, z_2, \dots, z_n\}$ be the elements of the array sorted in strictly increasing order. \\
+Let the set $Z_{ij} = \{z_i, z_{i+1}, \dots, z_j\}$ denote the set of elements between the $i$-th and $j$-th smallest elements, inclusive.
+
+Let $X_{ij}$ be an \textbf{indicator random variable} defined as:
+\[
+X_{ij} = \begin{cases} 
+1 & \text{if } z_i \text{ is compared to } z_j \text{ at any time during execution} \\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+Since elements are only compared to the pivot, $z_i$ and $z_j$ are compared \textbf{if and only if} the first element chosen as a pivot from the set $Z_{ij}$ is either $z_i$ or $z_j$. If any other element $z_k$ (where $i < k < j$) is chosen as a pivot first, $z_i$ and $z_j$ will be partitioned into separate subarrays and will never be compared.
+
+Because the pivot is chosen uniformly at random, every element in $Z_{ij}$ has an equal probability of being the first one chosen. The number of elements in $Z_{ij}$ is $j - i + 1$. Thus, the probability that $z_i$ or $z_j$ is chosen first from this set is:
+\[
+\mathbb{P}(z_i \text{ is compared to } z_j) = \frac{2}{j - i + 1}
+\]
+
+By the property of indicator random variables, the expected value is exactly the probability:
+\[
+\mathbb{E}[X_{ij}] = \mathbb{P}(z_i \text{ is compared to } z_j) = \frac{2}{j - i + 1}
+\]
+
+Let $X$ be the total number of comparisons performed. $X$ is the sum of $X_{ij}$ over all unique pairs:
+\[
+X = \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} X_{ij}
+\]
+
+By the \textbf{Linearity of Expectation}, we can compute the expected total number of comparisons $\mathbb{E}[X]$:
+\begin{align*}
+\mathbb{E}[X] &= \mathbb{E} \left[ \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} X_{ij} \right] \\
+&= \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \mathbb{E}[X_{ij}] \\
+&= \sum_{i=1}^{n-1} \sum_{j=i+1}^{n} \frac{2}{j - i + 1}
+\end{align*}
+
+To evaluate this sum, we perform a change of variables, letting $k = j - i$:
+\begin{align*}
+\mathbb{E}[X] &= \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{k + 1} \\
+&< \sum_{i=1}^{n-1} \sum_{k=1}^{n} \frac{2}{k} \quad \text{(bounding the inner sum to $n$ for simplicity)} \\
+&= \sum_{i=1}^{n-1} \left( 2 \sum_{k=1}^{n} \frac{1}{k} \right)
+\end{align*}
+
+The inner sum $\sum_{k=1}^{n} \frac{1}{k}$ is the $n$-th Harmonic number, $H_n$, which is tightly bounded by $\ln n + \mathcal{O}(1)$. Therefore:
+\begin{align*}
+\mathbb{E}[X] &< \sum_{i=1}^{n-1} 2 \ln n \\
+&= 2(n-1) \ln n \\
+&= \mathcal{O}(n \log n)
+\end{align*}
+
+Thus, the expected number of comparisons is $\mathcal{O}(n \log n)$, which implies the \textbf{expected running time is $\mathcal{O}(n \log n)$}.
+
+\rule{\textwidth}{0.4pt}
+
+\subsection*{4. Worst-case and Space Complexity Analysis}
+
+\begin{itemize}
+    \item \textbf{Worst-case Time Complexity: $\mathcal{O}(n^2)$} \\
+    Although highly improbable, if the random number generator continually happens to select the absolute maximum or minimum element of the subarray as the pivot at every recursive step, the array will be partitioned into sizes of $0$ and $n-1$. The recurrence relation becomes $T(n) = T(n-1) + \Theta(n)$, solving to $\Theta(n^2)$. The probability of this occurring on a distinct array of size $n$ is $\frac{1}{n!}$, which is astronomically small for large $n$.
+    
+    \item \textbf{Space Complexity: $\mathcal{O}(\log n)$ Expected, $\mathcal{O}(n)$ Worst-case} \\
+    Quicksort is an in-place sorting algorithm (ignoring the call stack). The space complexity is dictated by the maximum depth of the recursion tree. 
+    \begin{itemize}
+        \item Expected depth: Since the partition is well-balanced probabilistically, the expected recursion depth is $\mathcal{O}(\log n)$.
+        \item Worst-case depth: In the severely unbalanced case described above, the recursion tree degenerates to a linked list, requiring $\mathcal{O}(n)$ auxiliary stack space.
+    \end{itemize}
+\end{itemize}
+
+\end{tcolorbox}
 
 \end{enumerate}
 
