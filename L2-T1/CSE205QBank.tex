@@ -141,7 +141,6 @@
 \newpage
 
 
-
 %% ══════════════════════════════════════════════════════════════════════
 %%  TABLE OF CONTENTS
 %% ══════════════════════════════════════════════════════════════════════
@@ -192,20 +191,21 @@
     \item \hyperref[sec:S4]{\textbf{S4.} Arithmetic \& Data Handling Circuits, Decoders, Encoders, MUX/DEMUX}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cD}{$\cdot$}}]
         \item \hyperref[sub:s4-number-sys]{Number System \& Arithmetic Operations}
+        \item \hyperref[sub:s4-code-converter]{Code Converter}
         \item \hyperref[sub:s4-adder-sub]{Binary Adder \& Subtractor}
+        \item \hyperref[sub:s4-bcd-addsub]{BCD Adder-Subtractor}
         \item \hyperref[sub:s4-cla]{Carry Look-Ahead Adder (CLA)}
         \item \hyperref[sub:s4-2scomp]{2's Complement Circuit}
         \item \hyperref[sub:s4-overflow]{Overflow Detection}
         \item \hyperref[sub:s4-multiplier]{Binary Multiplier}
         \item \hyperref[sub:s4-incrementer]{Incrementer}
         \item \hyperref[sub:s4-encoders]{Encoders \& Decoders}
+        \item \hyperref[sub:s4-decoder-func]{Function Implementation using Decoder}
+        \item \hyperref[sub:s4-demux]{Decoder as Demultiplexer}
         \item \hyperref[sub:s4-bcd]{BCD to 7-Segment Decoder \& BCD Error Detector}
         \item \hyperref[sub:s4-mux]{Multiplexers \& Demultiplexers}
         \item \hyperref[sub:s4-comb-custom]{Custom Combinational Circuit Design}
-        \item \hyperref[sub:s4-decoder-func]{Function Implementation using Decoder}
-        \item \hyperref[sub:s4-demux]{Decoder as Demultiplexer}
         \item \hyperref[sub:s4-comparator]{Magnitude Comparator}
-        \item \hyperref[sub:s4-bcd-addsub]{BCD Adder-Subtractor}
       \end{itemize}
   \end{itemize}
 \end{tcolorbox}
@@ -297,44 +297,56 @@
 Apply relevant laws and theorems to show that the term $yz$ is redundant and obtain the simplified form.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Analyze whether the dual and the complement of the following function are the same:
 \[ F = ABC + A(B+C) + A'B'C' \]
 Justify your answer.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Using Boolean algebra, show that $F = xyz' + wx'y' + (x'+z+w)(x'+z+w') + xyz + wx'y$ can be simplified to $F = xy + wx' + x' + z$.
 \mk{11} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
 
 \item Simplify the following Boolean expressions to a minimum number of literals: $(A + B)'(A'+B')'$.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Simplify the following expression to POS and SOP: $ACD' + C'D + AB' + ABCD$.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item Simplify the following expression to POS and SOP: $BCD' + ABC' + ACD$.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \item Prove the following Boolean algebra theorem:
 \[ (x + y)(x' + z)(y + z) = (x + y)(x' + z) \]
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item How many distinct Boolean functions are there of $n$ Boolean variables?
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item Simplify the Boolean function using algebraic manipulation:
 \[ f = A'BC + AB'C + ABC' + ABC \]
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Simplify the following Boolean function using algebraic manipulation:
 \[ (A + BC)' + AB' \]
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item State and prove the consensus theorem using Boolean algebra.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Simplify the following function using Boolean algebra:
 \[ F(A, B, C) = A'BC + AB'C + ABC \]
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Simplify the following Boolean expressions to a minimum number of literals using Boolean algebra:
 \begin{enumerate}
@@ -343,14 +355,18 @@ Justify your answer.
 \end{enumerate}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item The Boolean expression for an X-OR gate is $AB' + A'B$. With this as a starting point, use DeMorgan's theorems and other rules or laws to find a simplified expression for an X-NOR gate.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \item Give an example of the non-associativity of the 3-input NOR operator.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
+
 \item Prove that $x(x + y) = x$.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -367,11 +383,14 @@ Justify your answer.
 \end{enumerate}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
+
 \item Given De Morgan's theorem for two variables: $(A + B)' = A'B'$, prove De Morgan's theorem for three variables by successive substitution.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item State and prove De Morgan's theorem using a truth table.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 %% -- Q2: De Morgan's for three variables --
 \end{enumerate}
@@ -386,25 +405,30 @@ Justify your answer.
 \item Why are NAND and NOR gates called universal gates? Explain how hardware cost is related to Boolean simplification. If a function is already minimal, how can you verify it?
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item How does a three-state gate work? What can be the advantage of using a three-state gate?
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
 
 \item What do you mean by Universal gate? Show that both NAND gate and NOR gate are universal gates.
 \mk{14} \yr{CSE 205 | L-2/T-1 | 2022--23, 2013--14} \variant{2019--20}
 
+
 \item Show the circuit diagram of the expression $AB + CDE$ using only NAND gates.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
 
 \item A majority circuit is a combinational circuit whose output is equal to~1 if the input variables have more 1's than 0's, and 0 otherwise. Design a 3-input majority circuit by finding the circuit's truth table, simplified Boolean equation, and a logic diagram. Use only NAND gate(s) for your design.
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
 
-
 \item Show that NAND gate is a universal logic gate. Also show that NAND operation does not follow the associative law.
 \mk{5+5} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Define: Odd Function, Even Function, Don't-care conditions.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -448,6 +472,7 @@ Justify your answer.
 
 \mk{9} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -464,8 +489,10 @@ Justify your answer.
 \item Implement $F(x,y,z) = x'y'z' + xyz'$ using two-level forms of logic by using NAND-AND gates. Assume that the complement of $x$, $y$ and $z$ are readily available.
 \mk{14} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Express $f(A,B,C,D) = \Sigma\,(0,4,8,9,10,11,12,14)$ with the two-level forms of logic ``NAND-AND'' and ``OR-NAND''.
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Implement the function $F(w, x, y, z) = w'x' + w'x'z + w'yz'$ using two-level forms of logic by
 \begin{enumerate}
@@ -476,9 +503,11 @@ Justify your answer.
 \end{enumerate}
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+
 \item Show the truth table for the following function:
 \[ F(x, y, z) = (x+y+z)(x+y+z')(x+y'+z)(x'+y+z) \]
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Given function $F = A'B + BC + AC$:
 \begin{enumerate}
@@ -489,16 +518,18 @@ Justify your answer.
 \end{enumerate}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Given the Boolean function $F = xy + x'y' + y'z$, implement it with (i) AND, OR and NOT gates, and (ii) only NAND gates.
 \mk{5+5} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \item Using the two-level forms of logic (i) NOR-OR, and (ii) OR-NAND, implement the following Boolean function $F$:
 \[ F(A,B,C,D) = \Sigma\,(0,4,8,9,10,11,12,14) \]
 Assume that both the normal and complement inputs are available.
 \mk{6+6} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
-\end{enumerate}
 
+\end{enumerate}
 
 
 %%──────────────────────────────────────────────────────────────────────
@@ -511,21 +542,26 @@ Assume that both the normal and complement inputs are available.
 \item Express $f(A, B, C) = \Pi\,(0, 2, 3, 5, 7)$ with NOR gates.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item Express $f(A,B,C,D) = \mathrm{SOP}(0,4,8,9,10,11,12,14)$ with the two-level forms of logic ``NOR-OR'' and ``AND-NOR''.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \item Using NOR gates, evaluate the following expression:
 \[ p \oplus (q \vee r) \oplus ((p \wedge q) \to r) \]
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \item Implement the following Boolean function using only NOR gates:
 \[ f = xy + yz \]
 Your implementation should use as few NOR gates as possible.
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Implement the following Boolean function together with the don't-care conditions using only two-input NOR gates (complements of literals are available as input):
 \[ F(A,B,C,D) = \Sigma\,(0,1,9,11), \quad d(A,B,C,D) = \Sigma\,(2,8,10,14,15) \]
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -539,12 +575,15 @@ Your implementation should use as few NOR gates as possible.
 \item Show that the dual of the exclusive-OR is equal to its complement.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2022--23, 2019--20}
 
+
 \item Show that XOR operation is not distributive over AND operation.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item Why is the XOR operation called an odd function? Convert the following Boolean expression to a canonical maxterm form:
 \[ a \oplus b \oplus c \oplus d \]
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \end{enumerate}
 
@@ -558,14 +597,18 @@ Your implementation should use as few NOR gates as possible.
 \item In a network, for a 3-bit data transmission, an error will be generated if there is an odd parity. Design this logical circuit.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item What are the differences between an odd parity checker and an odd parity generator?
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item For a 3-bit Excess-3 code, design an odd parity checker and odd parity generator.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Design a negative logic 4-bit parity checker and generator.
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \end{enumerate}
 
@@ -589,6 +632,7 @@ Your implementation should use as few NOR gates as possible.
 \item Compare the different types of canonical and standard forms used in Boolean Algebra with examples.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item
 \begin{enumerate}
   \item What are the differences between canonical form and standard form?
@@ -596,6 +640,7 @@ Your implementation should use as few NOR gates as possible.
   \item Which form is obtained when reading a function from a truth table?
 \end{enumerate}
 \mk{8+4+3} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -609,12 +654,15 @@ Your implementation should use as few NOR gates as possible.
 \[ F = (x'+y)(x+z)(y+z) \]
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Convert the Boolean function $F = xy + x'z$ as a product of maxterms using the distributive law.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item Using Boolean Algebra, express the following Boolean function as a sum of minterms:
 \[ F(A,B,C) = A + B'C \]
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
 
 \item Determine the output functions $A$ as the sum of minterms and the output function $B$ as the product of maxterms:
 
@@ -725,6 +773,7 @@ Your implementation should use as few NOR gates as possible.
 \end{center}
 \mk{16} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+
 \end{enumerate}
 
 
@@ -749,9 +798,11 @@ Your implementation should use as few NOR gates as possible.
 \item Differentiate between prime implicant and essential prime implicant of a K-Map.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2023--24, 2011--12}
 
+
 \item Find all the prime implicants for the following Boolean function and determine which are essential:
 \[ F(A, B, C, D) = \Sigma\,(0, 2, 3, 5, 7, 8, 9, 10, 11, 13, 15) \]
 \mk{11} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \end{enumerate}
 
@@ -761,30 +812,42 @@ Your implementation should use as few NOR gates as possible.
 
 \begin{enumerate}
 
+\item Simplify the following Boolean function into (a) sum-of-products form and (b) product-of-sums form:
+\[ F(A, B, C, D) = \Sigma\,(0, 1, 2, 5, 8, 9, 10) \]
+\mk{14} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
+
 \item Using K-Map, minimize $f(v,w,x,y,z) = \Sigma\,(2,7,8,15,22,23,25,29) + d(6,9,13,18,24,31)$. Find the Prime Implicants and Essential Prime Implicants, and the Minimal Sums. Write down the responsible minterm for each Essential Prime Implicant.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 \item Convert the following Boolean function from sum-of-products form to a simplified product-of-sums form, then draw a logic circuit for the POS form:
 \[ F(w,x,y,z) = \Sigma\,(0,1,2,5,7,11,13) \]
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
+
 \item Using K-Map, minimize $f(w,x,y,z) = \Sigma\,(1,2,3,7,10,12,14) + d(0,6,8,13)$. Find the Prime Implicants and Essential Prime Implicants. Write down the responsible minterm for each Essential Prime Implicant.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Using K-Map, minimize $f(w,x,y,z) = \mathrm{SOP}(1,2,4,7,9,10,12,14) + d(0,6,8,13)$. Find the Prime Implicants and Essential Prime Implicants. Write down the responsible minterm for each Essential Prime Implicant.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Using K-map, solve $f(x_1,x_2,x_3,x_4,x_5) = \Sigma\,(0,2,4,5,6,7,8,10,14,17,18,21,29,31) + d\Sigma\,(11,20,22)$. Find the essential prime implicants. (Show the reduction steps.)
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \item Using K-maps, find the simplified product of sums form of the following Boolean function:
 \[ f(w, x, y, z) = \Sigma\,(1, 5, 8, 12, 14, 15), \quad \text{don't-care minterms: } d = \Sigma\,(3, 11) \]
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Using K-maps, find the simplified sum of products form of the following Boolean function:
 \[ f(a,b,c,d,e,f) = \Sigma\,(1,2,3,5,7,11,13,17,19,23,29,31) \]
 Don't-care minterms: $d = \Sigma\,(6,20,24,25,26,27)$.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item Simplify the following Boolean functions using K-map:
 \begin{enumerate}
@@ -793,9 +856,11 @@ Don't-care minterms: $d = \Sigma\,(6,20,24,25,26,27)$.
 \end{enumerate}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Minimize the following function in both SOP and POS forms using Karnaugh map:
 \[ f(A,B,C,D) = \Sigma\,m(0,4,7,9,13) + d(5,8,15) \]
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -811,40 +876,41 @@ Don't-care minterms: $d = \Sigma\,(6,20,24,25,26,27)$.
 What is the main purpose of the tabulation method (Quine-McCluskey method) in digital logic design, and how does it systematically help in minimizing Boolean expressions compared to the Karnaugh map method?
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Using tabular method, find the prime implicants and essential prime implicants of the following Boolean function:
 \[ F(A, B, C, D) = \Sigma\,(0, 2, 3, 5, 7, 8, 9, 10, 11, 13, 15) \]
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
-\item Simplify the following Boolean function into (a) sum-of-products form and (b) product-of-sums form:
-\[ F(A, B, C, D) = \Sigma\,(0, 1, 2, 5, 8, 9, 10) \]
-\mk{14} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
 \item Determine the prime implicants of the following function using the tabulation (tabular) method:
 \[ F(w, x, y, z) = \Sigma\,(0, 1, 2, 8, 10, 11, 14, 15) \]
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Compare the Tabulation method and the Karnaugh map for minimizing Boolean functions based on their merits and demerits.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2019--20}
+
 
 \item Using the Tabulation method, simplify the following Boolean function by first finding the essential prime implicants:
 \[ F(A,B,C,D) = \Sigma\,(1,3,4,5,10,11,12,13,14) \]
 \mk{28} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
+
 \item Minimize the following function using the Quine-McCluskey (Q-M) method. Find essential prime implicants and all prime implicants:
 \[ f(A,B,C,D,E) = \Sigma\,(0,1,2,8,9,15,17,21,24,25,27,31) \]
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item When is the tabulation method more preferable than the K-Map method for simplifying a Boolean function?
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Simplify the following Boolean function by using the tabulation method:
 \[ F(A,B,C,D) = \Sigma\,(0,1,2,8,10,11,14,15) \]
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
+
 \end{enumerate}
-
-
-
 
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -858,20 +924,75 @@ What is the main purpose of the tabulation method (Quine-McCluskey method) in di
 \section*{S4 \quad Combinational Logic}
 \addcontentsline{toc}{section}{S4: Combinational Logic}
 
+\subtopic{cD}{Number System \& Arithmetic Operations}
+\label{sub:s4-number-sys}
+
+\begin{enumerate}
+
+\item Describe the steps to find $M - N$ using $(r-1)$'s complement, where $M$ and $N$ are two $n$-digit unsigned numbers and $r$ is the base.
+\mk{13} \yr{CSE 205 | L-2/T-1 | 2022--23, 2021--22}
+
+
+\item Explain the difference between binary and gray encoding and the benefits of each.
+\mk{9} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
+
+\item Write the rules of subtraction for two $n$-digit numbers $M$ and $N$ in base $r$. Consider two cases: $M \geq N$ and $M < N$. Find the value of $9 - 6.9 - 9.8$ using the complement rule where the base is Hexadecimal.
+\mk{2+5} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
+
+\item What is the difference between $r$'s complement and $(r-1)$'s complement (where $r$ is the base)? 
+\mk{2} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
+
+\item Convert $(0.625)_{10}$ to binary. Show every step of your calculation.
+\mk{4} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
+
+\item A decimal number $N$ is represented in a weighted binary code as \texttt{0011 0100 1010 1100}. Write the decimal digits of $N$, if the following weights are used for the weighted binary code: $6,\,3,\,1,\,1$.
+\mk{4} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
+
+\item You are given two numbers: $(305.E)_{16}$ and $(109.6875)_{10}$.
+\begin{enumerate}
+  \item Convert the given numbers into binary.
+  \item Subtract the latter number from the former using binary arithmetic.
+  \item Convert the result of the subtraction into octal.
+\end{enumerate}
+\mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
+
+\item Perform the following binary subtraction: $11000011 - 10101010$.
+\mk{6} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
+
+\item Using 2's complement, subtract decimal $-70$ from decimal $-50$.
+\mk{9} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
+
+\item Convert $(41.6875)_{10}$ to binary.
+\mk{5} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
+
+\item Perform the subtraction with the following binary unsigned numbers using (i) 2's complement, (ii) 1's complement: $11010 - 1101$.
+\mk{10} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
+
+\end{enumerate}
+
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Code Converter}
 \label{sub:s4-code-converter}
 
 \begin{enumerate}
 
-\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
-\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
-
 \item A consensus circuit is a combinational circuit whose output is equal to 1 if exactly two inputs are 1, and 0 otherwise. Design a 3-input consensus circuit by finding the circuit's truth table, simplified Boolean equation and a circuit diagram.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Design a combinational circuit that converts a three-bit gray code to a three-bit binary number. Use only a minimum number of gates in your design.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item Design a combinational circuit that converts a decimal digit represented with ``Random Code'' to ``BCD Code''. Use the K-Map method for logic simplification and show the circuit diagram.
 
@@ -895,53 +1016,11 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Number System \& Arithmetic Operations}
-\label{sub:s4-number-sys}
 
-\begin{enumerate}
-
-\item Describe the steps to find $M - N$ using $(r-1)$'s complement, where $M$ and $N$ are two $n$-digit unsigned numbers and $r$ is the base.
-\mk{13} \yr{CSE 205 | L-2/T-1 | 2022--23, 2021--22}
-
-\item Explain the difference between binary and gray encoding and the benefits of each.
-\mk{9} \yr{CSE 205 | L-2/T-1 | 2022--23}
-
-\item Write the rules of subtraction for two $n$-digit numbers $M$ and $N$ in base $r$. Consider two cases: $M \geq N$ and $M < N$. Find the value of $9 - 6.9 - 9.8$ using the complement rule where the base is Hexadecimal.
-\mk{2+5} \yr{CSE 205 | L-2/T-1 | 2017--18}
-
-\item What is the difference between $r$'s complement and $(r-1)$'s complement (where $r$ is the base)? 
-\mk{2} \yr{CSE 205 | L-2/T-1 | 2016--17}
-
-\item Convert $(0.625)_{10}$ to binary. Show every step of your calculation.
-\mk{4} \yr{CSE 205 | L-2/T-1 | 2014--15}
-
-\item A decimal number $N$ is represented in a weighted binary code as \texttt{0011 0100 1010 1100}. Write the decimal digits of $N$, if the following weights are used for the weighted binary code: $6,\,3,\,1,\,1$.
-\mk{4} \yr{CSE 205 | L-2/T-1 | 2014--15}
-
-\item You are given two numbers: $(305.E)_{16}$ and $(109.6875)_{10}$.
-\begin{enumerate}
-  \item Convert the given numbers into binary.
-  \item Subtract the latter number from the former using binary arithmetic.
-  \item Convert the result of the subtraction into octal.
-\end{enumerate}
-\mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
-
-\item Perform the following binary subtraction: $11000011 - 10101010$.
-\mk{6} \yr{CSE 205 | L-2/T-1 | 2012--13}
-
-\item Using 2's complement, subtract decimal $-70$ from decimal $-50$.
-\mk{9} \yr{CSE 205 | L-2/T-1 | 2012--13}
-
-\item Convert $(41.6875)_{10}$ to binary.
-\mk{5} \yr{CSE 205 | L-2/T-1 | 2011--12}
-
-\item Perform the subtraction with the following binary unsigned numbers using (i) 2's complement, (ii) 1's complement: $11010 - 1101$.
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2011--12}
-
-\end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Binary Adder \& Subtractor}
@@ -957,20 +1036,26 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \end{enumerate}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Design a full subtractor circuit with three inputs $x$, $y$, $B_{in}$ and two outputs $\mathrm{Diff}$ and $B_{out}$. The circuit subtracts $x - y - B_{in}$, where $B_{in}$ is the input borrow and $B_{out}$ is the output borrow.
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2019--20}
+
 
 \item Write the advantages and disadvantages of serial and parallel adders.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Design a 4-bit BCD adder using 4-bit binary adders and basic logic gates. Use a block diagram to draw a binary adder.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Design a four-bit binary adder using a 1-bit full-adder circuit. How can it be modified to use as a four-bit subtractor?
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Starting with a truth table, design a full subtractor.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -984,11 +1069,14 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item Design a BCD adder-subtractor which takes two 4-bit BCD numbers $A$ and $B$. Addition and subtraction is selected by a selector bit $S$: when $S=0$ the circuit produces $A+B$; when $S=1$ it produces $A-B$.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item Design a BCD adder-subtractor for two BCD inputs $A$ and $B$. Addition and subtraction is selected by a selector bit $x$: when $x=0$ the circuit computes $A+B$; when $x=1$ it computes $A-B$. Explain the operations $9+7$ and $9-7$ with your designed circuit.
 \mk{9+4} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Design a circuit which computes $A - B$ and $A + B$ where $A$ and $B$ are 4-bit BCD values. Explain the design.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \end{enumerate}
 
@@ -1002,23 +1090,30 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item Explain the working principle of a Carry Look-Ahead (CLA) adder. Derive the expressions for carry generation ($C_1, C_2, C_3, C_4$) using generate and propagate functions.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item What is the benefit of using an adder with carry lookahead logic? Derive expressions of different carry of a 4-bit adder with carry lookahead logic.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
 
 \item Design a 4 bit Carry Look Ahead (CLA) adder which will take $X_3X_2X_1X_0$ and $Y_3Y_2Y_1Y_0$ as input, and produce their sum. Show the steps and the role of different \textit{carries} of this CLA.
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item Design a 3-bit CLA circuit and show all types of ``carry'' for the addition $3+4$ with your designed CLA.
 \mk{8+4} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \item For a carry look-ahead adder circuit, what advantage do we get if we use it instead of a 4-bit simple full adder? For a NOT gate with 2\,ns propagation delay and other basic gates with 4\,ns propagation delay, what will be the total propagation delay?
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item What is the problem with the binary parallel adder circuit? Design and implement a 4-bit carry look-ahead adder circuit. If the propagation delay is 1\,ns for a NOT gate and 2\,ns for other basic gates, what is the propagation delay of the CLA adder to produce its final output?
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item What are the advantages of a CLA over a normal binary four-bit adder? Assume that the exclusive-OR gate has a propagation delay of 10\,ns and that the AND or OR gates have a propagation delay of 5\,ns. What is the total propagation delay time in the four-bit CLA adder?
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -1032,8 +1127,10 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item Using only half adders, design a circuit that outputs the 1's complement of a 4-bit input when the control input $C$ is 1, and passes the input unchanged when $C$ is 0.
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Design a circuit that takes a 4-bit number as input and produces the 2's complement of the given number.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1046,8 +1143,10 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item What is overflow in binary arithmetic? Explain how overflow is detected in signed addition and signed subtraction. Provide suitable examples.
 \mk{11} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item How do you check for overflow in the case of addition of two binary numbers in both signed and unsigned representations?
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -1060,14 +1159,18 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item Discuss and design a 2-bit by 2-bit binary multiplier.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Design a circuit with a 4-bit binary adder which returns $A \times B$ where $A$ and $B$ are 3-bit binary numbers.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Using 4-bit adders, design a 3-bit multiplier for 3-bit variables $X(X_1,X_2,X_3)$ and $Y(Y_1,Y_2,Y_3)$. Explain the design.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item How would you implement a one-bit by one-bit binary multiplier using basic gates?
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \item The figure below represents a multiplier that takes two 2-bit binary numbers $x_1x_0$ and $y_1y_0$ as inputs, and produces an output binary number $p_3p_2p_1p_0$ equal to the arithmetic product of the two input numbers. Design the logic circuit for the multiplier.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2012--13}
@@ -1101,6 +1204,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
     \end{tikzpicture}
 \end{center}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -1113,8 +1217,10 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item Design a 4-bit combinational circuit incrementer (a circuit that adds 1 to a 4-bit binary number) using only half adders.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Design a 4-bit incrementer circuit using 4 half-adders. Note that the incrementer circuit adds 1 to a binary number.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1127,38 +1233,50 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item Design a light sensor based controller circuit for accessing eight servers A, B, C, D, E, F, G, H. The light sensors are numbered as $S_1, S_2, \ldots$ and so on. The sensors of the controller will be ON to show which server is active. The servers have some priority order: C, A, E, H, D, G, F, B (C has the highest priority and B has the lowest priority).
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Show the truth table of an 8-to-3 line priority encoder, where higher priority is given to lower numbered input.
 \mk{9} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
 
 \item After a school final result, Ishrat applied for college admission and gave her choices from eight colleges indexed A to H, following the priority order B, A, D, E, F, H, G, C (B has the highest priority, C has the lowest priority). Find the Boolean function of her choices and show the design steps.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item Design an 8-to-3 priority encoder with the priority order: 5, 0, 7, 4, 6, 3, 2, 1 (5 has highest priority, 1 has lowest priority).
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Design an 8-to-3 priority encoder with the priority order: 6, 0, 7, 4, 5, 3, 1, 2 (6 has highest priority, 2 has lowest priority).
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item ``A lower-order code will get priority'' --- Design and explain a priority encoder with negative enable for 9 bits.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \item Design a full adder with a decoder and basic logic gates.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+
 \item An Octal-to-Binary Encoder may cause ambiguities if more than one input is simultaneously set to~1. How can this ambiguity be resolved?
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item What is a priority encoder? Design a four-input priority encoder with inputs $I_0, I_1, I_2, I_3$, where the priority order is $I_2 > I_3 > I_1 > I_0$.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item You need a full adder for an experiment but in the lab you could only find plenty of $3 \times 8$ decoders. Can any such decoder be used as a full adder? Explain your answer with a truth table.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \item Design a 4-input priority encoder and show the gate-level circuit diagram.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2011--12, 2013--14}
 
+
 \item Design a $3 \times 8$ decoder using two $2 \times 4$ decoder circuits.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1171,29 +1289,38 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \item Design a 1-bit full subtractor using a 4 to 16 line decoder that has active low outputs and two active low enables $\overline{EN_1}$ and $\overline{EN_2}$.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Design a 4-to-16-line decoder by using only the minimum number of 2-to-4-line decoders. Assume that the 2-to-4-line decoders have an enable input (`1' = enabled) but the designed 4-to-16-line decoder does not have an enable input.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
 
 \item Design a full adder circuit using a $3 \times 8$ decoder and two OR gates.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
+
 \item Implement $F(x, y, z) = \Sigma\,(3, 5, 6, 7)$ using an active low $3 \times 8$ decoder and AND gates.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
 
 \item Design a logic circuit which takes two 2-bit numbers $X_1X_0$ and $Y_1Y_0$ and finds their sum using a $2\times4$ line decoder with inputs $I_0, I_1$, active-low outputs $O_3, O_2, O_1, O_0$, and active-low enables $\overline{EN_1}$ and $\overline{EN_2}$. (Use the minimum number of extra logic gates.)
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item Design a logic circuit for $f(w, x, y, z) = \Sigma\,(0, 2, 6, 7, 10, 11, 12, 14)$ with a $2\times4$ line decoder that has inputs $A$, $B$, active-low enables $\overline{EN_1}$ and $\overline{EN_2}$. (Use the minimum number of extra logic gates.)
 \mk{14} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Design a logic circuit for $f(w, x, y, z) = \mathrm{SOP}(0, 2, 6, 7, 8, 10, 11, 13, 14)$ with a $2\times4$ line decoder that has inputs $A$, $B$, active-low enable $\overline{EN}$ and active-low outputs $D_0', D_1', D_2', D_3'$. (Use the minimum number of extra logic gates.)
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Using a $2 \times 4$ line decoder, design a half subtractor. (Decoder outputs $D_0, D_1, D_2, D_3$ are active high; enable $\overline{EN}$ is active low.)
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Using only a $2 \times 4$ line decoder, solve the function $f(A,B,C,D) = \pi\,(3,5,9,15,12,4,1)$. The $2\times4$ line decoder has an active-low enable and active-low outputs. (Use the minimum number of gates if required.)
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \item Consider a $3 \times 8$ decoder whose outputs are active low and which has one active high enable signal. Implement the following functions using the above-mentioned decoder:
 \begin{enumerate}
@@ -1203,6 +1330,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
   \end{enumerate}
 Note that you will need to implement both functions in a single circuit. You may use as many decoders as required, keeping the implementation as efficient as possible. Basic gates are also allowed.
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \end{enumerate}
 
@@ -1215,14 +1343,18 @@ Note that you will need to implement both functions in a single circuit. You may
 \item What is a demultiplexer? Give an example.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Can a decoder act like a demultiplexer? If yes, explain how.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 \item Show that a decoder can be used as a demultiplexer.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item How can a decoder be used as a demultiplexer? Explain with an example.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \end{enumerate}
 
@@ -1235,8 +1367,10 @@ Note that you will need to implement both functions in a single circuit. You may
 \item Explain how the Ripple-blanking input (RBI) and Ripple-blanking output (RBO) pins of the BCD to 7-segment decoder (IC 7447) should be connected such that all but the LSB show blank for leading zeros.
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
+
 \item You are receiving BCD codes sent by a remote transmitter. The bits are $A_3A_2A_1A_0$ ($A_0$ being the LSB). Design a BCD-error-detector (BED) for your receiver that will produce a HIGH for any received code that is not a valid BCD code. (For example, if you receive $1010$, the output of BED will be HIGH.)
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -1250,15 +1384,19 @@ Note that you will need to implement both functions in a single circuit. You may
 \item There is a 4$\times$4 smart grid to serve as the electricity transmission facility. The grids will be activated based on the logic function $g(a,b,c,d) = \Sigma\,(1,2,5,7,12,14)$. Design the logic circuit using a switching circuit that has 3-bit selector bits $S_2, S_1, S_0$ to select any of the eight input lines. The switching circuit is activated by two Enables — one active low $\overline{EN_0}$ and another active high $EN_1$. (Design with the minimum number of extra logic gates if required.)
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Using the switching circuit defined above (5-bit selector lines $A, B, C, D, E$ where $A$ is MSB and $E$ is LSB), design a $32\times1$ multiplexer. (Design with the minimum number of logic gates if required.)
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
 
 \item Design a full adder using NOT gates and two 4 to 1 multiplexers.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Implement the following Boolean function with a $4 \times 1$ multiplexer and external gates:
 \[ F(A, B, C, D) = \Sigma\,(1, 2, 4, 7, 8, 9, 10, 11, 13, 15) \]
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item What will be the output function $F(X, Y, Z)$ in the product of maxterms form in the given 4$\times$1 MUX circuit? Assume $X$ as the most significant bit and $Z$ as the least significant bit. (The MUX has inputs $Z', Z, 0, 1$ and selection lines $S_1S_0$ connected to $X, Y$.)
 
@@ -1309,54 +1447,71 @@ Note that you will need to implement both functions in a single circuit. You may
 
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Math teacher Mina Rahman sent sixteen question choices $Q_0,\ldots,Q_{15}$ to her students with a 2-bit binary code $C_1C_0$. If $C_1C_0=11$, $Q_0$ is selected; $C_1C_0=10$, $Q_1$ is selected; \ldots and so on. The code is activated by active-low $\overline{EN_1}$ and active-high $EN_2$. Design the multiplexing circuit.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 \item There are 16 electronic turnstile gates in a cricket stadium. The gates are numbered from 0 to 15 denoted by four bits $T_3T_2T_1T_0$. You have to design a digital ticketing system which uses a switch, and the switch has four input lines $I_0, I_1, I_2, I_3$. These lines can be selected by $S_0, S_1$. The switch is activated by two active low enables $EN_1'$ and $EN_2'$. (The selection policy of the switch is as follows. If $S_1S_0 = 00$, $I_0$ is selected; if $S_1S_0 = 01$, $I_1$ is selected; if $S_1S_0 = 10$, $I_2$ is selected; ... so on.). You can have entry to the stadium if you get the ticket for any of the following gate numbers $(1, 3, 4, 6, 7, 9, 12, 15)$. Design the ticketing circuit using the switch.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item Implement $F(A,B,C,D) = \Sigma\,(1,2,4,10,12,13,14,15)$ with a $4\times1$ multiplexer and external gates. Connect inputs $A$ and $B$ to the selection lines. Express $F$ as a function of $C$ and $D$ for each of the four cases $AB=00,01,10,11$ to obtain the data-line requirements.
 \mk{17} \yr{CSE 205 | L-2/T-1 | 2019--20}
+
 
 \item Using a $4\times1$ line MUX, design a logic circuit for $f(w,x,y,z) = \Pi\,(0,2,5,6,7,8,9,10)$, where the MUX has selector bits $S_1S_0$, input lines $I_0\ldots I_3$, active-low enable $\overline{EN_1}$ and active-high enable $EN_2$.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item Design a 1-bit Full Subtractor using a $4\times1$ multiplexer. The MUX has selector bits $S_1S_0$, input lines $I_0, I_1, I_2, I_3$, and active-low enable $\overline{EN}$.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Using an $8\times1$ line MUX, design a logic circuit for $f(w,x,y,z) = \mathrm{POS}(0,2,5,6,7,8,9,10)$, where the MUX has selector bits $S_2S_1S_0$, input lines $I_0\ldots I_7$, and active-low enable $\overline{EN}$. (If $S_2S_1S_0 = 000$, $I_0$ is selected; \ldots and so on.)
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Design a 1-bit Full Adder using two $4\times1$ multiplexers. The MUX has selector bits $S_1S_0$, input lines $I_0, I_1, I_2, I_3$, and active-low enable $\overline{EN}$. (If $S_1S_0 = 00$, $I_0$ is selected; $01 \to I_1$; $10 \to I_2$; $11 \to I_3$.)
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \item Using only $4\times1$ line, 2-bit multiplexers, design $f(w,x,y,z) = \pi\,(2,4,5,7,11,12,13)$. (Use minimum gates if required.)
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item Design and implement the circuit diagram of a 1-bit full subtractor circuit using $2\times1$ MUXs only. You cannot use any other gates.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item Consider the Boolean function $f(w, x, y, z) = \Pi\,(2,4,5,7,11,12,13)$. Implement the function using a $4 \times 1$ MUX and other basic gates if necessary.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Show the truth table for a three-state buffer. Construct a 2-to-1 line MUX with three-state buffers.
 \mk{3+5} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item An $8 \times 1$ multiplexer has inputs $A, B, C, D$ where inputs $A$, $B$, and $C$ are connected to selection inputs $S_2$, $S_1$, and $S_0$ respectively. The data inputs $I_0$ through $I_7$ are: $I_1 = I_2 = 0$; $I_3 = I_7 = 1$; $I_4 = I_5 = D$; $I_0 = I_6 = D'$. Determine the Boolean function that the multiplexer implements.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Construct a $16 \times 1$ multiplexer with two $8 \times 1$ and one $2 \times 1$ multiplexers.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \item Implement $F = \Sigma\,(3,5,7,10,11,13,14,15)$ using a 16-to-1 MUX.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
+
 \item Can the function $F = \Sigma\,(3,5,7,10,11,13,14,15)$ be implemented using only one $4 \times 1$ MUX? If yes, show how; if not, explain why.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \item Implement the following function $F$ using one $4 \times 1$ multiplexer and basic gates:
 \[ F(A,B,C,D) = \Sigma\,(1,3,4,11,12,13,14,15) \]
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1368,6 +1523,7 @@ Note that you will need to implement both functions in a single circuit. You may
 
 \item Using a 4-bit binary adder and XOR gates, design a circuit which takes two 4-bit BCD inputs $A$ and $B$ and returns: $A+1$ if input is 00; $A'$ if input is 01; $A'+1$ if input is 10; $A$ if input is 11.
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Design a Binary-to-Excess-3 converter using a logic circuit block with inputs $A$, $B$, $C$, $D$, control lines $x_1$, $x_0$, and active-low $\overline{EN}$. Output~$Y$: if $x_1x_0=00$, $A \to Y$; if $01$, $B \to Y$; if $10$, $C \to Y$; if $11$, $D \to Y$.
 
@@ -1414,8 +1570,10 @@ Note that you will need to implement both functions in a single circuit. You may
 \end{center}
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item Design a combinational circuit with 3 inputs $x$, $y$, $z$ and 3 outputs $A$, $B$, $C$. When the binary input is 0, 1, 2, or 3, the binary output is two greater than the input. When the binary input is 4, 5, 6, or 7, the binary output is three less than the input.
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \end{enumerate}
 
@@ -1425,19 +1583,27 @@ Note that you will need to implement both functions in a single circuit. You may
 
 \begin{enumerate}
 
+\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
+\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
+
 \item Design a logic circuit which finds the maximum value between two 3-bit numbers. Explain the operation using the two numbers 7 and 3.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item Design a logic circuit which returns the smaller value between two 4-bit binary numbers $A$ and $B$. Show the operation with $A=7$, $B=9$.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Design a digital circuit with logic gates which takes two 3-bit binary numbers $X$ and $Y$ and returns a 3-bit binary number $Z$ equal to the maximum between $X$ and $Y$. 
 ($X$ can be expressed as $X_2X_1X_0$, $Y$ can be expressed as $Y_2XY_1Y_0$; and Z can be
 expressed as $Z_2Z_1Z_0$).
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Design and explain a 2-bit magnitude comparator.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \end{enumerate}
 
@@ -1462,6 +1628,7 @@ expressed as $Z_2Z_1Z_0$).
 \item Discuss why the condition $S = R = 1$ leads to an unstable condition for an SR latch.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item Consider the following transition table:
 
 \begin{center}
@@ -1479,17 +1646,22 @@ expressed as $Z_2Z_1Z_0$).
 Design the circuit with NAND SR latches and gates.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item Write the excitation table for a SR latch constructed with NOR gates.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item What do you understand by mechanical switch contact bounce? Describe how the $\overline{S}\,\overline{R}$ latch can eliminate mechanical switch contact bounce.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+
 \item Explain the undefined condition in SR flip-flops. How is this problem solved in JK flip-flops?
 \mk{4+4} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
+
 \item Show the logic diagram and function table of an SR latch with NAND gates.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1502,8 +1674,10 @@ Design the circuit with NAND SR latches and gates.
 \item What is the problem in the construction of a JK flip-flop? How can we overcome this problem?
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Derive the characteristic table and the characteristic equation for a JK flip-flop.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1520,23 +1694,30 @@ Design the circuit with NAND SR latches and gates.
 \end{enumerate}
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Draw the block diagram of a negative edge triggered Master-Slave D flip-flop using D latches.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item Draw the circuit diagram of a master-slave JK flip-flop with asynchronous preset and clear using only NOR gates.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Draw the circuit diagram of a master-slave JK Flip-Flop using only NAND gates.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Why do we use master-slave flip-flops?
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Draw the block diagram and explain the operation of a Master-Slave negative edge triggered D flip-flop.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Draw and explain the operation of a Master-Slave D flip-flop.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1654,6 +1835,7 @@ Design the circuit with NAND SR latches and gates.
 
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -1664,6 +1846,7 @@ Design the circuit with NAND SR latches and gates.
 
 \item Write the differences between a latch and a flip-flop.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -1676,24 +1859,31 @@ Design the circuit with NAND SR latches and gates.
 \item Design a T flip-flop using a JK flip-flop and verify its operation using state transitions.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Construct a JK flip-flop from a T flip-flop and necessary gates. Show all the steps of this construction process.
 \mk{11} \yr{CSE 205 | L-2/T-1 | 2023--24, 2022--23, 2016--17}
+
 
 \item Design a D flip-flop using a T flip-flop and gates.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2020--21}
 \variant{2019--20}
 
+
 \item Design a SR Flip-Flop using a D Flip-Flop and a $4\times1$ MUX.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Convert: (i) a JK flip-flop into a T flip-flop, and (ii) a D flip-flop into a JK flip-flop.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Convert a T flip-flop into a JK flip-flop and vice versa.
 \mk{4+4} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
+
 \item Convert a D flip-flop to a T flip-flop. Use necessary gates.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1792,6 +1982,7 @@ Design the circuit with NAND SR latches and gates.
 
 \mk{12}  \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item A sequential circuit has two flip-flops $A$ and $B$, two inputs $x_1$ and $x_2$, and one output $z$. The flip-flop input equations and circuit output equations are:
 \begin{align*}
   J_A &= y_A x_1 + y_B x_2,\quad  & K_A &= y_A y_B + x_1 x_2 \\
@@ -1804,6 +1995,7 @@ Design the circuit with NAND SR latches and gates.
   \item Draw the state diagram.
 \end{enumerate}
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
 
 %% -- Q7(b): Analyze sequential circuit; transition, excitation, state table (figure-based) --
 \item A sequential circuit has two flip-flops $A$ and $B$, two inputs $x_1$ and $x_2$, and one output $z$. The flip-flop input equations and circuit output equations are:
@@ -1821,6 +2013,7 @@ For the above circuit:
 \end{enumerate}
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
+
 \item A sequential circuit has two JK Flip-Flops $A$ and $B$, two inputs $x$ and $y$, and one output $z$. The flip-flop input equations and circuit output equation are:
 \begin{align*}
   J_A &= Ax + By,\quad & K_A &= AB + xy \\
@@ -1833,12 +2026,14 @@ For the above circuit:
   \end{enumerate}
 \mk{4+7+4} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item A sequential circuit has two JK Flip-Flops $A$ and $B$, two inputs $x$ and $y$, and one output $z$. The Flip-Flop input equations and circuit output equation are:
 \[
   J_A = Bx + B'y',\quad K_A = B'xy',\quad J_B = A'x,\quad K_B = A + xy',\quad z = Ax'y' + Bx'y'
 \]
 Draw the logic diagram of the circuit, tabulate the state table and derive the state equations for $A$ and $B$.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Derive the state diagram from the following sequential circuit.
 
@@ -1938,6 +2133,7 @@ Draw the logic diagram of the circuit, tabulate the state table and derive the s
 \end{center}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
+
 \end{enumerate}
 \subtopic{cF}{Circuit Design from State Diagram}
 
@@ -2005,8 +2201,10 @@ Draw the logic diagram of the circuit, tabulate the state table and derive the s
 
 \mk{21} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Design a one-input, one-output serial 2's complementer using D flip-flops. The circuit accepts a string of bits from the input and generates the 2's complement at the output. The circuit can be reset asynchronously to start and end the operation. Include: (i) State diagram, (ii) State table, (iii) Simplified logic equations, (iv) Logic diagram.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item Design a control unit with a synchronous sequential circuit for a vending machine that accepts 5\,Tk, 10\,Tk and 20\,Tk notes and releases a soft drink bottle worth 20\,Tk. The machine releases a drink whenever the deposit amount equals or exceeds 20\,Tk and keeps the change. The maximum deposit at any time is 15\,Tk. The machine releases the deposit whenever the `CHANGE' input is given. Outputs: Release Drink $Z_1$ and Release Change $Z_2$. Inputs $X_1X_2$: Tk5=00, Tk10=01, Tk20=10, CHANGE=11. Use JK Flip-Flops.
 
@@ -2028,6 +2226,7 @@ CHANGE & 11 \\
 \end{center}
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -2039,18 +2238,23 @@ CHANGE & 11 \\
 \item Develop a sequential circuit that detects a sequence of three or more consecutive 1's in a string of bits coming through an input line. Use D flip-flops. Show the state diagram, the state table and simplified logic equations. You do not need to show the logic diagram.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
+
 \item Design a sequence recognizer using T flip-flops that recognizes a 4-bit \textbf{non-overlapping} binary sequence $X$ from an input stream of bits, where:
 \[ \text{Sequence } X = \text{4-bit binary representation of your roll number} \pmod{16} \]
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
+
 \item Design a sequence recognizer that recognizes the sequence \textbf{1101} from an input sequence (overlapping allowed). Design the circuit using SR Flip-Flops and draw the circuit diagram.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Design a clocked sequential circuit that recognizes the input sequence \textbf{1010} (including overlap) such that for input $x = 01010100011010010100$ the output is $z = 00001010000001000010$. Design the circuit using T Flip-Flops and basic gates.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item Draw the state diagram in Moore model of a synchronous sequential circuit that results in an output of 1 whenever the sequence $10011$ occurs. The circuit is required to recognize overlapping sequences.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \item Design a sequential circuit that detects a sequence of three or more consecutive 1s in a string of bits coming through an input line. Use D flip-flops. The design must include the following:
 \begin{enumerate}
@@ -2060,6 +2264,7 @@ CHANGE & 11 \\
   \item Logic 
 \end{enumerate}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2090,6 +2295,7 @@ E & A, 1 & B, 1 \\ \hline
 
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Transform the following Mealy machine into a corresponding Moore machine.
 
 \begin{center}
@@ -2105,6 +2311,7 @@ D                   & D, 1         & C, 0         \\ \hline
 \end{center}
 
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
 
 \item Obtain the Mealy equivalent state table for the following Moore machine.
 
@@ -2122,11 +2329,14 @@ D & A & D & 0 \\ \hline
 
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item Define (i) a Mealy machine and (ii) a Moore machine.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item What are the advantages and disadvantages of using the Mealy model and the Moore model for sequential circuit design?
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 %%──────────────────────────────────────────────────────────────────────
@@ -2151,6 +2361,7 @@ E & D,1 & C,1 \\ F & C,1 & C,1 \\ G & C,1 & D,1 \\ H & C,0 & A,1 \\
 \end{center}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item For the state-table of a completely specified circuit, find the equivalent partitions and write the state-table of the minimal machine. Name the equivalent states.
 
 \begin{center}
@@ -2168,6 +2379,7 @@ F & B,0 & D,1 & F,1 \\ \hline
 \end{center}
 
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item For the state-table of a completely specified circuit, find the equivalence partitions and write the state-table of the minimal machine. Name the equivalent states.
 
@@ -2187,6 +2399,7 @@ H & B, 1 & D, 0 & E, 1 & A, 0 \\
 \end{tabular}
 \end{center}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \item You are given the following state table of a synchronous sequential circuit. 
 
@@ -2213,6 +2426,7 @@ h & h & c & 0 & 0 \\ \hline
 \end{enumerate}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item You are given a state table of a synchronous sequential circuit. Find the reduced state table using the implication table.
 
 \begin{center}
@@ -2232,6 +2446,7 @@ h & h & c & 0 & 0 \\ \hline
 \end{center}
 
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item Find a critical race-free state assignment for a reduced flow table (states $a$--$d$, inputs 00/01/11/10) using the Multiple-row method.
 
@@ -2256,6 +2471,7 @@ h & h & c & 0 & 0 \\ \hline
 \end{center}
 
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Using an implication table, reduce the following state table to a minimum number of states and write the reduced state table.
 
@@ -2287,6 +2503,7 @@ h & h & c & 0 & 0 \\ \hline
 \end{center}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Using an implication table, reduce the following state table to a minimum number of states and write the reduced state table.
 
 \begin{center}
@@ -2316,6 +2533,7 @@ h & h & c & 0 & 0 \\ \hline
     \end{tabular}
 \end{center}
 \mk{17} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -2348,6 +2566,7 @@ H & B/1 & D/0 & E/1 & A/0 \\ \hline
 
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item For the incompletely specified machine shown below, derive the implication table and determine the maximal compatibles and the maximal incompatibles. Find the upper bound and the lower bound of the number of states of the minimal machine. Give the state table of the minimal machine.
 
 \begin{center}
@@ -2367,6 +2586,7 @@ G & F, 0 & --, -- \\ \hline
 
 \mk{23} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Reduce the number of states of the following state table using implication table. Show the reduced state table.
 
 \begin{center}
@@ -2384,6 +2604,7 @@ E                      & A              & D              & 0            & 1     
 
 \mk{11} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
+
 \item For the incompletely specified machine shown in the figure, derive the implication table and determine the maximal compatibles and the maximal incompatibles. Find the upper bound and the lower bound of the number of states of the minimal machine. Give the state table of the minimal machine.
 
 \begin{center}
@@ -2400,6 +2621,7 @@ E                   & -       & E, 0    & A, -    \\ \hline
 \end{center}
 
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
 
 \item For the incompletely specified machine below, complete the implication table and determine the maximal compatibles and maximal incompatibles. Find the upper and lower bounds on the number of states of the minimal machine. Give the state table of the minimal machine.
 \par\smallskip
@@ -2428,6 +2650,7 @@ G & A, 00 & - & - & G, 11 \\
 \end{center}
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
+
 \item For the incompletely specified machine shown below, derive the implication table and determine the maximal compatibles and the maximal incompatibles. Find the upper bound and the lower bound of the minimal machine and determine the minimal machine.
 
 \begin{center}
@@ -2446,6 +2669,7 @@ G & G, - & G, - \\ \hline
 \end{center}
 
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2019--20}
+
 
 \item For the incompletely specified machine , complete the implication table and determine the maximal compatibles and maximal incompatibles. Find the upper and lower bounds. Give the state table of the minimal machine.
 
@@ -2466,6 +2690,7 @@ G & D, 0 & E, 0 \\ \hline
 
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item For the incompletely specified machine , complete the implication table and determine the maximal compatibles and maximal incompatibles. Find the upper and lower bounds on the number of states of the minimal machine. Give the state table of the minimal machine.
 \begin{center}
   \begin{tabular}{c|cc}
@@ -2484,6 +2709,7 @@ G & G, - & G, - \\
   
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \end{enumerate}
 
 
@@ -2496,6 +2722,7 @@ G & G, - & G, - \\
 \item What are the problems that may occur when redundant states are present in the state diagram?
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2012--13, 2013--14}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -2506,6 +2733,7 @@ G & G, - & G, - \\
 
 \item Write down the procedure to assign the output to unstable states in a flow table.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2518,11 +2746,14 @@ G & G, - & G, - \\
 \item Design an asynchronous circuit functioning in fundamental mode. The circuit has three inputs $a$, $b$, and $c$, and one output $U$. $U=1$ only if all inputs are equal to `1', and they went to `1' in the order $a$, $b$, then $c$. $U$ returns to 0 when all inputs are returned to `0'. Derive the primitive flow table, reduced flow table and the minimum number of states required to have a race-free state assignment, and find a possible state assignment.
 \mk{23} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item At a junction of a single-track railroad and a road, traffic lights are to be installed. The lights are to be controlled by switches that are pressed or released by the trains. When a train approaches the junction from either direction and is within 1500 feet from it, the lights are to change from green to red and remain red until the train is 1500 feet past the junction. You may assume that the length of a train is smaller than 3000 feet. Determine a primitive flow table and reduce it.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Design a two-input ($x_1$, $x_2$), one-output ($z$) fundamental mode circuit that operates as follows. The output changes from 0 to 1 only on the first $x_1$ input change that follows an $x_2$ input change. A $1\to0$ output change occurs only when $x_1$ changes from 1 to 0 while $x_2=1$. Determine the primitive flow table, reduced flow table, race-free state assignment, K-maps and circuit diagram.
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 \item Design a fundamental mode circuit to function as an electrical lock. The lock has two switch inputs $X_1$ and $X_2$. Design the circuit so that the lock-open signal $Z=1$ is produced only after the following conditions have been satisfied:
 \begin{enumerate}
@@ -2534,20 +2765,26 @@ G & G, - & G, - \\
 Determine the primitive flow table, reduced flow table, race-free state assignment, K-maps and circuit diagram.
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
+
 \item Construct a primitive flow table for a fundamental mode circuit where the output $z=0$ when the two inputs $x_1$ and $x_2$ are equal. $z=1$ results when $x_1=0$ and $x_2$ changes from 0 to 1, and when $x_1=1$ and $x_2$ changes from 1 to 0. No other input change causes any output change. Determine the reduced flow table containing the minimum number of rows.
 \mk{10+10} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item Design a circuit for a digital lock using T latches. The lock has two push-button inputs $A$ and $B$ and produces a single pulse $Z_1$ for each activation. The two switches are mechanically interlocked so that simultaneous pulses are not possible. Features: (i) opening sequence is AABABA; (ii) three $B$ pulses give absolute reset; (iii) any incorrect use of $A$ produces output $Z_2$ to ring a bell.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item Construct a primitive flow table for a fundamental mode circuit with two inputs ($x_1$, $x_2$) and two outputs ($z_1$, $z_2$). Specifications: when $x_1x_2=00$, $z_1z_2=00$. Output 10 is produced following input sequence $00\to01\to11$ and remains until $x_1x_2$ returns to 00. Output 01 is produced following sequence $00\to10\to11$ and remains until 00 input returns the output to 00. Determine the minimum row-reduced flow table.
 \mk{10+10} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \item What does it mean when an asynchronous sequential circuit is assumed to operate in the fundamental mode?
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Derive the primitive flow table for a negative-edge triggered T flip-flop.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \item A specification is given below for a gated latch circuit with two inputs $G$ and $D$ and an output $Q$. Assume fundamental mode operation.
 
@@ -2555,6 +2792,7 @@ Determine the primitive flow table, reduced flow table, race-free state assignme
 
 Derive the primitive flow table and then obtain the reduced flow table.
 \mk{6+6} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2574,6 +2812,7 @@ Derive the primitive flow table and then obtain the reduced flow table.
 \end{enumerate}
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
+
 \item An asynchronous sequential circuit has two internal states and one output. The excitation and output functions are:
 \begin{align*}
   Y_1 &= x_1 x_2 + x_1 y_2' + x_2' y_1 \\
@@ -2583,10 +2822,12 @@ Derive the primitive flow table and then obtain the reduced flow table.
 Draw the logic diagram of the circuit and derive the transition table.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
+
 \item An asynchronous sequential circuit is described by the following excitation function:
 \[ Y = X_1 X_2' + (X_1 + X_2')\,y \]
 Draw the logic diagram of the circuit and derive the transition table.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
 
 \end{enumerate}
 
@@ -2599,6 +2840,7 @@ Draw the logic diagram of the circuit and derive the transition table.
 \item What is a static-1 hazard? Give an example of a static-1 hazard in an asynchronous sequential circuit.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -2609,6 +2851,7 @@ Draw the logic diagram of the circuit and derive the transition table.
     
 \item Design a serial parity generation circuit. The circuit receives a sequence of bits and determines whether the sequence contains an even or odd number of ones. The circuit output $p$ should be 0 for even parity and 1 for odd parity.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21, 2018--19}
+
 
 \item For the following primitive flow table shown in Figure , answer the following questions:
 \begin{enumerate}[label=(\roman*)]
@@ -2637,8 +2880,8 @@ $h$ & $a$, $-$ & $-$, $-$ & $-$, $-$ & \circled{$h$}, $0$ \\ \hline
 
 \mk{10+5+5} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
-\end{enumerate}
 
+\end{enumerate}
 
 
 %%──────────────────────────────────────────────────────────────────────
@@ -2649,6 +2892,7 @@ $h$ & $a$, $-$ & $-$, $-$ & $-$, $-$ & \circled{$h$}, $0$ \\ \hline
 
 \item What is a race in fundamental mode circuits? Explain critical and non-critical races with examples.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item For the given reduced flow table, find a valid assignment without any critical race and complete the modified flow table.
 
@@ -2665,6 +2909,7 @@ D & A,0   & (D),0 & (D),0 & C,-   \\ \hline
 
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item For the given reduced flow table, find a valid assignment without any critical race and complete the modified flow table.
 \par\smallskip
 \begin{center}
@@ -2677,6 +2922,7 @@ D & A,0   & (D),0 & (D),0 & C,-   \\ \hline
 \end{tabular}
 \end{center}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 \item For the given reduced flow table, find a valid assignment without any critical race and complete the modified flow table.
 
@@ -2693,6 +2939,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item For the given reduced flow table, find a valid assignment without any critical race and complete the modified flow table.
 
 \begin{center}
@@ -2708,8 +2955,10 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item What is race condition? Explain different types of races with examples.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \item Investigate the transition table (state variables $y_1 y_2$, inputs $x_1 x_2$) and determine all race conditions and whether they are critical or noncritical. Determine also whether there are any cycles.
 
@@ -2731,8 +2980,10 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+
 \item What is a race in fundamental mode circuits? Explain critical and non-critical races with an example.
 \mk{4+8} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2745,20 +2996,26 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \item Design an automatic vending machine, where the candy bars inside the machine cost 3\,Tk and the machine accepts 1\,Tk and 2\,Tk only. The system accepts the bills sequentially. The circuit produces a level output that delivers the candy whenever the amount received by the machine is 3\,Tk or more. The excess amount is kept deposited for the next candy. Design a pulse mode circuit for the vending machine using S-R flip-flops. Provide the circuit diagram as well.
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Design a pulse mode sequential circuit that satisfies the following requirements. The circuit has two input lines $x_1$ and $x_2$ along with one level output line $z$. An output transition from 0 to 1 is produced only after the occurrence of the last $x_2$ pulse in the sequence $x_1\text{-}x_2\text{-}x_1\text{-}x_2$. The output is reset from 1 to 0 only after the first $x_1$ pulse that occurs following the 0 to 1 output transition. The circuit allows overlapping sequences. Develop the pulse mode circuit using JK flip-flops. Draw the circuit diagram.
 \mk{23} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
 
 \item Design an automatic vending machine. The candy bars inside the machine cost 15\,Tk, and the machine accepts 5\,Tk and 10\,Tk only. An electromechanical system accepts the money sequentially. The circuit produces a pulse output that delivers the candy whenever the amount received by the machine is 15\,Tk or more. The excess amount is kept deposited for the next candy. Design a pulse mode circuit for the vending machine using S-R latches.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
+
 \item Design a circuit for a digit lock using T latches. The lock has two input push-button switches $A$, $B$ and it outputs a single pulse ($Z_1$) for each activation. The two switches are interlocked mechanically so that simultaneous pulses are not possible. The lock should have the following features: (i) The opening sequence is AABABA. (ii) Three $B$ pulses should give an absolute reset. (iii) Any incorrect use of the $A$ switch will cause an output ($Z_2$) to ring a bell to warn that the lock is being tampered with.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
 
 \item Design an automatic vending machine. Candy bars cost 3\,Tk; the machine accepts 1\,Tk and 2\,Tk coins sequentially. The circuit produces a level output delivering the candy whenever the amount received equals or exceeds 3\,Tk. Excess amount is kept for the next candy. Design a pulse mode circuit using SR Flip-Flops. Draw the circuit diagram.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Write down the restrictions on the duration of input for pulse mode asynchronous circuits.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2783,24 +3040,31 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \item Design the Modulo-100 ripple down counter with JK flip-flops and basic gates.
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Show the logic diagram of a four-bit binary ripple (asynchronous) countdown counter using T flip-flops that trigger on the negative edge of the clock.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item A MOD-13 counter counts from 0000 to 1100. Design the MOD-13 ripple up/down counter with positive edge-triggered JK flip-flops and basic gates.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Design a BCD ripple down counter using D flip-flops.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2020--21, 2018--19}
 
+
 \item Design a 4-bit modulo-12 asynchronous up counter using JK Flip-Flops.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \item A MOD-12 counter counts from 0000 to 1011. Design the MOD-12 ripple counter with positive edge-triggered JK Flip-Flops and basic gates.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
 \variant{2019--20}
 
+
 \item Design a 4-bit Ripple counter using D Flip-Flops and briefly explain its operation.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item
 \begin{enumerate}
@@ -2811,8 +3075,10 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 \mk{8+4+3} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
+
 \item Draw and explain a four-bit binary count-up ripple counter with T flip-flops.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2829,20 +3095,26 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Using JK flip-flops, design a synchronous counter that counts in the following sequence: $1, 2, 5, 7, 1, 2, \ldots$ Analyze the final circuit to ensure that if the circuit enters any of the unused states, after a finite number of clock cycles it comes to a used state.
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item Design a synchronous counter that counts in the following sequence: $0 \to 2 \to 4 \to 7 \to 5 \to 3 \to 0 \to 2 \to 4 \to \ldots$ Design the counter using one JK flip-flop, one T flip-flop and one D flip-flop. Draw the circuit diagram.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Design a synchronous counter that counts in the sequence $0 \to 2 \to 4 \to 7 \to 5 \to 3 \to 0 \to 2 \to 4 \to \cdots$ Design the counter using SR Flip-Flops and draw the circuit diagram.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 \item Design a synchronous counter that counts in the following sequence: $0 \to 1 \to 2 \to 5 \to 4 \to 6 \to 0 \to 1 \to 2 \to \cdots$ Design the counter using SR Flip-Flops and draw the circuit diagram.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Design a synchronous counter with the sequence: $1 \to 4 \to 5 \to 7 \to 2 \to 1$. You need not take any measure for the unused states.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \item Show two ways to design a Modulo-6 counter using a 4-bit binary counter and necessary basic gates. The Modulo-6 counter repeatedly goes through $0, 1, 2, 3, 4, 5$.
 
@@ -2877,14 +3149,18 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Design a 3-bit binary up counter that counts $1 \to 2 \to 5 \to 7 \to 1\cdots$, where any invalid state goes to the immediate next valid state in the sequence. Use T Flip-Flops. Show the state diagram, state table, function equations, minimization (if necessary) and the circuit diagram.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \item Design a 3-bit synchronous binary up counter that counts $1 \to 2 \to 4 \to 7 \to 1 \to \cdots$, where any invalid state goes to the immediate next state in the sequence. Use JK flip-flops. Show the state table, state diagram, function minimization (if necessary), and circuit diagram.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Design a synchronous counter with the following binary sequence: $0, 1, 3, 7, 6, 4$ and repeat. Use T flip-flops.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -2897,9 +3173,11 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \item Design a 3-bit synchronous Gray Code Counter using JK Flip-Flops. Show the state diagram, state table, function equations and the circuit diagram.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+
 \item Develop a synchronous 3-bit counter with a Gray code sequence using JK flip-flops.\\
 \textit{(Hint: Gray code count sequence for a 2-bit counter is: $00, 01, 11, 10, 00, 01, \ldots$)}
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2913,8 +3191,10 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \item Design a 5-bit ring counter using a shift register and illustrate its operation using a timing diagram.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
+
 \item Draw the logic diagram of a four-stage switch-tail ring counter.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2927,15 +3207,19 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
     \item Write a short note about a ring counter.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
+
 \item Distinguish between a ring counter and a Johnson counter. Design a 5-bit ring counter and a 5-bit Johnson counter using shift registers and illustrate their operation using timing diagrams.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
 \variant{2019--20}
 
+
 \item Design a 4-bit Johnson counter using a shift register and illustrate its operation using a timing diagram.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
 \item Design a 4-bit Johnson Counter. What is the disadvantage of a Johnson Counter? What is the difference between a Johnson Counter and a Ring Counter?
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 \end{enumerate}
 
@@ -3028,6 +3312,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -3038,6 +3323,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 
 \item Given a 100\,MHz clock signal, derive a circuit using D flip-flops to generate 50\,MHz and 25\,MHz clock signals. Draw a timing diagram for all three clock signals.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
 
 \end{enumerate}
 
@@ -3050,8 +3336,10 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \item Design a 4-bit universal shift register using multiplexers and D flip-flops.
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Compare the hardware efficiency and flexibility of universal shift registers with dedicated shift registers in complex digital systems.
 \mk{7} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
 
 \item Use a 2-to-4 decoder, NAND gates and edge triggered D flip-flops to design a 4-bit shift register module that has the following functions:
 \begin{center}
@@ -3068,14 +3356,18 @@ $S_1$ & $S_0$ & Mode \\
 \end{center}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Draw the logic diagram of a 3-bit universal shift register with mode selection inputs $s_2$, $s_1$, $s_0$. The register operates with eight modes: (000) No change, (001) Invert all bits, (010) Set all bits to 0, (011) Set all bits to 1, (100) Parallel load, (101) Shift left, (110) Shift right, (111) No change.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
 
 \item Draw the logic diagram of a two-bit register with two D flip-flops and two $4\times1$ multiplexers with mode selection inputs $s_1$ and $s_0$. The register operates with four modes: (00) No change, (01) Complement the two outputs, (10) Clear register to 0 (synchronous), (11) Load parallel data.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Draw the circuit diagram of a 4-bit universal shift register using JK flip-flops.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -3092,20 +3384,26 @@ $S_1$ & $S_0$ & Mode \\
 \end{enumerate}
 \mk{16} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Design a sequential circuit to copy the content of shift register $A$ to shift register $B$. Use a block diagram to represent the shift register in the diagram.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item Design a serial subtractor that will perform the operation $A - B$, where $A = a_{n-1}\ldots a_1 a_0$ and $B = b_{n-1}\ldots b_1 b_0$. The operands are applied to the serial subtractor sequentially, beginning with bits $a_0$ and $b_0$. Use JK flip-flops in your design.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Design a serial adder that computes the sum of two 4-bit binary numbers $A$ and $B$ stored in individual shift registers. The result of the addition is stored in the shift register representing $A$.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18, 2016--17}
+
 
 \item Design a serial subtractor that subtracts the content of register $B$ from the content of register $A$, where the contents of $A$ and $B$ are stored in individual shift registers. The result of the subtraction is stored in the shift register representing $A$. (Both $A$ and $B$ are 4-bit binary numbers.)
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \item Draw the logic diagram of a serial adder. Show the values of inputs and outputs of all components (e.g., flip-flop, register) used in the design after every clock pulse while adding the following two numbers: $0101$ and $0011$.
 \mk{6+6} \yr{CSE 205 | L-2/T-1 | 2011--12, 2012--13}
+
 
 \end{enumerate}
 
@@ -3130,6 +3428,7 @@ $S_1$ & $S_0$ & Mode \\
 \item You have several $32 \times 4$ ROMs in the laboratory. Each ROM can be enabled/disabled using a 1/0 signal respectively. How would you implement a $128 \times 4$ ROM using the available ROMs? You may use any additional circuitry if needed.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -3145,12 +3444,14 @@ $S_1$ & $S_0$ & Mode \\
 \end{align*}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Tabulate the PLA programming table for the two Boolean functions listed below. Minimize the numbers of product terms:
 \begin{align*}
   F_1(A, B, C) &= \Sigma\,(0, 1, 2, 4) \\
   F_2(A, B, C) &= \Sigma\,(0, 5, 6, 7)
 \end{align*}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
 
 \item A combinational circuit is defined by the following two functions:
 \begin{align*}
@@ -3160,8 +3461,10 @@ $S_1$ & $S_0$ & Mode \\
 The circuit needs to be implemented with a PLA having three inputs, four product terms, and two outputs. Show the PLA programming table.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2021--22}
 
+
 \item Design a digital security lock using PLA which takes BCD as input and opens after converting the input to Excess-3 code. Use the minimum number of product terms. (Show the fuse map.)
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 \item Design a circuit for the following functions using a Programmable Logic Array (PLA):
 \begin{align*}
@@ -3170,12 +3473,14 @@ The circuit needs to be implemented with a PLA having three inputs, four product
 \end{align*}
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
+
 \item Design a security lock using PLA which will be opened using the following combinations:
 \begin{align*}
   A(x,y,z) &= \Sigma\,(1,3,5,6),\quad B(x,y,z) = \Sigma\,(0,1,6,7) \\
   C(x,y,z) &= \Sigma\,(3,5),\quad D(x,y,z) = \Sigma\,(1,3,4,5,7)
 \end{align*}
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
 
 \item For a given Programmable Logic Array (PLA), find the function expressions for $F_1$ and $F_2$ and show the PLA programming table.
 
@@ -3316,6 +3621,7 @@ The circuit needs to be implemented with a PLA having three inputs, four product
 
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
+
 \item Write the difference between ROM and PLA. A combinational circuit is defined by the following functions:
 \begin{align*}
   F_1(A,B,C) &= \Sigma\,(0,1,2,4) \\
@@ -3324,8 +3630,10 @@ The circuit needs to be implemented with a PLA having three inputs, four product
 Implement the circuit with a PLA having three inputs, four product terms and two outputs.
 \mk{5+10} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
+
 \item Derive the PLA program table for a combinational circuit that squares a 3-bit binary number. Minimize the number of product terms.
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2013--14}
+
 
 \item Implement the following three Boolean functions with a PLA:
 \begin{align*}
@@ -3334,6 +3642,7 @@ Implement the circuit with a PLA having three inputs, four product terms and two
   F_3 &= \Sigma\,(0,3,5,7)
 \end{align*}
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -3345,6 +3654,7 @@ Implement the circuit with a PLA having three inputs, four product terms and two
 
 \item If you use two dimensional decoding for addressing a 1K word memory, can you optimize the cost? Justify your answer.
 \mk{8} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
 
 \end{enumerate}
 
@@ -3358,14 +3668,17 @@ Implement the circuit with a PLA having three inputs, four product terms and two
 \item Design an automatic vending machine, when the candy bars inside the machine cost 3\,Tk and the machine accepts 1\,Tk and 2\,Tk only. The system accepts the bills sequentially. The circuit produces a level output that delivers the candy whenever the amount received by the machine is 3\,Tk or more. The excess amount is kept deposited for the next candy. Design a synchronous sequential circuit for the vending machine using S-R flip-flops. Provide the circuit diagram as well.
 \mk{25} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
+
 \item Design a simplified traffic-light controller that switches traffic lights on a crossing where a north-south (NS) street intersects an east-west (EW) street. The input to the controller is the WALK button pushed by pedestrians who want to cross the street. The outputs are two signals NS and EW that control the traffic lights in NS and EW directions. When NS or EW are 0, the red light is on and when they are 1, the green light is on. When there are no pedestrians, $\text{NS}=0$ and $\text{EW}=1$ for 1 minute, followed by $\text{NS}=1$ and $\text{EW}=0$ for 1 minute and so on. When a WALK button is pushed, NS and EW both come 1 for a minute when the present minute expires. After that the NS and EW signals continue alternating. For the traffic-light controller:
 	(i) Develop a state diagram and state/output table.
 	(ii) Find the transition and excitation tables using S-R flipflops.
 	(iii) Draw a circuit diagram.
 \mk{23} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
+
 \item Design a divide-by-three counter which counts the number of `1's from an input sequence of binary stream. This counter outputs one 1 for every three 1's seen as input (not necessarily in succession). After outputting a 1, it starts counting all over again. Design the counter using D flip-flops.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
 
 \end{enumerate}
 

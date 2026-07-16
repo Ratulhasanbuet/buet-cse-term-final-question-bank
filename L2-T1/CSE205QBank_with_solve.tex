@@ -222,20 +222,21 @@
     \item \hyperref[sec:S4]{\textbf{S4.} Arithmetic \& Data Handling Circuits, Decoders, Encoders, MUX/DEMUX}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cD}{$\cdot$}}]
         \item \hyperref[sub:s4-number-sys]{Number System \& Arithmetic Operations}
+        \item \hyperref[sub:s4-code-converter]{Code Converter}
         \item \hyperref[sub:s4-adder-sub]{Binary Adder \& Subtractor}
+        \item \hyperref[sub:s4-bcd-addsub]{BCD Adder-Subtractor}
         \item \hyperref[sub:s4-cla]{Carry Look-Ahead Adder (CLA)}
         \item \hyperref[sub:s4-2scomp]{2's Complement Circuit}
         \item \hyperref[sub:s4-overflow]{Overflow Detection}
         \item \hyperref[sub:s4-multiplier]{Binary Multiplier}
         \item \hyperref[sub:s4-incrementer]{Incrementer}
         \item \hyperref[sub:s4-encoders]{Encoders \& Decoders}
+        \item \hyperref[sub:s4-decoder-func]{Function Implementation using Decoder}
+        \item \hyperref[sub:s4-demux]{Decoder as Demultiplexer}
         \item \hyperref[sub:s4-bcd]{BCD to 7-Segment Decoder \& BCD Error Detector}
         \item \hyperref[sub:s4-mux]{Multiplexers \& Demultiplexers}
         \item \hyperref[sub:s4-comb-custom]{Custom Combinational Circuit Design}
-        \item \hyperref[sub:s4-decoder-func]{Function Implementation using Decoder}
-        \item \hyperref[sub:s4-demux]{Decoder as Demultiplexer}
         \item \hyperref[sub:s4-comparator]{Magnitude Comparator}
-        \item \hyperref[sub:s4-bcd-addsub]{BCD Adder-Subtractor}
       \end{itemize}
   \end{itemize}
 \end{tcolorbox}
@@ -6291,6 +6292,113 @@ All other minterms are covered by overlapping groups (two or more PIs). Therefor
 
 \begin{enumerate}
 
+\item Simplify the following Boolean function into (a) sum-of-products form and (b) product-of-sums form:
+\[ F(A, B, C, D) = \Sigma\,(0, 1, 2, 5, 8, 9, 10) \]
+\mk{14} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cC!4,colframe=cC,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cC]
+
+\textbf{\large Part (a): Sum-of-Products (SOP) Minimization}
+
+\vspace{0.5em}
+\textbf{Step 1: Identify Minterms} \\
+The Boolean function is given directly as a sum of minterms:
+\[ F(A,B,C,D) = \Sigma\,m(0, 1, 2, 5, 8, 9, 10) \]
+
+\vspace{0.5em}
+\textbf{Step 2: Karnaugh Map Plotting and Grouping for SOP} \\
+We plot the $1$s on a 4-variable K-map and group them to find the essential prime implicants.
+
+\begin{center}
+\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \minterms{0,1,2,5,8,9,10}
+    \autoterms[0]
+    
+    % Group 1: Wrap-around quad covering 0, 1, 8, 9
+    \implicantedge{0}{1}{8}{9}
+    % Group 2: Four corners covering 0, 2, 8, 10
+    \implicantcorner
+    % Group 3: Vertical pair covering 1, 5
+    \implicant{1}{5}
+    
+\end{karnaugh-map}
+\end{center}
+
+\textbf{Essential Prime Implicants Analysis:}
+\begin{itemize}
+    \item \textbf{Wrap-around Quad:} Cells $0, 1, 8, 9$ form a quad spanning the top and bottom rows. \\
+    Constant variables: $B=0, C=0 \implies \mathbf{B'C'}$.
+    \item \textbf{Corner Quad:} Cells $0, 2, 8, 10$ form a quad at the four corners. \\
+    Constant variables: $B=0, D=0 \implies \mathbf{B'D'}$.
+    \item \textbf{Vertical Pair:} Cells $1, 5$ form a pair. \\
+    Constant variables: $A=0, C=0, D=1 \implies \mathbf{A'C'D}$.
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Final Simplified SOP Expression:}
+\begin{center}
+\fcolorbox{cC}{cC!10}{
+\parbox{0.6\linewidth}{
+\centering
+$\displaystyle F_{SOP}(A,B,C,D) = \textcolor{cC}{\mathbf{B'C' + B'D' + A'C'D}}$
+}
+}
+\end{center}
+
+\vspace{1.5em}
+\rule{\textwidth}{0.4pt}
+\vspace{1.5em}
+
+\textbf{\large Part (b): Product-of-Sums (POS) Minimization}
+
+\vspace{0.5em}
+\textbf{Step 1: Identify Maxterms} \\
+To find the POS form, we identify the maxterms ($0$s) by finding the missing indices from the 16 possible combinations (0 to 15):
+\[ F(A,B,C,D) = \Pi\,M(3, 4, 6, 7, 11, 12, 13, 14, 15) \]
+
+\vspace{0.5em}
+\textbf{Step 2: Karnaugh Map Plotting and Grouping for POS} \\
+We plot the $0$s on the K-map. For POS, each grouped block of $0$s yields a sum term. Constant $0$s yield uncomplemented variables, and constant $1$s yield complemented variables.
+
+\begin{center}
+\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \maxterms{3,4,6,7,11,12,13,14,15}
+    \autoterms[1]
+    
+    % Group 1: Full row quad covering 12, 13, 15, 14
+    \implicant{12}{14}
+    % Group 2: Full column quad covering 3, 7, 11, 15
+    \implicant{3}{11}
+    % Group 3: Wrap-around quad on the sides for 4, 12 and 6, 14
+    \implicantedge{4}{12}{6}{14}
+    
+\end{karnaugh-map}
+\end{center}
+
+\textbf{Groupings for POS Sum Terms:}
+\begin{itemize}
+    \item \textbf{Horizontal Quad (Row 11):} Cells $12, 13, 14, 15$ form a complete row. \\
+    Constant variables: $A=1, B=1 \implies \mathbf{(A' + B')}$.
+    \item \textbf{Vertical Quad (Column 11):} Cells $3, 7, 11, 15$ form a complete column. \\
+    Constant variables: $C=1, D=1 \implies \mathbf{(C' + D')}$.
+    \item \textbf{Side-Edge Quad:} Cells $4, 6, 12, 14$ form a quad by wrapping the left and right edges across two rows. \\
+    Constant variables: $B=1, D=0 \implies \mathbf{(B' + D)}$.
+\end{itemize}
+
+\vspace{0.5em}
+\textbf{Final Simplified POS Expression:}
+\begin{center}
+\fcolorbox{cC}{cC!10}{
+\parbox{0.65\linewidth}{
+\centering
+$\displaystyle F_{POS}(A,B,C,D) = \textcolor{cC}{\mathbf{(A' + B')(C' + D')(B' + D)}}$
+}
+}
+\end{center}
+
+\end{tcolorbox}
+
+
 \item Using K-Map, minimize $f(v,w,x,y,z) = \Sigma\,(2,7,8,15,22,23,25,29) + d(6,9,13,18,24,31)$. Find the Prime Implicants and Essential Prime Implicants, and the Minimal Sums. Write down the responsible minterm for each Essential Prime Implicant.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
@@ -7493,111 +7601,6 @@ These isolated columns signify that PI$_1$ and PI$_5$ are absolutely required to
 
 \end{tcolorbox}
 
-\item Simplify the following Boolean function into (a) sum-of-products form and (b) product-of-sums form:
-\[ F(A, B, C, D) = \Sigma\,(0, 1, 2, 5, 8, 9, 10) \]
-\mk{14} \yr{CSE 205 | L-2/T-1 | 2022--23}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cC!4,colframe=cC,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cC]
-
-\textbf{\large Part (a): Sum-of-Products (SOP) Minimization}
-
-\vspace{0.5em}
-\textbf{Step 1: Identify Minterms} \\
-The Boolean function is given directly as a sum of minterms:
-\[ F(A,B,C,D) = \Sigma\,m(0, 1, 2, 5, 8, 9, 10) \]
-
-\vspace{0.5em}
-\textbf{Step 2: Karnaugh Map Plotting and Grouping for SOP} \\
-We plot the $1$s on a 4-variable K-map and group them to find the essential prime implicants.
-
-\begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
-    \minterms{0,1,2,5,8,9,10}
-    \autoterms[0]
-    
-    % Group 1: Wrap-around quad covering 0, 1, 8, 9
-    \implicantedge{0}{1}{8}{9}
-    % Group 2: Four corners covering 0, 2, 8, 10
-    \implicantcorner
-    % Group 3: Vertical pair covering 1, 5
-    \implicant{1}{5}
-    
-\end{karnaugh-map}
-\end{center}
-
-\textbf{Essential Prime Implicants Analysis:}
-\begin{itemize}
-    \item \textbf{Wrap-around Quad:} Cells $0, 1, 8, 9$ form a quad spanning the top and bottom rows. \\
-    Constant variables: $B=0, C=0 \implies \mathbf{B'C'}$.
-    \item \textbf{Corner Quad:} Cells $0, 2, 8, 10$ form a quad at the four corners. \\
-    Constant variables: $B=0, D=0 \implies \mathbf{B'D'}$.
-    \item \textbf{Vertical Pair:} Cells $1, 5$ form a pair. \\
-    Constant variables: $A=0, C=0, D=1 \implies \mathbf{A'C'D}$.
-\end{itemize}
-
-\vspace{0.5em}
-\textbf{Final Simplified SOP Expression:}
-\begin{center}
-\fcolorbox{cC}{cC!10}{
-\parbox{0.6\linewidth}{
-\centering
-$\displaystyle F_{SOP}(A,B,C,D) = \textcolor{cC}{\mathbf{B'C' + B'D' + A'C'D}}$
-}
-}
-\end{center}
-
-\vspace{1.5em}
-\rule{\textwidth}{0.4pt}
-\vspace{1.5em}
-
-\textbf{\large Part (b): Product-of-Sums (POS) Minimization}
-
-\vspace{0.5em}
-\textbf{Step 1: Identify Maxterms} \\
-To find the POS form, we identify the maxterms ($0$s) by finding the missing indices from the 16 possible combinations (0 to 15):
-\[ F(A,B,C,D) = \Pi\,M(3, 4, 6, 7, 11, 12, 13, 14, 15) \]
-
-\vspace{0.5em}
-\textbf{Step 2: Karnaugh Map Plotting and Grouping for POS} \\
-We plot the $0$s on the K-map. For POS, each grouped block of $0$s yields a sum term. Constant $0$s yield uncomplemented variables, and constant $1$s yield complemented variables.
-
-\begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
-    \maxterms{3,4,6,7,11,12,13,14,15}
-    \autoterms[1]
-    
-    % Group 1: Full row quad covering 12, 13, 15, 14
-    \implicant{12}{14}
-    % Group 2: Full column quad covering 3, 7, 11, 15
-    \implicant{3}{11}
-    % Group 3: Wrap-around quad on the sides for 4, 12 and 6, 14
-    \implicantedge{4}{12}{6}{14}
-    
-\end{karnaugh-map}
-\end{center}
-
-\textbf{Groupings for POS Sum Terms:}
-\begin{itemize}
-    \item \textbf{Horizontal Quad (Row 11):} Cells $12, 13, 14, 15$ form a complete row. \\
-    Constant variables: $A=1, B=1 \implies \mathbf{(A' + B')}$.
-    \item \textbf{Vertical Quad (Column 11):} Cells $3, 7, 11, 15$ form a complete column. \\
-    Constant variables: $C=1, D=1 \implies \mathbf{(C' + D')}$.
-    \item \textbf{Side-Edge Quad:} Cells $4, 6, 12, 14$ form a quad by wrapping the left and right edges across two rows. \\
-    Constant variables: $B=1, D=0 \implies \mathbf{(B' + D)}$.
-\end{itemize}
-
-\vspace{0.5em}
-\textbf{Final Simplified POS Expression:}
-\begin{center}
-\fcolorbox{cC}{cC!10}{
-\parbox{0.65\linewidth}{
-\centering
-$\displaystyle F_{POS}(A,B,C,D) = \textcolor{cC}{\mathbf{(A' + B')(C' + D')(B' + D)}}$
-}
-}
-\end{center}
-
-\end{tcolorbox}
 
 \item Determine the prime implicants of the following function using the tabulation (tabular) method:
 \[ F(w, x, y, z) = \Sigma\,(0, 1, 2, 8, 10, 11, 14, 15) \]
@@ -8344,667 +8347,6 @@ $\displaystyle F(A,B,C,D) = \textcolor{cC}{\mathbf{A'B'C' + B'D' + AC}}$
 \section*{S4 \quad Combinational Logic}
 \addcontentsline{toc}{section}{S4: Combinational Logic}
 
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Code Converter}
-\label{sub:s4-code-converter}
-
-\begin{enumerate}
-
-\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
-\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{1. Problem Formulation}
-
-A magnitude comparator is a combinational logic circuit that compares two binary numbers and determines their relative magnitudes. We are given two 3-bit binary numbers, $X$ and $Y$:
-\begin{align*}
-    X &= X_2 X_1 X_0 \\
-    Y &= Y_2 Y_1 Y_0
-\end{align*}
-where $X_2$ and $Y_2$ are the Most Significant Bits (MSBs), and $X_0$ and $Y_0$ are the Least Significant Bits (LSBs). 
-
-The circuit will output three mutually exclusive signals:
-\begin{itemize}
-    \item $E$ (Equal): High (1) if $X = Y$.
-    \item $G$ (Greater): High (1) if $X > Y$.
-    \item $L$ (Less): High (1) if $X < Y$.
-\end{itemize}
-
-Since there are 6 input variables in total, a standard truth table would require $2^6 = 64$ rows. To simplify the design process, we derive the Boolean expressions directly using algorithmic logic based on bit significance.
-
-\vspace{1em}
-\textbf{2. Intermediate Bit-Level Functions}
-
-We first define the bit-wise comparison terms for any arbitrary bit position $i \in \{0, 1, 2\}$:
-
-\begin{itemize}
-    \item \textbf{Bit Equality ($e_i$):} The $i$-th bits are equal ($X_i = Y_i$) if both are 1 or both are 0. This is represented by the XNOR operation:
-    \begin{align*}
-        e_i &= X_i Y_i + \overline{X_i}\overline{Y_i} = X_i \odot Y_i
-    \end{align*}
-    
-    \item \textbf{Bit Greater ($g_i$):} The bit $X_i$ is strictly greater than $Y_i$ only when $X_i = 1$ and $Y_i = 0$. 
-    \begin{align*}
-        g_i &= X_i \overline{Y_i}
-    \end{align*}
-    
-    \item \textbf{Bit Less ($l_i$):} The bit $X_i$ is strictly less than $Y_i$ only when $X_i = 0$ and $Y_i = 1$.
-    \begin{align*}
-        l_i &= \overline{X_i} Y_i
-    \end{align*}
-\end{itemize}
-
-\vspace{1em}
-\textbf{3. Final Output Equations}
-
-Using the intermediate signals, we can construct the logic for the entire 3-bit word by evaluating from the MSB ($i=2$) down to the LSB ($i=0$).
-
-\textbf{Equality ($E$):}
-For the two numbers to be equal, all corresponding bits must be identical simultaneously.
-\begin{align*}
-    E &= e_2 \cdot e_1 \cdot e_0 \\
-    E &= (X_2 \odot Y_2)(X_1 \odot Y_1)(X_0 \odot Y_0)
-\end{align*}
-
-\textbf{Greater Than ($G$):}
-The number $X$ is greater than $Y$ if:
-1. $X_2 > Y_2$ (MSB is greater), OR
-2. $X_2 = Y_2$ AND $X_1 > Y_1$, OR
-3. $X_2 = Y_2$ AND $X_1 = Y_1$ AND $X_0 > Y_0$.
-Expressing this logically using our intermediate terms:
-\begin{align*}
-    G &= g_2 + e_2 g_1 + e_2 e_1 g_0 \\
-    G &= X_2 \overline{Y_2} + (X_2 \odot Y_2)X_1 \overline{Y_1} + (X_2 \odot Y_2)(X_1 \odot Y_1)X_0 \overline{Y_0}
-\end{align*}
-
-\textbf{Less Than ($L$):}
-Similarly, $X$ is less than $Y$ if the corresponding condition holds for the lesser bits:
-\begin{align*}
-    L &= l_2 + e_2 l_1 + e_2 e_1 l_0 \\
-    L &= \overline{X_2} Y_2 + (X_2 \odot Y_2)\overline{X_1} Y_1 + (X_2 \odot Y_2)(X_1 \odot Y_1)\overline{X_0} Y_0
-\end{align*}
-\textit{Note:} $L$ can also be obtained using a NOR gate since the states are mutually exclusive: $L = \overline{G + E}$.
-
-\vspace{1em}
-\textbf{4. Logic Circuit Implementation}
-
-To ensure high readability and avoid overlapping routing, the complete logic circuit is separated into two hierarchical tiers. The first tier generates the intermediate bit-level signals ($e_i, g_i, l_i$). The second tier uses these signals to compute the final outputs ($E, G, L$).
-
-\vspace{1em}
-\begin{center}
-\textbf{Tier 1: Bit-Level Signal Generation (Shown for bit $i$)} \\
-\vspace{1.5em}
-\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
-
-    % --- Inputs ---
-    \node[left, font=\bfseries] at (0, 4.28) {$X_i$};
-    \node[left, font=\bfseries] at (0, -0.28) {$Y_i$};
-
-    % --- Main Logic Gates ---
-    \node[and port] (ANDG) at (8, 4) {};
-    \node[xnor port] (XNORE) at (8, 2) {};
-    \node[and port] (ANDL) at (8, 0) {};
-
-    % --- Inverters ---
-    \node[not port, scale=0.7] (NOTY) at (5.5, 3.72) {};
-    \node[not port, scale=0.7] (NOTX) at (5.5, 0.28) {};
-
-    % --- Wiring X_i ---
-    % Direct to ANDG
-    \draw (0, 4.28) -- (ANDG.in 1);
-    % Tap down to XNORE
-    \draw (1, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 1);
-    % Tap down to NOTX
-    \draw (2.5, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTX.in);
-    % NOTX to ANDL
-    \draw (NOTX.out) -- (ANDL.in 1);
-
-    % --- Wiring Y_i ---
-    % Direct to ANDL
-    \draw (0, -0.28) -- (ANDL.in 2);
-    % Tap up to XNORE
-    \draw (1.5, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 2);
-    % Tap up to NOTY
-    \draw (4, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTY.in);
-    % NOTY to ANDG
-    \draw (NOTY.out) -- (ANDG.in 2);
-
-    % --- Outputs ---
-    \draw (ANDG.out) -- ++(0.5,0) node[right] {$g_i \ (X_i > Y_i)$};
-    \draw (XNORE.out) -- ++(0.5,0) node[right] {$e_i \ (X_i = Y_i)$};
-    \draw (ANDL.out) -- ++(0.5,0) node[right] {$l_i \ (X_i < Y_i)$};
-
-\end{circuitikz}
-\end{center}
-
-\vspace{1.5em}
-\begin{center}
-\textbf{Tier 2: Aggregate Output Generation ($E, G, L$)} \\
-\vspace{0.5em}
-\begin{circuitikz}[thick, scale=0.85, transform shape]
-    
-    % ==== E Generation ====
-    \node[and port, number inputs=3] (Eand) at (4, 8) {};
-    \node[left] at (Eand.in 1) {$e_2$};
-    \node[left] at (Eand.in 2) {$e_1$};
-    \node[left] at (Eand.in 3) {$e_0$};
-    \node[right] at (Eand.out) {\textbf{$E \ (X=Y)$}};
-    
-    % ==== G Generation ====
-    \node[left] at (0, 5) {$g_2$};
-    
-    \node[and port] (Gand1) at (2, 3.5) {};
-    \node[left] at (Gand1.in 1) {$e_2$};
-    \node[left] at (Gand1.in 2) {$g_1$};
-    
-    \node[and port, number inputs=3] (Gand2) at (2, 1.5) {};
-    \node[left] at (Gand2.in 1) {$e_2$};
-    \node[left] at (Gand2.in 2) {$e_1$};
-    \node[left] at (Gand2.in 3) {$g_0$};
-    
-    \node[or port, number inputs=3] (Gor) at (5, 3.5) {};
-    \draw (0, 5) -| (3.5, 5) |- (Gor.in 1);
-    \draw (Gand1.out) |- (Gor.in 2);
-    \draw (Gand2.out) -| (3.5, 1.5) |- (Gor.in 3);
-    \node[right] at (Gor.out) {\textbf{$G \ (X>Y)$}};
-    
-    % ==== L Generation ====
-    \node[left] at (8, 5) {$l_2$};
-    
-    \node[and port] (Land1) at (10, 3.5) {};
-    \node[left] at (Land1.in 1) {$e_2$};
-    \node[left] at (Land1.in 2) {$l_1$};
-    
-    \node[and port, number inputs=3] (Land2) at (10, 1.5) {};
-    \node[left] at (Land2.in 1) {$e_2$};
-    \node[left] at (Land2.in 2) {$e_1$};
-    \node[left] at (Land2.in 3) {$l_0$};
-    
-    \node[or port, number inputs=3] (Lor) at (13, 3.5) {};
-    \draw (8, 5) -| (11.5, 5) |- (Lor.in 1);
-    \draw (Land1.out) |- (Lor.in 2);
-    \draw (Land2.out) -| (11.5, 1.5) |- (Lor.in 3);
-    \node[right] at (Lor.out) {\textbf{$L \ (X<Y)$}};
-    
-\end{circuitikz}
-\end{center}
-
-\end{tcolorbox}
-
-\item A consensus circuit is a combinational circuit whose output is equal to 1 if exactly two inputs are 1, and 0 otherwise. Design a 3-input consensus circuit by finding the circuit's truth table, simplified Boolean equation and a circuit diagram.
-\mk{12} \yr{CSE 205 | L-2/T-1 | 2023--24}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{\textcolor{cD}{1. Problem Formulation and Truth Table}}
-
-A consensus circuit evaluates its inputs and produces a logic HIGH ($1$) if and only if exactly two of its inputs are HIGH. For a 3-input circuit with inputs $A$, $B$, and $C$, and output $Y$, we systematically evaluate all $2^3 = 8$ possible input combinations.
-
-\begin{center}
-\begin{tabular}{ccc|cc}
-\toprule
-\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{2}{c}{\textbf{Output}} \\
-$A$ & $B$ & $C$ & $Y$ & \textit{Condition Met?} \\
-\midrule
-0 & 0 & 0 & 0 & None are 1 \\
-0 & 0 & 1 & 0 & Only one is 1 \\
-0 & 1 & 0 & 0 & Only one is 1 \\
-0 & 1 & 1 & 1 & \textbf{Exactly two are 1 ($B, C$)} \\
-1 & 0 & 0 & 0 & Only one is 1 \\
-1 & 0 & 1 & 1 & \textbf{Exactly two are 1 ($A, C$)} \\
-1 & 1 & 0 & 1 & \textbf{Exactly two are 1 ($A, B$)} \\
-1 & 1 & 1 & 0 & Three are 1 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-From the truth table, the sum-of-minterms expression is:
-\begin{align*}
-    Y(A,B,C) = \sum m(3, 5, 6)
-\end{align*}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{2. Boolean Equation Simplification}}
-
-To find the simplified Boolean equation, we map the minterms onto a 3-variable Karnaugh Map.
-
-\begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
-    \minterms{3,5,6}
-    \implicant{3}{3}
-    \implicant{5}{5}
-    \implicant{6}{6}
-    \autoterms[0]
-\end{karnaugh-map}
-\end{center}
-
-\textbf{Analysis of the K-Map:}
-Observing the plotted 1s at cells 3 (011), 5 (101), and 6 (110), there are no adjacent cells containing a 1. Because no groups of two, four, or eight can be formed, the Boolean expression cannot be further reduced using standard Sum-of-Products (SOP) grouping. 
-
-Thus, the minimal SOP Boolean equation is directly the canonical sum of products:
-\begin{align*}
-    Y &= m_3 + m_5 + m_6 \\
-    Y &= \overline{A}BC + A\overline{B}C + AB\overline{C}
-\end{align*}
-
-\textit{Note: While not reducible in pure SOP form, algebraic manipulation using XOR logic is possible (e.g., $Y = C(A \oplus B) + AB\overline{C}$), but standard combinational design typically defaults to the minimal SOP utilizing AND, OR, and NOT gates.}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{3. Logic Circuit Diagram}}
-
-We implement the minimal SOP expression using a standard logic bus architecture. Three 3-input AND gates generate the required product terms, which are then summed by a 3-input OR gate.
-
-\begin{center}
-\begin{circuitikz}[thick]
-    % Input Nodes
-    \node (A) at (0, 6) {$A$};
-    \node (B) at (2, 6) {$B$};
-    \node (C) at (4, 6) {$C$};
-
-    % Main Input Wires
-    \draw (A) -- (0, -3);
-    \draw (B) -- (2, -3);
-    \draw (C) -- (4, -3);
-
-    % Inverters for Complements
-    \node[not port, rotate=-90, scale=0.7] (notA) at (1, 5) {};
-    \node[not port, rotate=-90, scale=0.7] (notB) at (3, 5) {};
-    \node[not port, rotate=-90, scale=0.7] (notC) at (5, 5) {};
-
-    % Routing into Inverters
-    \draw (0, 5.5) to[short, *-] (1, 5.5) -- (notA.in);
-    \draw (2, 5.5) to[short, *-] (3, 5.5) -- (notB.in);
-    \draw (4, 5.5) to[short, *-] (5, 5.5) -- (notC.in);
-
-    % Inverted Lines
-    \draw (notA.out) -- (1, -3);
-    \draw (notB.out) -- (3, -3);
-    \draw (notC.out) -- (5, -3.5);
-
-    % Gate 1: A'BC
-    \node[and port, number inputs=3] (and1) at (8, 3) {};
-    \draw (1, 0 |- and1.in 1) node[circle,fill,inner sep=1.2pt]{} -- (and1.in 1); % A'
-    \draw (2, 0 |- and1.in 2) node[circle,fill,inner sep=1.2pt]{} -- (and1.in 2); % B
-    \draw (4, 0 |- and1.in 3) node[circle,fill,inner sep=1.2pt]{} -- (and1.in 3); % C
-    \node[above left, font=\scriptsize] at (and1.out) {$\overline{A}BC$};
-
-    % Gate 2: AB'C
-    \node[and port, number inputs=3] (and2) at (8, 0) {};
-    \draw (0, 0 |- and2.in 1) node[circle,fill,inner sep=1.2pt]{} -- (and2.in 1); % A
-    \draw (3, 0 |- and2.in 2) node[circle,fill,inner sep=1.2pt]{} -- (and2.in 2); % B'
-    \draw (4, 0 |- and2.in 3) node[circle,fill,inner sep=1.2pt]{} -- (and2.in 3); % C
-    \node[above left, font=\scriptsize] at (and2.out) {$A\overline{B}C$};
-
-    % Gate 3: ABC'
-    \node[and port, number inputs=3] (and3) at (8, -3) {};
-    \draw (0, 0 |- and3.in 1) node[circle,fill,inner sep=1.2pt]{} -- (and3.in 1); % A
-    \draw (2, 0 |- and3.in 2) node[circle,fill,inner sep=1.2pt]{} -- (and3.in 2); % B
-    \draw (5, 0 |- and3.in 3) node[circle,fill,inner sep=1.2pt]{} -- (and3.in 3); % C'
-    \node[below left, font=\scriptsize] at (and3.out) {$AB\overline{C}$};
-
-    % Output OR Gate
-    \node[or port, number inputs=3] (orOut) at (12, 0) {};
-    
-    % Routing to OR Gate
-    \draw (and1.out) -| (10, 1.43) -- (orOut.in 1);
-    \draw (and2.out) -- (orOut.in 2);
-    \draw (and3.out) -| (10, -1.43) -- (orOut.in 3);
-
-    % Final Output Label
-    \node[right] at (orOut.out) {$Y$};
-
-\end{circuitikz}
-\end{center}
-
-\end{tcolorbox}
-
-\item Design a combinational circuit that converts a three-bit gray code to a three-bit binary number. Use only a minimum number of gates in your design.
-\mk{20} \yr{CSE 205 | L-2/T-1 | 2022--23}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{\textcolor{cD}{1. Truth Table Formulation}}
-
-A Gray code to binary converter takes a Gray code input ($G_2, G_1, G_0$) and produces a binary number output ($B_2, B_1, B_0$). We evaluate all 8 possible combinations in standard binary order for the inputs to easily derive our K-maps.
-
-\begin{center}
-\begin{tabular}{ccc|ccc}
-\toprule
-\multicolumn{3}{c|}{\textbf{Gray Code Input}} & \multicolumn{3}{c}{\textbf{Binary Output}} \\
-$G_2$ & $G_1$ & $G_0$ & $B_2$ & $B_1$ & $B_0$ \\
-\midrule
-0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 0 & 0 & 1 \\
-0 & 1 & 0 & 0 & 1 & 1 \\
-0 & 1 & 1 & 0 & 1 & 0 \\
-1 & 0 & 0 & 1 & 1 & 1 \\
-1 & 0 & 1 & 1 & 1 & 0 \\
-1 & 1 & 0 & 1 & 0 & 0 \\
-1 & 1 & 1 & 1 & 0 & 1 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{2. Karnaugh Map Analysis \& Boolean Simplification}}
-
-We derive the simplified Boolean expressions for each output bit ($B_2, B_1, B_0$).
-
-\textbf{For MSB ($B_2$):}
-By direct inspection of the truth table, $B_2$ exactly matches the input $G_2$.
-\begin{align*}
-    B_2 &= G_2
-\end{align*}
-
-\textbf{For Middle Bit ($B_1$):}
-We plot the minterms for $B_1$ ($\Sigma m(2,3,4,5)$) on a K-map.
-
-\begin{center}
-\begin{karnaugh-map}[4][2][1][$G_1 G_0$][$G_2$]
-    \minterms{2,3,4,5}
-    \autoterms[0]
-    \implicant{3}{2}
-    \implicant{4}{5}
-\end{karnaugh-map}
-\end{center}
-\begin{align*}
-    B_1 &= \overline{G_2}G_1 + G_2\overline{G_1} \\
-    B_1 &= G_2 \oplus G_1 \quad \text{(XOR Definition)}
-\end{align*}
-
-\textbf{For LSB ($B_0$):}
-We plot the minterms for $B_0$ ($\Sigma m(1,2,4,7)$) on a K-map.
-
-
-\begin{center}
-\begin{karnaugh-map}[4][2][1][$G_1 G_0$][$G_2$]
-    \minterms{1,2,4,7}
-    \implicant{1}{1}
-    \implicant{2}{2}
-    \implicant{4}{4}
-    \implicant{7}{7}
-    \autoterms[0]
-\end{karnaugh-map}
-\end{center}
-
-The resulting ``checkerboard" pattern indicates a multi-variable XOR relationship:
-\begin{align*}
-    B_0 &= \overline{G_2}\overline{G_1}G_0 + \overline{G_2}G_1\overline{G_0} + G_2\overline{G_1}\overline{G_0} + G_2G_1G_0 \\
-    B_0 &= \overline{G_2}(\overline{G_1}G_0 + G_1\overline{G_0}) + G_2(\overline{G_1}\overline{G_0} + G_1G_0) \quad &&\text{(Distributive Law)} \\
-    B_0 &= \overline{G_2}(G_1 \oplus G_0) + G_2(\overline{G_1 \oplus G_0}) \quad &&\text{(XOR and XNOR Definitions)} \\
-    B_0 &= G_2 \oplus G_1 \oplus G_0 \quad &&\text{(XOR Definition)}
-\end{align*}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{3. Logic Circuit Implementation (Minimized Gate Count)}}
-
-To minimize the number of gates, we can cascade 2-input XOR gates by reusing the generated $B_1$ signal for the calculation of $B_0$:
-\begin{align*}
-    B_0 &= (G_2 \oplus G_1) \oplus G_0 = B_1 \oplus G_0
-\end{align*}
-This reduces the circuit requirement to exactly \textbf{two 2-input XOR gates}.
-
-\vspace{1em}
-\begin{center}
-\begin{circuitikz}[thick, scale=1.2, transform shape]
-    % Inputs
-    \node (G2) at (0, 4) {$G_2$};
-    \node (G1) at (0, 2) {$G_1$};
-    \node (G0) at (0, 0) {$G_0$};
-
-    % XOR Gates
-    \node[xor port] (XOR1) at (3, 3) {};
-    \node[xor port] (XOR2) at (6, 1) {};
-
-    % Wiring G2 and Output B2
-    \draw (G2) -- (1, 4) coordinate(dotG2);
-    \draw (dotG2) |- (XOR1.in 1);
-    \draw (dotG2) -- (8, 4) node[right] {\textbf{$B_2$}};
-    \filldraw (dotG2) circle (2pt);
-
-    % Wiring G1
-    \draw (G1) -- (1.5, 2) |- (XOR1.in 2);
-
-    % Wiring B1 (XOR1 output)
-    \draw (XOR1.out) -- (4, 3) coordinate(dotB1);
-    \draw (dotB1) -- (8, 3) node[right] {\textbf{$B_1$}};
-    \filldraw (dotB1) circle (2pt);
-
-    % Wiring B1 into XOR2
-    \draw (dotB1) |- (XOR2.in 1); 
-    
-    % Wiring G0 into XOR2
-    \draw (G0) -- (4, 0) |- (XOR2.in 2);
-    
-    % Wiring B0 (XOR2 output)
-    \draw (XOR2.out) -- (8, 1) node[right] {\textbf{$B_0$}};
-\end{circuitikz}
-\end{center}
-
-\end{tcolorbox}
-
-\item Design a combinational circuit that converts a decimal digit represented with ``Random Code'' to ``BCD Code''. Use the K-Map method for logic simplification and show the circuit diagram.
-
-\begin{center}
-  \begin{tabular}{|c|c|c|}
-\hline
-Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begin{tabular}{@{}c@{}}BCD Code \\ wxyz\end{tabular} \\
-\hline
-0 & 0000 & 0000 \\ \hline
-1 & 0011 & 0001 \\ \hline
-2 & 0101 & 0010 \\ \hline
-3 & 0110 & 0011 \\ \hline
-4 & 1010 & 0100 \\ \hline
-5 & 1011 & 0101 \\ \hline
-6 & 1100 & 0110 \\ \hline
-7 & 1101 & 0111 \\ \hline
-8 & 1110 & 1000 \\ \hline
-9 & 1111 & 1001 \\ \hline
-\end{tabular}
-\end{center}
-
-\mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{\textcolor{cD}{1. Identification of Minterms and Don't Cares}}
-
-From the provided table, we define the combinational circuit with inputs $A, B, C, D$ and outputs $w, x, y, z$. 
-The input is a 4-bit "Random Code". Only 10 specific input combinations are valid (representing decimal digits 0-9). The remaining 6 combinations are invalid and will be treated as \textbf{Don't Cares ($d$)}.
-
-\begin{itemize}
-    \item \textbf{Valid Inputs (Minterms):} $m_0, m_3, m_5, m_6, m_{10}, m_{11}, m_{12}, m_{13}, m_{14}, m_{15}$
-    \item \textbf{Don't Cares ($d$):} $\sum d(1, 2, 4, 7, 8, 9)$
-\end{itemize}
-
-We can now list the sum of minterms for each output bit of the BCD code ($w, x, y, z$) by observing when each output is `1` in the truth table:
-\begin{align*}
-    w(A,B,C,D) &= \sum m(14, 15) + \sum d(1, 2, 4, 7, 8, 9) \\
-    x(A,B,C,D) &= \sum m(10, 11, 12, 13) + \sum d(1, 2, 4, 7, 8, 9) \\
-    y(A,B,C,D) &= \sum m(5, 6, 12, 13) + \sum d(1, 2, 4, 7, 8, 9) \\
-    z(A,B,C,D) &= \sum m(3, 6, 11, 13, 15) + \sum d(1, 2, 4, 7, 8, 9)
-\end{align*}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{2. K-Map Simplification}}
-
-We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expressions for each output.
-
-\vspace{0.5em}
-\noindent
-\begin{minipage}{0.48\textwidth}
-\begin{center}
-    \textbf{K-Map for $w$} \\
-    \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
-        \minterms{14,15}
-        \indeterminants{1,2,4,7,8,9}
-        \implicant{15}{14}
-        \autoterms[0]
-    \end{karnaugh-map}
-    \\[0.5em]
-    \textbf{Group 1 (Red):} $ABC$ \\
-    \textbf{Simplified:} $\mathbf{w = ABC}$
-\end{center}
-\end{minipage}
-\hfill
-\begin{minipage}{0.48\textwidth}
-\begin{center}
-    \textbf{K-Map for $x$} \\
-    \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
-        \minterms{10,11,12,13}
-        \indeterminants{1,2,4,7,8,9}
-        \autoterms[0]
-        \implicant{12}{9}
-        \implicant{8}{10}
-    \end{karnaugh-map}
-    \\[0.5em]
-    \textbf{Group 1 (Red):} $A\overline{C}$ \\
-    \textbf{Group 2 (Green):} $A\overline{B}$ \\
-    \textbf{Simplified:} $\mathbf{x = A\overline{C} + A\overline{B}}$
-\end{center}
-\end{minipage}
-
-\vspace{2em}
-
-\noindent
-\begin{minipage}{0.48\textwidth}
-\begin{center}
-    \textbf{K-Map for $y$} \\
-    \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
-        \minterms{5,6,12,13}
-        \indeterminants{1,2,4,7,8,9}
-        \autoterms[0]
-        \implicant{4}{13}
-        \implicant{4}{6}
-    \end{karnaugh-map}
-    \\[0.5em]
-    \textbf{Group 1 (Red):} $B\overline{C}$ \\
-    \textbf{Group 2 (Green):} $\overline{A}B$ \\
-    \textbf{Simplified:} $\mathbf{y = B\overline{C} + \overline{A}B}$
-\end{center}
-\end{minipage}
-\hfill
-\begin{minipage}{0.48\textwidth}
-\begin{center}
-    \textbf{K-Map for $z$} \\
-    \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
-        \minterms{3,6,11,13,15}
-        \indeterminants{1,2,4,7,8,9}
-        \autoterms[0]
-        \implicant{13}{11}
-        \implicant{3}{6}
-    \end{karnaugh-map}
-    \\[0.5em]
-    \textbf{Group 1 (Red):} $AD$ \\
-    \textbf{Group 2 (Green):} $\overline{A}C$ \\
-    \textbf{Simplified:} $\mathbf{z = AD + \overline{A}C}$
-\end{center}
-\end{minipage}
-
-\vspace{1.5em}
-\textbf{\textcolor{cD}{3. Logic Circuit Implementation}}
-
-Using the derived minimized equations:
-\begin{align*}
-    w &= ABC \\
-    x &= A\overline{C} + A\overline{B} \\
-    y &= B\overline{C} + \overline{A}B \\
-    z &= AD + \overline{A}C
-\end{align*}
-
-We construct the circuit diagram utilizing logic gates. The input bus is organized with vertical lines for each variable and their inverted forms.
-
-\vspace{1em}
-\begin{center}
-\begin{circuitikz}[thick]
-    % Input Labels
-    \node at (0, 11.5) {$A$};
-    \node at (2, 11.5) {$B$};
-    \node at (4, 11.5) {$C$};
-    \node at (6, 11.5) {$D$};
-
-    % Main Input Lines
-    \draw (0, 11) -- (0, -1);
-    \draw (2, 11) -- (2, -1);
-    \draw (4, 11) -- (4, -1);
-    \draw (6, 11) -- (6, -1);
-
-    % Inverters (Moved higher to avoid overlap)
-    \node[not port, rotate=-90, scale=0.7] (notA) at (1, 10.5) {};
-    \node[not port, rotate=-90, scale=0.7] (notB) at (3, 10.5) {};
-    \node[not port, rotate=-90, scale=0.7] (notC) at (5, 10.5) {};
-
-    % Connect Inverters to Main Lines
-    \draw (0, 11) to[short, *-] (1, 11) -- (notA.in);
-    \draw (2, 11) to[short, *-] (3, 11) -- (notB.in);
-    \draw (4, 11) to[short, *-] (5, 11) -- (notC.in);
-
-    % Inverted Lines
-    \draw (notA.out) -- (1, -1);
-    \draw (notB.out) -- (3, -1);
-    \draw (notC.out) -- (5, -1);
-
-    % ======== Output w = ABC ========
-    \node[and port, number inputs=3] (andW) at (9, 9) {};
-    \draw (0, 9.4) node[circle,fill,inner sep=1.2pt]{} |- (andW.in 1); % A
-    \draw (2, 9.0) node[circle,fill,inner sep=1.2pt]{} |- (andW.in 2); % B
-    \draw (4, 8.6) node[circle,fill,inner sep=1.2pt]{} |- (andW.in 3); % C
-    \node[right] at (andW.out) {\textbf{$w$}};
-
-    % ======== Output x = A*C' + A*B' ========
-    \node[and port] (andX1) at (9, 7.5) {};
-    \draw (0, 7.78) node[circle,fill,inner sep=1.2pt]{} |- (andX1.in 1); % A
-    \draw (5, 7.22) node[circle,fill,inner sep=1.2pt]{} |- (andX1.in 2); % C'
-    
-    \node[and port] (andX2) at (9, 6) {};
-    \draw (0, 6.28) node[circle,fill,inner sep=1.2pt]{} |- (andX2.in 1); % A
-    \draw (3, 5.72) node[circle,fill,inner sep=1.2pt]{} |- (andX2.in 2); % B'
-    
-    \node[or port] (orX) at (11.5, 6.75) {};
-    \draw (andX1.out) |- (orX.in 1);
-    \draw (andX2.out) |- (orX.in 2);
-    \node[right] at (orX.out) {\textbf{$x$}};
-
-    % ======== Output y = B*C' + A'*B ========
-    \node[and port] (andY1) at (9, 4.5) {};
-    \draw (2, 4.78) node[circle,fill,inner sep=1.2pt]{} |- (andY1.in 1); % B
-    \draw (5, 4.22) node[circle,fill,inner sep=1.2pt]{} |- (andY1.in 2); % C'
-    
-    \node[and port] (andY2) at (9, 3) {};
-    \draw (1, 3.28) node[circle,fill,inner sep=1.2pt]{} |- (andY2.in 1); % A'
-    \draw (2, 2.72) node[circle,fill,inner sep=1.2pt]{} |- (andY2.in 2); % B
-    
-    \node[or port] (orY) at (11.5, 3.75) {};
-    \draw (andY1.out) |- (orY.in 1);
-    \draw (andY2.out) |- (orY.in 2);
-    \node[right] at (orY.out) {\textbf{$y$}};
-
-    % ======== Output z = A*D + A'*C ========
-    \node[and port] (andZ1) at (9, 1.5) {};
-    \draw (0, 1.78) node[circle,fill,inner sep=1.2pt]{} |- (andZ1.in 1); % A
-    \draw (6, 1.22) node[circle,fill,inner sep=1.2pt]{} |- (andZ1.in 2); % D
-    
-    \node[and port] (andZ2) at (9, 0) {};
-    \draw (1, 0.28) node[circle,fill,inner sep=1.2pt]{} |- (andZ2.in 1); % A'
-    \draw (4, -0.28) node[circle,fill,inner sep=1.2pt]{} |- (andZ2.in 2); % C
-    
-    \node[or port] (orZ) at (11.5, 0.75) {};
-    \draw (andZ1.out) |- (orZ.in 1);
-    \draw (andZ2.out) |- (orZ.in 2);
-    \node[right] at (orZ.out) {\textbf{$z$}};
-
-\end{circuitikz}
-\end{center}
-\end{tcolorbox}
-
-\end{enumerate}
-
-%%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Number System \& Arithmetic Operations}
 \label{sub:s4-number-sys}
 
@@ -9828,6 +9170,487 @@ Both methods successfully yield the correct binary result.
 \end{tcolorbox}
 
 \end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cD}{Code Converter}
+\label{sub:s4-code-converter}
+
+\begin{enumerate}
+
+\item A consensus circuit is a combinational circuit whose output is equal to 1 if exactly two inputs are 1, and 0 otherwise. Design a 3-input consensus circuit by finding the circuit's truth table, simplified Boolean equation and a circuit diagram.
+\mk{12} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{\textcolor{cD}{1. Problem Formulation and Truth Table}}
+
+A consensus circuit evaluates its inputs and produces a logic HIGH ($1$) if and only if exactly two of its inputs are HIGH. For a 3-input circuit with inputs $A$, $B$, and $C$, and output $Y$, we systematically evaluate all $2^3 = 8$ possible input combinations.
+
+\begin{center}
+\begin{tabular}{ccc|cc}
+\toprule
+\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{2}{c}{\textbf{Output}} \\
+$A$ & $B$ & $C$ & $Y$ & \textit{Condition Met?} \\
+\midrule
+0 & 0 & 0 & 0 & None are 1 \\
+0 & 0 & 1 & 0 & Only one is 1 \\
+0 & 1 & 0 & 0 & Only one is 1 \\
+0 & 1 & 1 & 1 & \textbf{Exactly two are 1 ($B, C$)} \\
+1 & 0 & 0 & 0 & Only one is 1 \\
+1 & 0 & 1 & 1 & \textbf{Exactly two are 1 ($A, C$)} \\
+1 & 1 & 0 & 1 & \textbf{Exactly two are 1 ($A, B$)} \\
+1 & 1 & 1 & 0 & Three are 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+From the truth table, the sum-of-minterms expression is:
+\begin{align*}
+    Y(A,B,C) = \sum m(3, 5, 6)
+\end{align*}
+
+\vspace{1em}
+\textbf{\textcolor{cD}{2. Boolean Equation Simplification}}
+
+To find the simplified Boolean equation, we map the minterms onto a 3-variable Karnaugh Map.
+
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \minterms{3,5,6}
+    \implicant{3}{3}
+    \implicant{5}{5}
+    \implicant{6}{6}
+    \autoterms[0]
+\end{karnaugh-map}
+\end{center}
+
+\textbf{Analysis of the K-Map:}
+Observing the plotted 1s at cells 3 (011), 5 (101), and 6 (110), there are no adjacent cells containing a 1. Because no groups of two, four, or eight can be formed, the Boolean expression cannot be further reduced using standard Sum-of-Products (SOP) grouping. 
+
+Thus, the minimal SOP Boolean equation is directly the canonical sum of products:
+\begin{align*}
+    Y &= m_3 + m_5 + m_6 \\
+    Y &= \overline{A}BC + A\overline{B}C + AB\overline{C}
+\end{align*}
+
+\textit{Note: While not reducible in pure SOP form, algebraic manipulation using XOR logic is possible (e.g., $Y = C(A \oplus B) + AB\overline{C}$), but standard combinational design typically defaults to the minimal SOP utilizing AND, OR, and NOT gates.}
+
+\vspace{1em}
+\textbf{\textcolor{cD}{3. Logic Circuit Diagram}}
+
+We implement the minimal SOP expression using a standard logic bus architecture. Three 3-input AND gates generate the required product terms, which are then summed by a 3-input OR gate.
+
+\begin{center}
+\begin{circuitikz}[thick]
+    % Input Nodes
+    \node (A) at (0, 6) {$A$};
+    \node (B) at (2, 6) {$B$};
+    \node (C) at (4, 6) {$C$};
+
+    % Main Input Wires
+    \draw (A) -- (0, -3);
+    \draw (B) -- (2, -3);
+    \draw (C) -- (4, -3);
+
+    % Inverters for Complements
+    \node[not port, rotate=-90, scale=0.7] (notA) at (1, 5) {};
+    \node[not port, rotate=-90, scale=0.7] (notB) at (3, 5) {};
+    \node[not port, rotate=-90, scale=0.7] (notC) at (5, 5) {};
+
+    % Routing into Inverters
+    \draw (0, 5.5) to[short, *-] (1, 5.5) -- (notA.in);
+    \draw (2, 5.5) to[short, *-] (3, 5.5) -- (notB.in);
+    \draw (4, 5.5) to[short, *-] (5, 5.5) -- (notC.in);
+
+    % Inverted Lines
+    \draw (notA.out) -- (1, -3);
+    \draw (notB.out) -- (3, -3);
+    \draw (notC.out) -- (5, -3.5);
+
+    % Gate 1: A'BC
+    \node[and port, number inputs=3] (and1) at (8, 3) {};
+    \draw (1, 0 |- and1.in 1) node[circle,fill,inner sep=1.2pt]{} -- (and1.in 1); % A'
+    \draw (2, 0 |- and1.in 2) node[circle,fill,inner sep=1.2pt]{} -- (and1.in 2); % B
+    \draw (4, 0 |- and1.in 3) node[circle,fill,inner sep=1.2pt]{} -- (and1.in 3); % C
+    \node[above left, font=\scriptsize] at (and1.out) {$\overline{A}BC$};
+
+    % Gate 2: AB'C
+    \node[and port, number inputs=3] (and2) at (8, 0) {};
+    \draw (0, 0 |- and2.in 1) node[circle,fill,inner sep=1.2pt]{} -- (and2.in 1); % A
+    \draw (3, 0 |- and2.in 2) node[circle,fill,inner sep=1.2pt]{} -- (and2.in 2); % B'
+    \draw (4, 0 |- and2.in 3) node[circle,fill,inner sep=1.2pt]{} -- (and2.in 3); % C
+    \node[above left, font=\scriptsize] at (and2.out) {$A\overline{B}C$};
+
+    % Gate 3: ABC'
+    \node[and port, number inputs=3] (and3) at (8, -3) {};
+    \draw (0, 0 |- and3.in 1) node[circle,fill,inner sep=1.2pt]{} -- (and3.in 1); % A
+    \draw (2, 0 |- and3.in 2) node[circle,fill,inner sep=1.2pt]{} -- (and3.in 2); % B
+    \draw (5, 0 |- and3.in 3) node[circle,fill,inner sep=1.2pt]{} -- (and3.in 3); % C'
+    \node[below left, font=\scriptsize] at (and3.out) {$AB\overline{C}$};
+
+    % Output OR Gate
+    \node[or port, number inputs=3] (orOut) at (12, 0) {};
+    
+    % Routing to OR Gate
+    \draw (and1.out) -| (10, 1.43) -- (orOut.in 1);
+    \draw (and2.out) -- (orOut.in 2);
+    \draw (and3.out) -| (10, -1.43) -- (orOut.in 3);
+
+    % Final Output Label
+    \node[right] at (orOut.out) {$Y$};
+
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
+\item Design a combinational circuit that converts a three-bit gray code to a three-bit binary number. Use only a minimum number of gates in your design.
+\mk{20} \yr{CSE 205 | L-2/T-1 | 2022--23}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{\textcolor{cD}{1. Truth Table Formulation}}
+
+A Gray code to binary converter takes a Gray code input ($G_2, G_1, G_0$) and produces a binary number output ($B_2, B_1, B_0$). We evaluate all 8 possible combinations in standard binary order for the inputs to easily derive our K-maps.
+
+\begin{center}
+\begin{tabular}{ccc|ccc}
+\toprule
+\multicolumn{3}{c|}{\textbf{Gray Code Input}} & \multicolumn{3}{c}{\textbf{Binary Output}} \\
+$G_2$ & $G_1$ & $G_0$ & $B_2$ & $B_1$ & $B_0$ \\
+\midrule
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 1 & 0 & 0 & 1 \\
+0 & 1 & 0 & 0 & 1 & 1 \\
+0 & 1 & 1 & 0 & 1 & 0 \\
+1 & 0 & 0 & 1 & 1 & 1 \\
+1 & 0 & 1 & 1 & 1 & 0 \\
+1 & 1 & 0 & 1 & 0 & 0 \\
+1 & 1 & 1 & 1 & 0 & 1 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+\textbf{\textcolor{cD}{2. Karnaugh Map Analysis \& Boolean Simplification}}
+
+We derive the simplified Boolean expressions for each output bit ($B_2, B_1, B_0$).
+
+\textbf{For MSB ($B_2$):}
+By direct inspection of the truth table, $B_2$ exactly matches the input $G_2$.
+\begin{align*}
+    B_2 &= G_2
+\end{align*}
+
+\textbf{For Middle Bit ($B_1$):}
+We plot the minterms for $B_1$ ($\Sigma m(2,3,4,5)$) on a K-map.
+
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$G_1 G_0$][$G_2$]
+    \minterms{2,3,4,5}
+    \autoterms[0]
+    \implicant{3}{2}
+    \implicant{4}{5}
+\end{karnaugh-map}
+\end{center}
+\begin{align*}
+    B_1 &= \overline{G_2}G_1 + G_2\overline{G_1} \\
+    B_1 &= G_2 \oplus G_1 \quad \text{(XOR Definition)}
+\end{align*}
+
+\textbf{For LSB ($B_0$):}
+We plot the minterms for $B_0$ ($\Sigma m(1,2,4,7)$) on a K-map.
+
+
+\begin{center}
+\begin{karnaugh-map}[4][2][1][$G_1 G_0$][$G_2$]
+    \minterms{1,2,4,7}
+    \implicant{1}{1}
+    \implicant{2}{2}
+    \implicant{4}{4}
+    \implicant{7}{7}
+    \autoterms[0]
+\end{karnaugh-map}
+\end{center}
+
+The resulting ``checkerboard" pattern indicates a multi-variable XOR relationship:
+\begin{align*}
+    B_0 &= \overline{G_2}\overline{G_1}G_0 + \overline{G_2}G_1\overline{G_0} + G_2\overline{G_1}\overline{G_0} + G_2G_1G_0 \\
+    B_0 &= \overline{G_2}(\overline{G_1}G_0 + G_1\overline{G_0}) + G_2(\overline{G_1}\overline{G_0} + G_1G_0) \quad &&\text{(Distributive Law)} \\
+    B_0 &= \overline{G_2}(G_1 \oplus G_0) + G_2(\overline{G_1 \oplus G_0}) \quad &&\text{(XOR and XNOR Definitions)} \\
+    B_0 &= G_2 \oplus G_1 \oplus G_0 \quad &&\text{(XOR Definition)}
+\end{align*}
+
+\vspace{1em}
+\textbf{\textcolor{cD}{3. Logic Circuit Implementation (Minimized Gate Count)}}
+
+To minimize the number of gates, we can cascade 2-input XOR gates by reusing the generated $B_1$ signal for the calculation of $B_0$:
+\begin{align*}
+    B_0 &= (G_2 \oplus G_1) \oplus G_0 = B_1 \oplus G_0
+\end{align*}
+This reduces the circuit requirement to exactly \textbf{two 2-input XOR gates}.
+
+\vspace{1em}
+\begin{center}
+\begin{circuitikz}[thick, scale=1.2, transform shape]
+    % Inputs
+    \node (G2) at (0, 4) {$G_2$};
+    \node (G1) at (0, 2) {$G_1$};
+    \node (G0) at (0, 0) {$G_0$};
+
+    % XOR Gates
+    \node[xor port] (XOR1) at (3, 3) {};
+    \node[xor port] (XOR2) at (6, 1) {};
+
+    % Wiring G2 and Output B2
+    \draw (G2) -- (1, 4) coordinate(dotG2);
+    \draw (dotG2) |- (XOR1.in 1);
+    \draw (dotG2) -- (8, 4) node[right] {\textbf{$B_2$}};
+    \filldraw (dotG2) circle (2pt);
+
+    % Wiring G1
+    \draw (G1) -- (1.5, 2) |- (XOR1.in 2);
+
+    % Wiring B1 (XOR1 output)
+    \draw (XOR1.out) -- (4, 3) coordinate(dotB1);
+    \draw (dotB1) -- (8, 3) node[right] {\textbf{$B_1$}};
+    \filldraw (dotB1) circle (2pt);
+
+    % Wiring B1 into XOR2
+    \draw (dotB1) |- (XOR2.in 1); 
+    
+    % Wiring G0 into XOR2
+    \draw (G0) -- (4, 0) |- (XOR2.in 2);
+    
+    % Wiring B0 (XOR2 output)
+    \draw (XOR2.out) -- (8, 1) node[right] {\textbf{$B_0$}};
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
+\item Design a combinational circuit that converts a decimal digit represented with ``Random Code'' to ``BCD Code''. Use the K-Map method for logic simplification and show the circuit diagram.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+\hline
+Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begin{tabular}{@{}c@{}}BCD Code \\ wxyz\end{tabular} \\
+\hline
+0 & 0000 & 0000 \\ \hline
+1 & 0011 & 0001 \\ \hline
+2 & 0101 & 0010 \\ \hline
+3 & 0110 & 0011 \\ \hline
+4 & 1010 & 0100 \\ \hline
+5 & 1011 & 0101 \\ \hline
+6 & 1100 & 0110 \\ \hline
+7 & 1101 & 0111 \\ \hline
+8 & 1110 & 1000 \\ \hline
+9 & 1111 & 1001 \\ \hline
+\end{tabular}
+\end{center}
+
+\mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{\textcolor{cD}{1. Identification of Minterms and Don't Cares}}
+
+From the provided table, we define the combinational circuit with inputs $A, B, C, D$ and outputs $w, x, y, z$. 
+The input is a 4-bit "Random Code". Only 10 specific input combinations are valid (representing decimal digits 0-9). The remaining 6 combinations are invalid and will be treated as \textbf{Don't Cares ($d$)}.
+
+\begin{itemize}
+    \item \textbf{Valid Inputs (Minterms):} $m_0, m_3, m_5, m_6, m_{10}, m_{11}, m_{12}, m_{13}, m_{14}, m_{15}$
+    \item \textbf{Don't Cares ($d$):} $\sum d(1, 2, 4, 7, 8, 9)$
+\end{itemize}
+
+We can now list the sum of minterms for each output bit of the BCD code ($w, x, y, z$) by observing when each output is `1` in the truth table:
+\begin{align*}
+    w(A,B,C,D) &= \sum m(14, 15) + \sum d(1, 2, 4, 7, 8, 9) \\
+    x(A,B,C,D) &= \sum m(10, 11, 12, 13) + \sum d(1, 2, 4, 7, 8, 9) \\
+    y(A,B,C,D) &= \sum m(5, 6, 12, 13) + \sum d(1, 2, 4, 7, 8, 9) \\
+    z(A,B,C,D) &= \sum m(3, 6, 11, 13, 15) + \sum d(1, 2, 4, 7, 8, 9)
+\end{align*}
+
+\vspace{1em}
+\textbf{\textcolor{cD}{2. K-Map Simplification}}
+
+We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expressions for each output.
+
+\vspace{0.5em}
+\noindent
+\begin{minipage}{0.48\textwidth}
+\begin{center}
+    \textbf{K-Map for $w$} \\
+    \vspace{0.5em}
+    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+        \minterms{14,15}
+        \indeterminants{1,2,4,7,8,9}
+        \implicant{15}{14}
+        \autoterms[0]
+    \end{karnaugh-map}
+    \\[0.5em]
+    \textbf{Group 1 (Red):} $ABC$ \\
+    \textbf{Simplified:} $\mathbf{w = ABC}$
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{center}
+    \textbf{K-Map for $x$} \\
+    \vspace{0.5em}
+    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+        \minterms{10,11,12,13}
+        \indeterminants{1,2,4,7,8,9}
+        \autoterms[0]
+        \implicant{12}{9}
+        \implicant{8}{10}
+    \end{karnaugh-map}
+    \\[0.5em]
+    \textbf{Group 1 (Red):} $A\overline{C}$ \\
+    \textbf{Group 2 (Green):} $A\overline{B}$ \\
+    \textbf{Simplified:} $\mathbf{x = A\overline{C} + A\overline{B}}$
+\end{center}
+\end{minipage}
+
+\vspace{2em}
+
+\noindent
+\begin{minipage}{0.48\textwidth}
+\begin{center}
+    \textbf{K-Map for $y$} \\
+    \vspace{0.5em}
+    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+        \minterms{5,6,12,13}
+        \indeterminants{1,2,4,7,8,9}
+        \autoterms[0]
+        \implicant{4}{13}
+        \implicant{4}{6}
+    \end{karnaugh-map}
+    \\[0.5em]
+    \textbf{Group 1 (Red):} $B\overline{C}$ \\
+    \textbf{Group 2 (Green):} $\overline{A}B$ \\
+    \textbf{Simplified:} $\mathbf{y = B\overline{C} + \overline{A}B}$
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{center}
+    \textbf{K-Map for $z$} \\
+    \vspace{0.5em}
+    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+        \minterms{3,6,11,13,15}
+        \indeterminants{1,2,4,7,8,9}
+        \autoterms[0]
+        \implicant{13}{11}
+        \implicant{3}{6}
+    \end{karnaugh-map}
+    \\[0.5em]
+    \textbf{Group 1 (Red):} $AD$ \\
+    \textbf{Group 2 (Green):} $\overline{A}C$ \\
+    \textbf{Simplified:} $\mathbf{z = AD + \overline{A}C}$
+\end{center}
+\end{minipage}
+
+\vspace{1.5em}
+\textbf{\textcolor{cD}{3. Logic Circuit Implementation}}
+
+Using the derived minimized equations:
+\begin{align*}
+    w &= ABC \\
+    x &= A\overline{C} + A\overline{B} \\
+    y &= B\overline{C} + \overline{A}B \\
+    z &= AD + \overline{A}C
+\end{align*}
+
+We construct the circuit diagram utilizing logic gates. The input bus is organized with vertical lines for each variable and their inverted forms.
+
+\vspace{1em}
+\begin{center}
+\begin{circuitikz}[thick]
+    % Input Labels
+    \node at (0, 11.5) {$A$};
+    \node at (2, 11.5) {$B$};
+    \node at (4, 11.5) {$C$};
+    \node at (6, 11.5) {$D$};
+
+    % Main Input Lines
+    \draw (0, 11) -- (0, -1);
+    \draw (2, 11) -- (2, -1);
+    \draw (4, 11) -- (4, -1);
+    \draw (6, 11) -- (6, -1);
+
+    % Inverters (Moved higher to avoid overlap)
+    \node[not port, rotate=-90, scale=0.7] (notA) at (1, 10.5) {};
+    \node[not port, rotate=-90, scale=0.7] (notB) at (3, 10.5) {};
+    \node[not port, rotate=-90, scale=0.7] (notC) at (5, 10.5) {};
+
+    % Connect Inverters to Main Lines
+    \draw (0, 11) to[short, *-] (1, 11) -- (notA.in);
+    \draw (2, 11) to[short, *-] (3, 11) -- (notB.in);
+    \draw (4, 11) to[short, *-] (5, 11) -- (notC.in);
+
+    % Inverted Lines
+    \draw (notA.out) -- (1, -1);
+    \draw (notB.out) -- (3, -1);
+    \draw (notC.out) -- (5, -1);
+
+    % ======== Output w = ABC ========
+    \node[and port, number inputs=3] (andW) at (9, 9) {};
+    \draw (0, 9.4) node[circle,fill,inner sep=1.2pt]{} |- (andW.in 1); % A
+    \draw (2, 9.0) node[circle,fill,inner sep=1.2pt]{} |- (andW.in 2); % B
+    \draw (4, 8.6) node[circle,fill,inner sep=1.2pt]{} |- (andW.in 3); % C
+    \node[right] at (andW.out) {\textbf{$w$}};
+
+    % ======== Output x = A*C' + A*B' ========
+    \node[and port] (andX1) at (9, 7.5) {};
+    \draw (0, 7.78) node[circle,fill,inner sep=1.2pt]{} |- (andX1.in 1); % A
+    \draw (5, 7.22) node[circle,fill,inner sep=1.2pt]{} |- (andX1.in 2); % C'
+    
+    \node[and port] (andX2) at (9, 6) {};
+    \draw (0, 6.28) node[circle,fill,inner sep=1.2pt]{} |- (andX2.in 1); % A
+    \draw (3, 5.72) node[circle,fill,inner sep=1.2pt]{} |- (andX2.in 2); % B'
+    
+    \node[or port] (orX) at (11.5, 6.75) {};
+    \draw (andX1.out) |- (orX.in 1);
+    \draw (andX2.out) |- (orX.in 2);
+    \node[right] at (orX.out) {\textbf{$x$}};
+
+    % ======== Output y = B*C' + A'*B ========
+    \node[and port] (andY1) at (9, 4.5) {};
+    \draw (2, 4.78) node[circle,fill,inner sep=1.2pt]{} |- (andY1.in 1); % B
+    \draw (5, 4.22) node[circle,fill,inner sep=1.2pt]{} |- (andY1.in 2); % C'
+    
+    \node[and port] (andY2) at (9, 3) {};
+    \draw (1, 3.28) node[circle,fill,inner sep=1.2pt]{} |- (andY2.in 1); % A'
+    \draw (2, 2.72) node[circle,fill,inner sep=1.2pt]{} |- (andY2.in 2); % B
+    
+    \node[or port] (orY) at (11.5, 3.75) {};
+    \draw (andY1.out) |- (orY.in 1);
+    \draw (andY2.out) |- (orY.in 2);
+    \node[right] at (orY.out) {\textbf{$y$}};
+
+    % ======== Output z = A*D + A'*C ========
+    \node[and port] (andZ1) at (9, 1.5) {};
+    \draw (0, 1.78) node[circle,fill,inner sep=1.2pt]{} |- (andZ1.in 1); % A
+    \draw (6, 1.22) node[circle,fill,inner sep=1.2pt]{} |- (andZ1.in 2); % D
+    
+    \node[and port] (andZ2) at (9, 0) {};
+    \draw (1, 0.28) node[circle,fill,inner sep=1.2pt]{} |- (andZ2.in 1); % A'
+    \draw (4, -0.28) node[circle,fill,inner sep=1.2pt]{} |- (andZ2.in 2); % C
+    
+    \node[or port] (orZ) at (11.5, 0.75) {};
+    \draw (andZ1.out) |- (orZ.in 1);
+    \draw (andZ2.out) |- (orZ.in 2);
+    \node[right] at (orZ.out) {\textbf{$z$}};
+
+\end{circuitikz}
+\end{center}
+\end{tcolorbox}
+
+\end{enumerate}
+
+%%──────────────────────────────────────────────────────────────────────
+
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Binary Adder \& Subtractor}
@@ -18701,11 +18524,11 @@ Below is the complete hardware implementation using standard basic logic gates a
     \draw (andI1.out) -- (-0.5, 3.8);
     
     % NOT gates for I1 inputs
-    \node[not port, scale=0.4] (notC) at ([xshift=-1.5cm]andI1.in 1) {};
-    \node[not port, scale=0.4] (notD) at ([xshift=-1.5cm]andI1.in 2) {};
+    \node[not port, scale=0.5] (notC) at ([xshift=-1.5cm]andI1.in 1) {};
+    \node[not port, scale=0.5] (notD) at ([xshift=-1.5cm, yshift =-0.5cm]andI1.in 2) {};
     
     \draw (notC.out) -- (andI1.in 1);
-    \draw (notD.out) -- (andI1.in 2);
+    \draw (notD.out) |- (andI1.in 2);
     
     % Connections from Rails to NOT gates
     \draw (-6.5, 0 |- notC.in) node[circ]{} -- (notC.in);
@@ -18725,6 +18548,7 @@ Below is the complete hardware implementation using standard basic logic gates a
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 \end{enumerate}
@@ -19312,6 +19136,188 @@ Based on the optimized expressions, the combinational logic circuit is construct
 \label{sub:s4-comparator}
 
 \begin{enumerate}
+
+\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
+\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Problem Formulation}
+
+A magnitude comparator is a combinational logic circuit that compares two binary numbers and determines their relative magnitudes. We are given two 3-bit binary numbers, $X$ and $Y$:
+\begin{align*}
+    X &= X_2 X_1 X_0 \\
+    Y &= Y_2 Y_1 Y_0
+\end{align*}
+where $X_2$ and $Y_2$ are the Most Significant Bits (MSBs), and $X_0$ and $Y_0$ are the Least Significant Bits (LSBs). 
+
+The circuit will output three mutually exclusive signals:
+\begin{itemize}
+    \item $E$ (Equal): High (1) if $X = Y$.
+    \item $G$ (Greater): High (1) if $X > Y$.
+    \item $L$ (Less): High (1) if $X < Y$.
+\end{itemize}
+
+Since there are 6 input variables in total, a standard truth table would require $2^6 = 64$ rows. To simplify the design process, we derive the Boolean expressions directly using algorithmic logic based on bit significance.
+
+\vspace{1em}
+\textbf{2. Intermediate Bit-Level Functions}
+
+We first define the bit-wise comparison terms for any arbitrary bit position $i \in \{0, 1, 2\}$:
+
+\begin{itemize}
+    \item \textbf{Bit Equality ($e_i$):} The $i$-th bits are equal ($X_i = Y_i$) if both are 1 or both are 0. This is represented by the XNOR operation:
+    \begin{align*}
+        e_i &= X_i Y_i + \overline{X_i}\overline{Y_i} = X_i \odot Y_i
+    \end{align*}
+    
+    \item \textbf{Bit Greater ($g_i$):} The bit $X_i$ is strictly greater than $Y_i$ only when $X_i = 1$ and $Y_i = 0$. 
+    \begin{align*}
+        g_i &= X_i \overline{Y_i}
+    \end{align*}
+    
+    \item \textbf{Bit Less ($l_i$):} The bit $X_i$ is strictly less than $Y_i$ only when $X_i = 0$ and $Y_i = 1$.
+    \begin{align*}
+        l_i &= \overline{X_i} Y_i
+    \end{align*}
+\end{itemize}
+
+\vspace{1em}
+\textbf{3. Final Output Equations}
+
+Using the intermediate signals, we can construct the logic for the entire 3-bit word by evaluating from the MSB ($i=2$) down to the LSB ($i=0$).
+
+\textbf{Equality ($E$):}
+For the two numbers to be equal, all corresponding bits must be identical simultaneously.
+\begin{align*}
+    E &= e_2 \cdot e_1 \cdot e_0 \\
+    E &= (X_2 \odot Y_2)(X_1 \odot Y_1)(X_0 \odot Y_0)
+\end{align*}
+
+\textbf{Greater Than ($G$):}
+The number $X$ is greater than $Y$ if:
+1. $X_2 > Y_2$ (MSB is greater), OR
+2. $X_2 = Y_2$ AND $X_1 > Y_1$, OR
+3. $X_2 = Y_2$ AND $X_1 = Y_1$ AND $X_0 > Y_0$.
+Expressing this logically using our intermediate terms:
+\begin{align*}
+    G &= g_2 + e_2 g_1 + e_2 e_1 g_0 \\
+    G &= X_2 \overline{Y_2} + (X_2 \odot Y_2)X_1 \overline{Y_1} + (X_2 \odot Y_2)(X_1 \odot Y_1)X_0 \overline{Y_0}
+\end{align*}
+
+\textbf{Less Than ($L$):}
+Similarly, $X$ is less than $Y$ if the corresponding condition holds for the lesser bits:
+\begin{align*}
+    L &= l_2 + e_2 l_1 + e_2 e_1 l_0 \\
+    L &= \overline{X_2} Y_2 + (X_2 \odot Y_2)\overline{X_1} Y_1 + (X_2 \odot Y_2)(X_1 \odot Y_1)\overline{X_0} Y_0
+\end{align*}
+\textit{Note:} $L$ can also be obtained using a NOR gate since the states are mutually exclusive: $L = \overline{G + E}$.
+
+\vspace{1em}
+\textbf{4. Logic Circuit Implementation}
+
+To ensure high readability and avoid overlapping routing, the complete logic circuit is separated into two hierarchical tiers. The first tier generates the intermediate bit-level signals ($e_i, g_i, l_i$). The second tier uses these signals to compute the final outputs ($E, G, L$).
+
+\vspace{1em}
+\begin{center}
+\textbf{Tier 1: Bit-Level Signal Generation (Shown for bit $i$)} \\
+\vspace{1.5em}
+\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
+
+    % --- Inputs ---
+    \node[left, font=\bfseries] at (0, 4.28) {$X_i$};
+    \node[left, font=\bfseries] at (0, -0.28) {$Y_i$};
+
+    % --- Main Logic Gates ---
+    \node[and port] (ANDG) at (8, 4) {};
+    \node[xnor port] (XNORE) at (8, 2) {};
+    \node[and port] (ANDL) at (8, 0) {};
+
+    % --- Inverters ---
+    \node[not port, scale=0.7] (NOTY) at (5.5, 3.72) {};
+    \node[not port, scale=0.7] (NOTX) at (5.5, 0.28) {};
+
+    % --- Wiring X_i ---
+    % Direct to ANDG
+    \draw (0, 4.28) -- (ANDG.in 1);
+    % Tap down to XNORE
+    \draw (1, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 1);
+    % Tap down to NOTX
+    \draw (2.5, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTX.in);
+    % NOTX to ANDL
+    \draw (NOTX.out) -- (ANDL.in 1);
+
+    % --- Wiring Y_i ---
+    % Direct to ANDL
+    \draw (0, -0.28) -- (ANDL.in 2);
+    % Tap up to XNORE
+    \draw (1.5, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 2);
+    % Tap up to NOTY
+    \draw (4, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTY.in);
+    % NOTY to ANDG
+    \draw (NOTY.out) -- (ANDG.in 2);
+
+    % --- Outputs ---
+    \draw (ANDG.out) -- ++(0.5,0) node[right] {$g_i \ (X_i > Y_i)$};
+    \draw (XNORE.out) -- ++(0.5,0) node[right] {$e_i \ (X_i = Y_i)$};
+    \draw (ANDL.out) -- ++(0.5,0) node[right] {$l_i \ (X_i < Y_i)$};
+
+\end{circuitikz}
+\end{center}
+
+\vspace{1.5em}
+\begin{center}
+\textbf{Tier 2: Aggregate Output Generation ($E, G, L$)} \\
+\vspace{0.5em}
+\begin{circuitikz}[thick, scale=0.85, transform shape]
+    
+    % ==== E Generation ====
+    \node[and port, number inputs=3] (Eand) at (4, 8) {};
+    \node[left] at (Eand.in 1) {$e_2$};
+    \node[left] at (Eand.in 2) {$e_1$};
+    \node[left] at (Eand.in 3) {$e_0$};
+    \node[right] at (Eand.out) {\textbf{$E \ (X=Y)$}};
+    
+    % ==== G Generation ====
+    \node[left] at (0, 5) {$g_2$};
+    
+    \node[and port] (Gand1) at (2, 3.5) {};
+    \node[left] at (Gand1.in 1) {$e_2$};
+    \node[left] at (Gand1.in 2) {$g_1$};
+    
+    \node[and port, number inputs=3] (Gand2) at (2, 1.5) {};
+    \node[left] at (Gand2.in 1) {$e_2$};
+    \node[left] at (Gand2.in 2) {$e_1$};
+    \node[left] at (Gand2.in 3) {$g_0$};
+    
+    \node[or port, number inputs=3] (Gor) at (5, 3.5) {};
+    \draw (0, 5) -| (3.5, 5) |- (Gor.in 1);
+    \draw (Gand1.out) |- (Gor.in 2);
+    \draw (Gand2.out) -| (3.5, 1.5) |- (Gor.in 3);
+    \node[right] at (Gor.out) {\textbf{$G \ (X>Y)$}};
+    
+    % ==== L Generation ====
+    \node[left] at (8, 5) {$l_2$};
+    
+    \node[and port] (Land1) at (10, 3.5) {};
+    \node[left] at (Land1.in 1) {$e_2$};
+    \node[left] at (Land1.in 2) {$l_1$};
+    
+    \node[and port, number inputs=3] (Land2) at (10, 1.5) {};
+    \node[left] at (Land2.in 1) {$e_2$};
+    \node[left] at (Land2.in 2) {$e_1$};
+    \node[left] at (Land2.in 3) {$l_0$};
+    
+    \node[or port, number inputs=3] (Lor) at (13, 3.5) {};
+    \draw (8, 5) -| (11.5, 5) |- (Lor.in 1);
+    \draw (Land1.out) |- (Lor.in 2);
+    \draw (Land2.out) -| (11.5, 1.5) |- (Lor.in 3);
+    \node[right] at (Lor.out) {\textbf{$L \ (X<Y)$}};
+    
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
 
 \item Design a logic circuit which finds the maximum value between two 3-bit numbers. Explain the operation using the two numbers 7 and 3.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
@@ -34426,7 +34432,7 @@ We map the excitation signals to 3-variable Karnaugh Maps (inputs $Q_2, Q_1, Q_0
         \minterms{2}
         \maxterms{0,1,6}
         \indeterminants{3,4,5,7}
-        \implicant{2}{3}
+        \implicant{3}{2}
     \end{karnaugh-map}
     \vspace{0.1cm}
     $S_2 = \overline{Q_2} Q_1$

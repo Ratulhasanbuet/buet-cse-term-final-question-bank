@@ -36,7 +36,8 @@
 \definecolor{cE}{RGB}{230,81,0}
 \definecolor{cF}{RGB}{0,96,100}
 \definecolor{cH}{RGB}{0,77,64}
-
+\definecolor{cG}{RGB}{136,14,79}
+\definecolor{cI}{RGB}{62,39,35}
 
 %% ── Section headings ──────────────────────────────────────────────────
 \titleformat{\section}{\large\bfseries\color{pblue}}{}{0em}{}[\titlerule]
@@ -130,6 +131,7 @@
 \end{tcolorbox}
 \newpage
 
+
 %% ══════════════════════════════════════════════════════════════════════
 %%  TABLE OF CONTENTS
 %% ══════════════════════════════════════════════════════════════════════
@@ -157,9 +159,7 @@
         \item \hyperref[sub:s1-rectifier]{Bridge Rectifier}
         \item \hyperref[sub:s1-zener]{Zener Diode Regulator}
         \item \hyperref[sub:s1-design]{Diode Circuit Design}
-        \item \hyperref[sub:s1-fwr]{Full Wave Rectifier}
         \item \hyperref[sub:s1-battery]{Battery Charger Circuit}
-        \item \hyperref[sub:s1-waveshape]{Diode Wave Shaping}
         \item \hyperref[sub:s1-spd]{Special Purpose Diodes/Thyristors}
       \end{itemize}
 
@@ -321,13 +321,13 @@
 \vspace{6pt}
 
 %% Part VII
-\begin{tcolorbox}[breakable,colback=cH!5,colframe=cH,boxrule=1pt,arc=5pt,
+\begin{tcolorbox}[breakable,colback=cG!5,colframe=cG,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cH}{Part VII --- Data Converters, PLL \& Memory}}\\[5pt]
-  \textcolor{cH!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
-  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cH}{$\triangleright$}}]
+  {\large\bfseries\textcolor{cG}{Part VII --- Data Converters, PLL \& Memory}}\\[5pt]
+  \textcolor{cG!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cG}{$\triangleright$}}]
     \item \hyperref[sec:S10]{\textbf{S10.} Data Converters, PLL \& Memory}
-      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cH}{$\cdot$}}]
+      \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cG}{$\cdot$}}]
         \item \hyperref[sub:s10-dac]{Digital-to-Analog Converter (DAC)}
         \item \hyperref[sub:s10-adc]{Analog-to-Digital Converter (ADC)}
         \item \hyperref[sub:s10-pll]{Phase-Locked Loop (PLL)}
@@ -357,7 +357,10 @@
 \subtopic{cA}{Diode Circuit Analysis}
 \label{sub:s1-dc}
 
-\begin{enumerate}\item For the circuit shown, $I$ is the current flowing through each of the diodes and $R$ is unknown. The diodes are identical with $I_S=10^{-16}\,\text{A}$ and $n=1$. (i) Find the value of $(I,R)$ such that $V_o=2.4\,\text{V}$ is maintained. (ii) If a current of 1\,mA is drawn away from the output terminated by a load, what is the change in output voltage?
+\begin{enumerate}
+    
+\item For the circuit shown, $I$ is the current flowing through each of the diodes and $R$ is unknown. The diodes are identical with $I_S=10^{-16}\,\text{A}$ and $n=1$. (i) Find the value of $(I,R)$ such that $V_o=2.4\,\text{V}$ is maintained. (ii) If a current of 1\,mA is drawn away from the output terminated by a load, what is the change in output voltage?
+
 \begin{center}
        \begin{circuitikz}[thick, scale=1.2]
         
@@ -379,12 +382,13 @@
         
         % Output voltage labels (+, V_o, -) aligned vertically
         \node[below=2pt] at (vo) {$+$};
-        \node[below=20pt] at (vo) {$V_o$};
-        \node[below=38pt] at (vo) {$-$};
+        \node[below=38pt] at (vo) {$V_o$};
+        \node[below=76pt] at (vo) {$-$};
                 
     \end{circuitikz}
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item For the circuit given, determine the range of values of resistor $R$ such that $D_1$ does not conduct and $D_2$ conducts. Assume ideal diodes.
 \begin{center}
@@ -409,6 +413,7 @@
     \end{circuitikz}
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item In the circuit shown, both diodes are identical. Find the value of $R$ for which $V=50\,\text{mV}$.
 \begin{center}
@@ -440,6 +445,102 @@
     \end{circuitikz}
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
+
+\item Determine the Boolean expression for $V_0$ in terms of the four input voltages for the circuit shown (diode logic).
+\begin{center}
+  
+    % Scale kept to 1.0 so it respects standard page margins perfectly
+    \begin{circuitikz}[thick,x=1.2cm, transform shape]
+        % Slightly scaling down the component symbols keeps the wire paths looking spacious
+        \ctikzset{resistors/scale=0.8, diodes/scale=0.8}
+
+        % ==========================================
+        % Inputs V1, V2 and Top AND Gate (D1, D2, R1)
+        % ==========================================
+        \draw (0, 9) node[left] {$V_1$} to[short, o-] (0.5, 9);
+        \draw (0, 7) node[left] {$V_2$} to[short, o-] (0.5, 7);
+        
+        % Diodes D1, D2 (Cathodes at the inputs)
+        \draw (2.5, 9) to[D, l=$D_1$] (0.5, 9);
+        \draw (2.5, 7) to[D, l=$D_2$] (0.5, 7);
+        \draw (2.5, 9) -- (2.5, 7);
+        
+        % Node A and Pull-up R1
+        \node[circ] (NodeA) at (2.5, 8) {};
+        \draw (2.5,9) to[R, l=$R_1$, a=$1\text{ k}\Omega$] (2.5, 10.5) node[vcc] {$+5\text{V}$};
+
+        % ==========================================
+        % Inputs V3, V4 and Bottom AND Gate (D5, D6, R3)
+        % ==========================================
+        \draw (0, 4) node[left] {$V_3$} to[short, o-] (0.5, 4);
+        \draw (0, 2) node[left] {$V_4$} to[short, o-] (0.5, 2);
+        
+        % Diodes D5, D6
+        \draw (2.5, 4) to[D, l=$D_5$] (0.5, 4);
+        \draw (2.5, 2) to[D, l=$D_6$] (0.5, 2);
+        \draw (2.5, 4) -- (2.5, 2);
+        
+        % Node B and Pull-up R3
+        \node[circ] (NodeB) at (2.5, 3) {};
+        \draw (3.5,3) to[R, l=$R_3$, a=$1\text{ k}\Omega$, *-] (3.5, 5.5) node[vcc] {$+5\text{V}$};
+
+        % ==========================================
+        % Level Shift / Coupling (D3, Node C, R2, D4)
+        % ==========================================
+        \draw (NodeA) to[D, l=$D_3$] (5, 8) coordinate (NodeC);
+        \node[circ] at (NodeC) {};
+
+        % Pull-up R2
+        \draw (NodeC) to[R, l={$R_2=1\text{ k}\Omega$}, *-] (5, 10.5) node[vcc] {$+5\text{V}$};
+        
+        % D4 Clamping Diode (Spaced safely to the right at X=6.5)
+        \draw (NodeC) to[short, -*] (6.5, 8) coordinate (D4Junct);
+        \draw (D4Junct) to[D, l=$D_4$] (6.5, 10.5) node[vcc] {$+5\text{V}$};
+
+        % ==========================================
+        % OR Gate Stage (D7, D8, Node E, R4)
+        % ==========================================
+        % Route from Top Branch
+        \draw (D4Junct) -- (7.5, 8) -- (7.5, 6.5);
+        \draw (7.5, 6.5) to[D, l=$D_7$] (9.5, 6.5);
+
+        % Route from Bottom Branch (Node B)
+        \draw (NodeB) -- (7.5, 3) -- (7.5, 4.5);
+        \draw (7.5, 4.5) to[D, l=$D_8$] (9.5, 4.5);
+
+        % Junction Node E
+        \draw (9.5, 6.5) -- (9.5, 4.5);
+        \node[circ] (NodeE) at (9.5, 5.5) {};
+
+        % Pull-down R4
+        \draw (10,5.5) to[R, l=$R_4$, a=$1\text{ k}\Omega$, *-] (10, 3) node[ground] {};
+
+        % ==========================================
+        % Output Stage (D9, Node F, D10, R5)
+        % ==========================================
+        \draw (NodeE) to[D, l=$D_9$] (12.5, 5.5) coordinate (NodeF);
+        \node at (NodeF) {};
+
+        % D10 Clamping Diode (Anode at ground, isolated vertically at X=11.5)
+        \draw (12.5, 3) node[ground] {} to[D, l=$D_{10}$] (12.5,5.5);
+
+        % Pull-down R5 (Safely shifted to X=13)
+        \draw (NodeF) -- (13, 5.5) coordinate (VoutJunct);
+        \node at (VoutJunct) {};
+        \draw (14,5.5) to[R, l={$R_5=1\text{ k}\Omega$}] (14, 3) node[ground] {};
+
+        % Final Output Vo
+        \draw (VoutJunct) to[short, -o] (15, 5.5) node[right] {\Large $V_o$};
+
+        % ==========================================
+        % Figure Caption
+        % ==========================================
+
+    \end{circuitikz}
+
+\end{center}
+\mk{10} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
 
 \item Find the values of $I$ and $V$ in the circuit shown. Use the 0.7\,V drop diode model.
@@ -492,9 +593,8 @@
         
     \end{circuitikz}
 \end{center}
-
-
 \mk{10.67} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
 
 \item Assuming the diodes to be ideal, find the values of $I$ and $V$ in the circuits shown.
 
@@ -564,14 +664,18 @@
 
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Diode Models (Ideal, CVD, Piecewise Linear)}
 \label{sub:s1-models}
 
-\begin{enumerate}\item Describe the different models for diode forward characteristics.
+\begin{enumerate}
+    
+\item Describe the different models for diode forward characteristics.
 \mk{7} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item Determine the current $I_D$ and diode voltage $V_D$ for the circuit shown using:
 \begin{enumerate}
@@ -610,13 +714,16 @@
 
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Small Signal Model}
 \label{sub:s1-ssm}
 
-\begin{enumerate}\item In the circuit shown, ``$I$'' is a DC current source and ``$V_i$'' is a sinusoidal signal with small amplitude ($<10\,\text{mV}$) and a frequency of 100\,kHz. Representing the diode by its small-signal resistance $r_d$ (a function of $I$):\\
+\begin{enumerate}
+    
+\item In the circuit shown, ``$I$'' is a DC current source and ``$V_i$'' is a sinusoidal signal with small amplitude ($<10\,\text{mV}$) and a frequency of 100\,kHz. Representing the diode by its small-signal resistance $r_d$ (a function of $I$):\\
 (i) sketch the small-signal equivalent circuit for determining the sinusoidal output $V_o$ across the capacitor; \\ 
 (ii) find the phase shift between $V_i$ and $V_o$; \\
 (iii) find the value of $I$ that will provide a phase shift of $-45°$; \\
@@ -648,8 +755,10 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
 \item The small-signal model of a diode is said to be valid for voltage variations of about 10\,mV. To what percentage current change does this correspond for $n=1$ (consider both positive and negative signals)? What is the maximum allowable voltage signal (positive or negative) if the current change is limited to 10\%?
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
 
 \end{enumerate}
 
@@ -657,7 +766,9 @@
 \subtopic{cA}{Peak Rectifier}
 \label{sub:s1-peak}
 
-\begin{enumerate}\item Consider a half-wave rectifier circuit with $R=1\,\text{k}\Omega$ load operating from a 120\,V (rms), 60\,Hz household supply through a 10-to-1 step-down transformer, augmented with a filter capacitor $C$ across the load. Assume $V_D=0.7\,\text{V}$ for any current. \\
+\begin{enumerate}
+    
+\item Consider a half-wave rectifier circuit with $R=1\,\text{k}\Omega$ load operating from a 120\,V (rms), 60\,Hz household supply through a 10-to-1 step-down transformer, augmented with a filter capacitor $C$ across the load. Assume $V_D=0.7\,\text{V}$ for any current. \\
 (i) Find $C$ for a peak-to-peak ripple of 10\% of peak output.\\
  (ii) Find $C$ for a peak-to-peak ripple of 1\% of peak output. \\
  (iii) Find the average output voltage for each of the case (i) \& (ii) . \\
@@ -665,11 +776,14 @@
  (v) Find the average and peak diode currents for each of the case (i) \& (ii).\\
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2024--25}
 
+
 \item Consider a peak rectifier fed by a 60\,Hz sinusoid with a peak value $V_p=100\,\text{V}$. Let the load resistance $R=10\,\text{k}\Omega$. Find the value of capacitance $C$ that will result in a peak-to-peak ripple of 2\,V. Also calculate the fraction of the cycle during which the diode is conducting and the average and peak values of the diode current.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item Consider a half-wave peak rectifier fed with a voltage having a triangular waveform with 20\,V peak-to-peak amplitude, zero average and 1\,kHz frequency. Load resistance $R=100\,\Omega$ and filter capacitor $C=100\,\mu$F. Assume the diode has a forward voltage drop of 0.7\,V when conducting. Find: (i) average DC output voltage, (ii) time interval during which the diode conducts, (iii) average diode current during conduction, (iv) maximum diode current.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2016--17}
+
 
 \item A peak rectifier circuit is operated with a 1\,k$\Omega$ load and a diode that can be modeled to have a 0.7\,V drop at any current. It is fed by a 50\,Hz sinusoid and the capacitor is chosen to provide a peak-to-peak ripple voltage of 10\% of the peak output voltage. Consider the load current $I_L = 15\,\text{mA}$.
 \begin{enumerate}
@@ -680,6 +794,7 @@
 \end{enumerate}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -689,7 +804,9 @@
 \begin{enumerate}
     
 \item 
-\begin{enumerate}\item What would be the output voltage if the diode and the resistor were connected in parallel?
+\begin{enumerate}
+    
+\item What would be the output voltage if the diode and the resistor were connected in parallel?
 \mk{10.67} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
 \begin{center}
@@ -778,7 +895,8 @@
 
 
 \item
-\begin{enumerate}\item An AC voltage source is applied to a series combination of a diode and a resistance. The dotted line in the figure is the input voltage waveform ($V_{ac}$) and the solid line is the output voltage waveform ($V_R$) across the resistance. Copy $V_R$ from the figure to your answer script exactly to scale and draw the voltage waveform across the diode over the same graph. Given that $\frac{dV_{ac}}{dt}=1\,\text{V/sec}$ when $V_{ac}$ is rising and $\frac{dV_{ac}}{dt}=-1\,\text{V/sec}$ when $V_{ac}$ is falling.
+\begin{enumerate}
+\item An AC voltage source is applied to a series combination of a diode and a resistance. The dotted line in the figure is the input voltage waveform ($V_{ac}$) and the solid line is the output voltage waveform ($V_R$) across the resistance. Copy $V_R$ from the figure to your answer script exactly to scale and draw the voltage waveform across the diode over the same graph. Given that $\frac{dV_{ac}}{dt}=1\,\text{V/sec}$ when $V_{ac}$ is rising and $\frac{dV_{ac}}{dt}=-1\,\text{V/sec}$ when $V_{ac}$ is falling.
 
 \begin{center}
 \begin{tikzpicture}[thick,scale=0.8]
@@ -822,8 +940,6 @@
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
 
-
-
 \item Draw the I-V characteristics curve of the above diode exactly to scale (mention the voltage(s) at which the diode begins conduction).
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
@@ -839,8 +955,11 @@
 \subtopic{cA}{Diode Thermal Characteristics}
 \label{sub:s1-thermal}
 
-\begin{enumerate}\item When a 15\,A current is applied to a particular diode, the junction voltage immediately becomes 0.7\,V. As power dissipation raises its temperature, the voltage eventually reaches 0.6\,V. (i) What is the apparent rise in junction temperature? (ii) What is the temperature rise per watt of power dissipation? (iii) What is the power dissipated in the diode in its final state?
+\begin{enumerate}
+    
+\item When a 15\,A current is applied to a particular diode, the junction voltage immediately becomes 0.7\,V. As power dissipation raises its temperature, the voltage eventually reaches 0.6\,V. (i) What is the apparent rise in junction temperature? (ii) What is the temperature rise per watt of power dissipation? (iii) What is the power dissipated in the diode in its final state?
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item When a 15\,A current is applied to a particular diode, the junction voltage immediately becomes 0.7\,V. As power dissipation raises its temperature, the voltage eventually reaches 0.58\,V.\\
  (i) What is the apparent rise in junction temperature? \\
@@ -848,13 +967,16 @@
  (iii) What is the power dissipated in the diode in its final state?\\
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Bridge Rectifier}
 \label{sub:s1-rectifier}
 
-\begin{enumerate}\item Consider a bridge rectifier circuit with a filter capacitor $C$ placed across the load resistor $R=100\,\Omega$. The transformer secondary delivers a sinusoid of 12\,V (rms) at 60\,Hz. Assume $V_D=0.8\,\text{V}$.\\
+\begin{enumerate}
+    
+\item Consider a bridge rectifier circuit with a filter capacitor $C$ placed across the load resistor $R=100\,\Omega$. The transformer secondary delivers a sinusoid of 12\,V (rms) at 60\,Hz. Assume $V_D=0.8\,\text{V}$.\\
  (i) Find the value of $C$ such that the ripple voltage is no larger than 1\,V peak-to-peak. \\
  (ii) What is the DC voltage at the output? \\
  (iii) Find the load current. \\
@@ -862,11 +984,10 @@
  (v) What is the peak reverse voltage across each diode?\\
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
-\item A full-wave bridge rectifier circuit with 1\,k$\Omega$ load operates from a 120\,V (rms), 60\,Hz household supply through a 10:1 step-down transformer. Each diode has a voltage drop of 0.7\,V at any current. (i) What is the peak value of the rectified voltage across the load? (ii) For what fraction of a cycle does each diode conduct? (iii) What are the average voltage across and average current through the load?
-\mk{10} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
-\item A full-wave bridge rectifier circuit with a 1-k$\Omega$ load operates from a 120-V (rms), 60-Hz household supply through a 10-to-1 step-down transformer having a single secondary winding. Each diode can be modeled to have a 0.7-V drop in forward bias. Find: the peak value of the rectified voltage across the load; the fraction of a cycle for which each diode conducts; the average voltage and average current through the load.
-\mk{16} \yr{EEE 263 | L-2/T-1 | 2022--23}
+\item A full-wave bridge rectifier circuit with 1\,k$\Omega$ load operates from a 120\,V (rms), 60\,Hz household supply through a 10:1 step-down transformer. Each diode has a voltage drop of 0.7\,V at any current. (i) What is the peak value of the rectified voltage across the load? (ii) For what fraction of a cycle does each diode conduct? (iii) What are the average voltage across and average current through the load?
+\mk{10} \yr{EEE 263 | L-2/T-1 | 2023--24, 2022--23}
+
 
 \item For the bridge rectifier circuit shown, $v_s$ is a 12\,V (rms) sinusoid, $V_D=0.7\,\text{V}$, and $R=100\,\Omega$. Find the average of the output voltage $v_o$, the peak diode current, and the PIV.
 \begin{center}
@@ -934,6 +1055,12 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2021--22}
 
+
+\item Draw the circuit of a full-wave rectifier with center-tapped secondary winding and draw the input and output voltage waveshapes. Comment on the values of RC time constant for a rectifier circuit.
+\mk{20} \yr{EEE 263 | L-2/T-1 | Jan--2021}  
+    
+
+
 \item Draw the transfer curve of the circuit shown, assuming all diodes are ideal, $R_1=R_2=20\,\text{k}\Omega$, and $R_L=10\,\text{k}\Omega$. (i) What is the maximum peak voltage of the output signal? (ii) What is the peak-inverse voltage? (iii) What is the average current through the load?
 \begin{center}
          \begin{tikzpicture}[thick,scale=0.85, baseline=(current bounding box.center)]
@@ -990,19 +1117,31 @@
 \end{center}
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2020--21}
 
+
 \item Draw the circuit of a full-wave bridge rectifier and show the output wave shape for a sinusoidal input.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \item For a full-wave bridge rectifier, find the value of peak current through the diode and PIV for the diode. Given: $V_s=12\,\text{V}$ (rms), $V_{DO}=0.7\,\text{V}$, $R=100\,\Omega$.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \item Comment on the value of RC time constant for a rectifier circuit.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
 
+\item Draw the circuit diagram of a full wave rectifier with a filter capacitor. Assume the input is a sinusoidal signal with 10\,kHz frequency and 7.07\,V rms voltage, the load is 1\,k$\Omega$ and capacitor used is 1\,$\mu$F. Diode has a forward voltage drop of 0.7\,V. Find:
+\begin{enumerate}
+  \item Ripple voltage.
+  \item PIV and duty cycle.
+  \item Peak output voltage.
+\end{enumerate}
+\mk{16} \yr{EEE 263 | L-2/T-1 | 2015--16}
+
 
 \item Show that the average output voltage of a bridge rectifier circuit is $V_o = \frac{2}{\pi}V_s - 2V_{DO}$. If the input voltage is a 12\,V (rms) sinusoid and the load resistance is 100\,$\Omega$, calculate: (i) the average output voltage, (ii) the peak diode current, and (iii) the PIV of the diodes. Assume $V_{DO}=0.7\,\text{V}$.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1010,11 +1149,15 @@
 \subtopic{cA}{Zener Diode Regulator}
 \label{sub:s1-zener}
 
-\begin{enumerate}\item A 6.8\,V Zener diode exhibits its nominal voltage at a test current of 5\,mA. At this current the incremental resistance is $r_z=20\,\Omega$ and knee current $I_{ZK}=0.2\,\text{mA}$. The negative terminal is connected to $V^+=10\,\text{V}$ ($\pm1\,\text{V}$) through a $0.5\,\text{k}\Omega$ resistor; positive terminal is grounded. (i) Find $V_o$ with no load at nominal supply. (ii) Find the change in $V_o$ as supply varies by $\pm1\,\text{V}$. (iii) Find the change in $V_o$ when $R_L=2\,\text{k}\Omega$ is connected; what happens if $R_L=0.5\,\text{k}\Omega$? (iv) Find the minimum $R_L$ for which the diode still operates in breakdown.
+\begin{enumerate}
+    
+\item A 6.8\,V Zener diode exhibits its nominal voltage at a test current of 5\,mA. At this current the incremental resistance is $r_z=20\,\Omega$ and knee current $I_{ZK}=0.2\,\text{mA}$. The negative terminal is connected to $V^+=10\,\text{V}$ ($\pm1\,\text{V}$) through a $0.5\,\text{k}\Omega$ resistor; positive terminal is grounded. (i) Find $V_o$ with no load at nominal supply. (ii) Find the change in $V_o$ as supply varies by $\pm1\,\text{V}$. (iii) Find the change in $V_o$ when $R_L=2\,\text{k}\Omega$ is connected; what happens if $R_L=0.5\,\text{k}\Omega$? (iv) Find the minimum $R_L$ for which the diode still operates in breakdown.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item A 9.1\,V Zener diode exhibits its nominal voltage at a test current of 28\,mA. At this current the incremental resistance is specified to be 5\,$\Omega$. (i) Find $V_{z0}$ in the Zener model. (ii) Find the Zener voltage at currents of 10\,mA and 100\,mA, respectively. (iii) Comment on the advantages/disadvantages of running the Zener diode at current values other than the nominal value.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
 
 \item For the circuit given, determine the range of $R_L$ and $I_L$ that will result in $V_{R_L}$ being maintained at 10\,V. Also determine the maximum wattage rating of the diode. The Zener diode is a 10\,V Zener with maximum current rating of 32\,mA.
 \begin{center}
@@ -1059,6 +1202,7 @@
 \end{center}
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2022--23}
 
+
 \item The zener diode in the circuit shown is specified to have $V_Z=6.8\,\text{V}$ at $I_Z=5\,\text{mA}$, $r_z=20\,\Omega$ and $I_{ZK}=0.2\,\text{mA}$. (i) Find $V_0$ at no load conditions. (ii) What is the minimum value of $R_L$ for which the diode will still operate in the breakdown region?
 \begin{center}
     
@@ -1085,6 +1229,7 @@
     \end{tikzpicture}
 \end{center}
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2020--21}
+
 
 \item A voltage regulator circuit is to power a car radio at $V_L=9\,\text{V}$ from an automobile battery whose voltage may vary between 11 and 13.6\,V. The current in the radio will vary between 0 (off) and 100\,mA (full volume). Determine the value of the current-limiting resistor $R_i$ and the maximum power dissipated in the Zener diode.
 \begin{center}
@@ -1142,6 +1287,7 @@
 \end{center}
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item For the circuit shown in Figure , plot $v_0$ versus $v_{\text{i}}$ and $i_1$ versus $v_{\text{i}}$ over the range $-10 \le v_{\text{i}} \le +10\text{ V}$. Assume the diodes to be ideal.
  \begin{center}
 \begin{circuitikz}[thick,scale=1.2, transform shape]
@@ -1196,7 +1342,6 @@
 
 
 \item For the circuit shown, find $V_a$ and $I_z$. Now if $R_1$ and $R_2$ are swapped, what will be the value of $V_a$ and $I_z$?
-
 \begin{center}
   
     \begin{circuitikz}[thick,scale=1.2, transform shape]
@@ -1237,9 +1382,8 @@
 
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item Calculate the regulated load voltage $V_L$ and the current $I_Z$ flowing through the zener diode in the voltage regulator circuit shown.
-
-
 \begin{center}
       \begin{circuitikz}[thick,scale=1.2, transform shape]
         
@@ -1289,13 +1433,16 @@
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Diode Circuit Design}
 \label{sub:s1-design}
 
-\begin{enumerate}\item Design the circuit shown to provide an output voltage $v_a = 3\,\text{V}$. Assume that the diodes available have 0.7\,V drop at 1\,mA, thermal voltage = 25\,mV, and parameter $n=1$.
+\begin{enumerate}
+    
+\item Design the circuit shown to provide an output voltage $v_a = 3\,\text{V}$. Assume that the diodes available have 0.7\,V drop at 1\,mA, thermal voltage = 25\,mV, and parameter $n=1$.
 \begin{center}
       \begin{circuitikz}[thick,scale=1.2, transform shape]
         
@@ -1331,27 +1478,9 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
-\end{enumerate}
-
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Full Wave Rectifier}
-\label{sub:s1-fwr}  
-
-
-\begin{enumerate}
-    
-    \item Draw the circuit of a full-wave rectifier with center-tapped secondary winding and draw the input and output voltage waveshapes. Comment on the values of RC time constant for a rectifier circuit.
-\mk{20} \yr{EEE 263 | L-2/T-1 | Jan--2021}  
-    
-    \item Draw the circuit diagram of a full wave rectifier with a filter capacitor. Assume the input is a sinusoidal signal with 10\,kHz frequency and 7.07\,V rms voltage, the load is 1\,k$\Omega$ and capacitor used is 1\,$\mu$F. Diode has a forward voltage drop of 0.7\,V. Find:
-\begin{enumerate}\item Ripple voltage.
-  \item PIV and duty cycle.
-  \item Peak output voltage.
-\end{enumerate}
-\mk{16} \yr{EEE 263 | L-2/T-1 | 2015--16}
-
 
 \end{enumerate}
+
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Battery Charger Circuit}
@@ -1392,6 +1521,7 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item A circuit for charging a 10\,V battery is shown in the figure. If $V_s$ is a sinusoid with 20\,V peak amplitude, find the fraction of each cycle during which the diode conducts. Assume the diode is ideal. Also find the peak value of the diode current and the maximum reverse bias voltage that appears across the diode.
 
 \begin{center}
@@ -1420,128 +1550,6 @@
 
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
-\end{enumerate}
-
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Diode Wave Shaping}
-\label{sub:s1-waveshape}
-
-\begin{enumerate}\item For a sinusoidal input, draw the output waveshape for the circuit shown.
-\begin{center}
-    \begin{circuitikz}[thick,american, scale=1.2]
-    % 1. Top wire with Input terminal, Resistor R, and Output terminal
-    \draw (0,2.5) node[below=2pt] {$+$} 
-          to[R, l_=$R$, o-*] (3,2.5) 
-          to[short, -o] (5,2.5) node[below=2pt] {$+$};
-          
-    % 2. Bottom reference wire with Input and Output terminals
-    \draw (0,0) node[above=2pt] {$-$} 
-          to[short, o-*] (3,0) 
-          to[short, -o] (5,0) node[above=2pt] {$-$};
-          
-    % 3. Input and Output Voltage Labels
-    \node[font=\large] at (0.5, 1.25) {$V_i$};
-    \node[font=\large] at (4.5, 1.25) {$V_o$};
-    
-    % 4. Shunt Branch: Battery (V) and Diode pointing upwards
-    % Drawing from bottom to top automatically sets up the correct polarities
-    \draw (3,1.25) to[battery2, l_=$V$] (3,0);
-        \draw (3,1.25)  to[D] (3,2.5);
-          
-    % 5. Figure Caption
-
-\end{circuitikz}
-\end{center}
-\mk{10} \yr{EEE 263 | L-2/T-1 | 2018--19}
-
-
-\item Assuming that the diodes are ideal, find the output voltage $V_o$ for the circuit given. Draw the wave shape clearly.
-
-\begin{center}
-  
-    \begin{circuitikz}[thick,scale=1.1]
-        
-        % ===================================================
-        % 1. Left Side: Input Voltage Waveform (Graph)
-        % ===================================================
-        \coordinate (Origin) at (0,0);
-        
-        % Y-axis & X-axis
-        \draw[->, >=stealth] (Origin |- 0,-2) -- (Origin |- 0,2) node[above] {$v_{in}(\mathrm{Volt})$};
-        \draw[->, >=stealth] (Origin) -- (5,0) node[right] {$t(\mathrm{ms})$};
-        
-        % Y-axis Labels (+10 and -10)
-        \draw (-0.1, 1.5) -- (0.1, 1.5) node[left=0.2cm] {$+10$};
-        \draw (-0.1, -1.5) -- (0.1, -1.5) node[left=0.2cm] {$-10$};
-        
-        % Dashed guidelines for peaks
-        \draw[dashed] (0, 1.5) -- (1.25, 1.5);
-        \draw[dashed] (0, -1.5) -- (3.75, -1.5);
-        
-        % Triangular Waveform
-        \draw[thick] (0,0) -- (1.25, 1.5) 
-                     -- (2.5, 0) node[below, yshift=-0.1cm] {$5$} 
-                     -- (3.75, -1.5) 
-                     -- (5, 0) node[below] {$10$};
-                     
-        % Label Vin near the axis end as in the image
-        
-        
-    \end{circuitikz}
-\end{center}
-
-
-\begin{center}
-    
-    \begin{circuitikz}
-        % ===================================================
-        % 2. Right Side: Circuit Diagram
-        % ===================================================
-        % Shift the starting point of the circuit to the right to avoid overlap
-        \coordinate (C_offset) at (8.5, 0); 
-        
-        % AC Voltage Source
-        \draw (C_offset |- 0,-1.5) to[sV, l={$v_{in}$}] (C_offset |- 0,1.5) coordinate (TopLeft);
-        
-        % Resistor R at the top
-        \draw (TopLeft) to[R, l={$R=10\Omega$}] ++(2.5, 0) coordinate (Node1);
-        
-        % Branch 1: D1 (pointing down) and 6V Battery (positive/long line UP)
-        % l_ moves the labels to the left side of this branch
-        \draw (Node1) to[D, l_={$D1$}] ++(0, -1.5) 
-                      to[battery1, l_={$6\mathrm{V}$}] ++(0, -1.5) coordinate (Bot1);
-        
-        % Branch 2: D2 (pointing UP) and 4V Battery (negative/short line UP)
-        % Increased distance between branches (from 1.5 to 2.0)
-        \draw (Node1) -- ++(2.0, 0) coordinate (Node2);
-        \coordinate (Bot2) at (Node2 |- Bot1);
-        
-        % Drawn from bottom to top. l_ moves labels to the right side of this branch
-        \draw (Bot2) to[battery1, l_={$4\mathrm{V}$}] ++(0, 1.5) 
-                     to[D, l_={$D2$}] (Node2); 
-        
-        % Branch 3: Series Capacitor C
-        \draw (Node2) to[C, l={$C$}] ++(2, 0) coordinate (Node3);
-        
-        % Branch 4: D3 (pointing UP)
-        \coordinate (Bot3) at (Node3 |- Bot1);
-        \draw (Bot3) to[D, l_={$D3$}] (Node3);
-        
-        % Output Terminals (Vo) 
-        % Extended the wire to 1.5 to move Vo further right
-        \draw (Node3) to[short, -o] ++(1.5, 0) coordinate (OutTop);
-        \draw (Bot3) to[short, -o] ++(1.5, 0) coordinate (OutBot);
-        
-        % Output Voltage Label (+ and - with Vo)
-        \draw (OutTop) to[open, v^={$V_o$}] (OutBot);
-        
-        % Connect all bottom ground/return wires
-        \draw (C_offset |- 0,-1.5) -- (OutBot);
-        
-    \end{circuitikz}
-\end{center}
-
-\mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
 \end{enumerate}
 
@@ -1549,14 +1557,17 @@
 \subtopic{cA}{Special Purpose Diodes/Thyristors}
 \label{sub:s1-spd}
 
-\begin{enumerate}\item  Draw the circuit diagram of controlled full wave rectifier using SCR. Draw the waveforms of sinusoidal input, gate pulses and rectified output.
+\begin{enumerate}
+    
+\item  Draw the circuit diagram of controlled full wave rectifier using SCR. Draw the waveforms of sinusoidal input, gate pulses and rectified output.
 \mk{11.67} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
 
 \item Explain SCR and TRIAC operation with suitable examples.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
-\item Sketch the output wave form of the following circuit given in Fig. for Q. 1(c)(i) assuming output wave is obtained across the resistance. The input waveform and gate pulse sequence is given in Fig. for Q. 1(c)(ii). 
 
+\item Sketch the output wave form of the following circuit given in Fig. for Q. 1(c)(i) assuming output wave is obtained across the resistance. The input waveform and gate pulse sequence is given in Fig. for Q. 1(c)(ii). 
 
 \subsection*{1. Circuit Diagram [Fig. 1(c)(i)]}
 \begin{center}
@@ -1594,7 +1605,6 @@
 \end{tikzpicture}
 \end{center}
 
-
 \subsection*{2. Input Voltage Waveform [Fig. 1(c)(ii)]}
 \begin{center}
 \begin{tikzpicture}[thick,scale=0.9]
@@ -1625,7 +1635,6 @@
 \end{center}
 
 \vspace{1cm}
-
 
 \subsection*{3. Gate Pulse Sequence [Fig. 1(c)(ii)]}
 \begin{center}
@@ -1661,12 +1670,14 @@
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+
 \item Draw the I-V characteristics of an SCR and a TRIAC.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
+
 \item Explain the operating principle of a Silicon controlled Rectifier with the help of 'Two transistor model'.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2011--12}
-
 
 
 \end{enumerate}
@@ -1686,8 +1697,11 @@
 \subtopic{cA}{Energy Band Profile}
 \label{sub:s2-energy}
 
-\begin{enumerate}\item Draw the energy band profile of a pnp transistor under zero bias and forward-active mode bias conditions.
+\begin{enumerate}
+    
+\item Draw the energy band profile of a pnp transistor under zero bias and forward-active mode bias conditions.
 \mk{16/23} \yr{EEE 263 | L-2/T-1 | 2020--21, 2018--19}
+
 
 \end{enumerate}
 
@@ -1695,8 +1709,11 @@
 \subtopic{cA}{Device Structure and Operating Principle}
 \label{sub:s2-structure}
 
-\begin{enumerate}\item Why is the third terminal (Base or Gate) used in a transistor?
+\begin{enumerate}
+    
+\item Why is the third terminal (Base or Gate) used in a transistor?
 \mk{10} \yr{EEE 263 | L-2/T-1 | Jan--2021}
+
 
 \end{enumerate}
 
@@ -1704,14 +1721,19 @@
 \subtopic{cA}{Early Effect}
 \label{sub:s2-early}
 
-\begin{enumerate}\item What is the Early-effect in a BJT? Draw the $I$--$V$ curve of a practical BJT showing the Early effect.
+\begin{enumerate}
+    
+\item What is the Early-effect in a BJT? Draw the $I$--$V$ curve of a practical BJT showing the Early effect.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
 
 \item What is the early effect for BJT? What are the consequences of early effect on BJT behavior?
 \mk{16} \yr{EEE 263 | L-2/T-1 | Jan--2021}
 
+
 \item Why biasing is needed for an amplifier using BJT? Draw the output characteristics of a BJT connected in CE configuration. Define Early effect.
 \mk{10.667} \yr{EEE 263 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -1758,9 +1780,10 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2020--21}
 
+
 \item Calculate the collector current, emitter current and base current for the circuit shown in Figure . Also verify the operating mode of the transistor. Assume $\beta = 100$. (16)
 
-  \begin{center}
+\begin{center}
             \begin{circuitikz}[thick, american, scale=1.2]
                 % NPN Transistor
                 \node[npn] (Q) at (0,0) {};
@@ -1781,7 +1804,7 @@
                       to[short] (Q.B);
    
             \end{circuitikz}
-        \end{center}
+\end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
 
@@ -1832,6 +1855,7 @@
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \item For the circuit shown, determine the voltages of all nodes and current through all branches. Assume $\beta=100$.
 \begin{center}
       \begin{circuitikz}[thick,scale=1.2, transform shape]
@@ -1872,6 +1896,7 @@
     \end{circuitikz}
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2015--16}
+
 
 \item 
 \begin{enumerate}
@@ -1955,6 +1980,7 @@
 \end{center}
 \end{enumerate}
 
+
 \item For the circuit shown, determine $R_1$ and $R_C$ if $I_B=0.02\,\text{mA}$ and $V_{CE}=10V$.
 
 \begin{center}
@@ -1990,6 +2016,7 @@
 
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
+
 \item Determine all node voltages and branch currents for the circuit shown. Assume $\beta=100$ and $V_{BE}=0.7\,\text{V}$.
 
 \begin{center}
@@ -2022,14 +2049,19 @@
 
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{BJT Saturation Parameters}
 \label{sub:s2-saturation}
 
-\begin{enumerate}\item A BJT for which $I_B=0.5\,\text{mA}$ has $v_{CEsat}=140\,\text{mV}$ at $I_C=10\,\text{mA}$ and $v_{CEsat}=170\,\text{mV}$ at $I_C=20\,\text{mA}$. Estimate the values of: (i) saturation resistance $R_{CEsat}$; (ii) offset voltage $V_{CEoff}$; (iii) $\beta_f$; (iv) $\beta_r$.
+\begin{enumerate}
+
+
+\item A BJT for which $I_B=0.5\,\text{mA}$ has $v_{CEsat}=140\,\text{mV}$ at $I_C=10\,\text{mA}$ and $v_{CEsat}=170\,\text{mV}$ at $I_C=20\,\text{mA}$. Estimate the values of: (i) saturation resistance $R_{CEsat}$; (ii) offset voltage $V_{CEoff}$; (iii) $\beta_f$; (iv) $\beta_r$.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
 
 \end{enumerate}
 
@@ -2037,7 +2069,9 @@
 \subtopic{cA}{Multi-BJT Circuit Analysis}
 \label{sub:s2-multibjtdc}
 
-\begin{enumerate}\item For the circuit shown, the emitter voltage was measured to be $V_E=+1.7\,\text{V}$. Assume $|V_{BE}|=0.7\,\text{V}$. Find the values of the labeled node voltages and branch currents. What are the values of $\alpha$ and $\beta$ for the pnp transistor?
+\begin{enumerate}
+    
+\item For the circuit shown, the emitter voltage was measured to be $V_E=+1.7\,\text{V}$. Assume $|V_{BE}|=0.7\,\text{V}$. Find the values of the labeled node voltages and branch currents. What are the values of $\alpha$ and $\beta$ for the pnp transistor?
 \begin{center}
         \begin{circuitikz}[thick, scale=1.2]
         
@@ -2064,6 +2098,7 @@
     \end{circuitikz}
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item For the circuit shown, find the values of the labeled node voltages and branch currents. Assume $\beta$ to be very high and $|V_{BE}|=0.7\,\text{V}$. What will happen if $\beta$ is reduced to a value of 100?
 \begin{center}
@@ -2098,6 +2133,7 @@
     \end{circuitikz}
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
 
 \item For the circuit shown with $\beta=200$ for each transistor, determine: (i) $I_{E1}$, (ii) $I_{E2}$, (iii) $V_{C1}$, and (iv) $V_{C2}$.
 \begin{center}
@@ -2140,6 +2176,7 @@
     \end{circuitikz}
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item For the circuit shown, $\beta_n=120$ (npn) and $\beta_p=80$ (pnp). Determine $I_{B1}$, $I_{C1}$, $I_{B2}$, $I_{C2}$, $V_{CE1}$, and $V_{EC2}$.
 \begin{center}
@@ -2190,6 +2227,7 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2022--23}
 
+
 \item For the circuit shown, find $V_B$, $V_E$, and $V_C$ for $R_B=10\,\text{k}\Omega$. Let $\beta=100$.
 \begin{center}
      \begin{circuitikz}[american, thick]
@@ -2220,6 +2258,7 @@
     \end{circuitikz}
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \item Determine the currents $I_{C1}$ and $I_{C2}$ for the multi-BJT circuit shown.
 \begin{center}
@@ -2285,11 +2324,10 @@
           to[R, l={$R_{C2}\!=\!2.7\text{ k}\Omega$}] (7.5, -2.0) node[ground] {};
 
 
-
-
 \end{circuitikz}
 \end{center}
 \mk{30} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \end{enumerate}
 
@@ -2297,7 +2335,9 @@
 \subtopic{cA}{Voltage Transfer Characteristics}
 \label{sub:s2-vtc}
 
-\begin{enumerate}\item Draw the voltage transfer characteristics by qualitatively analyzing the circuit shown.
+\begin{enumerate}
+    
+\item Draw the voltage transfer characteristics by qualitatively analyzing the circuit shown.
 \begin{center}
       \begin{circuitikz}[thick,scale=1.2, transform shape]
         
@@ -2341,13 +2381,16 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Operating Mode Design}
 \label{sub:s2-opmode}
 
-\begin{enumerate}\item The circuit shown is to be fabricated using a transistor type whose $\beta$ can vary from 50 to 150. Design the circuit (find $R_c$) so that all fabricated circuits are guaranteed to be in the active mode. What is the range of collector voltages that the fabricated circuits may exhibit?
+\begin{enumerate}
+    
+\item The circuit shown is to be fabricated using a transistor type whose $\beta$ can vary from 50 to 150. Design the circuit (find $R_c$) so that all fabricated circuits are guaranteed to be in the active mode. What is the range of collector voltages that the fabricated circuits may exhibit?
 \begin{center}
     
 \begin{circuitikz}[thick,american, scale=1.2]
@@ -2372,6 +2415,7 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -2380,11 +2424,13 @@
 
 \begin{enumerate}
     
-    \item What is transistor biasing? Why do we need transistor biasing? How can you achieve biasing stability?
+\item What is transistor biasing? Why do we need transistor biasing? How can you achieve biasing stability?
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2020--21}
+
 
 \item Comment on the desired values of input impedance, output impedance, voltage gain, and current gain of a BJT amplifier. Comment on the values of these four parameters for CB, CE, and CC configurations.
 \mk{16} \yr{EEE 263 | L-2/T-1 | Jan--2021}
+
 
 \item 
 \begin{enumerate}
@@ -2435,6 +2481,7 @@
 \item Why do we need to bias a BJT at a proper Q-point before using it as an amplifier?
 \mk{5} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
+
 \item Graphically explain the benefit of having $R_E > 0$ in the biasing scheme shown.
 
 \begin{center}
@@ -2450,10 +2497,8 @@
         \draw[->] (0, 3) -- (0, 3.2) node[above] {$15\text{ V}$};
    \end{circuitikz}          
 \end{center}
-
-
-
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -2461,7 +2506,9 @@
 \subtopic{cA}{BJT Circuit Design}
 \label{sub:s2-design}
 
-\begin{enumerate}\item Design the circuit shown to meet the following specifications: $V_{CE1}=V_{CE2}=2.5\,\text{V}$, $V_{RE}=0.7\,\text{V}$, $I_{C1}\cong I_{C2}\cong1\,\text{mA}$, and $I_{R1}\cong I_{R2}\cong I_{R3}=0.10\,\text{mA}$.
+\begin{enumerate}
+    
+\item Design the circuit shown to meet the following specifications: $V_{CE1}=V_{CE2}=2.5\,\text{V}$, $V_{RE}=0.7\,\text{V}$, $I_{C1}\cong I_{C2}\cong1\,\text{mA}$, and $I_{R1}\cong I_{R2}\cong I_{R3}=0.10\,\text{mA}$.
 \begin{center}
     
     \begin{circuitikz}[thick]
@@ -2518,6 +2565,7 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2022--23}
 
+
 \item Design the circuit shown to establish $I_C=0.2\,\text{mA}$ and $V_C=0.5\,\text{V}$. The transistor exhibits $V_{BE}=0.8\,\text{V}$ at $i_c=1\,\text{mA}$, and $\beta=100$.
 \begin{center}
         \begin{circuitikz}[american, thick, y=1.4cm]
@@ -2547,6 +2595,7 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2021--22}
 
+
 \item The transistor in the circuit has $\beta=100$ and exhibits $V_{BE}=0.7\,\text{V}$ at $i_c=1\,\text{mA}$. Design the circuit so that a current of 2\,mA flows through the collector and a voltage of $+5\,\text{V}$ appears at the collector.
 \begin{center}
        \begin{tikzpicture}[thick,scale=1.2, transform shape]
@@ -2571,6 +2620,7 @@
     \end{tikzpicture}
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2020--21}
+
 
 \item Design the circuit shown to provide $I_C=3\,\text{mA}$ and $V_{CE}=1.5\,\text{V}$ for $\beta=90$. Use $V_{CC}=3\,\text{V}$ and a current through $R_2$ equal to the base current.
 \begin{center}
@@ -2628,15 +2678,16 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2016--17}    
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Linear Amplifier Constraints}
 \label{sub:s2-linear}
 
-\begin{enumerate}\item For the figure shown, find out the maximum collector current that the device can support. If the operating point is set for that maximum current, what kind of problem will we face if we want to use the device as a linear amplifier?
-
-
+\begin{enumerate}
+    
+\item For the figure shown, find out the maximum collector current that the device can support. If the operating point is set for that maximum current, what kind of problem will we face if we want to use the device as a linear amplifier?
 \begin{center}
 \begin{tikzpicture}[thick, scale=1.2]
     
@@ -2657,8 +2708,8 @@
     
 \end{tikzpicture}
 \end{center}
-
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -2677,20 +2728,27 @@
 \subtopic{cA}{Device Characteristics}
 \label{sub:s3-devchar}
 
-\begin{enumerate}\item Explain the different operation regions of an enhancement PMOS transistor with properly labeled $I_D$--$V_{SD}$ plots. Derive the threshold conditions for operating in those regions.
+\begin{enumerate}
+    
+\item Explain the different operation regions of an enhancement PMOS transistor with properly labeled $I_D$--$V_{SD}$ plots. Derive the threshold conditions for operating in those regions.
 \mk{8} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item For a particular MOSFET operating in the saturation region at a constant $v_{gs}$, $i_D=2\,\text{mA}$ at $v_{ds}=4\,\text{V}$. The $i_D$ increases by 10\% when $v_{ds}$ is doubled. Find the corresponding values of $r_0$, $V_A$, and $\lambda$.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
 \item Briefly explain the I-V characteristics of an n-channel enhancement MOSFET with necessary plots.
 \mk{7} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item What is the difference between enhancement-type and depletion-type MOSFETs? Draw $I_D$ vs.\ $V_{GS}$ and $I_D$ vs.\ $V_{DS}$ characteristics for different values of $V_{GS}$ for both enhancement-type and depletion-type MOSFETs.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \item Showing different operating regions, describe the output characteristics of a MOSFET. Why does current saturation occur in a MOSFET as $V_{DS}$ is increased?
 \mk{18} \yr{EEE 263 | L-2/T-1 | Jan--2021}
+
 
 \end{enumerate}
 
@@ -2698,11 +2756,15 @@
 \subtopic{cA}{Comparison with BJT}
 \label{sub:s3-compare}
 
-\begin{enumerate}\item Compare MOSFET and BJT in terms of their operating principles. Mention each of their advantages and disadvantages.
+\begin{enumerate}
+    
+\item Compare MOSFET and BJT in terms of their operating principles. Mention each of their advantages and disadvantages.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item What are the mutual advantages and disadvantages of BJT and MOSFET?
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -2710,8 +2772,11 @@
 \subtopic{cA}{Threshold Voltage}
 \label{sub:s3-threshold}
 
-\begin{enumerate}\item Explain the concept of threshold voltage ($V_t$) of a MOSFET. What happens to $V_t$ and oxide capacitance ($C_{ox}$) if: (i) the dielectric thickness is increased/decreased? (ii) the gate insulator is replaced with a more high-$k$ dielectric of the same thickness?
+\begin{enumerate}
+    
+\item Explain the concept of threshold voltage ($V_t$) of a MOSFET. What happens to $V_t$ and oxide capacitance ($C_{ox}$) if: (i) the dielectric thickness is increased/decreased? (ii) the gate insulator is replaced with a more high-$k$ dielectric of the same thickness?
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -2719,7 +2784,9 @@
 \subtopic{cA}{DC Analysis \& Transistor Sizing}
 \label{sub:s3-dc}
 
-\begin{enumerate}\item In the circuit shown, the aspect ratios of $Q_1$ and $Q_2$ are $(W/L)_1 = 2(W/L)_2 = 20$. Both transistors have $V_t=1\,\text{V}$ and $\mu_n C_{ox}=100\,\mu\text{A/V}^2$. Find the node voltages $V_1$, $V_2$, and $V_3$.
+\begin{enumerate}
+    
+\item In the circuit shown, the aspect ratios of $Q_1$ and $Q_2$ are $(W/L)_1 = 2(W/L)_2 = 20$. Both transistors have $V_t=1\,\text{V}$ and $\mu_n C_{ox}=100\,\mu\text{A/V}^2$. Find the node voltages $V_1$, $V_2$, and $V_3$.
 \begin{center}
     
 \begin{circuitikz}[american, line width=0.8pt]
@@ -2777,6 +2844,7 @@
 \end{center}
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2024--25}
 
+
 \item The NMOS transistors in the circuit have $V_t=1\,\text{V}$, $\mu_n C_{ox}=120\,\mu\text{A/V}^2$, $\lambda=0$, and $L_1=L_2=1\,\mu\text{m}$. Find the required values of gate width $W_1$ and $W_2$ for $Q_1$ and $Q_2$, and the value of $R$, for obtaining the voltage values indicated. The current in $R$ will be $120\,\mu\text{A}$.
 \begin{center}
     
@@ -2825,6 +2893,7 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
 \item The PMOS transistor in the circuit shown has $V_t=-0.7\,\text{V}$, $\mu_p C_{ox}=60\,\mu\text{A/V}^2$, $L=0.8\,\mu\text{m}$, and $\lambda=0$. Find the value of $W$ and $R$ in order to establish a drain current of $115\,\mu\text{A}$ and a voltage $V_D=3.5\,\text{V}$.
 \begin{center}
         \begin{circuitikz}[american, thick]
@@ -2852,9 +2921,8 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
 \item The NMOS and PMOS transistors in the circuit are matched with $k_n=k_p=1\,\text{mA/V}^2$ and $V_{tn}=-V_{tp}=1\,\text{V}$. Assuming $\lambda=0$ for both MOSFETs, find the drain currents $i_{DN}$ and $i_{DP}$ and the voltage $v_0$ for $v_1=0\,\text{V}$ and $v_1=+2.5\,\text{V}$.
-
-
 \begin{center}
       \begin{circuitikz}[thick,scale=1.2, transform shape]
         \ctikzset{tripoles/mos style/arrows}
@@ -2931,6 +2999,7 @@
 \end{center}
 \mk{28} \yr{EEE 263 | L-2/T-1 | Jan--2021}
 
+
 \item For the circuit shown, find $R$ so that $I_{D1}=0.4\,\text{mA}$. Also find $V_{D1}$, $V_{D2}$, and $I_{D2}$. $Q_1$ and $Q_2$ are identical. Given: $V_t=2\,\text{V}$, $\mu_n C_{ox}=20\,\mu\text{A/V}^2$, $L=10\,\mu\text{m}$, $W=100\,\mu\text{m}$.
 \begin{center}
     \begin{circuitikz}[thick,american, scale=1.3]
@@ -2980,6 +3049,7 @@
 \end{circuitikz}
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \item For the circuit shown, for all MOSFETs $|V_t|=1\,\text{V}$, $\mu_n C_{ox}=50\,\mu\text{A/V}^2$, $L=1\,\mu\text{m}$, $W=10\,\mu\text{m}$. Find $V$ and $I$. If $Q_3$ and $Q_4$ are made to have $W=100\,\mu\text{m}$, find $V$ and $I$ in that case.
 \begin{center}
@@ -3062,6 +3132,7 @@
 \end{center}
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \item The NMOS and PMOS transistors in the circuit shown have $k_n(W/L)=k_p(W/L)=1\,\text{mA/V}^2$ and $V_{tn}=-V_{tp}=1\,\text{V}$. Assume $\lambda=0$. Find $i_{DN}$, $i_{DP}$, and $v_o$ for $V_i=+2.5\,\text{V}$ and $V_i=-2.5\,\text{V}$.
 
 \begin{center}
@@ -3115,6 +3186,7 @@
 
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \item The NMOS transistors in the circuit have $V_t=1\,\text{V}$, $\mu_n C_{ox}=120\,\mu\text{A/V}^2$, $L_1=L_2=1\,\mu\text{m}$. Find $W_1$, $W_2$, and $R$, where $W_1$ and $W_2$ are the gate widths of Q1 and Q2 respectively.
 \begin{center}
     \begin{circuitikz}[thick,scale=1.2, transform shape]
@@ -3166,9 +3238,8 @@
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \item For the circuit shown, find the value of $V_0$. Both NMOS transistors have $V_t=1\,\text{V}$, $\lambda=0$, and $\mu_n C_{ox}(W/L)=1\,\text{mA/V}^2$. Supply voltage is 5\,V.
-
-
 \begin{center}
   \begin{circuitikz}[thick,scale=1.2, transform shape]
           \ctikzset{tripoles/mos style/arrows}
@@ -3217,6 +3288,7 @@
 \end{center}
 
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item The NMOS transistors in the circuit have $V_t=1\,\text{V}$, $\mu_n C_{ox}=120\,\mu\text{A/V}^2$, and $L_1=L_2=L_3=1\,\mu\text{m}$. Find the required values of gate width for each of Q1, Q2, and Q3 to obtain the voltage and current values indicated in the figure.
 
@@ -3286,8 +3358,8 @@
 
     \end{circuitikz}
 \end{center}
-
 \mk{14} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \item Determine all node voltages and drain current of the circuit. Assume $V_t=1\,\text{V}$, $K_n' W/L = 1\,\text{mA/V}^2$, $\lambda=0$, $V_{DD}=+10\,\text{V}$, $R_D=6\,\text{k}\Omega$.
 
@@ -3327,10 +3399,7 @@
   
 \end{circuitikz}
 \end{center}
-
-
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2011--12}
-
 
 
 \end{enumerate}
@@ -3339,7 +3408,9 @@
 \subtopic{cA}{Multi-stage MOSFET Circuit Design}
 \label{sub:s3-multistage}
 
-\begin{enumerate}\item For the circuit shown with transistor parameters $K_{n1}=500\,\mu\text{A/V}^2$, $K_{n2}=200\,\mu\text{A/V}^2$, $V_{T1}=V_{T2}=1.2\,\text{V}$, design the circuit such that $I_{D1}=0.1\,\text{mA}$, $I_{D2}=0.3\,\text{mA}$, $V_{DS1}=V_{DS2}=5\,\text{V}$.
+\begin{enumerate}
+
+\item For the circuit shown with transistor parameters $K_{n1}=500\,\mu\text{A/V}^2$, $K_{n2}=200\,\mu\text{A/V}^2$, $V_{T1}=V_{T2}=1.2\,\text{V}$, design the circuit such that $I_{D1}=0.1\,\text{mA}$, $I_{D2}=0.3\,\text{mA}$, $V_{DS1}=V_{DS2}=5\,\text{V}$.
 \begin{center}
   
     \begin{circuitikz}[thick,scale=1.2, transform shape]
@@ -3407,6 +3478,7 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -3418,9 +3490,11 @@
 \item Derive the condition of small signal operation considering a simple CS nMOS amplifier circuit. Find the expression of MOSFET transconductance $g_m$ from there as well.
 \mk{8} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
     
 \item How can the MOSFET transconductance $g_m$ be varied with the design parameters $W/L$ ratio and overdrive voltage $V_{ov}$? Explain.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
 
 \end{enumerate}
 
@@ -3428,8 +3502,11 @@
 \subtopic{cA}{Voltage Transfer Characteristics}
 \label{sub:s3-vtc}
 
-\begin{enumerate}\item Draw the voltage transfer characteristic of a MOSFET. In which part of this graph is a MOSFET used as an amplifier, and why? What are the benefits and drawbacks of increasing bias voltage?
+\begin{enumerate}
+    
+\item Draw the voltage transfer characteristic of a MOSFET. In which part of this graph is a MOSFET used as an amplifier, and why? What are the benefits and drawbacks of increasing bias voltage?
 \mk{19} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -3437,8 +3514,10 @@
 \subtopic{cA}{MOSFET as Small-Signal Amplifier}
 \label{sub:s3-ssa}
 
-\begin{enumerate}\item Briefly explain the operation of a MOSFET as a small-signal amplifier and deduce its VTC from the $I_D$--$V_{DS}$ graph.
+\begin{enumerate}
+\item Briefly explain the operation of a MOSFET as a small-signal amplifier and deduce its VTC from the $I_D$--$V_{DS}$ graph.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \end{enumerate}
 
@@ -3446,12 +3525,13 @@
 \subtopic{cA}{Biasing Stability}
 \label{sub:s3-biasing}
 
-\begin{enumerate}\item What is the reason for biasing a MOSFET? Write a short note on the biasing technique of a discrete MOSFET using a fixed voltage at the gate and a resistance $R_s$ in the source.
+\begin{enumerate}
+    
+\item What is the reason for biasing a MOSFET? Write a short note on the biasing technique of a discrete MOSFET using a fixed voltage at the gate and a resistance $R_s$ in the source.
 \mk{11} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item Design the circuit shown to obtain a current $I_D = 80\,\mu\text{A}$. Given: $V_t=0.6\,\text{V}$, $\mu_n C_{ox}=200\,\mu\text{A/V}^2$, $L=0.8\,\mu\text{m}$, $W=4\,\mu\text{m}$, and $V_A=50\,\text{V}$.
-
-
 \begin{center}
       \begin{circuitikz}[thick,scale=1.5, transform shape]
           \ctikzset{tripoles/mos style/arrows}
@@ -3490,8 +3570,10 @@
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
+
 \item Explain graphically the benefit of using a resistance at the MOSFET source terminal. How does it counteract the problem of unpredictable variation in process parameters such as $V_t$, $C_{ox}$, $\mu_n$?
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -3499,7 +3581,9 @@
 \subtopic{cA}{CMOS Logic Implementation}
 \label{sub:s3-cmos}
 
-\begin{enumerate}\item The diagram shows a Boolean function $Y$ being implemented as a combinational circuit. Design a CMOS transistor-level implementation of the Boolean function using the minimum number of transistors.
+\begin{enumerate}
+    
+\item The diagram shows a Boolean function $Y$ being implemented as a combinational circuit. Design a CMOS transistor-level implementation of the Boolean function using the minimum number of transistors.
 \begin{center}
     
     \begin{circuitikz}
@@ -3553,6 +3637,7 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2020--21}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -3560,7 +3645,8 @@
 \label{sub:s3-sizing}
 
 \begin{enumerate}
-    \item For the logic circuit shown, choose transistor widths to achieve equal rise and fall resistance as a unit inverter. Assume $\mu_n = 3\mu_p$. What is the minimum and maximum propagation delay in the circuit?
+
+\item For the logic circuit shown, choose transistor widths to achieve equal rise and fall resistance as a unit inverter. Assume $\mu_n = 3\mu_p$. What is the minimum and maximum propagation delay in the circuit?
 \begin{center}
     
     \begin{tikzpicture}[scale=1.1, transform shape, thick]
@@ -3650,6 +3736,7 @@
 \end{center}
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2020--21}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -3700,6 +3787,7 @@
 \end{center}
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2020--21}
 
+
 \end{enumerate}
 
 
@@ -3721,7 +3809,9 @@
 \subtopic{cB}{Clipping Circuits --- Waveform \& Transfer Characteristics}
 \label{sub:s4-clipping}
 
-\begin{enumerate}\item For the circuit given, plot $v_0$ vs time. The input $v_1$ is a sine wave with 5\,V amplitude and 1\,kHz frequency. Assume 0.7\,V voltage drop across diodes in forward bias.
+\begin{enumerate}
+    
+\item For the circuit given, plot $v_0$ vs time. The input $v_1$ is a sine wave with 5\,V amplitude and 1\,kHz frequency. Assume 0.7\,V voltage drop across diodes in forward bias.
 \begin{center}
     
     \begin{circuitikz}[thick]
@@ -3766,8 +3856,39 @@
 \end{center}
 \mk{14} \yr{EEE 263 | L-2/T-1 | 2022--23}
 
+
 \item Design a limiter circuit using only diodes and 10\,k$\Omega$ resistors to provide an output signal limited to the range $\pm2.1\,\text{V}$. Assume each diode has a 0.7\,V drop when conducting.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
+
+\item For a sinusoidal input, draw the output waveshape for the circuit shown.
+\begin{center}
+    \begin{circuitikz}[thick,american, scale=1.2]
+    % 1. Top wire with Input terminal, Resistor R, and Output terminal
+    \draw (0,2.5) node[below=2pt] {$+$} 
+          to[R, l_=$R$, o-*] (3,2.5) 
+          to[short, -o] (5,2.5) node[below=2pt] {$+$};
+          
+    % 2. Bottom reference wire with Input and Output terminals
+    \draw (0,0) node[above=2pt] {$-$} 
+          to[short, o-*] (3,0) 
+          to[short, -o] (5,0) node[above=2pt] {$-$};
+          
+    % 3. Input and Output Voltage Labels
+    \node[font=\large] at (0.5, 1.25) {$V_i$};
+    \node[font=\large] at (4.5, 1.25) {$V_o$};
+    
+    % 4. Shunt Branch: Battery (V) and Diode pointing upwards
+    % Drawing from bottom to top automatically sets up the correct polarities
+    \draw (3,1.25) to[battery2, l_=$V$] (3,0);
+        \draw (3,1.25)  to[D] (3,2.5);
+          
+    % 5. Figure Caption
+
+\end{circuitikz}
+\end{center}
+\mk{10} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \item Design a parallel-based clipper that will yield the voltage transfer function shown in the figure. Assume 0.7\,V as diode cut-in voltage.
 \begin{center}
@@ -3813,6 +3934,7 @@
     \end{tikzpicture}
 \end{center}
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \item For the circuit shown in Figure ,  find and sketch the voltage transfer characteristics with proper labelling. Utilize the constant-voltage drop model ($0.7\text{ V}$) for each conduction diode.  
 
@@ -3876,7 +3998,6 @@
 \mk{13} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
 
-
 \item For the circuit shown, neatly draw the output ($v_o$) waveform corresponding to the input ($v_{in}$). Here, $v_{in}=10\sin(200\pi t)$ and diodes are non-ideal.
 \begin{center}
   
@@ -3932,6 +4053,93 @@
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
+\item Assuming that the diodes are ideal, find the output voltage $V_o$ for the circuit given. Draw the wave shape clearly.
+\begin{center}
+  
+    \begin{circuitikz}[thick,scale=1.1]
+        
+        % ===================================================
+        % 1. Left Side: Input Voltage Waveform (Graph)
+        % ===================================================
+        \coordinate (Origin) at (0,0);
+        
+        % Y-axis & X-axis
+        \draw[->, >=stealth] (Origin |- 0,-2) -- (Origin |- 0,2) node[above] {$v_{in}(\mathrm{Volt})$};
+        \draw[->, >=stealth] (Origin) -- (5,0) node[right] {$t(\mathrm{ms})$};
+        
+        % Y-axis Labels (+10 and -10)
+        \draw (-0.1, 1.5) -- (0.1, 1.5) node[left=0.2cm] {$+10$};
+        \draw (-0.1, -1.5) -- (0.1, -1.5) node[left=0.2cm] {$-10$};
+        
+        % Dashed guidelines for peaks
+        \draw[dashed] (0, 1.5) -- (1.25, 1.5);
+        \draw[dashed] (0, -1.5) -- (3.75, -1.5);
+        
+        % Triangular Waveform
+        \draw[thick] (0,0) -- (1.25, 1.5) 
+                     -- (2.5, 0) node[below, yshift=-0.1cm] {$5$} 
+                     -- (3.75, -1.5) 
+                     -- (5, 0) node[below] {$10$};
+                     
+        % Label Vin near the axis end as in the image
+        
+        
+    \end{circuitikz}
+\end{center}
+
+\begin{center}
+    
+    \begin{circuitikz}
+        % ===================================================
+        % 2. Right Side: Circuit Diagram
+        % ===================================================
+        % Shift the starting point of the circuit to the right to avoid overlap
+        \coordinate (C_offset) at (8.5, 0); 
+        
+        % AC Voltage Source
+        \draw (C_offset |- 0,-1.5) to[sV, l={$v_{in}$}] (C_offset |- 0,1.5) coordinate (TopLeft);
+        
+        % Resistor R at the top
+        \draw (TopLeft) to[R, l={$R=10\Omega$}] ++(2.5, 0) coordinate (Node1);
+        
+        % Branch 1: D1 (pointing down) and 6V Battery (positive/long line UP)
+        % l_ moves the labels to the left side of this branch
+        \draw (Node1) to[D, l_={$D1$}] ++(0, -1.5) 
+                      to[battery1, l_={$6\mathrm{V}$}] ++(0, -1.5) coordinate (Bot1);
+        
+        % Branch 2: D2 (pointing UP) and 4V Battery (negative/short line UP)
+        % Increased distance between branches (from 1.5 to 2.0)
+        \draw (Node1) -- ++(2.0, 0) coordinate (Node2);
+        \coordinate (Bot2) at (Node2 |- Bot1);
+        
+        % Drawn from bottom to top. l_ moves labels to the right side of this branch
+        \draw (Bot2) to[battery1, l_={$4\mathrm{V}$}] ++(0, 1.5) 
+                     to[D, l_={$D2$}] (Node2); 
+        
+        % Branch 3: Series Capacitor C
+        \draw (Node2) to[C, l={$C$}] ++(2, 0) coordinate (Node3);
+        
+        % Branch 4: D3 (pointing UP)
+        \coordinate (Bot3) at (Node3 |- Bot1);
+        \draw (Bot3) to[D, l_={$D3$}] (Node3);
+        
+        % Output Terminals (Vo) 
+        % Extended the wire to 1.5 to move Vo further right
+        \draw (Node3) to[short, -o] ++(1.5, 0) coordinate (OutTop);
+        \draw (Bot3) to[short, -o] ++(1.5, 0) coordinate (OutBot);
+        
+        % Output Voltage Label (+ and - with Vo)
+        \draw (OutTop) to[open, v^={$V_o$}] (OutBot);
+        
+        % Connect all bottom ground/return wires
+        \draw (C_offset |- 0,-1.5) -- (OutBot);
+        
+    \end{circuitikz}
+\end{center}
+\mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
+
 \item Sketch the output waveform and transfer characteristics for the circuit shown. Assume the diode is ideal and $V_s$ is a sinusoid with 5\,V peak amplitude and frequency 5\,kHz.
 
 \begin{center}
@@ -3966,15 +4174,15 @@
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
 
-
-
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cB}{Clamping Circuits}
 \label{sub:s4-clamping}
 
-\begin{enumerate}\item Design a clamper circuit to perform the function indicated in the figure (input $v_i$, output $v_0$). Assume ideal diodes.
+\begin{enumerate}
+    
+\item Design a clamper circuit to perform the function indicated in the figure (input $v_i$, output $v_0$). Assume ideal diodes.
 \begin{center}
         \begin{tikzpicture}[scale=1.0, >=stealth]
         
@@ -4174,6 +4382,7 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item Draw the output wave shape ($v_0$) and also the $V_L$--$V_o$ graph for the circuit shown. Assume a constant 0.7\,V forward voltage drop across the diode.
 \begin{center}
   
@@ -4213,12 +4422,10 @@
 
     \end{circuitikz}
 \end{center}
-
-
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
-\item Design a clamper circuit to perform the function indicated in the figure using an ideal diode.
 
+\item Design a clamper circuit to perform the function indicated in the figure using an ideal diode.
 \begin{center}
 \begin{tikzpicture}[thick,scale=1.2]
 
@@ -4258,9 +4465,7 @@
 
 \end{tikzpicture}
 \end{center}
-
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2011--12}
-
 
 
 \end{enumerate}
@@ -4269,8 +4474,11 @@
 \subtopic{cB}{Switching Circuits --- Logic Gates using BJTs}
 \label{sub:s4-switching}
 
-\begin{enumerate}\item Make a NAND and a NOR gate using BJTs.
+\begin{enumerate}
+
+\item Make a NAND and a NOR gate using BJTs.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -4278,8 +4486,11 @@
 \subtopic{cB}{BJT Inverter Analysis}
 \label{sub:s4-inverter}
 
-\begin{enumerate}\item 
-  \begin{enumerate}\item Modify both the $V_o$--$V_{in}$ and $I_c$--$V_{in}$ graphs if supply voltage is decreased from 5\,V to 2.5\,V ($R_c \approx 480\,\Omega$).
+\begin{enumerate}
+    
+\item 
+\begin{enumerate}
+\item Modify both the $V_o$--$V_{in}$ and $I_c$--$V_{in}$ graphs if supply voltage is decreased from 5\,V to 2.5\,V ($R_c \approx 480\,\Omega$).
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
 \begin{center}
@@ -4353,9 +4564,7 @@
     \end{tikzpicture}
 \end{center}
 
-
 \item The figure shows an inverter gate built by an npn BJT and its $V_o$--$V_{in}$ characteristics. Copy the $V_o$--$V_{in}$ graph to your answer script exactly to scale and then draw the collector current ($I_c$) vs.\ $V_{in}$ over the same graph. Mention the co-ordinates of the bending points of the $I_c$--$V_{in}$ graph as shown for $V_o$--$V_{in}$.
-
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
 \item Modify both the $V_o$--$V_{in}$ and $I_c$--$V_{in}$ graphs if $R_c$ is infinity.
@@ -4369,13 +4578,16 @@
 
 \end{enumerate}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cB}{CMOS Inverter Analysis}
 \label{sub:s4-cmos}
 
-\begin{enumerate}\item The inverter circuit with CMOS shown has $k_n'(W_n/L_n) = k_p'(W_p/L_p) = 1\,\text{mA/V}^2$ and $V_{tn}' = -V_{tp}' = 1\,\text{V}$. Find (i) $i_{DN}$, (ii) $i_{DP}$, (iii) $V_o$ for $V_{in} = -2.5\,\text{V}$.
+\begin{enumerate}
+    
+\item The inverter circuit with CMOS shown has $k_n'(W_n/L_n) = k_p'(W_p/L_p) = 1\,\text{mA/V}^2$ and $V_{tn}' = -V_{tp}' = 1\,\text{V}$. Find (i) $i_{DN}$, (ii) $i_{DP}$, (iii) $V_o$ for $V_{in} = -2.5\,\text{V}$.
 \begin{center}
    \begin{circuitikz}[thick,scale=1.2, transform shape]
                               \ctikzset{tripoles/mos style/arrows}
@@ -4413,6 +4625,7 @@
     \end{circuitikz}
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2015--16}
+
 
 \item For the CMOS inverter, draw $V_o$ for the given input $V_{in}$ waveform.
 
@@ -4475,30 +4688,34 @@
 
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cB}{Digital vs.\ Analog Systems}
 \label{sub:s4-digital}
 
-\begin{enumerate}\item Why is digital processing of data advantageous over analog processing?
+\begin{enumerate}
+    
+\item Why is digital processing of data advantageous over analog processing?
 \mk{6} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item Why do we need to miniaturize a transistor as much as possible? If you continue to miniaturize the transistor (switch), what problems may surface?
 \mk{5} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
+
 \item Write a script in C language that takes a sinusoidal input and provides a full-wave rectified output.
 \mk{5} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item How does a computer program rectify the sinusoidal input mentioned above? Is there any diode inside the processor? If not, what makes that act of rectification possible?
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
+
 \end{enumerate}
 
 
-%% ══════════════════════════════════════════════════════════════════════
-%%  PART III
-%% ══════════════════════════════════════════════════════════════════════
 \secdivider{Part III --- Amplifiers}{BJT and MOSFET amplifier configurations, small-signal analysis, gain derivation}{cC}
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -4514,7 +4731,9 @@
 \subtopic{cC}{Common Emitter / Trans-conductance Amplifier}
 \label{sub:s5-ce}
 
-\begin{enumerate}\item The transistor shown is biased with a constant current $I=1\,\text{mA}$ and has $\beta=100$ and $V_A=100\,\text{V}$. (i) Find the DC voltages at the Base, Emitter, and Collector terminals. (ii) Find the small-signal equivalent circuit parameters $r_o$, $r_\pi$, $g_m$ and draw the hybrid-$\pi$ model. (iii) If the Z terminal is connected to ground, X is connected to $v_{sig}$ through $R_{sig}=2\,\text{k}\Omega$, and Y is connected to $R_L=8\,\text{k}\Omega$, find the overall voltage gain $v_y/v_{sig}$.
+\begin{enumerate}
+    
+\item The transistor shown is biased with a constant current $I=1\,\text{mA}$ and has $\beta=100$ and $V_A=100\,\text{V}$. (i) Find the DC voltages at the Base, Emitter, and Collector terminals. (ii) Find the small-signal equivalent circuit parameters $r_o$, $r_\pi$, $g_m$ and draw the hybrid-$\pi$ model. (iii) If the Z terminal is connected to ground, X is connected to $v_{sig}$ through $R_{sig}=2\,\text{k}\Omega$, and Y is connected to $R_L=8\,\text{k}\Omega$, find the overall voltage gain $v_y/v_{sig}$.
 \begin{center}
 \begin{circuitikz}[american, line width=0.8pt]
 
@@ -4565,6 +4784,7 @@
 \end{circuitikz}
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item Determine the voltage gain $v_0/v_i$ of the transistor amplifier shown in the figure. Assume $\beta=100$.
 \begin{center}
@@ -4621,8 +4841,10 @@
 \end{center}
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item A CE amplifier utilizes a BJT with $\beta=100$ and $V_A=100\,\text{V}$, is biased at $I_C=1\,\text{mA}$ and has a collector resistance $R_C=5\,\text{k}\Omega$. Find $R_{in}$, $R_o$, and $A_{vo}$. If the amplifier is fed with a signal source having a resistance of 5\,k$\Omega$ and a load resistance $R_L=5\,\text{k}\Omega$ is connected to the output terminal, find the resulting $A_v$ and $G_v$. If $v_\pi$ is to be limited to 5\,mV, what are the corresponding $v_{sig}$ and $v_o$ with the load connected?
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \item For the circuit shown, determine small-signal parameters $g_m$, $r_\pi$, and $r_e$ for both transistors, the overall small-signal voltage gain $A_v = v_0/v_s$, input resistance $R_{in}$, and output resistance $R_{out}$. Here $\beta=120$.
 \begin{center}
@@ -4725,8 +4947,8 @@
 \end{center}
 \mk{36} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
-\item For the circuit shown, determine $R_{in}$, $R_{out}$, $V_o/V_i$, and $i_o/i_i$. The BJT is biased with $I=5\,\text{mA}$ and has $\beta=100$ and $V_A=100\,\text{V}$.
 
+\item For the circuit shown, determine $R_{in}$, $R_{out}$, $V_o/V_i$, and $i_o/i_i$. The BJT is biased with $I=5\,\text{mA}$ and has $\beta=100$ and $V_A=100\,\text{V}$.
 \begin{center}
  
   \begin{circuitikz}[thick,scale=1.2, transform shape]
@@ -4781,6 +5003,7 @@
 
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \item Draw the small signal circuit diagram of the CE circuit shown. Why is the circuit called a ``Small Signal'' circuit? Determine the values of input resistance $R_{in}$, output resistance $R_{out}$, and voltage gain $A_v$. If $v_{sig} \approx 2\,\text{mV}$, find the value of $V_{out}$.
 
 \begin{center}
@@ -4834,6 +5057,7 @@
 \end{center}
 
 \mk{36} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item The figure shows the basic structure of a trans-conductance amplifier to be implemented by a BJT. Given $AV_{in}=I_c R_{out}$ along with $R_{sig}\approx 0$ and the load ($R_L$) can be much greater than $R_{out}$; which BJT configuration (common emitter, common base, or common collector) will you choose for best performance? Explain why. Comment on its gain and loading effect.
 
@@ -4920,10 +5144,10 @@
 
 \end{circuitikz}
 \end{center}
-
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
-\item Consider the emitter degenerated CE circuit of Fig. for Q. No. 8(b).
+
+\item Consider the emitter degenerated CE circuit of Figure shown below
     \begin{enumerate}
         \item[(i)] Find the DC current $I_C$ and DC voltage $V_C$, $V_B$ and $V_E$. Assume $\beta = 100$, $V_{BE} = 0.7\text{ V}$.
         \item[(ii)] What are the allowable signal swings at the collector in both directions?
@@ -4932,8 +5156,6 @@
         \item[(v)] Find the value of $R_e$ that results in $R_{\text{in}}$ equal to four times the source resistance $R_{\text{sig}}$.
         \item[(vi)] For this value of $R_e$, find $A_{vo}$, $R_{\text{out}}$, $A_v$, $G_v$ and $A_{is}$ of the amplifier.
     \end{enumerate}
-
-
 \begin{center}
 \begin{circuitikz}[thick,american, thick, scale=1.1, transform shape]
 
@@ -5008,9 +5230,8 @@
 
 \end{circuitikz}
 \end{center}
-
-
 \mk{36} \yr{EEE 263 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -5018,12 +5239,15 @@
 \subtopic{cC}{Common Base Amplifier}
 \label{sub:s5-cb}
 
-\begin{enumerate}\item For a Common Base Amplifier, using the appropriate small-signal equivalent model, derive the expressions of input resistance, output resistance, open-circuit voltage gain, and overall voltage gain.
+\begin{enumerate}
+\item For a Common Base Amplifier, using the appropriate small-signal equivalent model, derive the expressions of input resistance, output resistance, open-circuit voltage gain, and overall voltage gain.
 \mk{14} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────\n\subtopic{cC}{Bootstrapped Follower}
+\subtopic{cC}{Bootstrapped Follower}
 \label{sub:s5-bootstrap}
 
 \begin{enumerate}
@@ -5090,15 +5314,19 @@
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2024--25}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────\n\subtopic{cC}{Common Collector (Emitter Follower)}
+\subtopic{cC}{Common Collector (Emitter Follower)}
+
 \label{sub:s5-cc}
 
 \begin{enumerate}
 
 \item For a common collector amplifier, derive the expressions for $R_i$, $R_o$, $A_v$, and $A_i$ using the T model with early effect for the transistor. Where is the common collector amplifier used?
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2020--21}
+
 
 \item For the common collector circuit shown, derive the expressions for $A_v$, $A_i$, $R_i$, and $R_o$ using the T model for the transistor.
 \begin{center}
@@ -5140,14 +5368,18 @@
 \end{center}
 \mk{23.67} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \item The small-signal voltage gain $A_v$ of a BJT CE amplifier is $-I_C R_C / V_T$ without the Early effect. Show that if the Early effect is considered using $i_C = I_S e^{v_{BE}/V_T}(1 + v_{CE}/V_A)$, the gain becomes $A_v = -\frac{I_C R_C / V_T}{1 + I_C R_C/(V_A + V_{CE})} = -\frac{(V_{CC}-V_{CE})/V_T}{1 + (V_{CC}-V_{CE})/(V_A+V_{CE})}$. For $V_{CC}=5\,\text{V}$, $V_{CE}=2.5\,\text{V}$, $V_A=100\,\text{V}$, calculate the gain with and without the Early effect.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item Derive the expression of $R_i$, $R_o$, $A_v$, and $G_v$ for a common-emitter amplifier with emitter resistance $R_e$ using the T model.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2021--22}
 
+
 \item For a BJT common-emitter amplifier with resistance in the emitter, derive the expressions for input impedance, output impedance, voltage gain, and current gain. What are the advantages and disadvantages of adding resistance in the emitter?
 \mk{30} \yr{EEE 263 | L-2/T-1 | Jan--2021}
+
 
 \end{enumerate}
 
@@ -5192,13 +5424,15 @@
 \end{center}
 \mk{26.67} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cC}{BJT Input-Output Characteristics}
 \label{sub:s5-io}
 
-\begin{enumerate}\item For the circuit shown, calculate (i) DC bias points, (ii) small-signal voltage gain, (iii) maximum allowable input AC voltage.
+\begin{enumerate}
+\item For the circuit shown, calculate (i) DC bias points, (ii) small-signal voltage gain, (iii) maximum allowable input AC voltage.
 \begin{center}
       \begin{circuitikz}[thick,scale=1.2, transform shape]
         
@@ -5229,6 +5463,7 @@
     \end{circuitikz}
 \end{center}
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2015--16}
+
 
 \item The input-output characteristics of a BJT circuit are given. What will happen (i) if $V_{cc}$ is increased, (ii) if $R_c$ is increased? Explain with the characteristic curve.
 \begin{center}
@@ -5287,6 +5522,7 @@
 \end{center}
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \end{enumerate}
 
 
@@ -5304,8 +5540,10 @@
 \subtopic{cC}{Common Gate Amplifier}
 \label{sub:s6-cg}
 
-\begin{enumerate}\item Derive the expression for input resistance, output resistance, and overall voltage gain of a common-gate (CG) amplifier.
+\begin{enumerate}
+\item Derive the expression for input resistance, output resistance, and overall voltage gain of a common-gate (CG) amplifier.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -5407,13 +5645,13 @@
 \end{center}
 \mk{35} \yr{EEE 263 | L-2/T-1 | 2024--25}
 
+
 \item Explain why adding a source resistor $R_S$ to a Common-Source MOSFET amplifier improves its bias stability compared to directly grounding the source terminal. Detail how $R_S$ actively compensates for manufacturing variations in the threshold voltage $V_t$ and transconductance parameter $k_n$.
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2024--25}
 
-    
+
 \item A CS amplifier is connected to a source $v_{sig}$ with resistance $R_{sig}$ and it utilizes a MOSFET with $\mu_n C_{ox} = 400 \mu\text{A/V}^2$, $W/L = 10$, and $V_A = 10\text{V}$. It is biased at $I_D = 0.2\text{ mA}$ and uses $R_D = 6\text{ k}\Omega$. Find $R_{in}$, $A_{vo}$, and $R_o$. If a load resistance of $10\text{ k}\Omega$ is connected to the output, what will be the overall voltage gain $G_v$? If a 0.2-V peak sine-wave signal is required at the output, what must the peak amplitude of $v_{sig}$ be?
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
-
 
 
 \item In the circuit shown, the NMOS transistor has $|V_t|=0.9\,\text{V}$ and $V_A=50\,\text{V}$ and is operated with $V_D=2\,\text{V}$. What is the voltage gain $v_0/v_i$? What do $V_D$ and the gain become for $I=1\,\text{mA}$?
@@ -5478,8 +5716,10 @@
 \end{center}
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2022--23}
 
+
 \item A CS amplifier utilizes a MOSFET biased at $I_D=0.25\,\text{mA}$ with $V_{ov}=0.25\,\text{V}$ and $R_D=20\,\text{k}\Omega$. The amplifier is fed with a signal source having $R_{sig}=100\,\text{k}\Omega$, and a 20-k$\Omega$ load is connected to the output. Find $R_{in}$, $A_{vo}$, $R_o$, $A_v$, and $G_v$.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \item Determine the overall small-signal voltage gain of the common source amplifier shown. The transistor parameters are: $V_t=0.4\,\text{V}$, $k_n=0.5\,\text{mA/V}^2$, $\lambda=0.02\,\text{V}^{-1}$.
 \begin{center}
@@ -5656,6 +5896,7 @@
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item For the circuit shown:
 \begin{enumerate}
   \item Calculate DC bias point ($I_D$ and $V_D$).
@@ -5708,8 +5949,10 @@ The transistor has $V_t=1.5\,\text{V}$, $k_n'(W/L)=0.25\,\text{mA/V}^2$, and $V_
 \end{center}
 \mk{31} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item For the CS amplifier, derive the expressions for input resistance ($R_{in}$), output resistance ($R_{out}$), open-circuit voltage gain ($A_{vo}$), and overall voltage gain ($G_v$).
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \item A common source amplifier circuit is shown in the figure.
 \begin{enumerate}
@@ -5718,8 +5961,6 @@ The transistor has $V_t=1.5\,\text{V}$, $k_n'(W/L)=0.25\,\text{mA/V}^2$, and $V_
   \item Find $g_m$, $R_{in}$, $R_{out}$, $A_v$, and $G_v$.
 \end{enumerate}
 Assume $V_t=1\,\text{V}$, $K_n' W/L=2\,\text{mA/V}^2$, $V_A=100\,\text{V}$.
-
-
 \begin{center}
 \begin{circuitikz}[thick,american, thick, scale=1.1, transform shape]
                       \ctikzset{tripoles/mos style/arrows}
@@ -5797,8 +6038,6 @@ Assume $V_t=1\,\text{V}$, $K_n' W/L=2\,\text{mA/V}^2$, $V_A=100\,\text{V}$.
 
 \end{circuitikz}
 \end{center}
-
-
 \mk{46} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
 
@@ -5825,19 +6064,22 @@ Assume $V_t=1\,\text{V}$, $K_n' W/L=2\,\text{mA/V}^2$, $V_A=100\,\text{V}$.
 \subtopic{cE}{Ideal Op-Amp Characteristics}
 \label{sub:s7-ideal}
 
-\begin{enumerate}\item What are the characteristics of an ideal op-amp?
-\mk{5} \yr{EEE 263 | L-2/T-1 | 2013--14}
+\begin{enumerate}
+    
+\item What are the characteristics of an ideal op-amp?
+\mk{5} \yr{EEE 263 | L-2/T-1 | 2013--14, 2011--12}
+
 
 \item Explain graphically why in a closed-loop feedback circuit of an Op-Amp the differential voltage $E_d$ is taken as zero.
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
+
 \item Derive the closed-loop gain of an inverting Op-Amp amplifier as a function of its open-loop gain, provided that the open-loop gain is not infinity.
 \mk{13} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
-\item Write down the properties of an ideal Op-Amp.
-\mk{10} \yr{EEE 263 | L-2/T-1 | 2011--12}
 
 \end{enumerate}
+
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Mathematical Operations}
@@ -5894,6 +6136,7 @@ Assume $V_t=1\,\text{V}$, $K_n' W/L=2\,\text{mA/V}^2$, $V_A=100\,\text{V}$.
 
 \end{center}
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2023--24}
+
 
 \item Suppose, you have three voltage sources: $V_1 = \sin(40t)$, $V_2 = \sin(100t)$, $V_3 = 1\text{V}$. Design a circuit using op-amps that will generate the following output:
 $$V_{out} = 5\sin(40t) - 4\cos(100t) + 4$$
@@ -5979,6 +6222,7 @@ node[left] {$v_2$};
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \item For the circuit shown, find $V_0$. The MOSFET is in saturation with $k_n'(W/L)=1\,\text{mA/V}^2$ and $V_t=0.7\,\text{V}$. The op-amp is ideal.
 \begin{center}
   
@@ -6018,12 +6262,10 @@ node[left] {$v_2$};
           -- (MOS.drain) 
           node[right, pos=0.5] {D};
           
-    % 9. Figure Caption/Label
-    \node[below] at (0.8,-1.8) {Fig for Q. 5(a)};
-
 \end{circuitikz}
 \end{center}
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \item Consider the circuit and input voltage waveform shown in the figure. (i) If $R=10\,\text{k}\Omega$, $C=0.1\,\mu\text{F}$, and the Op-Amp is ideal, sketch the output voltage waveform to scale. (ii) If $R=10\,\text{k}\Omega$, what value of $C$ is required for the peak-to-peak output amplitude to be 2\,V?
 \begin{center}
@@ -6100,6 +6342,7 @@ node[left] {$v_2$};
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item For the circuit shown, (i) determine output voltage $V_{out}$ in terms of input voltage $V_{in}$; (ii) using this circuit perform the following operation: $V_{out} = 3V_{in}^2$. Use additional Op-Amps and a DC voltage source if necessary. Specify values of all the parameters used. (Threshold voltage $V_{TH}=0.5\,\text{V}$ for the MOSFET M1.)
 \begin{center}
   
@@ -6142,6 +6385,7 @@ node[left] {$v_2$};
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item What is the value of the output voltage $V_o$ for the circuit shown?
 \begin{center}
       \begin{circuitikz}[thick,scale=1.2, transform shape]
@@ -6178,6 +6422,7 @@ node[left] {$v_2$};
 \end{center}
 \mk{16.67} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \item Design an Op-Amp circuit that performs the following mathematical operation:
 \[
 v_{out} = 5v_1 - 2\frac{dv_2}{dt} + 6\int v_3\,dt
@@ -6185,12 +6430,14 @@ v_{out} = 5v_1 - 2\frac{dv_2}{dt} + 6\int v_3\,dt
 where $v_1$, $v_2$, and $v_3$ are three input signals and $v_{out}$ is the overall output signal.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2012--13}
 
+
 \item Propose a circuit using Op-Amp which will produce the following as output:
 \[
 V_{out} = -4V_1 + 2V_2 + 7\frac{dV_1}{dt} - 8\int V_2\,dt
 \]
 where $V_1$ and $V_2$ are two different input sources.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -6241,11 +6488,15 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{center}
 \mk{17} \yr{EEE 263 | L-2/T-1 | Jan--2021}    
     
-    \item Show that a proper connection of a diode, a resistor, and an op-amp can perform the exponential function. Mention the assumptions, if any.
-\mk{Unspecified} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
+
+\item Show that a proper connection of a diode, a resistor, and an op-amp can perform the exponential function. Mention the assumptions, if any.
+\yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item Draw the circuit diagram of an inverting logarithmic amplifier and derive the expression of its output voltage.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -6253,14 +6504,19 @@ where $V_1$ and $V_2$ are two different input sources.
 \subtopic{cE}{Difference Amplifier}
 \label{sub:s7-diff}
 
-\begin{enumerate}\item Design a subtractor circuit using op-amps so that the output voltage is $v_0 = v_1 - v_2$.
+\begin{enumerate}
+    
+\item Design a subtractor circuit using op-amps so that the output voltage is $v_0 = v_1 - v_2$.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item Design a circuit using a single Op-Amp that performs the following operation: $V_o = 3(V_1 - V_2)$ where $V_1$ and $V_2$ are input signals (AC or DC). Specify values of all resistors used in the design.
 \mk{14} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item Implement $z = 5V_1 - 3V_2$ using only one op-amp, where $V_1$ and $V_2$ are input signals.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -6297,6 +6553,7 @@ where $V_1$ and $V_2$ are two different input sources.
 
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
     
 \item Determine the op-amp circuit that generates the transfer characteristics shown in the figure.
 \begin{center}
@@ -6331,11 +6588,14 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{center}
 \mk{11} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \item Design a Schmitt trigger that triggers from $+16\,\text{V}$ to $-16\,\text{V}$ at an input voltage of 12\,V and triggers from $-16\,\text{V}$ to $+16\,\text{V}$ at an input voltage of 8\,V. Specify all the values of resistors and reference DC voltage.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \item Draw a zero-crossing detector circuit using Op-Amp and briefly describe its operation.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2012--13}
+
 
 \end{enumerate}
 
@@ -6343,7 +6603,8 @@ where $V_1$ and $V_2$ are two different input sources.
 \subtopic{cE}{Waveform Generation}
 \label{sub:s7-wave}
 
-\begin{enumerate}\item Design a circuit using op-amp(s) for given input $v_i(t)$ and output $v_o(t)$ waveforms shown in the figure.
+\begin{enumerate}
+\item Design a circuit using op-amp(s) for given input $v_i(t)$ and output $v_o(t)$ waveforms shown in the figure.
 \begin{center}
     \begin{tikzpicture}[thick,scale=1.2]
 
@@ -6391,6 +6652,7 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \item Input signal $V_{in}$ and output signal $V_{out}$ of a circuit are given in the figure. Design the circuit using Op-Amps. Show necessary calculations.
 \begin{center}
     % ==========================================
@@ -6436,6 +6698,7 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{center}
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item Design a circuit using Op-Amps that gives a specified output waveform from a 1\,V DC input. Use $+15\,\text{V}$ and $-15\,\text{V}$ for DC biasing. Specify all the values of resistors and capacitors used.
 \begin{center}
       \begin{tikzpicture}[thick,scale=1.2]
@@ -6464,18 +6727,21 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Analog Computing (Differential Equations)}
 \label{sub:s7-analog}
 
-\begin{enumerate}\item Design a circuit using op-amps and other passive elements to solve:
+\begin{enumerate}
+\item Design a circuit using op-amps and other passive elements to solve:
 \[
 2\frac{d^2v}{dt^2} - 3\frac{dv}{dt} + 4v + 5 = 0
 \]
 Draw the overall connection diagram and specify element values. Assume op-amps biased with $\pm15\,\text{V}$; all initial conditions are zero.
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item Using op-amps, design a circuit to solve the following differential equation where $x$ is input and $y$ is output:
 \[
@@ -6483,11 +6749,13 @@ Draw the overall connection diagram and specify element values. Assume op-amps b
 \]
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2022--23}
 
+
 \item Design an electronic analog computer using op-amp to solve the following differential equation. Give a brief explanation of the operation of the designed computer.
 \[
 \frac{d^2v}{dt^2} + 4\frac{dv}{dt} + 5v - 5 = 0
 \]
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \item Design an analog computer circuit to solve the following differential equation for $t>0$:
 \[
@@ -6496,12 +6764,14 @@ Draw the overall connection diagram and specify element values. Assume op-amps b
 with initial conditions $v(0)=2$, $v'(0)=0$. An oscillator is available to provide $\sin(10t)$ signal.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item Design a circuit using Op-Amps that can solve the following differential equation:
 \[
 3\frac{d^2x(t)}{dt^2} + 4x(t) = 0
 \]
 Point out the node that represents the solution $x(t)$. Specify all the values of resistors and capacitors used.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
 
 \item Design a circuit using op-amp that can provide solution to the following equation:
 \[
@@ -6510,14 +6780,17 @@ Point out the node that represents the solution $x(t)$. Specify all the values o
 where $K$ = last digit of your student ID. Briefly discuss the operation of your designed circuit.
 \mk{29} \yr{EEE 263 | L-2/T-1 | Jan--2021}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Multiplier Circuit Design}
 \label{sub:s7-mult}
 
-\begin{enumerate}\item Suppose you have two input voltages $X_1$ and $X_2$. Design a circuit using Op-Amps that gives output $V_o = 10X_1 X_2$. The diodes available maintain the characteristic equation $I_D = I_s e^{V_D/nV_T}$ where $I_s = 10^{-6}\,\text{A}$. Specify all the values of resistors used.
+\begin{enumerate}
+\item Suppose you have two input voltages $X_1$ and $X_2$. Design a circuit using Op-Amps that gives output $V_o = 10X_1 X_2$. The diodes available maintain the characteristic equation $I_D = I_s e^{V_D/nV_T}$ where $I_s = 10^{-6}\,\text{A}$. Specify all the values of resistors used.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
 
 \end{enumerate}
 
@@ -6525,11 +6798,14 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \subtopic{cE}{Frequency Multiplier}
 \label{sub:s7-freqmult}
 
-\begin{enumerate}\item You have two supply voltage sources, $v_1 = \sin(100t)\,\text{V}$ and $v_2 = 1\,\text{V}$. Design a circuit using op-amps that will produce an output voltage $v_o = (\sin(50t))^2\,\text{V}$. Also show that this circuit produces this output.
+\begin{enumerate}
+\item You have two supply voltage sources, $v_1 = \sin(100t)\,\text{V}$ and $v_2 = 1\,\text{V}$. Design a circuit using op-amps that will produce an output voltage $v_o = (\sin(50t))^2\,\text{V}$. Also show that this circuit produces this output.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \item Suppose you have a sinusoidal input voltage $V_{in}(t) = \sin(4000\pi t)$ volt. Design a frequency multiplier circuit using Op-Amps that multiplies the frequency by a factor of 2 to produce $V_{out}(t) = \sin(8000\pi t)$ volt. Use resistors, capacitors, inductors, and diodes (having reverse saturation current $10^{-6}\,\text{A}$) if necessary. Show necessary calculations and specify all design parameter values.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2015--16}
+
 
 \end{enumerate}
 
@@ -6537,8 +6813,11 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \subtopic{cE}{Active Filters}
 \label{sub:s7-filters}
 
-\begin{enumerate}\item Design a 2nd order bandpass filter with lower cutoff frequency $f_{CL}=20\,\text{kHz}$ and higher cutoff frequency $f_{CH}=200\,\text{kHz}$.
+\begin{enumerate}
+    
+\item Design a 2nd order bandpass filter with lower cutoff frequency $f_{CL}=20\,\text{kHz}$ and higher cutoff frequency $f_{CH}=200\,\text{kHz}$.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \item Determine the type of filter shown in the circuit by computing the transfer function in the frequency domain.
 \begin{center}
@@ -6585,6 +6864,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
     \end{circuitikz}
 \end{center}
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2016--17, 2017--18}
+
 
 \item For the filter circuit given, determine (i) its type and comment on its order; derive the transfer function and find the cutoff frequency. (ii) If $R=10\,\text{k}\Omega$ and $C=0.1\,\mu\text{F}$, would it be possible to pass a 100\,Hz signal through this filter without distortion? Justify your answer. Note that the first Op-Amp block performs summation of input and output signals.
 \begin{center}
@@ -6651,6 +6931,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{center}
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item In the circuit shown, input voltage is $v_{in}(t) = 5 + 3\cos(300\pi t - 30°) + 8\sin(1000\pi t) + 7\sin(1600\pi t + 45°)$ volt. Design the active filter blocks and summing amplifier to obtain output $V_{out}(t) = 7 + 12\sin(1000\pi t)$ volt. Sketch the frequency response and specify the cutoff frequency for each filter. Specify all values of resistors and capacitors/inductors.
 \begin{center}
   \begin{tikzpicture}[thick,
@@ -6714,20 +6995,26 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{center}
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \item Write the equation of magnitude of gain of a $-20\,\text{dB/decade}$ low pass filter. Why is it called a $-20\,\text{dB/decade}$ filter? Can it also be called a $-6\,\text{dB/octave}$ filter?
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
+
 
 \item Design a notch filter that eliminates any signal between 8\,kHz and 12\,kHz using op-amps. Specify all the values of resistors and capacitors used.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \item A system blocks 20\,Hz and 20\,kHz but passes 10\,kHz. (i) Draw the frequency response of the system. (ii) Draw a block diagram of the system.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item Design a 40\,dB low pass filter (LPF) with a cutoff frequency of 1\,kHz. You have only one op-amp.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2013--14}
 
+
 \item Draw the circuit diagram of a $-20\,\text{dB/dec}$ low pass filter. Also write down the design procedure. Design a $-20\,\text{dB/dec}$ low pass filter with a cut-off frequency of 100\,kHz.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2011--12}
+
 
 \end{enumerate}
 
@@ -6735,7 +7022,8 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \subtopic{cE}{Voltage-to-Current Converter}
 \label{sub:s7-v2i}
 
-\begin{enumerate}\item The circuit shown in Figure functions as a voltage-to-current converter. The op-amp used in this circuit is biased using $\pm 20\text{ V}$ sources. The overall circuit operates in the linear region as long as $V_{\text{out}}$ stays within the bias voltage range, and the concept of virtual short (i.e. $V_1 = V_2$) can be applied under such circumstances. If $V_{\text{out}}$ attempts to exceed these limits, the amplifier enters saturation, and the virtual short assumption becomes invalid. Given the circuit parameters $R_1 = R_2 = 10\text{ k}\Omega$, $R_3 = R_4 = 1\text{ k}\Omega$ and $R_{\text{L}} = 100\ \Omega$, calculate the load current $i_{\text{L}}$ and output voltage $V_{\text{out}}$ for and input voltage of $V_{\text{in}} = -5\text{ V}$.
+\begin{enumerate}
+\item The circuit shown in Figure functions as a voltage-to-current converter. The op-amp used in this circuit is biased using $\pm 20\text{ V}$ sources. The overall circuit operates in the linear region as long as $V_{\text{out}}$ stays within the bias voltage range, and the concept of virtual short (i.e. $V_1 = V_2$) can be applied under such circumstances. If $V_{\text{out}}$ attempts to exceed these limits, the amplifier enters saturation, and the virtual short assumption becomes invalid. Given the circuit parameters $R_1 = R_2 = 10\text{ k}\Omega$, $R_3 = R_4 = 1\text{ k}\Omega$ and $R_{\text{L}} = 100\ \Omega$, calculate the load current $i_{\text{L}}$ and output voltage $V_{\text{out}}$ for and input voltage of $V_{\text{in}} = -5\text{ V}$.
 \begin{center}
     
 \begin{circuitikz}[american, line width=0.8pt]
@@ -6806,6 +7094,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{circuitikz}
 \end{center}
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \end{enumerate}
 
@@ -6882,6 +7171,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 
 \mk{26.67} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item A circuit is to be designed where depending on the range of input voltage a digital sequence is passed to a computer. The ranges and corresponding digital sequences are:
 \begin{center}
 \begin{tabular}{ll}
@@ -6898,13 +7188,15 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 Design a circuit using op-amps and digital circuits (gates, multiplexers) to perform the task. Assume 5\,V = digital 1 and 0\,V = digital 0.
 \mk{25} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Waveform Realization}
 \label{sub:s7-wavereal}
 
-\begin{enumerate}\item Determine an op-amp circuit realization for given input wave shapes $V_1$ and $V_2$ and output wave shape $V_{out}$.
+\begin{enumerate}
+\item Determine an op-amp circuit realization for given input wave shapes $V_1$ and $V_2$ and output wave shape $V_{out}$.
 \begin{center}
   
     \begin{tikzpicture}[thick,x=0.8cm]
@@ -6996,6 +7288,7 @@ Design a circuit using op-amps and digital circuits (gates, multiplexers) to per
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -7010,6 +7303,7 @@ v_0 \propto \int (v_1 + v_2)\,dt
 \]
 Write the final output expression in terms of the circuit components used in your design.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2020--21}
+
 
 \item The input voltage $v_I$ and output voltage $v_O$ of an op-amp based circuit are given. Design the circuit. 
 \begin{center}
@@ -7055,13 +7349,16 @@ Write the final output expression in terms of the circuit components used in you
 \end{center}
 \mk{17} \yr{EEE 263 | L-2/T-1 | Jan--2021}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Op-Amp Network Analysis}
 \label{sub:s7-network}
 
-\begin{enumerate}\item Determine the closed-loop voltage gain and current gain of the ideal op-amp network shown in the figure.
+\begin{enumerate}
+    
+\item Determine the closed-loop voltage gain and current gain of the ideal op-amp network shown in the figure.
 \begin{center}
     
 \begin{circuitikz}[thick,american, thick]
@@ -7114,6 +7411,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{circuitikz}
 \end{center}
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2020--21}
+
 
 \item Determine the differential equation solved by the circuit shown: (i) when the capacitor $C$ is absent; (ii) when the capacitor $C$ is present. At what value of $C$ does the circuit become a non-inverting amplifier?
 \begin{center}
@@ -7170,100 +7468,6 @@ Write the final output expression in terms of the circuit components used in you
 \end{center}
 \mk{21} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
-\item Determine the Boolean expression for $V_0$ in terms of the four input voltages for the circuit shown (diode logic).
-\begin{center}
-  
-    % Scale kept to 1.0 so it respects standard page margins perfectly
-    \begin{circuitikz}[thick,x=1.2cm, transform shape]
-        % Slightly scaling down the component symbols keeps the wire paths looking spacious
-        \ctikzset{resistors/scale=0.8, diodes/scale=0.8}
-
-        % ==========================================
-        % Inputs V1, V2 and Top AND Gate (D1, D2, R1)
-        % ==========================================
-        \draw (0, 9) node[left] {$V_1$} to[short, o-] (0.5, 9);
-        \draw (0, 7) node[left] {$V_2$} to[short, o-] (0.5, 7);
-        
-        % Diodes D1, D2 (Cathodes at the inputs)
-        \draw (2.5, 9) to[D, l=$D_1$] (0.5, 9);
-        \draw (2.5, 7) to[D, l=$D_2$] (0.5, 7);
-        \draw (2.5, 9) -- (2.5, 7);
-        
-        % Node A and Pull-up R1
-        \node[circ] (NodeA) at (2.5, 8) {};
-        \draw (2.5,9) to[R, l=$R_1$, a=$1\text{ k}\Omega$] (2.5, 10.5) node[vcc] {$+5\text{V}$};
-
-        % ==========================================
-        % Inputs V3, V4 and Bottom AND Gate (D5, D6, R3)
-        % ==========================================
-        \draw (0, 4) node[left] {$V_3$} to[short, o-] (0.5, 4);
-        \draw (0, 2) node[left] {$V_4$} to[short, o-] (0.5, 2);
-        
-        % Diodes D5, D6
-        \draw (2.5, 4) to[D, l=$D_5$] (0.5, 4);
-        \draw (2.5, 2) to[D, l=$D_6$] (0.5, 2);
-        \draw (2.5, 4) -- (2.5, 2);
-        
-        % Node B and Pull-up R3
-        \node[circ] (NodeB) at (2.5, 3) {};
-        \draw (3.5,3) to[R, l=$R_3$, a=$1\text{ k}\Omega$, *-] (3.5, 5.5) node[vcc] {$+5\text{V}$};
-
-        % ==========================================
-        % Level Shift / Coupling (D3, Node C, R2, D4)
-        % ==========================================
-        \draw (NodeA) to[D, l=$D_3$] (5, 8) coordinate (NodeC);
-        \node[circ] at (NodeC) {};
-
-        % Pull-up R2
-        \draw (NodeC) to[R, l={$R_2=1\text{ k}\Omega$}, *-] (5, 10.5) node[vcc] {$+5\text{V}$};
-        
-        % D4 Clamping Diode (Spaced safely to the right at X=6.5)
-        \draw (NodeC) to[short, -*] (6.5, 8) coordinate (D4Junct);
-        \draw (D4Junct) to[D, l=$D_4$] (6.5, 10.5) node[vcc] {$+5\text{V}$};
-
-        % ==========================================
-        % OR Gate Stage (D7, D8, Node E, R4)
-        % ==========================================
-        % Route from Top Branch
-        \draw (D4Junct) -- (7.5, 8) -- (7.5, 6.5);
-        \draw (7.5, 6.5) to[D, l=$D_7$] (9.5, 6.5);
-
-        % Route from Bottom Branch (Node B)
-        \draw (NodeB) -- (7.5, 3) -- (7.5, 4.5);
-        \draw (7.5, 4.5) to[D, l=$D_8$] (9.5, 4.5);
-
-        % Junction Node E
-        \draw (9.5, 6.5) -- (9.5, 4.5);
-        \node[circ] (NodeE) at (9.5, 5.5) {};
-
-        % Pull-down R4
-        \draw (10,5.5) to[R, l=$R_4$, a=$1\text{ k}\Omega$, *-] (10, 3) node[ground] {};
-
-        % ==========================================
-        % Output Stage (D9, Node F, D10, R5)
-        % ==========================================
-        \draw (NodeE) to[D, l=$D_9$] (12.5, 5.5) coordinate (NodeF);
-        \node at (NodeF) {};
-
-        % D10 Clamping Diode (Anode at ground, isolated vertically at X=11.5)
-        \draw (12.5, 3) node[ground] {} to[D, l=$D_{10}$] (12.5,5.5);
-
-        % Pull-down R5 (Safely shifted to X=13)
-        \draw (NodeF) -- (13, 5.5) coordinate (VoutJunct);
-        \node at (VoutJunct) {};
-        \draw (14,5.5) to[R, l={$R_5=1\text{ k}\Omega$}] (14, 3) node[ground] {};
-
-        % Final Output Vo
-        \draw (VoutJunct) to[short, -o] (15, 5.5) node[right] {\Large $V_o$};
-
-        % ==========================================
-        % Figure Caption
-        % ==========================================
-
-    \end{circuitikz}
-
-\end{center}
-\mk{10} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
 \end{enumerate}
 
@@ -7271,8 +7475,11 @@ Write the final output expression in terms of the circuit components used in you
 \subtopic{cE}{Op-Amp Practical Imperfections}
 \label{sub:s7-imperfections}
 
-\begin{enumerate}\item What are the AC imperfections of a practical op-amp? How can we find out the value of input offset voltage and input offset current?
+\begin{enumerate}
+    
+\item What are the AC imperfections of a practical op-amp? How can we find out the value of input offset voltage and input offset current?
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \end{enumerate}
 
@@ -7280,8 +7487,11 @@ Write the final output expression in terms of the circuit components used in you
 \subtopic{cE}{Dual Slope A/D Converter}
 \label{sub:s7-adc}
 
-\begin{enumerate}\item By drawing appropriate circuits, explain the operation of a dual slope A/D converter.
+\begin{enumerate}
+
+\item By drawing appropriate circuits, explain the operation of a dual slope A/D converter.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2020--21}
+
 
 \end{enumerate}
 
@@ -7304,8 +7514,10 @@ Write the final output expression in terms of the circuit components used in you
 \subtopic{cF}{Barkhausen Stability Criterion}
 \label{sub:s8-barkhausen}
 
-\begin{enumerate}\item Write down the Barkhausen criterion.
+\begin{enumerate}
+\item Write down the Barkhausen criterion.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \item Derive expression of Desensitivity. Explain positive and negative feedback from desensitivity.
 \mk{10+5} \yr{EEE 263 | L-2/T-1 | 2014--15}
@@ -7314,6 +7526,7 @@ Write the final output expression in terms of the circuit components used in you
 \item Write down the Barkhausen stability criterion for an oscillation in a linear electronic circuit to sustain.
 \mk{6} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -7321,12 +7534,12 @@ Write the final output expression in terms of the circuit components used in you
 \label{sub:s8-wien}
 
 
-
 \begin{enumerate}
 
 \item Define Barkhausen criterion. Describe the operating principle of an op-amp based Wein bridge oscillator. Derive the conditions for Barkhausen criteria to be satisfied in this oscillator and the expression of oscillation frequency.
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2023--24}    
-   
+
+
 \item For the Wien bridge circuit connected to an op-amp shown: 
 \begin{enumerate}
     
@@ -7403,13 +7616,16 @@ Write the final output expression in terms of the circuit components used in you
 \end{circuitikz}
 \end{center}
 \mk{28} \yr{EEE 263 | L-2/T-1 | Jan--2021}    
-    
+
+
     
 \item Design a Wien Bridge Oscillator with an oscillation frequency of 1\,kHz. What is the gain of the feedback network of your design? Specify all the values of resistors and capacitors used.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2014--15}
 
+
 \item Design a Wien Bridge Oscillator with an oscillation frequency of 1000\,rad/sec. Available capacitors are 0.1\,$\mu$F, 1\,$\mu$F, and 100\,pF.
-\mk{Unspecified} \yr{EEE 263 | L-2/T-1 | 2013--14}
+\yr{EEE 263 | L-2/T-1 | 2013--14}
+
 
 \item Draw a Wien Bridge oscillator circuit and describe its operating principle.
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2012--13}
@@ -7425,6 +7641,7 @@ Write the final output expression in terms of the circuit components used in you
     
 \item For an RC phase shift oscillator, derive the expression for oscillation frequency. Also derive the conditions for the Barkhausen criterion to be satisfied. Assume all resistors in the feedback network are of the same value and all capacitors are of the same value.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \item For the oscillator circuit shown below,  find oscillation frequency ($\text{w}$), $\beta$-network gain ($\beta$), and amplifier gain ($\text{A}$). Also design this oscillator for an oscillation frequency of $1\text{ kHz}$.Note that, each state is separated by a source follower circuit. Hence each stage will give a phase shift of $60^\circ$ and 3 stages will give in total 180 phase shift. Here, $\beta = \frac{v_2}{v_1}$.
 
@@ -7570,22 +7787,11 @@ Write the final output expression in terms of the circuit components used in you
         \draw (O2.down) -- ++(0,-0.4) node[below] {$-15$ V};
         \draw (O1.down) -- ++(0,-0.4) node[below] {$-15$ V};
 
-
-
-
-
-        
-
-
-
-
-
-
-        
     \end{circuitikz}
 \end{center}
 
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2015--16}
+
 
 \end{enumerate}
 
@@ -7596,7 +7802,8 @@ Write the final output expression in terms of the circuit components used in you
 \begin{enumerate}
     
 \item For the oscillator circuit given:
-\begin{enumerate}\item Derive the expression for oscillation frequency $f_0$.
+\begin{enumerate}
+\item Derive the expression for oscillation frequency $f_0$.
   \item Obtain the relationship between $R_1$ and $R_2$ for sustainable oscillation.
   \item Specify the bias conditions and values of $L$, $R_1$, $R_2$ to obtain a 20\,V peak-to-peak, 500\,kHz sinusoidal signal from this oscillator.
 \end{enumerate}
@@ -7652,17 +7859,21 @@ Write the final output expression in terms of the circuit components used in you
 \end{center}
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2015--16}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cF}{Colpitts Oscillator}
 \label{sub:s8-colpitts}
 
-\begin{enumerate}\item With an appropriate circuit diagram, describe the operation of an op-amp based Colpitts oscillator. Derive the frequency of oscillation and explain how this circuit satisfies the conditions for sustained oscillation.
+\begin{enumerate}
+\item With an appropriate circuit diagram, describe the operation of an op-amp based Colpitts oscillator. Derive the frequency of oscillation and explain how this circuit satisfies the conditions for sustained oscillation.
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2024--25}
+
 
 \item Derive the expression of oscillation frequency for a Colpitts oscillator. Then derive the conditions for the Barkhausen criterion to be satisfied.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item Draw the circuit of the Colpitts oscillator. Then, using the small-signal model of the MOSFET, show that the frequency of oscillation is:
 \[
@@ -7671,14 +7882,17 @@ Write the final output expression in terms of the circuit components used in you
 and that $\dfrac{C_1}{C_2} = g_m R$.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2018--19, 2020--21}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cF}{Crystal Oscillator}
 \label{sub:s8-crystal}
 
-\begin{enumerate}\item Draw the equivalent circuit of a piezoelectric crystal. Qualitatively draw the crystal reactance versus frequency and identify the inductive and capacitive reactance regions.
+\begin{enumerate}
+\item Draw the equivalent circuit of a piezoelectric crystal. Qualitatively draw the crystal reactance versus frequency and identify the inductive and capacitive reactance regions.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \end{enumerate}
 
@@ -7689,6 +7903,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \begin{enumerate}
 \item Draw a one-shot multivibrator circuit using an op-amp. Explain the operation of the circuit.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \end{enumerate}
 
@@ -7793,18 +8008,17 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{center}
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2023--24}
 
+
 \item With proper connection diagram, explain the monostable mode of operation of a 555 timer. Design a monostable multivibrator using a 555 timer that can generate an output pulse with duration T = 100ms. Draw the waveforms of output voltage and trigger voltage of your designed circuit.
 \mk{18} \yr{EEE 263 | L-2/T-1 | 2023--24}
     
 
+
 \item Design an oscillator circuit using a 555 Timer IC which has a square wave output with oscillation frequency of 20\,kHz and duty cycle of 25\%. Provide a necessary illustration of the designed circuit and draw the wave shape.
-
-
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2020--21}
 
+
 \item Design a circuit using a 555 timer to generate a 100\,kHz square wave with a duty cycle of 40\%. Draw the final connection diagram with proper component values.
-
-
 \begin{center}
     \begin{circuitikz}[american, line width=0.8pt]
     
@@ -7896,17 +8110,22 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2024--25}
 
+
 \item Design a square wave generator with 10\,ms period and 75\% duty cycle using a 555 timer.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item To get an output pulse of 10\,ms width when a trigger is applied, an external resistor and a 1\,$\mu$F capacitor are connected with a 555 timer. What should be the value of the resistor?
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2021--22}
 
+
 \item Design an astable multivibrator using a 555 timer with a period of 10\,ms and 75\% duty cycle.
 \mk{10} \yr{EEE 263 | L-2/T-1 | 2021--22}
 
+
 \item Design a circuit using a 555 IC which results in a square wave with oscillation frequency of 100\,kHz and 75\% duty cycle. Draw your designed circuit and output wave shape.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \item For the 555 IC based astable multivibrator circuit shown with $R_1=7\,\text{k}\Omega$, $R_2=3\,\text{k}\Omega$, $C=0.5\,\mu\text{F}$:
  \begin{enumerate}
@@ -7917,7 +8136,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \item  discuss how frequency depends on $C$ with a graph; 
 \item  design resistors and capacitors so that duty cycle becomes 0.40.
  \end{enumerate}
-   \begin{center}
+\begin{center}
     
 \begin{circuitikz}[thick,thick]
 
@@ -7975,8 +8194,9 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
     \draw[decorate,decoration={brace,amplitude=5pt}] (5.2, 2.5) -- (5.2, -1.5) node[midway,right=6pt] {$v_o$};
 
 \end{circuitikz}
-   \end{center}
+\end{center}
 \mk{29} \yr{EEE 263 | L-2/T-1 | Jan--2021}
+
 
 \end{enumerate}
 
@@ -7984,17 +8204,22 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \subtopic{cF}{Triangular Wave Generator}
 \label{sub:s8-triangular}
 
-\begin{enumerate}\item Draw and explain the operation of a triangular wave generator circuit using op-amps and a Schmitt trigger. Derive the frequency of oscillation for the circuit.
+\begin{enumerate}
+\item Draw and explain the operation of a triangular wave generator circuit using op-amps and a Schmitt trigger. Derive the frequency of oscillation for the circuit.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2022--23}
+
 
 \item Draw a sawtooth wave generator circuit using an op-amp. Explain the operation of the circuit.
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2021--22}
 
+
 \item Drawing appropriate circuits, show how you can generate triangular waves using a bistable multivibrator and appropriate Op-amp circuits.
 \mk{26} \yr{EEE 263 | L-2/T-1 | 2020--21}
 
+
 \item Design a circuit using a bistable multivibrator which generates a triangular waveform with oscillation frequency of 2\,kHz and 10\,V peak-to-peak amplitude.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \item A bistable multivibrator with a given hysteresis transfer characteristic is provided. Design a signal generator based on the bistable multivibrator that generates square and triangular waveforms. Choose values of your designed circuit components for which the frequency of oscillation is 1\,MHz.
 \begin{center}
@@ -8113,6 +8338,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{center}
 \mk{18} \yr{EEE 263 | L-2/T-1 | Jan--2021}
 
+
 \end{enumerate}
 
 
@@ -8134,14 +8360,18 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \subtopic{cD}{CMOS Logic Design and Implementation}
 \label{sub:s9-cmos}
 
-\begin{enumerate}\item Discuss basic operational characteristics and parameters of CMOS and TTL logic families.
+\begin{enumerate}
+\item Discuss basic operational characteristics and parameters of CMOS and TTL logic families.
 \mk{23} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \item Implement the function $f(A,B,C,D)=\sum m(0,4,8,9,10,11,12)$ using CMOS.
 \mk{13} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \item Draw a CMOS complex gate for the logic function $f(a,b,c,d)=\sum m(0,1,2,4,6,8,10,12,14)$. Use as few transistors as possible.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \item Derive complex gates for the following logic functions using as few transistors as possible:
 \begin{enumerate}
@@ -8150,8 +8380,10 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 \mk{21} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \item Implement the function $f(A,B,C,D)=\sum m(1,2,4,7,14,15)$ using (i) CMOS circuit and (ii) pseudo NMOS circuit. Which circuit would you prefer between your two designed circuits and why?
 \mk{25} \yr{EEE 263 | L-2/T-1 | Jan--2021}
+
 
 \end{enumerate}
 
@@ -8159,7 +8391,9 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \subtopic{cD}{CMOS Transistor Sizing}
 \label{sub:s9-sizing}
 
-\begin{enumerate}\item Calculate transistor $W/L$ ratios for the logic circuit shown. Assume that for the basic inverter $n=1.5$ and $P=5$ and the channel length is 0.25\,$\mu$m.
+\begin{enumerate}
+
+\item Calculate transistor $W/L$ ratios for the logic circuit shown. Assume that for the basic inverter $n=1.5$ and $P=5$ and the channel length is 0.25\,$\mu$m.
 \begin{center}
     \begin{circuitikz}[thick,american, scale=1.3]
 
@@ -8252,8 +8486,10 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{center}
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \item Design transistor $W/L$ ratios for the logic $Y=\overline{(AB+D)C}$ implemented using CMOS circuit. Assume that for the basic inverter $(W/L)_n=n=2$ and $(W/L)_p=p=7$ and the channel length is 0.15\,$\mu$m.
 \mk{21} \yr{EEE 263 | L-2/T-1 | Jan--2021}
+
 
 \end{enumerate}
 
@@ -8261,7 +8497,8 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \subtopic{cD}{Inverter Propagation Delay}
 \label{sub:s9-delay}
 
-\begin{enumerate}\item For the inverter shown with a capacitor $C$ connected between the output node and ground: if at $t=0$ the input goes low to high, find the equation of time for $v_0$ to reach $\frac{1}{2}(V_{OL}+V_{OH})$. Also calculate the high-to-low propagation time for $R=25\,\text{k}\Omega$ and $C=20\,\text{pF}$.
+\begin{enumerate}
+\item For the inverter shown with a capacitor $C$ connected between the output node and ground: if at $t=0$ the input goes low to high, find the equation of time for $v_0$ to reach $\frac{1}{2}(V_{OL}+V_{OH})$. Also calculate the high-to-low propagation time for $R=25\,\text{k}\Omega$ and $C=20\,\text{pF}$.
 \begin{center}
     \begin{circuitikz}[thick,american, scale=1.3]
                 \ctikzset{tripoles/mos style/arrows}
@@ -8300,17 +8537,20 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{center}
 \mk{10.67} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Transmission Gate Implementation}
 \label{sub:s9-tg}
 
-\begin{enumerate}\item Implement the following function $Y$ using CMOS transmission gate configuration:
+\begin{enumerate}
+\item Implement the following function $Y$ using CMOS transmission gate configuration:
 \[
 Y = AB + \bar{A}C
 \]
 \mk{7} \yr{EEE 263 | L-2/T-1 | 2018--19}
+
 
 \end{enumerate}
 
@@ -8318,8 +8558,10 @@ Y = AB + \bar{A}C
 \subtopic{cD}{CMOS Flip-Flop Implementation}
 \label{sub:s9-ff-cmos}
 
-\begin{enumerate}\item Show a CMOS implementation of edge-triggered D flip-flops with asynchronous reset.
+\begin{enumerate}
+\item Show a CMOS implementation of edge-triggered D flip-flops with asynchronous reset.
 \mk{25} \yr{EEE 263 | L-2/T-1 | 2016--17}
+
 
 \end{enumerate}
 
@@ -8327,8 +8569,10 @@ Y = AB + \bar{A}C
 \subtopic{cD}{Flip-Flop Construction}
 \label{sub:s9-ff-construction}
 
-\begin{enumerate}\item Show how D flip-flop and T flip-flop can be constructed from J-K flip-flops.
+\begin{enumerate}
+\item Show how D flip-flop and T flip-flop can be constructed from J-K flip-flops.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2016--17}
+
 
 \end{enumerate}
 
@@ -8336,14 +8580,18 @@ Y = AB + \bar{A}C
 \subtopic{cD}{Counter Design}
 \label{sub:s9-counter}
 
-\begin{enumerate}\item Design a MOD-3 counter using JK flip-flops and verify the design showing the truth table.
+\begin{enumerate}
+\item Design a MOD-3 counter using JK flip-flops and verify the design showing the truth table.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \item Design a modulo-12 up counter with synchronous reset.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item Design a 4-bit up/down counter using T flip-flops. It should include a control pin $\overline{UP}/DOWN$. When $\overline{UP}/DOWN=0$ the circuit behaves as an up counter; when $\overline{UP}/DOWN=1$ it behaves as a down counter. The circuit should also have a synchronous active-low $\overline{RESET}$ pin.
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2016--17}
+
 
 \end{enumerate}
 
@@ -8351,7 +8599,9 @@ Y = AB + \bar{A}C
 \subtopic{cD}{Combinational Logic Design}
 \label{sub:s9-combo}
 
-\begin{enumerate}\item Draw a PLA programmed to implement the following functions:
+\begin{enumerate}
+    
+\item Draw a PLA programmed to implement the following functions:
 \begin{align*}
 Y_1 &= A\bar{B}C + \bar{A}C + B \\
 Y_2 &= \bar{B}AC + AB\bar{C} + \bar{B} \\
@@ -8359,8 +8609,10 @@ Y_3 &= \bar{A}C + B\bar{C}A
 \end{align*}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \item Implement the function $f(x_1,x_2,x_3)=\sum m(2,3,4,6,7)$ using two-input LUTs (Look Up Tables). You can use as many LUTs as needed.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \item Triangular numbers are sequences formed by continuous summation of natural numbers (1, 3, 6, 10, \ldots). Design the simplest possible logic circuit that outputs 1 whenever it detects a 4-bit triangular number.
 
@@ -8410,14 +8662,18 @@ Y_3 &= \bar{A}C + B\bar{C}A
 
 \mk{11} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Priority Encoder}
 \label{sub:s9-encoder}
 
-\begin{enumerate}\item Design a four-line to two-line priority encoder circuit with active high inputs and outputs, with priority assigned to the higher-order data input line ($I_4 > I_3 > I_1$). Use NOR gates only for the circuit implementation.
+\begin{enumerate}
+    
+\item Design a four-line to two-line priority encoder circuit with active high inputs and outputs, with priority assigned to the higher-order data input line ($I_4 > I_3 > I_1$). Use NOR gates only for the circuit implementation.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2017--18}
+
 
 \end{enumerate}
 
@@ -8425,7 +8681,9 @@ Y_3 &= \bar{A}C + B\bar{C}A
 \subtopic{cD}{Shift Register Design}
 \label{sub:s9-shift}
 
-\begin{enumerate}\item Design a 4-bit shift register using D flip-flops and a four-to-one multiplexer with mode selection inputs $S_1$ and $S_0$. The register operates according to the following function table:
+\begin{enumerate}
+    
+\item Design a 4-bit shift register using D flip-flops and a four-to-one multiplexer with mode selection inputs $S_1$ and $S_0$. The register operates according to the following function table:
 \begin{center}
 \begin{tabular}{ccl}
 \toprule
@@ -8440,58 +8698,68 @@ $S_1$ & $S_0$ & \textbf{Register Operation} \\
 \end{center}
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2017--18}
 
+
 \end{enumerate}
 
 %% ══════════════════════════════════════════════════════════════════════
 %%  PART VII
 %% ══════════════════════════════════════════════════════════════════════
-\secdivider{Part VII --- Data Converters, PLL \& Memory}{DAC, ADC, Phase-Locked Loop, DRAM, Flash Memory}{cH}
+\secdivider{Part VII --- Data Converters, PLL \& Memory}{DAC, ADC, Phase-Locked Loop, DRAM, Flash Memory}{cG}
 
 %% ══════════════════════════════════════════════════════════════════════
 %%  SECTION 10: DATA CONVERTERS, PLL & MEMORY
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S10: Data Converters, PLL \& Memory}{S10: Data Converters, PLL \& Memory}
 \label{sec:S10}
-\titleformat{\section}{\large\bfseries\color{cH}}{}{0em}{}[\titlerule]
+\titleformat{\section}{\large\bfseries\color{cG}}{}{0em}{}[\titlerule]
 \section*{S10 \quad Data Converters, PLL \& Memory}
 \addcontentsline{toc}{section}{S10: Data Converters, PLL \& Memory}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{Digital-to-Analog Converter (DAC)}
+\subtopic{cG}{Digital-to-Analog Converter (DAC)}
 \label{sub:s10-dac}
 
-\begin{enumerate}\item What are DAC circuits? How does an R-2R ladder DAC circuit operate? Explain using a circuit diagram and mathematical analysis.
+\begin{enumerate}
+\item What are DAC circuits? How does an R-2R ladder DAC circuit operate? Explain using a circuit diagram and mathematical analysis.
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{Analog-to-Digital Converter (ADC)}
+\subtopic{cG}{Analog-to-Digital Converter (ADC)}
 \label{sub:s10-adc}
 
-\begin{enumerate}\item A 6-bit A/D converter has reference voltage $V_{REF}=8\,\text{V}$ and reference count $n_{REF}=2^6$. Values of some consecutive analog sampled voltages $|V_A|$ are: 0\,V, 3\,V, 5.5\,V, 7.125\,V. If these voltages are given as inputs to the converter, find the corresponding digital outputs.
+\begin{enumerate}
+\item A 6-bit A/D converter has reference voltage $V_{REF}=8\,\text{V}$ and reference count $n_{REF}=2^6$. Values of some consecutive analog sampled voltages $|V_A|$ are: 0\,V, 3\,V, 5.5\,V, 7.125\,V. If these voltages are given as inputs to the converter, find the corresponding digital outputs.
 \mk{12} \yr{EEE 263 | L-2/T-1 | 2021--22}
 
+
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{Phase-Locked Loop (PLL)}
+\subtopic{cG}{Phase-Locked Loop (PLL)}
 \label{sub:s10-pll}
 
-\begin{enumerate}\item Draw a simplified block diagram of a PLL and briefly explain its operation.
+\begin{enumerate}
+\item Draw a simplified block diagram of a PLL and briefly explain its operation.
 \mk{17} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{Memory: DRAM and Flash}
+\subtopic{cG}{Memory: DRAM and Flash}
 \label{sub:s10-memory}
 
-\begin{enumerate}\item Explain the read and write operation in a DRAM cell.
+\begin{enumerate}
+\item Explain the read and write operation in a DRAM cell.
 \mk{16} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \item Explain briefly the programming and erase operation in a Flash Memory.
 \mk{15} \yr{EEE 263 | L-2/T-1 | 2021--22}
+
 
 \end{enumerate}
 
