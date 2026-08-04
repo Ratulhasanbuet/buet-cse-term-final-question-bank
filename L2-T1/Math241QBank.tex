@@ -31,15 +31,12 @@
 \usepackage{etoolbox}
 \usepackage{hyperref}
 
-% ১. প্রতিটি tcolorbox-কে ট্র্যাক করার জন্য ব্যাকএন্ডে একটি কাস্টম কাউন্টার তৈরি
 \newcounter{myboxcount}
 
-% ২. প্রতিবার tcolorbox শুরু হওয়ার সময় যা যা ঘটবে:
-\BeforeBeginEnvironment{tcolorbox}{%
-  \stepcounter{myboxcount}% বক্স কাউন্টার ১ বাড়াবে
-  \setcounter{equation}{0}% ইকুয়েশন নম্বর ০ করবে (অর্থাৎ ১ থেকে শুরু হবে)
+\BeforeBeginEnvironment{tcolorbox}{
+  \stepcounter{myboxcount}
+  \setcounter{equation}{0}
   
-  % ৩. সংশোধিত লাইন: \thetcbcounter এর বদলে আমাদের নিজস্ব \themyboxcount ব্যবহার করা হয়েছে
   \renewcommand{\theHequation}{\themyboxcount.\arabic{equation}}%
 }
 
@@ -60,15 +57,15 @@
 %% ── Colors ────────────────────────────────────────────────────────────
 \definecolor{pblue}{RGB}{13,71,161}
 \definecolor{dgray}{RGB}{66,66,66}
-\definecolor{cA}{RGB}{183,28,28}    % Differential Calculus
-\definecolor{cB}{RGB}{1,87,155}     % Integral Calculus
-\definecolor{cC}{RGB}{27,94,32}     % ODE
-\definecolor{cD}{RGB}{106,27,154}   % Vector Calculus
-\definecolor{cE}{RGB}{230,81,0}     % Complex Calculus
-\definecolor{cF}{RGB}{0,96,100}     % PDE
-\definecolor{cG}{RGB}{62,39,35}     % Probability & Statistics
-\definecolor{cH}{RGB}{40,53,147}    % Coordinate Geometry
-\definecolor{cI}{RGB}{136,14,79}     % Series Solutions
+\definecolor{cA}{RGB}{183,28,28}
+\definecolor{cB}{RGB}{1,87,155}
+\definecolor{cC}{RGB}{27,94,32}
+\definecolor{cD}{RGB}{106,27,154}
+\definecolor{cE}{RGB}{230,81,0}
+\definecolor{cF}{RGB}{0,96,100}
+\definecolor{cH}{RGB}{0,77,64}
+\definecolor{cG}{RGB}{136,14,79}
+\definecolor{cI}{RGB}{62,39,35}    
 
 %% ── Section headings ──────────────────────────────────────────────────
 \titleformat{\section}{\large\bfseries\color{pblue}}{}{0em}{}[\titlerule]
@@ -198,7 +195,6 @@
         \item \hyperref[sub:s5-geometry]{Geometry of Complex Numbers}
         \item \hyperref[sub:s5-roots]{Roots of Complex Numbers}
         \item \hyperref[sub:s5-complexnums]{Complex Numbers: Argument \& Polar Form}
-        \item \hyperref[sub:s5-functions]{Functions of a Complex Variable}
         \item \hyperref[sub:s5-limcont]{Limits and Continuity}
         \item \hyperref[sub:s5-analytic]{Analytic Functions \& Cauchy-Riemann Equations}
         \item \hyperref[sub:s5-elementary]{Elementary Complex Functions}
@@ -239,12 +235,10 @@
 %%  PART IV — VECTOR CALCULUS
 %% ══════════════════════════════════════════════════════════════════════
 \secdivider{Vector Calculus}{Vector Algebra, Gradient, Divergence, Curl, Integration Theorems}{cD}
-\titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
 
-\section{S4. Vector Calculus}
+\section{S1. Vector Calculus}
 \label{sec:S4}
-\markboth{S4. Vector Calculus}{}
-
+\markboth{S1. Vector Calculus}{}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Vector Algebra}
@@ -562,11 +556,10 @@
 %% ══════════════════════════════════════════════════════════════════════
 \secdivider{Complex Calculus}{Analytic Functions, Cauchy-Riemann, Complex Integration}{cE}
 
-\titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
 
-\section{S5. Complex Calculus}
+\section{S2. Complex Calculus}
 \label{sec:S5}
-\markboth{S5. Complex Calculus}{}
+\markboth{S2. Complex Calculus}{}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Geometry of Complex Numbers}
@@ -593,6 +586,7 @@
 
 \item Identify $|z-3i|+|z+3i|=8$ and $|z-1|=|z+i|$ geometrically.
 \mk{15} \yr{MATH 245 | L-2/T-1 | 2021--22}
+
 
 \item Let $R$ be the region in the $z$-plane bounded by $x=0$, $y=0$, $x=2$, $y=1$. Determine the region $R'$ of the $w$-plane into which $R$ is mapped under $w=\sqrt{2}\,e^{i\pi/4}z+(1-2i)$.
 \mk{15} \yr{MATH 245 | L-2/T-1 | 2019--20}
@@ -667,9 +661,8 @@ where $z_{1},z_{2},a,b$ are complex numbers.
 \mk{10} \yr{MATH 245 | L-2/T-1 | 2021--22}
 
     
-    
 \item Find all the roots of $(-2\sqrt{3}-2i)^{1/4}$ in rectangular coordinates and exhibit the distinct roots graphically.
-\mk{10} \yr{MATH 241 | L-2/T-1 | 2013--14}
+\mk{10} \yr{MATH 241 | L-2/T-1 | 2013--14, 2011--12}
 
 
 \item Find all the roots of the following equations in rectangular coordinates, exhibit them geometrically, and point out which is the principal root:
@@ -680,8 +673,6 @@ where $z_{1},z_{2},a,b$ are complex numbers.
 \mk{18} \yr{MATH 241 | L-2/T-1 | 2012--13}
 
 
-\item Find all the roots of $(-2\sqrt{3}-2i)^{1/4}$.
-\mk{10} \yr{MATH 241 | L-2/T-1 | 2011--12}
 
 
 \end{enumerate}
@@ -697,12 +688,6 @@ where $z_{1},z_{2},a,b$ are complex numbers.
 
 
 \end{enumerate}
-
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Functions of a Complex Variable}
-\label{sub:s5-functions}
-
-\begin{enumerate}\item Hello \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Limits and Continuity of Complex Functions}
@@ -775,26 +760,49 @@ Hence, determine the domain where $f(z)$ is analytic.
 \item Show that $u(x,y)=\tfrac{1}{2}\log(x^{2}+y^{2})$ is harmonic in a specific domain. Find its harmonic conjugate $v(x,y)$ such that $f(z)=u+iv$ is analytic, and express $f(z)$ in terms of $z$.
 \mk{15} \yr{MATH 241 | L-2/T-1 | 2013--14, 2022--23} \yr{MATH 245 | L-2/T-1 | 2016--17}
 
+
+
+
+
 \item Find the exact points where $f(z)=x^{3}+i(1-y)^{3}$ is differentiable, and compute $f'(z)$ at those locations.
 \mk{6} \yr{MATH 241 | L-2/T-1 | 2022--23}
+
+
+
+
+
 
 \item Solve the complex equation $\cosh z=-2$ by equating its real and imaginary parts.
 \mk{10} \yr{MATH 241 | L-2/T-1 | 2022--23, 2016--17, 2015--16, 2013--14}
 
+
 \item Define a harmonic function and an analytic function. Prove that $u=\cos x\cosh y$ is harmonic, find its harmonic conjugate, and express the resulting analytic function $f(z)$ in terms of $z$.
 \mk{15} \yr{MATH 245 | L-2/T-1 | 2021--22}
+
+
 
 \item Evaluate the indefinite integral $\displaystyle\int\sqrt{1+\sqrt{1+z}}\,dz$, explicitly stating the conditions under which the resulting expression remains valid.
 \mk{10} \yr{MATH 245 | L-2/T-1 | 2021--22}
 
+
+
+
 \item Test the differentiability of the function $f(z)=\dfrac{z^{4}}{64}$ within its natural domain.
 \mk{11} \yr{MATH 245 | L-2/T-1 | 2020--21}
+
+
 
 \item Prove that $u(x,y)=\sinh x\sin y+\dfrac{y}{x^{2}+y^{2}}$ is harmonic, and compute its corresponding harmonic conjugate.
 \mk{15} \yr{MATH 245 | L-2/T-1 | 2020--21}
 
+
+
+
 \item Show that $|\cos z|^{2}=(\cos x)^{2}+(\sinh y)^{2}$ holds true for all $z=x+iy$.
 \mk{10} \yr{MATH 245 | L-2/T-1 | 2019--20}
+
+
+
 
 \item Determine which of the following functions $f(z)$ are entire. If a function is entire, compute its derivative $f'(z)$:
 \begin{enumerate}
@@ -1329,11 +1337,10 @@ where $C$ is the circle $|z|=4$.
 %%  PART VI — PARTIAL DIFFERENTIAL EQUATIONS
 %% ══════════════════════════════════════════════════════════════════════
 \secdivider{Partial Differential Equations}{Formation, First \& Second Order PDE, Separation of Variables}{cF}
-\titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
 
-\section{S6. Partial Differential Equations}
+\section{S3. Partial Differential Equations}
 \label{sec:S6}
-\markboth{S6. Partial Differential Equations}{}
+\markboth{S3. Partial Differential Equations}{}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cF}{Introduction \& Formation of PDE}
@@ -1624,7 +1631,6 @@ u_{xx}+2\sin x\,u_{xy}-\cos^{2}x\,u_{yy}-\cos x\,u_{y}=0.
 
 \item Solve: $(3D_{x}^{2}+7D_{x}D_{y}+2D_{y}^{2})z=e^{x+3y}\cdot x^{2}y^{2}$.
 \mk{17.5} \yr{MATH 143 | L-1/T-2 | 2011--12}
-
 
 \item Solve: $(2D_{x}-5D_{y}+6)(3D_{x}+2D_{y}-3)z=\cos(2x+3y)$.
 \mk{15} \yr{MATH 143 | L-1/T-2 | 2011--12}

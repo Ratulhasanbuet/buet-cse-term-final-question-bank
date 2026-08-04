@@ -33,9 +33,9 @@
 
 \newcounter{myboxcount}
 
-\BeforeBeginEnvironment{tcolorbox}{%
-  \stepcounter{myboxcount}% বক্স কাউন্টার ১ বাড়াবে
-  \setcounter{equation}{0}% ইকুয়েশন নম্বর ০ করবে (অর্থাৎ ১ থেকে শুরু হবে)
+\BeforeBeginEnvironment{tcolorbox}{
+  \stepcounter{myboxcount}
+  \setcounter{equation}{0}
   
   \renewcommand{\theHequation}{\themyboxcount.\arabic{equation}}%
 }
@@ -57,15 +57,15 @@
 %% ── Colors ────────────────────────────────────────────────────────────
 \definecolor{pblue}{RGB}{13,71,161}
 \definecolor{dgray}{RGB}{66,66,66}
-\definecolor{cA}{RGB}{0,96,100}    % Differential Calculus
-\definecolor{cB}{RGB}{1,87,155}     % Integral Calculus
-\definecolor{cC}{RGB}{27,94,32}     % ODE
-\definecolor{cD}{RGB}{106,27,154}   % Vector Calculus
-\definecolor{cE}{RGB}{230,81,0}     % Complex Calculus
-\definecolor{cF}{RGB}{0,96,100}     % PDE
-\definecolor{cG}{RGB}{62,39,35}     % Probability & Statistics
-\definecolor{cH}{RGB}{40,53,147}    % Coordinate Geometry
-\definecolor{cI}{RGB}{136,14,79}     % Series Solutions
+\definecolor{cA}{RGB}{0,96,100}   
+\definecolor{cB}{RGB}{1,87,155}     
+\definecolor{cC}{RGB}{27,94,32}     
+\definecolor{cD}{RGB}{106,27,154}   
+\definecolor{cE}{RGB}{230,81,0}     
+\definecolor{cF}{RGB}{0,96,100}    
+\definecolor{cG}{RGB}{62,39,35}     
+\definecolor{cH}{RGB}{40,53,147}    
+\definecolor{cI}{RGB}{136,14,79}     
 
 %% ── Section headings ──────────────────────────────────────────────────
 \titleformat{\section}{\large\bfseries\color{pblue}}{}{0em}{}[\titlerule]
@@ -129,7 +129,6 @@
   shadow={4pt}{-4pt}{0pt}{black!20}]
   \centering
   
-  % --- BUET Logo Added Here ---
   \includegraphics[height=2.5cm]{images/buet_logo.png}\\[8pt]
 
 
@@ -146,8 +145,8 @@
         & --- Question Curation \& Organisation\\
         & --- \LaTeX\ Typesetting\\[3pt]
       \textbf{NotebookLM} & --- Research \& Extraction\\[3pt]
-      \textbf{Claude AI} & --- \LaTeX\ Typesetting \& Formatting\\
-      \textbf{Gemini} & --- Diagram Generation\\[3pt]
+      \textbf{Claude AI} & --- \LaTeX\ Typesetting\\ [3pt]
+      \textbf{Gemini} & --- Answer \& Diagram Generation\\[3pt]
     \end{tabular}
  
 \end{tcolorbox}
@@ -237,9 +236,9 @@
 %% ══════════════════════════════════════════════════════════════════════
 \secdivider{Vector Calculus}{Vector Algebra, Gradient, Divergence, Curl, Integration Theorems}{cD}
 
-\section{S4. Vector Calculus}
+\section{S1. Vector Calculus}
 \label{sec:S4}
-\markboth{S4. Vector Calculus}{}
+\markboth{S1. Vector Calculus}{}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{Vector Algebra}
@@ -5225,9 +5224,9 @@ Summing up the values of the three terms:
 \secdivider{Complex Calculus}{Analytic Functions, Cauchy-Riemann, Complex Integration}{cE}
 
 
-\section{S5. Complex Calculus}
+\section{S2. Complex Calculus}
 \label{sec:S5}
-\markboth{S5. Complex Calculus}{}
+\markboth{S2. Complex Calculus}{}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Geometry of Complex Numbers}
@@ -5654,6 +5653,84 @@ The diagram below illustrates how doubling the argument of $z$ crosses the branc
 
 \item Identify $|z-3i|+|z+3i|=8$ and $|z-1|=|z+i|$ geometrically.
 \mk{15} \yr{MATH 245 | L-2/T-1 | 2021--22}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+To identify the geometric shapes represented by the given equations, we analyze them in the complex plane, letting $z = x + iy$.
+
+\subsubsection*{1. Analysis of $|z - 3i| + |z + 3i| = 8$}
+The geometric interpretation of $|z - z_0|$ is the distance between the point $z$ and the fixed point $z_0$ in the complex plane. Therefore, the equation $|z - 3i| + |z + (-3i)| = 8$ represents the locus of a point $z$ such that the sum of its distances from two fixed points, $F_1(0, 3)$ and $F_2(0, -3)$, is a constant $8$. 
+
+Because the distance between the two fixed points (foci) is $2c = |3i - (-3i)| = 6$, and this is less than the constant sum of distances $2a = 8$, the locus describes an \textbf{ellipse}.
+\begin{itemize}
+    \item \textbf{Foci:} $(0, 3)$ and $(0, -3)$ (on the imaginary axis).
+    \item \textbf{Center:} The midpoint of the foci, which is the origin $(0, 0)$.
+    \item \textbf{Semi-major axis ($a$):} $2a = 8 \implies a = 4$. The major axis lies along the imaginary axis ($y$-axis).
+    \item \textbf{Semi-minor axis ($b$):} Using the relation $b^2 = a^2 - c^2$, we have $b^2 = 4^2 - 3^2 = 16 - 9 = 7$. Thus, $b = \sqrt{7}$.
+\end{itemize}
+The Cartesian equation of this locus is:
+\[
+\boxed{ \frac{x^2}{7} + \frac{y^2}{16} = 1 \quad \text{(An ellipse centered at the origin)} }
+\]
+
+\subsubsection*{2. Analysis of $|z - 1| = |z + i|$}
+This equation implies that the distance from $z$ to the fixed point $z_1 = 1$ is equal to the distance from $z$ to the fixed point $z_2 = -i$. The locus of points equidistant from two fixed points is the \textbf{perpendicular bisector} of the line segment joining those two points.
+
+To find the Cartesian equation, we substitute $z = x + iy$:
+\begin{align*}
+    | (x - 1) + iy | &= | x + i(y + 1) | \\
+    \sqrt{(x - 1)^2 + y^2} &= \sqrt{x^2 + (y + 1)^2}
+\end{align*}
+Squaring both sides and expanding:
+\begin{align*}
+    (x^2 - 2x + 1) + y^2 &= x^2 + (y^2 + 2y + 1) \\
+    -2x + 1 &= 2y + 1 \\
+    -2x &= 2y \\
+    y &= -x
+\end{align*}
+This is a straight line passing through the origin with a slope of $-1$.
+\[
+\boxed{ y = -x \quad \text{(A straight line representing the perpendicular bisector)} }
+\]
+
+\vspace{1em}
+\begin{center}
+\begin{tikzpicture}[scale=0.9, >=stealth]
+    % Grid
+    \draw[step=1cm, gray!30, very thin] (-4.5,-4.5) grid (4.5,4.5);
+    
+    % Axes
+    \draw[->, thick] (-5,0) -- (5,0) node[right] {$\operatorname{Re}(z)$};
+    \draw[->, thick] (0,-5) -- (0,5) node[above] {$\operatorname{Im}(z)$};
+    
+    % Ellipse: x^2/7 + y^2/16 = 1
+    \draw[blue, thick] (0,0) ellipse ({sqrt(7)} and 4);
+    \node[blue, above right] at (1.5, 3.8) {$|z-3i|+|z+3i|=8$};
+    
+    % Foci of Ellipse
+    \filldraw[black] (0,3) circle (2pt) node[left=2pt] {$3i$ (Focus)};
+    \filldraw[black] (0,-3) circle (2pt) node[left=2pt] {$-3i$ (Focus)};
+    
+    % Line: y = -x
+    \draw[red, thick, domain=-4.5:4.5] plot (\x, {-\x}) node[below left] {$|z-1|=|z+i|$};
+    
+    % Points for the perpendicular bisector
+    \filldraw[black] (1,0) circle (2pt) node[above right=1pt] {$1$};
+    \filldraw[black] (0,-1) circle (2pt) node[below left=1pt] {$-i$};
+    
+    % Dashed line segment between 1 and -i
+    \draw[dashed, black!60, thick] (1,0) -- (0,-1);
+    
+    % Right angle marker at midpoint (0.5, -0.5)
+    \draw[black!80, thin] (0.5,-0.5) -- ++(-0.2, 0.2) -- ++(0.2, 0.2) -- ++(0.2, -0.2);
+    \filldraw[black] (0.5,-0.5) circle (1.5pt); % Midpoint
+    
+    % Origin node
+    \node[below left=1pt] at (0,0) {$O$};
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
 
 \item Let $R$ be the region in the $z$-plane bounded by $x=0$, $y=0$, $x=2$, $y=1$. Determine the region $R'$ of the $w$-plane into which $R$ is mapped under $w=\sqrt{2}\,e^{i\pi/4}z+(1-2i)$.
 \mk{15} \yr{MATH 245 | L-2/T-1 | 2019--20}
@@ -17523,9 +17600,9 @@ The transformation conformally maps the upper half-plane $\text{Im}(z) > 0$ to t
 %% ══════════════════════════════════════════════════════════════════════
 \secdivider{Partial Differential Equations}{Formation, First \& Second Order PDE, Separation of Variables}{cF}
 
-\section{S6. Partial Differential Equations}
+\section{S3. Partial Differential Equations}
 \label{sec:S6}
-\markboth{S6. Partial Differential Equations}{}
+\markboth{S3. Partial Differential Equations}{}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cF}{Introduction \& Formation of PDE}
@@ -17667,14 +17744,14 @@ We want to form a Partial Differential Equation (PDE) by eliminating the arbitra
 Differentiating equation \eqref{eq:main_eq} partially with respect to $x$, while treating $y$ as a constant, we obtain:
 \begin{align}
 p = \frac{\partial z}{\partial x} &= a \cdot 1 + 0 + 0 + 0 \nonumber \\
-p &= a \label{eq:p_val}
+p &= a \label{eq:s6_q1_p_val}
 \end{align}
 
 \subsubsection*{Step 2: Differentiate partially with respect to $y$}
 Next, differentiating equation \eqref{eq:main_eq} partially with respect to $y$, while treating $x$ as a constant, we get:
 \begin{align}
 q = \frac{\partial z}{\partial y} &= 0 + b \cdot 1 + 0 + 0 \nonumber \\
-q &= b \label{eq:q_val}
+q &= b \label{eq:s6_q1_q_val}
 \end{align}
 
 \subsubsection*{Step 3: Eliminate the arbitrary constants}
@@ -17707,7 +17784,7 @@ This represents a non-linear partial differential equation of the first order (s
 
 The given partial differential equation is:
 \begin{equation}
-(1+y)p + (1+x)q = z \label{eq:pde}
+(1+y)p + (1+x)q = z \label{eq:s6_q2_pde}
 \end{equation}
 This is a quasi-linear partial differential equation of the first order, which is of the standard form $Pp + Qq = R$, where:
 \[ P = 1+y, \quad Q = 1+x, \quad \text{and} \quad R = z \]
@@ -17734,7 +17811,7 @@ Rearranging the terms to group the variables together:
 \[ (x^2 - y^2) + 2(x - y) = c_1 \]
 Factoring out the common term $(x-y)$:
 \begin{equation}
-(x-y)(x+y+2) = c_1 \label{eq:u}
+(x-y)(x+y+2) = c_1 \label{eq:s6_q2_u}
 \end{equation}
 Let $u(x,y,z) = (x-y)(x+y+2)$.
 
@@ -17752,7 +17829,7 @@ Using the logarithmic property $\ln A + \ln B = \ln(AB)$:
 \[ \ln|z(x-y)| = \ln|c_2| \]
 Exponentiating both sides gives the second integral:
 \begin{equation}
-z(x-y) = c_2 \label{eq:v}
+z(x-y) = c_2 \label{eq:s6_q2_v}
 \end{equation}
 Let $v(x,y,z) = z(x-y)$.
 
@@ -17777,7 +17854,7 @@ Substituting our expressions for $u$ and $v$, the general solution is:
 
 The given partial differential equation is:
 \begin{equation}
-4yzp + q + 2y = 0 \label{eq:pde_main}
+4yzp + q + 2y = 0 \label{eq:s6_q3_pde_main}
 \end{equation}
 This is a quasi-linear partial differential equation of the first order, which takes the standard form $Pp + Qq = R$. By comparing, we identify:
 \[ P = 4yz, \quad Q = 1, \quad \text{and} \quad R = -2y \]
@@ -18011,7 +18088,7 @@ The complete integral represents a two-parameter family of surfaces. For $a=1$ a
 
 The given partial differential equation is:
 \begin{equation}
-(xy^3 - 2x^4)p + (2y^4 - x^3y)q = 9z(x^3 - y^3) \label{eq:pde}
+(xy^3 - 2x^4)p + (2y^4 - x^3y)q = 9z(x^3 - y^3) \label{eq:s6_q5_pde}
 \end{equation}
 This is a quasi-linear partial differential equation of the first order, which is of the standard form $Pp + Qq = R$, where:
 \[ P = xy^3 - 2x^4, \quad Q = 2y^4 - x^3y, \quad \text{and} \quad R = 9z(x^3 - y^3) \]
@@ -18043,7 +18120,7 @@ Using logarithmic properties $\ln(A) + \ln(B) = \ln(AB)$ and $n\ln(A) = \ln(A^n)
 \[ \ln|x^3 y^3 z| = \ln|c_1| \]
 Exponentiating both sides gives our first independent integral:
 \begin{equation}
-x^3 y^3 z = c_1 \label{eq:u}
+x^3 y^3 z = c_1 \label{eq:s6_q5_u}
 \end{equation}
 Let $u(x,y,z) = x^3 y^3 z$.
 
@@ -18068,7 +18145,7 @@ Applying logarithmic properties again:
 \[ \ln\left|(x^3 + y^3)^3 z^2\right| = \ln|c_2| \]
 Exponentiating both sides yields the second independent integral:
 \begin{equation}
-(x^3 + y^3)^3 z^2 = c_2 \label{eq:v}
+(x^3 + y^3)^3 z^2 = c_2 \label{eq:s6_q5_v}
 \end{equation}
 Let $v(x,y,z) = (x^3 + y^3)^3 z^2$.
 
@@ -18092,7 +18169,7 @@ The general solution of the PDE is given by $\phi(u, v) = 0$, where $\phi$ is an
 
 The given partial differential equation is:
 \begin{equation}
-(y+zx)p + (x+yz)q = z^2 - 1 \label{eq:pde_main}
+(y+zx)p + (x+yz)q = z^2 - 1 \label{eq:s6_q6_pde_main}
 \end{equation}
 This is a quasi-linear partial differential equation of the first order (Lagrange's form $Pp + Qq = R$), with:
 \[ P = y+zx, \quad Q = x+yz, \quad \text{and} \quad R = z^2-1 \]
@@ -18180,7 +18257,7 @@ Recognizing that $(z+1)(z-1) = z^2-1$, we arrive at the final simplified form of
 
 Let the given partial differential equation be denoted by $F(x,y,z,p,q) = 0$:
 \begin{equation}
-F(x,y,z,p,q) = 2z + 2px + 2qy - yp^2 = 0 \label{eq:pde_main}
+F(x,y,z,p,q) = 2z + 2px + 2qy - yp^2 = 0 \label{eq:s6_q7_pde_main}
 \end{equation}
 
 \subsubsection*{Step 1: Write Charpit's auxiliary equations}
@@ -18207,10 +18284,10 @@ Integrating both sides:
 \[ 2 \ln y + \ln p = \ln a \implies \ln(py^2) = \ln a \]
 where $a$ is an arbitrary constant. This yields our expression for $p$:
 \begin{equation}
-p = \frac{a}{y^2} \label{eq:p_val}
+p = \frac{a}{y^2} \label{eq:s6_q7_p_val}
 \end{equation}
 
-Now, substitute $p = \frac{a}{y^2}$ into the original PDE \eqref{eq:pde_main} to find $q$:
+Now, substitute $p = \frac{a}{y^2}$ into the original PDE \eqref{eq:s6_q7_pde_main} to find $q$:
 \begin{align*}
     2z + 2\left(\frac{a}{y^2}\right)x + 2qy - y\left(\frac{a}{y^2}\right)^2 &= 0 \\
     2z + \frac{2ax}{y^2} + 2qy - \frac{a^2}{y^3} &= 0
@@ -18218,7 +18295,7 @@ Now, substitute $p = \frac{a}{y^2}$ into the original PDE \eqref{eq:pde_main} to
 Solving for $2qy$ and dividing by $2y$, we find:
 \begin{align}
     2qy &= \frac{a^2}{y^3} - \frac{2ax}{y^2} - 2z \nonumber \\
-    q &= \frac{a^2}{2y^4} - \frac{ax}{y^3} - \frac{z}{y} \label{eq:q_val}
+    q &= \frac{a^2}{2y^4} - \frac{ax}{y^3} - \frac{z}{y} \label{eq:s6_q7_q_val}
 \end{align}
 
 \subsubsection*{Step 3: Find the complete integral}

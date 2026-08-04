@@ -1,4 +1,5 @@
 \documentclass[12pt,a3paper]{article}
+\usepackage{pgfplots}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
@@ -16,14 +17,46 @@
 \usepackage[american]{circuitikz}
 \usepackage{karnaugh-map}
 \usepackage{diagbox}
-\usepackage{circuitikz}
+\usepackage{circuitikz}[american]
 \usepackage{tikz}
-\usepackage{amsmath, amssymb}
+\usepackage{tikz-timing}
 \usepackage{multirow}
+\usepackage{cancel}
+\usepackage{booktabs}
+\usepackage[table]{xcolor} 
+\usepackage{makecell}  
+\usepackage{algorithm}
+\usepackage{algpseudocode}  
 
-\usepackage[table]{xcolor} % টেবিলের সেল কালার করার জন্য
-\usepackage{tikz}
 \usetikzlibrary{circuits.logic.US, positioning, calc}
+\usetikzlibrary{calc, positioning, backgrounds, fit}
+\usetikzlibrary{positioning, arrows.meta, calc, shadows}
+\tikzset{every picture/.append style={thick}}
+
+
+\newcounter{myboxcount}
+
+\BeforeBeginEnvironment{tcolorbox}{%
+  \stepcounter{myboxcount}% বক্স কাউন্টার ১ বাড়াবে
+  \setcounter{equation}{0}% ইকুয়েশন নম্বর ০ করবে (অর্থাৎ ১ থেকে শুরু হবে)
+  
+  \renewcommand{\theHequation}{\themyboxcount.\arabic{equation}}%
+}
+
+% enhanced এবং breakable অপশন সচল করার জন্য লাইব্রেরি
+\tcbuselibrary{skins, breakable}
+
+
+\usetikzlibrary{matrix}
+\usetikzlibrary{arrows.meta}
+\tcbuselibrary{listings}
+\usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
+\usetikzlibrary{decorations.pathreplacing}
+\tcbuselibrary{skins,breakable}
+\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
+\usetikzlibrary{circuits.logic.US}
+
 
 \newcommand{\mycircle}[1]{%
   \tikz[baseline=(char.base)]\node[anchor=south west, draw,circle, inner sep=1.5pt, minimum size=18pt, text height=1ex, text depth=0.2ex] (char) {#1};%
@@ -32,7 +65,7 @@
 
 
 \newcommand{\circled}[1]{\tikz[baseline=(char.base)]{\node[shape=circle,draw,inner sep=1.5pt] (char) {#1};}}
-\usetikzlibrary{automata, positioning, calc} % <--- এই লাইনটি অবশ্যই থাকতে হবে
+\usetikzlibrary{automata, positioning, calc}
 
 \usetikzlibrary{decorations.pathreplacing}
 \tcbuselibrary{skins,breakable}
@@ -47,8 +80,9 @@
 \definecolor{cD}{RGB}{106,27,154}
 \definecolor{cE}{RGB}{230,81,0}
 \definecolor{cF}{RGB}{0,96,100}
-\definecolor{cG}{RGB}{136,14,79}
 \definecolor{cH}{RGB}{0,77,64}
+\definecolor{cG}{RGB}{136,14,79}
+\definecolor{cI}{RGB}{62,39,35}
 
 %% ── Section headings ──────────────────────────────────────────────────
 \titleformat{\section}{\large\bfseries\color{pblue}}{}{0em}{}[\titlerule]
@@ -101,6 +135,7 @@
 \setlist[enumerate,2]{label=(\alph*),leftmargin=2em,itemsep=3pt}
 \setlist[enumerate,3]{label=(\roman*),leftmargin=2.5em,itemsep=2pt}
 
+
 \begin{document}
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -139,6 +174,9 @@
 
 \end{tcolorbox}
 \newpage
+
+
+
 
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -199,13 +237,13 @@
         \item \hyperref[sub:s4-overflow]{Overflow Detection}
         \item \hyperref[sub:s4-multiplier]{Binary Multiplier}
         \item \hyperref[sub:s4-incrementer]{Incrementer}
-        \item \hyperref[sub:s4-encoders]{Encoders \& Decoders}
-        \item \hyperref[sub:s4-decoder-func]{Function Implementation using Decoder}
+        \item \hyperref[sub:s4-comparator]{Magnitude Comparator}
+        \item \hyperref[sub:s4-encoders]{Encoders}
+        \item \hyperref[sub:s4-decoder-func]{Decoders}
         \item \hyperref[sub:s4-demux]{Decoder as Demultiplexer}
         \item \hyperref[sub:s4-bcd]{BCD to 7-Segment Decoder \& BCD Error Detector}
         \item \hyperref[sub:s4-mux]{Multiplexers \& Demultiplexers}
         \item \hyperref[sub:s4-comb-custom]{Custom Combinational Circuit Design}
-        \item \hyperref[sub:s4-comparator]{Magnitude Comparator}
       \end{itemize}
   \end{itemize}
 \end{tcolorbox}
@@ -267,11 +305,14 @@
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cG}{$\cdot$}}]
         \item \hyperref[sub:s8-rom]{ROM Design \& Expansion}
         \item \hyperref[sub:s8-pla]{PLA Design}
+        \item \hyperref[sub:s8-ram]{RAM Design}
+        \item \hyperref[sub:s6-sync-design]{Synchronous Sequential Circuit Design}
       \end{itemize}
   \end{itemize}
 \end{tcolorbox}
 
 \newpage
+
 
 %% ══════════════════════════════════════════════════════════════════════
 %%  SECTION 1: BOOLEAN ALGEBRA, THEOREMS & LOGIC GATES
@@ -422,6 +463,8 @@ Justify your answer.
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
 
+
+
 \item Show that NAND gate is a universal logic gate. Also show that NAND operation does not follow the associative law.
 \mk{5+5} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
@@ -486,6 +529,7 @@ Justify your answer.
 \mk{16} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
 
+
 \item Implement $F(x,y,z) = x'y'z' + xyz'$ using two-level forms of logic by using NAND-AND gates. Assume that the complement of $x$, $y$ and $z$ are readily available.
 \mk{14} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
@@ -530,6 +574,7 @@ Assume that both the normal and complement inputs are available.
 
 
 \end{enumerate}
+
 
 
 %%──────────────────────────────────────────────────────────────────────
@@ -817,6 +862,7 @@ Your implementation should use as few NOR gates as possible.
 \mk{14} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
 
+
 \item Using K-Map, minimize $f(v,w,x,y,z) = \Sigma\,(2,7,8,15,22,23,25,29) + d(6,9,13,18,24,31)$. Find the Prime Implicants and Essential Prime Implicants, and the Minimal Sums. Write down the responsible minterm for each Essential Prime Implicant.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
 
@@ -882,6 +928,7 @@ What is the main purpose of the tabulation method (Quine-McCluskey method) in di
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2022--23}
 
 
+
 \item Determine the prime implicants of the following function using the tabulation (tabular) method:
 \[ F(w, x, y, z) = \Sigma\,(0, 1, 2, 8, 10, 11, 14, 15) \]
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2021--22}
@@ -911,6 +958,9 @@ What is the main purpose of the tabulation method (Quine-McCluskey method) in di
 
 
 \end{enumerate}
+
+
+
 
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -1041,12 +1091,16 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \mk{18} \yr{CSE 205 | L-2/T-1 | 2019--20}
 
 
+\item Using 4-bit binary adder and XOR gate, design a circuit which takes two 4-bit BCD inputs $A$ and $B$, and returns $A+1$ if the control input is $00$, $A'$ if the control input is $01$, $A'+1$ when the control input is $10$, and $A$ when the control input is $11$.\mk{13}
+\yr{CSE 205 | L-2/T-1 | 2018--19}
+
+
+
+
 \item Write the advantages and disadvantages of serial and parallel adders.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2015--16}
 
 
-\item Design a 4-bit BCD adder using 4-bit binary adders and basic logic gates. Use a block diagram to draw a binary adder.
-\mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
 
 \item Design a four-bit binary adder using a 1-bit full-adder circuit. How can it be modified to use as a four-bit subtractor?
@@ -1066,16 +1120,18 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \begin{enumerate}
 
 
-\item Design a BCD adder-subtractor which takes two 4-bit BCD numbers $A$ and $B$. Addition and subtraction is selected by a selector bit $S$: when $S=0$ the circuit produces $A+B$; when $S=1$ it produces $A-B$.
-\mk{12} \yr{CSE 205 | L-2/T-1 | 2020--21}
+\item Design a BCD adder-subtractor which takes two 4-bit BCD numbers $A$ and $B$. Addition and subtraction is selected by a selector bit $S$: when $S=0$ the circuit produces $A+B$; when $S=1$ it produces $A-B$. Explain the operations $9+7$ and $9-7$ with your designed circuit.
+\mk{12} \yr{CSE 205 | L-2/T-1 | 2020--21, 2017--18, 2016--17}
 
 
-\item Design a BCD adder-subtractor for two BCD inputs $A$ and $B$. Addition and subtraction is selected by a selector bit $x$: when $x=0$ the circuit computes $A+B$; when $x=1$ it computes $A-B$. Explain the operations $9+7$ and $9-7$ with your designed circuit.
-\mk{9+4} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
 
-\item Design a circuit which computes $A - B$ and $A + B$ where $A$ and $B$ are 4-bit BCD values. Explain the design.
-\mk{15} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
+
+
+
+\item Design a 4-bit BCD adder using 4-bit binary adders and basic logic gates. Use a block diagram to draw a binary adder.
+\mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
 
 \end{enumerate}
@@ -1224,64 +1280,105 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 
 \end{enumerate}
 
+
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Encoders \& Decoders}
+\subtopic{cD}{Magnitude Comparator}
+\label{sub:s4-comparator}
+
+\begin{enumerate}
+
+\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
+\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
+
+\item Design a logic circuit which finds the maximum value between two 3-bit numbers. Explain the operation using the two numbers 7 and 3.
+\mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
+
+\item Design a logic circuit which returns the smaller value between two 4-bit binary numbers $A$ and $B$. Show the operation with $A=7$, $B=9$.
+\mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
+
+\item Design a digital circuit with logic gates which takes two 3-bit binary numbers $X$ and $Y$ and returns a 3-bit binary number $Z$ equal to the maximum between $X$ and $Y$. 
+($X$ can be expressed as $X_2X_1X_0$, $Y$ can be expressed as $Y_2XY_1Y_0$; and Z can be
+expressed as $Z_2Z_1Z_0$).
+\mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
+
+\item Design and explain a 2-bit magnitude comparator.
+\mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
+
+\end{enumerate}
+
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cD}{Encoders}
 \label{sub:s4-encoders}
 
 \begin{enumerate}
 
+
 \item Design a light sensor based controller circuit for accessing eight servers A, B, C, D, E, F, G, H. The light sensors are numbered as $S_1, S_2, \ldots$ and so on. The sensors of the controller will be ON to show which server is active. The servers have some priority order: C, A, E, H, D, G, F, B (C has the highest priority and B has the lowest priority).
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
+
+
 
 
 \item Show the truth table of an 8-to-3 line priority encoder, where higher priority is given to lower numbered input.
 \mk{9} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
 
+
+
+
+
 \item After a school final result, Ishrat applied for college admission and gave her choices from eight colleges indexed A to H, following the priority order B, A, D, E, F, H, G, C (B has the highest priority, C has the lowest priority). Find the Boolean function of her choices and show the design steps.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
 
 
 \item Design an 8-to-3 priority encoder with the priority order: 5, 0, 7, 4, 6, 3, 2, 1 (5 has highest priority, 1 has lowest priority).
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
 
+
 \item Design an 8-to-3 priority encoder with the priority order: 6, 0, 7, 4, 5, 3, 1, 2 (6 has highest priority, 2 has lowest priority).
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
+
+
+
 
 
 \item ``A lower-order code will get priority'' --- Design and explain a priority encoder with negative enable for 9 bits.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
 
 
-\item Design a full adder with a decoder and basic logic gates.
-\mk{12} \yr{CSE 205 | L-2/T-1 | 2014--15}
-
 
 \item An Octal-to-Binary Encoder may cause ambiguities if more than one input is simultaneously set to~1. How can this ambiguity be resolved?
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 
 \item What is a priority encoder? Design a four-input priority encoder with inputs $I_0, I_1, I_2, I_3$, where the priority order is $I_2 > I_3 > I_1 > I_0$.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
 
-\item You need a full adder for an experiment but in the lab you could only find plenty of $3 \times 8$ decoders. Can any such decoder be used as a full adder? Explain your answer with a truth table.
-\mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
 
 
 \item Design a 4-input priority encoder and show the gate-level circuit diagram.
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2011--12, 2013--14}
 
 
-\item Design a $3 \times 8$ decoder using two $2 \times 4$ decoder circuits.
-\mk{8} \yr{CSE 205 | L-2/T-1 | 2011--12}
-
-
 \end{enumerate}
 
+
+
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Function Implementation using Decoder}
+\subtopic{cD}{Decoders}
 \label{sub:s4-decoder-func}
 
 \begin{enumerate}
@@ -1314,6 +1411,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \mk{12} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
 
+
 \item Using a $2 \times 4$ line decoder, design a half subtractor. (Decoder outputs $D_0, D_1, D_2, D_3$ are active high; enable $\overline{EN}$ is active low.)
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
@@ -1330,6 +1428,23 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
   \end{enumerate}
 Note that you will need to implement both functions in a single circuit. You may use as many decoders as required, keeping the implementation as efficient as possible. Basic gates are also allowed.
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2015--16}
+
+
+
+\item Design a full adder with a decoder and basic logic gates.
+\mk{12} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
+
+
+\item You need a full adder for an experiment but in the lab you could only find plenty of $3 \times 8$ decoders. Can any such decoder be used as a full adder? Explain your answer with a truth table.
+\mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
+
+
+
+
+\item Design a $3 \times 8$ decoder using two $2 \times 4$ decoder circuits.
+\mk{8} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
 
 \end{enumerate}
@@ -1512,7 +1627,6 @@ Note that you will need to implement both functions in a single circuit. You may
 \[ F(A,B,C,D) = \Sigma\,(1,3,4,11,12,13,14,15) \]
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
-
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
@@ -1577,35 +1691,7 @@ Note that you will need to implement both functions in a single circuit. You may
 
 \end{enumerate}
 
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Magnitude Comparator}
-\label{sub:s4-comparator}
 
-\begin{enumerate}
-
-\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
-\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
-
-
-\item Design a logic circuit which finds the maximum value between two 3-bit numbers. Explain the operation using the two numbers 7 and 3.
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
-
-
-\item Design a logic circuit which returns the smaller value between two 4-bit binary numbers $A$ and $B$. Show the operation with $A=7$, $B=9$.
-\mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
-
-
-\item Design a digital circuit with logic gates which takes two 3-bit binary numbers $X$ and $Y$ and returns a 3-bit binary number $Z$ equal to the maximum between $X$ and $Y$. 
-($X$ can be expressed as $X_2X_1X_0$, $Y$ can be expressed as $Y_2XY_1Y_0$; and Z can be
-expressed as $Z_2Z_1Z_0$).
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
-
-
-\item Design and explain a 2-bit magnitude comparator.
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
-
-
-\end{enumerate}
 
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -1860,6 +1946,7 @@ Design the circuit with NAND SR latches and gates.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2024--25}
 
 
+
 \item Construct a JK flip-flop from a T flip-flop and necessary gates. Show all the steps of this construction process.
 \mk{11} \yr{CSE 205 | L-2/T-1 | 2023--24, 2022--23, 2016--17}
 
@@ -1867,6 +1954,8 @@ Design the circuit with NAND SR latches and gates.
 \item Design a D flip-flop using a T flip-flop and gates.
 \mk{5} \yr{CSE 205 | L-2/T-1 | 2020--21}
 \variant{2019--20}
+
+
 
 
 \item Design a SR Flip-Flop using a D Flip-Flop and a $4\times1$ MUX.
@@ -2278,6 +2367,7 @@ CHANGE & 11 \\
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2024--25, 2022--23, 2015--16, 2013--14, 2011--12}
 
 
+
 \item Transform the Mealy machine shown below into a corresponding Moore machine.
 
 \begin{center}
@@ -2294,6 +2384,7 @@ E & A, 1 & B, 1 \\ \hline
 \end{center}
 
 \mk{6} \yr{CSE 205 | L-2/T-1 | 2023--24}
+
 
 
 \item Transform the following Mealy machine into a corresponding Moore machine.
@@ -2794,6 +2885,7 @@ Derive the primitive flow table and then obtain the reduced flow table.
 \mk{6+6} \yr{CSE 205 | L-2/T-1 | 2011--12}
 
 
+
 \end{enumerate}
 
 
@@ -2853,6 +2945,7 @@ Draw the logic diagram of the circuit and derive the transition table.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21, 2018--19}
 
 
+
 \item For the following primitive flow table shown in Figure , answer the following questions:
 \begin{enumerate}[label=(\roman*)]
     \item Find all compatible pairs by means of an implication table.
@@ -2882,6 +2975,7 @@ $h$ & $a$, $-$ & $-$, $-$ & $-$, $-$ & \circled{$h$}, $0$ \\ \hline
 
 
 \end{enumerate}
+
 
 
 %%──────────────────────────────────────────────────────────────────────
@@ -3154,12 +3248,15 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
 
+
 \item Design a 3-bit synchronous binary up counter that counts $1 \to 2 \to 4 \to 7 \to 1 \to \cdots$, where any invalid state goes to the immediate next state in the sequence. Use JK flip-flops. Show the state table, state diagram, function minimization (if necessary), and circuit diagram.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2013--14}
 
 
 \item Design a synchronous counter with the following binary sequence: $0, 1, 3, 7, 6, 4$ and repeat. Use T flip-flops.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
+
 
 
 \end{enumerate}
@@ -3219,6 +3316,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 
 \item Design a 4-bit Johnson Counter. What is the disadvantage of a Johnson Counter? What is the difference between a Johnson Counter and a Ring Counter?
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
 
 
 \end{enumerate}

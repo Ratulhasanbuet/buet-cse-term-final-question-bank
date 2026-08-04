@@ -1,4 +1,7 @@
+
 \documentclass[12pt,a3paper]{article}
+\usepackage{pgfplots}
+\usepackage[utf8]{inputenc}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
@@ -16,18 +19,41 @@
 \usepackage{multirow}
 \usepackage[table]{xcolor}
 \usepackage{tikz}
+\usepackage{caption}   
 \usepackage{listings}
 \usepackage{makecell}
 \usepackage{tabularx}
 \usepackage{algorithm}
-
 \usepackage{algpseudocode}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage{tabularx}
+
+\usepackage{tcolorbox}
+\usepackage{etoolbox}
+\usepackage{hyperref}
+
+\newcounter{myboxcount}
+
+\BeforeBeginEnvironment{tcolorbox}{%
+  \stepcounter{myboxcount}% বক্স কাউন্টার ১ বাড়াবে
+  \setcounter{equation}{0}% ইকুয়েশন নম্বর ০ করবে (অর্থাৎ ১ থেকে শুরু হবে)
+  
+  \renewcommand{\theHequation}{\themyboxcount.\arabic{equation}}%
+}
+
+% enhanced এবং breakable অপশন সচল করার জন্য লাইব্রেরি
+\tcbuselibrary{skins, breakable}
+
 
 \usetikzlibrary{matrix}
 
 \tcbuselibrary{listings}
 \usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
-
+\usetikzlibrary{decorations.pathreplacing}
 \tcbuselibrary{skins,breakable}
 \geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 \tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
@@ -56,9 +82,11 @@
 \definecolor{cD}{RGB}{106,27,154}
 \definecolor{cE}{RGB}{230,81,0}
 \definecolor{cF}{RGB}{0,96,100}
-\definecolor{cG}{RGB}{136,14,79}
 \definecolor{cH}{RGB}{0,77,64}
+\definecolor{cG}{RGB}{136,14,79}
 \definecolor{cI}{RGB}{62,39,35}
+
+
 
 % %% ── Pseudocode listing style ──────────────────────────────────────────
 % \lstdefinestyle{pseudostyle}{
@@ -160,6 +188,8 @@
 \setlist[enumerate,2]{label=(\alph*),leftmargin=2em,itemsep=3pt}
 \setlist[enumerate,3]{label=(\roman*),leftmargin=2.5em,itemsep=2pt}
 
+
+
 \begin{document}
 
 %% -- COVER -------------------------------------------------------------
@@ -195,6 +225,7 @@
     \end{tabular}
 \end{tcolorbox}
 \newpage
+
 
 
 
@@ -310,6 +341,7 @@
 %% Part VII
 
 
+
 \newpage
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -351,7 +383,6 @@ Construct a directed weighted graph with non-negative integer edge weights such 
 %% Q — 2024-25
 \item Consider a directed weighted graph with vertices $\{A, B, C, D\}$ and edges $A \to B\ (3)$, $B \to C\ (2)$, $C \to D\ (2)$, $D \to B\ (-8)$, $A \to D\ (10)$, $B \to D\ (5)$. Determine whether the graph contains a negative weight cycle by applying the Floyd-Warshall algorithm. If a negative cycle exists, identify the vertex (or vertices) involved in the cycle.
 \mk{15} \yr{CSE 207 | L-2/T-1 | 2024--25}
-
 
 \item Let $c_1, c_2, \dots, c_n$ be various currencies. For any two currencies $c_i$ and $c_j$, there is an 
 exchange rate $r_{ij}$ which means that you can purchase $r_{ij}$ units of currency $c_j$ in 
@@ -425,7 +456,6 @@ From the above problem description, answer the following:
 \end{enumerate}
 \yr{CSE 207 | L-2/T-2 | 2021--22}
 
-
 %% Q — 2022-23
 \item Design an efficient algorithm for finding the length of the longest path in a dag (directed acyclic graph).
 \mk{8} \yr{CSE 207 | L-2/T-2 | 2020--21}
@@ -493,6 +523,7 @@ From the above problem description, answer the following:
 %% Q — 2019-20
 \item Show how to express the single-source shortest-paths problem as a product of matrices and a vector. Describe how evaluating this product corresponds to a Bellman-Ford-like algorithm.
 \mk{10} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
 
 
 %% Q — 2019-20
@@ -636,7 +667,6 @@ Dijkstra (G)
  \mk{6+6}
 \yr{CSE 207 | L-2/T-2 | 2012--13}
 
-
  
 \item In the figure below, the shortest path estimate of each vertex appears within the vertex and the distance to traverse from a vertex to another appears as the weight of the corresponding directed edge. Show the updated shortest path estimates of vertices after relaxing the following edges.
 
@@ -696,6 +726,7 @@ Dijkstra (G)
   \draw (cse215) -> (cse401);
   \end{tikzpicture}
 \end{center}
+
 
 
 \end{enumerate}
@@ -870,6 +901,7 @@ Dijkstra (G)
 \mk{10} \yr{CSE 207 | L-2/T-2 | 2017--18}
 
 
+
 \item Let $G$ be a weighted connected graph and let $V_1, V_2$ be a partition of its vertices into two disjoint non-empty sets. Let $e$ be an edge in $G$ with minimum weight among those with one endpoint in $V_1$ and the other in $V_2$. Show that there is a minimum spanning tree $T$ of $G$ containing $e$. \mk{10}
 \yr{CSE 207 | L-2/T-2 | 2017--18}
 
@@ -893,7 +925,6 @@ $s$ and $t$ in the network. Give an algorithm for solving this problem. Your
 algorithm should run in $O((V + E + E') \log V)$ time.
  \mk{15}\yr{CSE 207 | L-2/T-2 | 2015--16}
 
- 
 
 \item Find a minimum spanning tree by running (i) Kruskal's algorithm and (ii) Prim's algorithm. Show the order of edges selected in each case (use alphabetical ordering when there is a tie). \mk{15}
 \yr{CSE 207 | L-2/T-2 | 2015--16}
@@ -926,6 +957,7 @@ algorithm should run in $O((V + E + E') \log V)$ time.
 
   \end{tikzpicture}
 \end{center}
+
 
 
 \item Let $G = (V, E)$ be a connected undirected graph with weight function $w$ on $E$. Let $A \subseteq E$ be included in some MST for $G$, let $(S, V-S)$ be any cut that respects $A$, and let $(u, v)$ be a light edge crossing $(S, V-S)$. Prove that $(u, v)$ is safe for $A$. \mk{10}
@@ -1183,7 +1215,7 @@ to all the $n$ houses.\mk{12}
 
 \medskip
 
-\noindent Suppose we are given the communication distance $D$, parameters $b$ and $k$, and an array $d[1 \dots n, 1 \dots n]$ of distances, where $d[i, j]$ is the distance between device $i$ and device $j$. The problem is to design and analyze an algorithm that either computes a backup set of size $k$ for each of the $n$ devices, such that no device appears in more than $b$ backup sets, or correctly reports that no good collection of backup sets exists. Now answer the following questions: \textbf{(10+7+3)}
+\noindent Suppose we are given the communication distance $D$, parameters $b$ and $k$, and an array $d[1 \dots n, 1 \dots n]$ of distances, where $d[i, j]$ is the distance between device $i$ and device $j$. The problem is to design and analyze an algorithm that either computes a backup set of size $k$ for each of the $n$ devices, such that no device appears in more than $b$ backup sets, or correctly reports that no good collection of backup sets exists. Now answer the following questions: 
 
 \begin{enumerate}
     \item Reduce this problem to a max-flow problem. Describe a max-flow problem (a directed, capacitated graph $G$, a source and sink pair) such that a good collection of backup sets exist if and only if the max-flow in $G$ has a certain size. What is this size?
@@ -1296,6 +1328,7 @@ of the flow network. Integers represent the flow capacities of the edges.
   \draw (b) -> node[edge label, right] {5} (f);
   \draw (e) -> node[edge label, right]       {8}  (f);
   \draw (f) -> node[edge label, right]       {10}  (t);
+
 
 
 \end{tikzpicture}
@@ -1505,7 +1538,6 @@ of the flow network. Integers represent the flow capacities of the edges.
 \end{center}
  \mk{20} \yr{CSE 207 | L-2/T-2 | 2007--08}
 
- 
 
 \item There is a wireless network of nodes $A$, $B$, $C$, $D$, $E$, $F$, $G$ and $H$. Capacity of the wireless links are given in the following format: ``-'' indicates there is no link between those nodes. What is the maximum data flow, if node $A$ sends data to node $H$? What is the capacity of the optimal cut? (Use Ford-Fulkerson method and show the steps.) \mk{10+5=15}
 
@@ -1571,7 +1603,6 @@ if and only if there is a maximum flow $f$ in $G'$. \mk{17.5}
   \item In a stable matching problem (\textbf{Gale-Shapley algorithm}) each participant has a true preference order. Now consider a woman $w$. Suppose $w$ prefers man $m$ to $m'$, but both $m$ and $m'$ are low on her list of preferences. Can it be the case that by switching the order of $m$ and $m'$ on her list of preferences (i.e., by falsely claiming that she prefers $m'$ to $m$) and running the algorithm with this false preference list, $w$ will end up with a man $m''$ that she truly prefers to both $m$ and $m'$? Give proof to support your answer.
   \mk{10}  \yr{CSE 207 | L-2/T-1 | 2020--21}
 
-  
 
 \end{enumerate}
 
@@ -2132,7 +2163,7 @@ complexity of the algorithm.
 \mk{25} \yr{CSE 207 | L-2/T-1 | 2024--25}
 
 
-\item Delete the node 50 from the given Red-Black Tree. Note that doubly circled nodes represent Red and single circles represent Black.
+\item Delete the node 50 from the given Red-Black Tree.
 \begin{center}
       \begin{tikzpicture}[
         scale=1.4,
@@ -2282,8 +2313,9 @@ complexity of the algorithm.
 \mk{5} \yr{CSE 207 | L-2/T-2 | 2020--21}
 
 
+
 %% Q — 2021-22
-\item Insert 11 into the Red-Black tree shown in the figure. You have to show the intermediate steps. The red and black nodes are indicated by `r' and `b', respectively.
+\item Insert 11 into the Red-Black tree shown in the figure. You have to show the intermediate steps.
 \begin{center}
   \begin{tikzpicture}[
         every node/.style={circle, draw=black, thick, minimum size=0.7cm, font=\bfseries, inner sep=0pt},
@@ -2492,6 +2524,7 @@ complexity of the algorithm.
 \yr{CSE 207 | L-2/T-2 | 2017--18}
 
 
+
 %% Q — 2020-21
 \end{enumerate}
 
@@ -2619,6 +2652,7 @@ No. of consecutive heads & 1  & 4  & 1  & 0  & 3  & 2  & 2  & 3  & 1  \\ \hline
 \yr{CSE 203 | L-2/T-1 | 2013--14}
 
 
+
 \item Draw the skip-list for the following table that shows the keys and consecutive numbers of heads found in a coin toss while inserting the keys in a probabilistic skip-list:
 \begin{center}
 \begin{tabular}{lcccccccccc}
@@ -2696,7 +2730,7 @@ Perform the following operations on the skip-list and show the procedures:
 \mk{12} \yr{CSE 207 | L-2/T-1 | 2022--23}
 
 
-\item Suppose there are two priority queues named pq1 and pq2. The pq1 is a max priority queue and pq2 is a min priority queue. Both the priority queues are implemented using the binomial heap data structure. The priority queue pq1 was initially empty, but then the following numbers were inserted in this order: 210, 201, 220, 202, 221, 205, and 209. The internal heap representation of the priority queue pq2 is show in figure 1. Now answer the following questions:
+\item Suppose there are two priority queues named pq1 and pq2. The pq1 is a max priority queue and pq2 is a min priority queue. Both the priority queues are implemented using the binomial heap data structure. The priority queue pq1 was initially empty, but then the following numbers were inserted in this order: 210, 201, 220, 202, 221, 205, and 209. The internal heap representation of the priority queue pq2 is show in figure. Now answer the following questions:
 
 \vspace{0.5cm}
 
@@ -2859,7 +2893,6 @@ Perform the following operations on the skip-list and show the procedures:
 
 \end{enumerate}
 
-
 %% Q — 2022-23
 
 %% Q — 2019-20
@@ -2961,6 +2994,7 @@ Perform the following operations on the skip-list and show the procedures:
 \mk{17} \yr{CSE 207 | L-2/T-2 | 2019--20}
 
 
+
 %% Q — 2022-23
 \item Mention the amortized running times of the following operations for binomial and Fibonacci heaps:
 \begin{enumerate}
@@ -2972,8 +3006,13 @@ Perform the following operations on the skip-list and show the procedures:
 \mk{8} \yr{CSE 207 | L-2/T-2 | 2019--20, 2018--19}
 
 
+
+
+
+
 \item Write down the running times of the following operations for both Binomial heap and Fibonacci heap: (i) Insert key, (ii) Find min, (iii) Extract min, (iv) Union of two heaps, (v) Decrease key. A friend claims to have designed a mergeable heap with $O(1)$ time for all operations above. Would you believe it? Justify. \mk{6+6}
 \yr{CSE 207 | L-2/T-2 | 2017--18}
+
 
 
 \item Prove that there are $\binom{k}{i}$ nodes at depth $i$ in a binomial tree $B_k$. \mk{5}
@@ -3359,6 +3398,7 @@ Here double-circled nodes are marked and single-circled nodes are unmarked.
 \end{enumerate}
 
 
+
 %% Q — 2021-22
 \item Analyze the running time of a chaining hash table in both successful search and unsuccessful search cases.
 \mk{10} \yr{CSE 207 | L-2/T-2 | 2021--22}
@@ -3367,6 +3407,8 @@ Here double-circled nodes are marked and single-circled nodes are unmarked.
 %% Q — 2022-23
 \item You are given the task to implement the hash table data structure for a new programming language. You may use either separate chaining or open addressing. In open addressing, there are various options for probing. Explain your choice precisely with proper justification.
 \mk{10} \yr{CSE 207 | L-2/T-2 | 2020--21}
+
+
 
 
 %% Q — 2019-20
@@ -3393,6 +3435,7 @@ Here double-circled nodes are marked and single-circled nodes are unmarked.
 \item Consider successively inserting the keys 14, 3, 29, 3, 19, 16, 35, and 2 into a hash table of size $m = 11$ with hash function $h(k) = k \bmod m$. Illustrate the resulting hash table after inserting these keys using quadratic probing. You do not need to show the intermediate steps, just show the hash table after inserting all the elements.
  
 \mk{12} \yr{CSE 207 | L-2/T-2 | 2018--19, 2016--17}
+
 
 
 \item Under simple uniform hashing, what is the expected number of items that may collide with an element $x$ in a hash table with separate chaining, given $m$ chains and $n$ items? \mk{10}
@@ -3564,6 +3607,8 @@ NP-complete.
 \mk{12} \yr{CSE 207 | L-2/T-2 | 2019--20}
 
 
+
+
 %% Q — 2020-21
 \item The TAUTOLOGY problem asks if a given Boolean formula is true for all possible assignments to the Boolean variables. Prove or disprove that TAUTOLOGY is in co-NP.
 \mk{6} \yr{CSE 207 | L-2/T-2 | 2018--19}
@@ -3580,6 +3625,7 @@ NP-complete.
 
 \item Given clauses $C_1, C_2, \ldots, C_k$ each of length 3 over Boolean variables (3-SAT), and a graph $G$ with number $K$ (Vertex Cover asks if $G$ has a vertex cover of size $\leq K$). Prove that Vertex Cover is at least as hard as 3-SAT. \mk{15}
 \yr{CSE 207 | L-2/T-2 | 2016--17}
+
 
 
 \item Explain the term ``reducibility''. If $L_1$ and $L_2$ are two languages such that $L_1 \leq_p L_2$, show that $L_2 \in P$ implies $L_1 \in P$. If any NP-complete problem is polynomial-time solvable, prove that $P = NP$. \mk{10}
@@ -3602,6 +3648,7 @@ C_1 &= X_1 \vee \overline{X_2}, \quad C_2 = \overline{X_1} \vee X_2 \vee X_4 \ve
 C_3 &= \overline{X_2}, \quad C_4 = X_2 \vee X_3 \vee \overline{X_4}
 \end{align*}
 Mention the number of boolean variables and clauses in the 3-SAT problem.
+
 
 
 %% Q — 2019-20
@@ -3672,6 +3719,7 @@ Prove that the satisfiability of Boolean formulas is NP-complete.\\
  Give an example of reduction by equivalence .
  \mk{5+15+10}
 \yr{CSE 207 | L-2/T-2 | 2006--07}
+
 
 
 \end{enumerate}
@@ -3809,6 +3857,7 @@ $OPT(i, w)$ (the max value subset of items 1 to i with weight limit w).
 \end{center}
 
 \mk{12} \yr{CSE 207 | L-2/T-2 | 2019--20}
+
 
 
 \item Discuss the approximability of the general Traveling Salesperson Problem (TSP). Give an approximation algorithm for the Euclidean TSP problem and compute the approximation ratio of your algorithm. \mk{2+3+5}
@@ -3969,6 +4018,7 @@ Use the backtracking algorithm to decide whether this is satisfiable or not. You
 
 \item Consider the following Boolean formula: $(x' \vee y)(x \vee y' \vee z)(y \vee y')(x \vee y)(x \vee y \vee z')(x \vee y \vee z)$. Use a backtracking algorithm to decide whether it is satisfiable. Show the backtracking tree. \mk{15}
 \yr{CSE 207 | L-2/T-2 | 2016--17}
+
 
 
 \item Compare the techniques of brute-force algorithms, heuristics, and approximation algorithms for coping with hard problems. Write a backtracking algorithm to color a map with no more than four colors. \mk{5+5=10}
@@ -4242,7 +4292,6 @@ Item & Weight & Value \\
   \mk{10} \yr{CSE 207 | L-2/T-1 | 2024--25}
 
   
-  
 \end{enumerate}
 
 \subtopic{cG}{Las Vegas Algorithms \& Randomized Quick Sort}
@@ -4252,9 +4301,9 @@ Item & Weight & Value \\
   \item Analyze the running time of the randomized quick sort algorithm.
   \mk{12} \yr{CSE 207 | L-2/T-1 | 2024--25}
 
-  
 
 \end{enumerate}
+
 
 
 \end{document}

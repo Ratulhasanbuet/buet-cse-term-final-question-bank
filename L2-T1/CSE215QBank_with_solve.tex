@@ -24,6 +24,8 @@
 \usepackage{mathtools}
 \usepackage{caption}
 \usepackage{forest}
+\usepackage{tabularx}
+
 \usetikzlibrary{shadows}
 
 \usetikzlibrary{snakes}
@@ -222,7 +224,7 @@
       & --- \LaTeX\ Typesetting\\[3pt]
       \textbf{NotebookLM} & --- Research \& Extraction\\[3pt]
       \textbf{Claude AI} & --- \LaTeX\ Typesetting\\[3pt]
-      \textbf{Gemini} & --- Daigram Generation\\[3pt]
+      \textbf{Gemini} & --- Answer \& Diagram Generation\\[3pt]
     \end{tabular}
 \end{tcolorbox}
 \newpage
@@ -393,7 +395,7 @@ In a \textbf{2-tier architecture}, the system is divided into two distinct layer
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Three-Tier Database Architecture}
@@ -678,7 +680,7 @@ An ideal Database Management System (DBMS) must provide a robust, secure, and ef
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Definition of Entity and Attribute}
@@ -1371,7 +1373,7 @@ Feature & Database Schema & Database Data (Instance) \\
 \end{center}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. DDL versus DML}
@@ -1489,7 +1491,7 @@ To manage this metadata, the DBMS stores the data dictionary as a set of relatio
 \end{center}
 \vspace{1em}
 
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Storing the Relational Database: File Strategies}
@@ -2158,7 +2160,7 @@ In this context, a dependent only exists in the database if their associated emp
 \end{center}
 \vspace{1em}
 
-\hrule
+ 
 \vspace{0.75em}
 \noindent\textbf{Exam Tip (Relational Mapping):} When mapping this ER model to a relational database schema, you do not create a separate table for the identifying relationship. Instead, the resulting \texttt{DEPENDENT} table will simply have the composite primary key \texttt{(Emp\_ID, Dep\_Name)}, where \texttt{Emp\_ID} acts as a foreign key referencing the \texttt{EMPLOYEE} table.
 
@@ -2282,7 +2284,7 @@ A \textbf{Primary Key (PK)} is a candidate key chosen by the database designer t
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Solving the Multi-valued Attribute Problem}
@@ -4098,9 +4100,9 @@ The following diagram illustrates the transformation from a ternary relationship
 
 \vspace{1em}
 \begin{center}
-\resizebox{0.9\textwidth}{!}{
+
 \begin{tikzpicture}[
-    thick,
+    thick,x=1.2cm, 
     entity/.style={draw, rectangle, rounded corners, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
     associative/.style={draw, double, double distance=1.5pt, rectangle, rounded corners, minimum width=3cm, minimum height=1cm, align=center, fill=gray!10, font=\bfseries},
     relationship/.style={draw, diamond, aspect=1.5, minimum width=2.5cm, minimum height=1cm, align=center, fill=white, font=\bfseries},
@@ -4149,8 +4151,9 @@ The following diagram illustrates the transformation from a ternary relationship
     \draw[double, double distance=1.5pt] (RC) -- (ER) node[midway, right, label_style] {N};
 
 \end{tikzpicture}
-}
+
 \end{center}
+
 
 \vspace{1em}
 \subsubsection*{Relational Schema Mapping (Example)}
@@ -4613,7 +4616,7 @@ In database management systems, both \textbf{Views} and \textbf{Materialized Vie
 \end{center}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Disjoint Specialization in EER Modeling}
@@ -7029,7 +7032,7 @@ CREATE TABLE Lot_Materials (
 Below are the three principal strategies for converting this ISA (Inheritance) hierarchy into relational schemas. Primary keys are \underline{underlined}, and Foreign keys are denoted with \textit{italics} or explicitly stated.
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{Strategy 1: ER Approach (Superclass and Subclass Relations)}
@@ -7057,7 +7060,7 @@ Below are the three principal strategies for converting this ISA (Inheritance) h
 \end{itemize}
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{Strategy 2: Object-Oriented Approach (Multiple Concrete Relations)}
@@ -7083,7 +7086,7 @@ Below are the three principal strategies for converting this ISA (Inheritance) h
 \end{itemize}
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{Strategy 3: Single Relation Approach (Null-Value Method)}
@@ -7185,7 +7188,7 @@ CREATE TABLE Buses OF Bus_Type UNDER Vehicles;
 \end{lstlisting}
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{2. Constructor Functions and Insert Statements}
@@ -7357,7 +7360,7 @@ Before mapping the Entity-Relationship (ER) diagram to a relational schema, we a
 \end{itemize}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{2. Mapping Process \& Rules Applied}
@@ -7373,7 +7376,7 @@ Before mapping the Entity-Relationship (ER) diagram to a relational schema, we a
 \end{enumerate}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{3. Relational Schema Diagram}
@@ -7450,7 +7453,7 @@ The relational schema design layout below shows tables, underlined primary keys,
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{4. Relational Schema Definitions}
@@ -7506,7 +7509,7 @@ Below is an Entity-Relationship diagram demonstrating both relationship types.
 
 \begin{center}
     \begin{tikzpicture}[
-        thick,
+        thick,x=1.3cm, 
         entity/.style={rectangle, draw, fill=white, minimum width=2.5cm, minimum height=1cm, align=center},
         weak entity/.style={rectangle, draw, double, double distance=1.5pt, fill=white, minimum width=2.5cm, minimum height=1cm, align=center},
         relationship/.style={diamond, draw, fill=white, minimum width=2cm, minimum height=1cm, aspect=1.5, align=center},
@@ -7552,6 +7555,7 @@ Below is an Entity-Relationship diagram demonstrating both relationship types.
     \end{tikzpicture}
 \end{center}
 
+
 \subsection*{Comparison Table}
 
 \begin{center}
@@ -7569,7 +7573,7 @@ Below is an Entity-Relationship diagram demonstrating both relationship types.
 \end{center}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{2. Security Concerns Arising from the Choice of Primary Key}
@@ -7616,7 +7620,7 @@ A \textbf{derived attribute} is an attribute whose value is not inherently indep
 In physical database design, developers face a architectural choice: compute the value dynamically on-the-fly during runtime queries (non-stored approach), or physically write and maintain the calculated value within the base tables. Storing a derived attribute in a table is a core technique of \textbf{denormalization} and is often operationalized via \textbf{materialized views} or \textbf{database triggers}.
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{2. Diagrammatic Representation}
@@ -7683,7 +7687,7 @@ arrow/.style={->, >=stealth, line width=1pt}
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{3. Advantages of Storing Derived Attributes}
@@ -7719,7 +7723,7 @@ arrow/.style={->, >=stealth, line width=1pt}
 \end{enumerate}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{5. Trade-off Comparison Summary}
@@ -7911,7 +7915,7 @@ Although the problem statement underlines \texttt{maker} in the \texttt{Product}
 The \textbf{natural identifier} across all these relations is the \texttt{model} number, which is unique for every hardware product.
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{2. Suggested Primary and Foreign Keys}
@@ -7945,7 +7949,7 @@ Based on standard database design principles for ISA hierarchies, the keys shoul
 \end{itemize}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{3. Relational Schema Diagram}
@@ -8023,7 +8027,7 @@ The following diagram illustrates the corrected physical schema, explicitly show
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{4. Summary Table of Schema Constraints}
@@ -8103,7 +8107,7 @@ Since \textit{Figure 2} was referenced but not provided, the following standard 
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{2. SQL:2003 Schema Definition}
@@ -8143,7 +8147,7 @@ CREATE TABLE Employee (
 \end{lstlisting}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{3. Constructors for Structured Types}
@@ -8240,7 +8244,7 @@ SELECT total_moons() AS total_moon_count;
 \end{lstlisting}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. SQL Pattern Matching using LIKE}
@@ -9345,7 +9349,7 @@ FROM (
 
 \end{tcolorbox}
 
-\item You are in charge of managing the program committee for an important conference. The \textbf{conference database} stores information about papers submitted to the conference (table Paper), reviewers on the program committee (table Reviewer), and the assignment of reviewers to papers (table Reviews). Each reviewer on the program committee will have to review a set of papers. Each paper will be reviewed by a subset of reviewers. \hfill \textbf{(15)}
+\item You are in charge of managing the program committee for an important conference. The \textbf{conference database} stores information about papers submitted to the conference (table Paper), reviewers on the program committee (table Reviewer), and the assignment of reviewers to papers (table Reviews). Each reviewer on the program committee will have to review a set of papers. Each paper will be reviewed by a subset of reviewers.
 
 \vspace{0.2cm}
 \noindent Paper(\underline{pid}, title) \\
@@ -9852,8 +9856,8 @@ ORDER BY "TOTAL MANAGED EMPLOYEES" ASC;
 \textbf{Working Principle of the Self-Join:}
 \begin{center}
 \begin{tikzpicture}[
-    node distance=4cm,
-    table/.style={draw=black!80, thick, rounded corners=4pt, align=left, inner sep=10pt, fill=white, font=\sffamily},
+    node distance=8cm,
+    table/.style={draw=black!80, thick, rounded corners=4pt, align=left, inner sep=10pt, fill=white},
     arrow/.style={->, thick, >=stealth, draw=black!80}
 ]
 
@@ -9879,6 +9883,7 @@ ORDER BY "TOTAL MANAGED EMPLOYEES" ASC;
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{1em}
 
 \subsection*{2. Aggregation and Filtering Query}
@@ -10976,9 +10981,9 @@ When a referenced (parent) row is updated or deleted, the database must decide w
 };
 
 % Policies
-\node[block, below left=1.2cm and -1.5cm of parent] (restrict) {\textbf{RESTRICT}\\(or NO ACTION)};
+\node[block, below left=1.2cm and -1.2cm of parent] (restrict) {\textbf{RESTRICT}\\(or NO ACTION)};
 \node[block, below=1.2cm of parent] (cascade) {\textbf{CASCADE}};
-\node[block, below right=1.2cm and -1.5cm of parent] (setnull) {\textbf{SET NULL}};
+\node[block, below right=1.2cm and -1.2cm of parent] (setnull) {\textbf{SET NULL}};
 
 % Effects
 \node[effect, draw=red!80, text=red!80!black, below=1cm of restrict] (r_eff) {Aborts operation.\\Throws Error.};
@@ -10996,6 +11001,7 @@ When a referenced (parent) row is updated or deleted, the database must decide w
 
 \end{tikzpicture}
 \end{center}
+
 
 \subsubsection*{The Three Policies:}
 \begin{itemize}
@@ -11715,7 +11721,7 @@ The three fundamental types of relations in SQL are \textbf{Base Relations}, \te
 % VISUALIZATION: Relationship between the relation types
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,x=1.4cm,
     box/.style={rectangle, draw, thick, minimum width=3.8cm, minimum height=1.4cm, align=center, rounded corners=3pt},
     base/.style={box, fill=gray!20},
     view/.style={box, dashed, fill=blue!5},
@@ -11732,8 +11738,9 @@ The three fundamental types of relations in SQL are \textbf{Base Relations}, \te
     \draw[->, thick, dashed] (view.east) -- node[above, font=\footnotesize] {Evaluated at runtime} (temp.west);
 
 \end{tikzpicture}
-\captionof*{figure}{\textbf{Figure 1:} Architecture and lifecycle of the three SQL relation types.}
+\captionof*{figure}{\textbf{Figure :} Architecture and lifecycle of the three SQL relation types.}
 \end{center}
+
 
 \subsection*{1. Base Relations (Base Tables)}
 A base relation is an autonomous, named relation whose records are physically stored in the database's persistent storage (e.g., hard disks or SSDs). 
@@ -12625,8 +12632,7 @@ $$ \text{LessThan2} = \text{Req} - \text{AtLeast2} $$
 \textbf{Step 2.4: Find pairs with \textit{more than 2} evaluations.}
 Let $Ev_3 = \rho_{Ev_3}(\text{Evaluation})$.
 $$ \text{MoreThan2} = \Pi_{Ev_1\text{.Roll\_No}, Ev_1\text{.Question\_No}} \Big( \sigma_{C_2}(Ev_1 \times Ev_2 \times Ev_3) \Big) $$
-$$ C_2 \equiv C_1 \land (Ev_2\text{.Roll\_No} = Ev_3\text{.Roll\_No}) \land (Ev_2\text{.Question\_No} = Ev_3\text{.Question\_No}) \land (Ev_1\text{.Examiner} \neq Ev_3\text{.Examiner}) \land (Ev_2\text{.Examiner} \neq Ev_3\text{.Examiner}) $$
-
+$$ C_2 \equiv C_1 \land (Ev_2\text{.Roll\_No} = Ev_3\text{.Roll\_No}) \land (Ev_2\text{.Question\_No} = Ev_3\text{.Question\_No}) \land (Ev_1\text{.Examiner} \neq Ev_3\text{.Examiner}) \land $$$$(Ev_2\text{.Examiner} \neq Ev_3\text{.Examiner}) $$
 \textbf{Final Result:}
 $$ \text{Incorrectly\_Evaluated} = \text{LessThan2} \cup \text{MoreThan2} $$
 
@@ -14057,7 +14063,9 @@ An \textbf{Outer Join} is an extension of the inner join that retains un-matched
 To demonstrate the application of Left, Right, and Full Outer Joins, we will use the following two sample relations: \textbf{Employee} (Table A) and \textbf{Department} (Table B).
 
 \vspace{1em}
+
 \begin{minipage}[t]{0.48\textwidth}
+\begin{center}
 \textbf{Employee (Table A)} \\
 \begin{tabular}{@{}cll@{}}
 \toprule
@@ -14066,9 +14074,11 @@ To demonstrate the application of Left, Right, and Full Outer Joins, we will use
 2              & Bob              & 20              \\
 3              & Charlie          & NULL            \\ \bottomrule
 \end{tabular}
+\end{center}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
+\begin{center}
 \textbf{Department (Table B)} \\
 \begin{tabular}{@{}cl@{}}
 \toprule
@@ -14077,7 +14087,9 @@ To demonstrate the application of Left, Right, and Full Outer Joins, we will use
 20              & IT                \\
 30              & Sales             \\ \bottomrule
 \end{tabular}
+\end{center}
 \end{minipage}
+
 \vspace{1.5em}
 
 \subsection*{1. Left Outer Join (\texttt{LEFT JOIN})}
@@ -14121,7 +14133,7 @@ LEFT JOIN Department D ON E.DeptID = D.DeptID;
 \end{center}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Right Outer Join (\texttt{RIGHT JOIN})}
@@ -14165,7 +14177,7 @@ RIGHT JOIN Department D ON E.DeptID = D.DeptID;
 \end{center}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{3. Full Outer Join (\texttt{FULL OUTER JOIN})}
@@ -14293,7 +14305,7 @@ To understand how relational tables are combined, we must distinguish between fu
 \end{center}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. When are Outer Joins Useful?}
@@ -14307,7 +14319,7 @@ Left and Right Outer Joins are fundamentally asymmetric. They are extremely usef
 \end{enumerate}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{3. Example of a Left Outer Join}
@@ -14315,7 +14327,11 @@ Left and Right Outer Joins are fundamentally asymmetric. They are extremely usef
 Consider a company database where we want to list \textbf{all} employees and the department they work in. Some new employees have not been assigned to a department yet.
 
 \vspace{0.5em}
+
+
 \begin{minipage}[t]{0.48\textwidth}
+\begin{center}
+    
 \textbf{Table A: Employee} \\
 \begin{tabular}{@{}cll@{}}
 \toprule
@@ -14324,9 +14340,12 @@ Consider a company database where we want to list \textbf{all} employees and the
 102            & Bob           & 2               \\
 103            & Charlie       & NULL            \\ \bottomrule
 \end{tabular}
+\end{center}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.48\textwidth}
+\begin{center}
+
 \textbf{Table B: Department} \\
 \begin{tabular}{@{}cl@{}}
 \toprule
@@ -14335,7 +14354,9 @@ Consider a company database where we want to list \textbf{all} employees and the
 2               & Sales             \\
 3               & HR                \\ \bottomrule
 \end{tabular}
-\end{minipage}
+\end{center}
+\end{minipage}    
+
 \vspace{1em}
 
 If we use a \textbf{Natural Join}, Charlie will be missing from the results. To preserve Charlie, we use a \textbf{Left Outer Join}:
@@ -14383,7 +14404,7 @@ A \textbf{Natural Join} is a specific type of inner join that automatically eval
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Outer Joins}
@@ -14580,7 +14601,7 @@ Both \texttt{UNIQUE} constraints and \texttt{PRIMARY KEY} constraints are used t
 \end{itemize}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Key Structural Differences}
@@ -14604,7 +14625,7 @@ Both \texttt{UNIQUE} constraints and \texttt{PRIMARY KEY} constraints are used t
 \end{itemize}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{3. Comparison Summary Table}
@@ -14624,7 +14645,7 @@ Both \texttt{UNIQUE} constraints and \texttt{PRIMARY KEY} constraints are used t
 \end{center}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{4. Example Usage}
@@ -16069,7 +16090,7 @@ Before writing the constructor functions and schema definitions, we design the t
         fill=white,
         inner sep=0pt
     },
-    >=stealth
+    >=stealth, x=1.3cm 
 ]
 
 % Supertype Node
@@ -16262,7 +16283,7 @@ INSERT INTO Buses VALUES (
 To determine whether a specific functional dependency $X \to Y$ holds, or whether a set of attributes is a key, we compute the \textbf{attribute closure} of the left-hand side (LHS), denoted as $X^+$. If $Y \subseteq X^+$, then $X \to Y$ logically follows from $F$. If $X^+$ contains all attributes of the relation schema, then $X$ is a superkey.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(a) Determine whether the following functional dependencies follow from $F$}
@@ -16302,7 +16323,7 @@ We calculate the attribute closure of $AC$, denoted as $(AC)^+$:
 Therefore, the functional dependency \textbf{$\boldsymbol{AC \to BD}$ does NOT follow} from the given FDs.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(b) Determine whether the following are keys of the given relation}
@@ -16367,7 +16388,7 @@ We calculate the closure of $\{A, E\}$:
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(a) Nontrivial FDs with Single Attributes on the Right Side}
@@ -16398,7 +16419,7 @@ For clarity, the fundamental (irreducible) nontrivial FDs with a single attribut
 Any other valid FD can be formed by augmenting the left-hand sides of the above FDs with any subset of the remaining attributes (including $E$), provided the RHS attribute is not in the augmented LHS.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(b) All Keys of $R$}
@@ -16422,7 +16443,7 @@ Since each of these pairs determines all attributes in $R$, and neither single a
 $$\mathbf{\{A, E\}, \quad \{B, E\}, \quad \{C, E\}, \quad \{D, E\}}$$
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(c) All Superkeys that are not Keys}
@@ -16505,7 +16526,7 @@ Based on the dataset, the minimal set of non-trivial functional dependencies (ca
 Given these dependencies, both \textbf{\{FirstName, LastName\}} and \textbf{\{FullName\}} can determine all other attributes in the table. Therefore, they are the \textbf{candidate keys}.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. BCNF Decomposition}
@@ -16556,7 +16577,7 @@ $R(\text{FirstName, FirstInitial, LastName, LastInitial, FullName, FullAddress, 
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{Final Normalized Schema (BCNF)}
@@ -16601,7 +16622,7 @@ To answer the questions, we first determine the attribute closures for all singl
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(a) All Nontrivial FDs with Single Attributes on the Right Side}
@@ -16636,7 +16657,7 @@ A functional dependency $X \to Y$ is \textbf{nontrivial} if the right-hand side 
 \end{enumerate}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(b) All Keys of $R$}
@@ -16658,7 +16679,7 @@ Since $AB$, $BC$, and $BD$ are minimal and determine all attributes, the candida
 $$ \mathbf{\{A, B\}, \quad \{B, C\}, \quad \{B, D\}} $$
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(c) All Superkeys that are Not Keys}
@@ -16797,7 +16818,7 @@ The \textbf{attribute closure} of a set of attributes $X$ with respect to a set 
 \end{enumerate}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Computation of $\{A, B\}^+$}
@@ -16865,7 +16886,7 @@ The closure of $\{A, B\}$ is:
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(a) Compute the Canonical Cover ($F_c$)}
@@ -16904,7 +16925,7 @@ The minimal canonical cover is:
 \[ \mathbf{F_c = \{A \to B,\; B \to C\}} \]
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(b) Lossless Decomposition and Normal Forms}
@@ -16972,7 +16993,7 @@ Compute the attribute closure $(AG)^+$ and show that $AG$ is a candidate key of 
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{1. Computation of Attribute Closure $\boldsymbol{(AG)^+}$}
@@ -17007,7 +17028,7 @@ To find the attribute closure $(AG)^+$, we start with the initial set and repeat
 \[ (AG)^+ = \{A, B, C, G, H, I\} \]
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Proof that $\boldsymbol{AG}$ is a Candidate Key}
@@ -17079,7 +17100,7 @@ Before addressing the specific questions, let's determine the attribute closures
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(a) All Nontrivial FDs with Single Attributes on the Right Side}
@@ -17110,7 +17131,7 @@ By extracting the non-trivial, single-attribute dependencies from these closures
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(b) All Keys of $R$}
@@ -17127,7 +17148,7 @@ Therefore, the candidate keys of $R$ are exactly:
 $$ \mathbf{\{A, B\}, \quad \{B, C\}, \quad \{C, D\}, \quad \{A, D\}} $$
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{(c) All Superkeys that are Not Keys}
@@ -17166,7 +17187,7 @@ The complete list of \textbf{5 superkeys that are not keys} is:
 To find all non-trivial functional dependencies that logically follow from $F$, we first systematically compute the attribute closures for all possible subsets of $\{A, B, C, D\}$. 
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{1. Compute Attribute Closures}
@@ -17200,7 +17221,7 @@ To find all non-trivial functional dependencies that logically follow from $F$, 
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Extract All Completely Non-Trivial FDs}
@@ -17251,7 +17272,7 @@ To systematically find all non-trivial functional dependencies (FDs) that follow
 \end{itemize}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{0.5em}
 
 \subsection*{2. Computation of Attribute Closures}
@@ -17288,7 +17309,7 @@ We compute the attribute closure $X^+$ for every non-empty subset $X \subseteq \
 \end{itemize}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{0.5em}
 
 \subsection*{3. Derivation of Non-Trivial Functional Dependencies}
@@ -17322,7 +17343,7 @@ Below is the complete textbook classification of all completely non-trivial depe
 \end{enumerate}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{0.5em}
 
 \subsection*{4. Summary Table of Dependent Attribute Mappings}
@@ -17384,7 +17405,7 @@ To determine the number of superkeys, we rely on the fundamental definitions of 
 \end{itemize}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{0.5em}
 
 \subsection*{2. Case (a): The only candidate key is $\{A_1\}$}
@@ -17400,7 +17421,7 @@ The number of ways to choose a subset from the remaining $n - 1$ attributes is e
 \[ \text{Number of Superkeys} = 2^{n - 1} \]
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{0.5em}
 
 \subsection*{3. Case (b): The only candidate keys are $\{A_1, A_2\}$ and $\{A_1, A_3\}$}
@@ -17432,7 +17453,7 @@ Subtracting the invalid combinations from the total possible combinations gives:
 \textit{Note: This formula holds for all $n \ge 3$. If $n = 2$, the key $\{A_1, A_3\}$ cannot exist, making the question contextually bound to $n \ge 3$.}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{0.5em}
 
 \subsection*{4. Summary of Results}
@@ -17838,7 +17859,7 @@ The final optimized and normalized database schema is presented below:
 \vspace{0.5em}
 \begin{center}
     \renewcommand{\arraystretch}{1.4}
-    \begin{tabular}{lll}
+    \begin{tabularx}{\linewidth}{@{} l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X @{}}
         \toprule
         \textbf{Table Name} & \textbf{Schema} & \textbf{Description} \\
         \midrule
@@ -17847,8 +17868,9 @@ The final optimized and normalized database schema is presented below:
         \textbf{PRODUCT} & \textbf{\underline{PROD\_NUM}}, PROD\_LABEL, PROD\_PRICE, \textit{VEND\_CODE} (FK) & Stores product details and links to its supplier. \\
         \textbf{LINE\_ITEM} & \textbf{\underline{INV\_NUM}} (FK), \textbf{\underline{PROD\_NUM}} (FK), QUANT\_SOLD & Resolves the M:N relationship between invoices and products. \\
         \bottomrule
-    \end{tabular}
+    \end{tabularx}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -18687,7 +18709,7 @@ To find the candidate key, we identify the attributes that \textbf{never appear 
 Since $(ABE)^+ = \{A, B, C, D, E\}$ (all attributes in $R$) and no proper subset of $\{A, B, E\}$ can determine all attributes, the unique \textbf{Candidate Key} for $R$ is $\mathbf{ABE}$.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{Part 1: Indicate All BCNF Violations}
@@ -18712,7 +18734,7 @@ We evaluate all the given non-trivial functional dependencies against this rule:
 Because \textbf{none} of the determinants ($AB$, $DE$, or $B$) are superkeys of $R$ (none of their closures contain all attributes of $R$), \textbf{all three functional dependencies are BCNF violations}.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{Part 2: Decompose into a Collection of BCNF Relations}
@@ -19387,7 +19409,7 @@ The \textbf{Boyce-Codd Normal Form (BCNF) Decomposition Algorithm} is a systemat
 The working principle of the algorithm can be visualized as a hierarchical tree structure where a violating table is recursively split:
 
 \begin{center}
-\begin{tikzpicture}[>=stealth, thick, node distance=2.5cm]
+\begin{tikzpicture}[>=stealth, thick, node distance=2.5cm, y=1.4cm]
     % Central Parent Node
     \node[draw, rectangle, rounded corners, fill=gray!10, minimum width=4.5cm, minimum height=1cm, align=center] (root) at (0,0) {
         \textbf{Original Relation $R$} \\
@@ -19684,7 +19706,7 @@ The finalized relational schema clearly exhibits the Primary Keys (PKs) and Fore
 
 \vspace{1.5em}
 \begin{center}
-\begin{tikzpicture}
+\begin{tikzpicture}[y=1.3cm]
     % Styles for Schema Diagram
     \tikzset{
         cell/.style={draw, thick, rectangle, minimum height=0.8cm, align=center, font=\small},
@@ -19718,6 +19740,7 @@ The finalized relational schema clearly exhibits the Primary Keys (PKs) and Fore
         (6.75, -4.4) -- (6.75, -3.6) -- (-0.6, -3.6) -- (-0.6, -0.4) -- (0, -0.4);
 \end{tikzpicture}
 \end{center}
+
 \vspace{1.5em}
 
 \subsection*{6. Populated 3NF Tables}
@@ -20339,7 +20362,7 @@ Using multitable clustering on the \textbf{Dept\_ID} attribute, the \texttt{Depa
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
+    >=stealth,y=1.3cm, x=1.4cm, 
     deptrec/.style={rectangle, draw, thick, fill=gray!20, minimum width=9cm, minimum height=0.8cm, align=left, font=\bfseries\small},
     emprec/.style={rectangle, draw, thick, fill=white, minimum width=8cm, minimum height=0.8cm, align=left, font=\small}
 ]
@@ -20368,6 +20391,7 @@ Using multitable clustering on the \textbf{Dept\_ID} attribute, the \texttt{Depa
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{1em}
 
 \subsection*{3. Disadvantages of Multitable Clustering}
@@ -20473,7 +20497,7 @@ The \textbf{Slotted Page Structure} is used to organize variable-length records 
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
-    scale=0.9,
+    scale=0.9,y=1.3cm, x=1.3cm, 
     box/.style={rectangle, draw, thick, minimum width=10cm, align=center, font=\small}
 ]
 
@@ -20509,6 +20533,7 @@ The \textbf{Slotted Page Structure} is used to organize variable-length records 
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{0.5em}
 
 \subsection*{3. Core Properties of this Setup}
@@ -20624,8 +20649,8 @@ If this table were stored using a \textbf{Slotted Page Structure}, the physical 
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth,
-    scale=0.9,
+    >=stealth,x=1.4cm, 
+    scale=0.9,y=1.4cm, 
     every node/.style={font=\small},
     box/.style={rectangle, draw, thick, minimum width=10cm, align=center},
     slot/.style={rectangle, draw, thick, fill=gray!15, minimum width=2.4cm, minimum height=0.7cm, align=center, font=\scriptsize},
@@ -20633,7 +20658,7 @@ If this table were stored using a \textbf{Slotted Page Structure}, the physical 
 ]
 
 % Page boundary block
-\draw[ultra thick, rounded corners=2pt] (0, 1.2) rectangle (10,-9.5);
+\draw[ultra thick, rounded corners=2pt] (0, 1.2) rectangle (11,-11.5);
 \node[anchor=north west, font=\bfseries] at (0, 1.2) {Disk Page (Slotted Page Layout)};
 
 % Page Header
@@ -20677,6 +20702,7 @@ If this table were stored using a \textbf{Slotted Page Structure}, the physical 
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -21028,7 +21054,7 @@ To store 5 records ($R_1, R_2, R_3, R_4, R_5$), the DBMS allocates them into the
     >=stealth,
     scale=1,
     every node/.style={font=\small},
-    block/.style={rectangle, draw, thick, rounded corners=2pt, minimum width=12cm, minimum height=1.4cm, align=left},
+    block/.style={rectangle, draw, thick, rounded corners=2pt, minimum width=13cm, minimum height=1.6cm, align=left},
     rec/.style={rectangle, draw, thick, fill=white, minimum width=4.5cm, minimum height=0.8cm, align=center},
     wasted/.style={rectangle, draw, thick, dashed, fill=gray!20, minimum height=0.8cm, align=center}
 ]
@@ -21055,6 +21081,7 @@ To store 5 records ($R_1, R_2, R_3, R_4, R_5$), the DBMS allocates them into the
 
 \end{tikzpicture}
 \end{center}
+
 
 \vspace{1em}
 \subsection*{5. Internal Structure of a Single Record}
@@ -21816,7 +21843,7 @@ The reconstructed block exactly matches the original $D_2$. The array can rebuil
 \subsection*{4. RAID 5 Architecture and Recovery Diagram}
 
 \begin{center}
-\begin{tikzpicture}[>=stealth, font=\sffamily, thick]
+\begin{tikzpicture}[>=stealth, font=\sffamily, thick, x=1.3cm]
 
     % Define Styles
     \tikzstyle{disk}=[draw, very thick, rounded corners=2pt, minimum width=2.5cm, minimum height=6.5cm]
@@ -21855,7 +21882,7 @@ The reconstructed block exactly matches the original $D_2$. The array can rebuil
     \node[datablock] at (10.5, -2.5) {Data $D_{12}$};
 
     % Recovery Equation Node
-    \node[draw, fill=yellow!10, rounded corners, minimum width=10cm, inner sep=10pt] (equation) at (5.25, -4.5) {
+    \node[draw, fill=yellow!10, rounded corners, minimum width=10cm, inner sep=10pt] (equation) at (5.25, -5) {
         \Large \textbf{Reconstruction:} $D_5 = D_4 \oplus P_{4-6} \oplus D_6$
     };
 
@@ -21869,6 +21896,7 @@ The reconstructed block exactly matches the original $D_2$. The array can rebuil
 
 \end{tikzpicture}
 \end{center}
+
 
 \subsection*{5. Trade-offs}
 \begin{itemize}
@@ -22100,7 +22128,7 @@ After these 5 insertions, the \textbf{Free Space Pointer} is updated to \textbf{
 
     % --- HEADER ---
     \draw[fill=blue!10] (0, 13) rectangle (12, 14);
-    \node[anchor=west] at (0.2, 13.5) {\Large \textbf{Page Header}};
+    \node[anchor=west] at (0.2, 13.5) {\textbf{Page Header}};
     \node[anchor=east] at (11.8, 13.5) {\texttt{Num\_Slots = 5} \hspace{0.5cm} \texttt{Free\_Space\_Ptr = 6920}};
     \draw[thick] (12, 14) -- (12.2, 14);
     \node[anchor=west, font=\small\ttfamily] at (12.2, 14) {0};
@@ -23487,10 +23515,9 @@ To demonstrate the file structure modifications, we assume an initial fixed-leng
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, 
+    >=stealth,y=1.6cm, 
     thick, x=1.3cm,
     font=\sffamily\small,
-    % স্টাইল ডেফিনিশন সমূহ
     normal/.style={draw, rectangle, minimum width=1.2cm, minimum height=0.7cm, align=center, fill=gray!12, draw=gray!60},
     deleted/.style={draw, rectangle, minimum width=1.2cm, minimum height=0.7cm, align=center, fill=red!15, draw=red!40, text=red!80!black, dashed},
     moved/.style={draw, rectangle, minimum width=1.2cm, minimum height=0.7cm, align=center, fill=blue!12, draw=blue!40, text=blue!80!black},
@@ -23538,21 +23565,19 @@ To demonstrate the file structure modifications, we assume an initial fixed-leng
     \node[normal] at (9.1, 1.0) {R7};
     \node[moved] (c2_8) at (10.4, 1.0) {R8};
 
-    % ওপর দিয়ে ঘুরে আসা সুন্দর কার্ভড অ্যারো
-    \draw[->, blue!80!black, very thick] (c2_8.north) .. controls (9.0, 2.5) and (5.5, 2.5) .. (c2_3.north)
+    \draw[->, blue!80!black, very thick] (c2_8.north) .. controls (9.0, 1.4) and (5.5, 2.5) .. (c2_3.north)
         node[midway, above, font=\scriptsize\bfseries, text=blue!90!black] {Relocate Last Record};
 
     % =========================================================================
     % --- CASE 3: FREE LIST (LINKED) METHOD ---
     % =========================================================================
     \node[font=\bfseries\large, anchor=west] at (0, -0.8) {3. Free List (Linked) Method};
-    
-    % ইন্ডেক্স নাম্বারসমূহ
+
     \foreach \i in {1,...,8} {
         \node[font=\scriptsize\bfseries, text=gray] at (\i*1.3, -1.4) {\i};
     }
     
-    % হেডার বক্স (আলাদা বামে প্লেস করা হয়েছে ওভারল্যাপ এড়াতে)
+
     \node[headerbox] (header) at (0, -2.0) {Header\\(Free: 3)};
     
     \node[normal] at (1.3, -2.0) {R1};
@@ -23564,11 +23589,11 @@ To demonstrate the file structure modifications, we assume an initial fixed-leng
     \node[normal] at (9.1, -2.0) {R7};
     \node[normal] at (10.4, -2.0) {R8};
 
-    % হেডার থেকে ৩ নম্বর ব্লকে পয়েন্ট করার লিঙ্ক অ্যারো
     \draw[->, green!50!black, very thick] (header.east) to[out=15, in=165] (c3_3.west);
 
 \end{tikzpicture}
 \end{center}
+
 
 
 \end{tcolorbox}
@@ -23660,7 +23685,7 @@ student & 1204003 & N23 & EEE & 3 & 1 \\
 In this standard structure, the \texttt{department} records are not stored contiguously; they are heavily interleaved with \texttt{student} records. To retrieve all department records, the Database Management System (DBMS) must scan the entire file sequentially (a Full Table Scan). This means it reads all the blocks containing the interleaved \texttt{student} records into memory only to ignore them, resulting in high and wasted disk I/O overhead.
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{(b) Multitable Clustering with Pointer Chain}
@@ -24791,7 +24816,7 @@ Notice that the index only contains entries for the first record of each sorted 
 
 \begin{center}
 \begin{tikzpicture}[
-    >=latex,
+    >=latex,y=1.3cm,
     cell/.style={draw, thick, minimum width=1.2cm, minimum height=0.6cm, inner sep=0pt, font=\sffamily\small},
     ptr/.style={draw, thick, minimum width=0.6cm, minimum height=0.6cm, inner sep=0pt},
     block/.style={draw, thick, rounded corners=2pt, inner sep=6pt}
@@ -24841,6 +24866,7 @@ Notice that the index only contains entries for the first record of each sorted 
 
 \end{tikzpicture}
 \end{center}
+
 
 \vspace{1em}
 \subsubsection*{B. Secondary Index Structure (Dense)}
@@ -25187,7 +25213,7 @@ The visual representation below illustrates this convergence. Because the block 
 \begin{center}
 \begin{tikzpicture}[
     >=Stealth,
-    thick,
+    thick,y=1.3cm,
     box/.style={draw, rectangle, minimum height=1.8em, minimum width=1.5cm, align=center, font=\small},
     page/.style={draw, rectangle, minimum height=3.5em, minimum width=3cm, align=center, font=\small, fill=black!2},
     ptr/.style={circle, fill, inner sep=1.2pt}
@@ -25602,7 +25628,6 @@ To prevent query optimizers from abandoning secondary indexes for moderately sel
 \subsection*{5. Structural Comparison Diagram}
 
 The visual model below highlights why a naive secondary index scan causes thrashing via chaotic random access lines, whereas the bitmap strategy organizes access into linear, ordered physical operations.
-
 \begin{center}
 \begin{tikzpicture}[>=Stealth, thick, scale=0.9]
 
@@ -25625,7 +25650,7 @@ The visual model below highlights why a naive secondary index scan causes thrash
     \draw[->, dash pattern=on 2pt off 2pt] (idx1.east) -- (db3.west);
     \draw[->, dash pattern=on 2pt off 2pt] (idx2.east) -- (db1.west);
     \draw[->, dash pattern=on 2pt off 2pt] (idx3.east) -- (db2.west);
-    \node[text=red!80!black, font=\scriptsize, align=center] at (1.8, 0.1) {Unordered, repetitive\\random I/O pathways};
+    \node[text=red!80!black, font=\scriptsize, align=center] at (1.8, -0.4) {Unordered, repetitive\\random I/O pathways};
 
     % --- Right Side: Bitmap Scan ---
     \begin{scope}[shift={(7.0,0)}]
@@ -25657,11 +25682,12 @@ The visual model below highlights why a naive secondary index scan causes thrash
         \draw[->, thick] (bm.east) |- (bdb1.west);
         \draw[->, thick] (bm.east) -- (bdb2.west);
         \draw[->, thick] (bm.east) |- (bdb3.west);
-        \node[text=green!50!black, font=\scriptsize, align=center] at (3.5, 0.1) {Ordered sequentialized\\block retrieval};
+        \node[text=green!50!black, font=\scriptsize, align=center] at (3.5, -0.4) {Ordered sequentialized\\block retrieval};
     \end{scope}
 
 \end{tikzpicture}
 \end{center}
+
 
 \subsection*{6. Comparative Summary}
 The table below details the performance characteristics across different operational paradigms when handling intermediate to high row selectivity:
@@ -25761,7 +25787,7 @@ Under the single index method, the execution proceeds as follows:
 
 \begin{center}
 \begin{tikzpicture}[
-    >=Stealth,
+    >=Stealth, 
     node distance=1.5cm,
     box/.style={draw, thick, rectangle, rounded corners, minimum width=3.5cm, minimum height=1cm, align=center, fill=black!5},
     db/.style={draw, thick, cylinder, shape border rotate=90, aspect=0.25, minimum height=1.5cm, minimum width=2cm, align=center, fill=white},
@@ -25778,7 +25804,7 @@ Under the single index method, the execution proceeds as follows:
     
     \node[box, below=1.5cm of index] (fetch) {\textbf{Data File Fetch}\\ \scriptsize Retrieve 20 Tuples via Pointers\\ \scriptsize (Worst case: 20 Block Accesses)};
     
-    \node[box, right=1.5cm of fetch] (filter) {\textbf{In-Memory Filter}\\ \scriptsize Check \texttt{name = 'Abid'}\\ \scriptsize AND \texttt{year\_admit = 2015}};
+    \node[box, right=2.5cm of fetch] (filter) {\textbf{In-Memory Filter}\\ \scriptsize Check \texttt{name = 'Abid'}\\ \scriptsize AND \texttt{year\_admit = 2015}};
     
     \node[box, right=1.5cm of filter] (result) {\textbf{Final Result Set}};
 
@@ -25798,6 +25824,7 @@ Under the single index method, the execution proceeds as follows:
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -26070,7 +26097,7 @@ The DBMS resolves this query entirely in memory by fetching the two relevant bit
     \node[lbl] at (4, 2) {Bitmap for \texttt{Gender = 'M'}};
 
     % Operator
-    \node[font=\Large\bfseries] at (-1, 1) {AND};
+    \node[font=\Large\bfseries] at (-1.4, 1) {AND};
 
     % Vector 2: Income = 'H'
     \node[bit] (i1) at (0, 1) {0};
@@ -26140,7 +26167,7 @@ The following diagram illustrates a hypothetical attempt to create a sparse inde
 \begin{center}
 \begin{tikzpicture}[
     >=stealth, y=1.5cm, 
-    thick,
+    thick,x=1.4cm, 
     rec/.style={draw, minimum width=3.5cm, minimum height=0.6cm, fill=white, font=\small},
     idx/.style={draw, minimum width=1.5cm, minimum height=0.6cm, fill=gray!20, font=\small\bfseries},
     ptr/.style={draw, minimum width=0.8cm, minimum height=0.6cm, fill=white},
@@ -26174,7 +26201,7 @@ The following diagram illustrates a hypothetical attempt to create a sparse inde
     \node[right, font=\footnotesize\bfseries] at (7.9, -0.3) {Block 1};
     
     \draw[thick] (4.1, -1.5) rectangle (7.9, -2.7);
-    \node[right, font=\footnotesize\bfseries] at (3.5, -2.1) {Block 2};
+    \node[right, font=\footnotesize\bfseries] at (3, -2.1) {Block 2};
     
     \draw[thick] (4.1, -3.3) rectangle (7.9, -4.5);
     \node[right, font=\footnotesize\bfseries] at (7.9, -3.9) {Block 3};
@@ -26208,6 +26235,7 @@ The following diagram illustrates a hypothetical attempt to create a sparse inde
 
 \end{tikzpicture}
 \end{center}
+
 
 
 \end{tcolorbox}
@@ -28565,7 +28593,7 @@ The root node will act as an internal routing node, containing the smallest key 
 \end{center}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsubsection*{2. Insertion of 15}
@@ -28853,8 +28881,7 @@ The three primary indexing architectures used in modern relational and analytica
 \end{tabular}
 \end{center}
 
-\vspace{0.5cm}
-\rule{\textwidth}{0.4pt}
+ 
 \vspace{0.5cm}
 
 \subsubsection*{2. Hash-Based Index}
@@ -28900,8 +28927,7 @@ A hash-based index uses a mathematical \textbf{hash function} $h(K)$ to map sear
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.5cm}
-\rule{\textwidth}{0.4pt}
+ 
 \vspace{0.5cm}
 
 \subsubsection*{3. B$^+$-Tree Index}
@@ -28955,8 +28981,7 @@ The B$^+$-tree is a balanced multi-level search tree. Unlike standard B-trees, \
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.5cm}
-\rule{\textwidth}{0.4pt}
+ 
 \vspace{0.5cm}
 
 \subsubsection*{4. Bitmap Index}
@@ -29081,8 +29106,7 @@ Inserting the monotonically increasing sequence $(2, 3, 5, 13, 17, 19, 23, 29, 3
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.4cm}
-\rule{\textwidth}{0.4pt}
+
 \vspace{0.4cm}
 
 \subsubsection*{2. Deletion of Element 31}
@@ -29140,8 +29164,7 @@ Therefore, we must \textbf{merge} the empty leaf, its sibling \texttt{[41]}, and
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.4cm}
-\rule{\textwidth}{0.4pt}
+
 \vspace{0.4cm}
 
 \subsubsection*{3. Deletion of Element 43}
@@ -29252,8 +29275,7 @@ Inserting the sequence \texttt{2, 3, 5, 7, 14, 16, 20, 34, 38, 40} builds the fo
 \end{tikzpicture}
 \end{center}
 
-\vspace{0.4cm}
-\rule{\textwidth}{0.4pt}
+
 \vspace{0.4cm}
 
 \subsubsection*{2. Step-by-Step Deletion Analysis}
@@ -29363,8 +29385,7 @@ Since the number of pointers must be an integer, we take the floor value: $m = 1
 \end{center}
 \vspace{0.4cm}
 
-\rule{\textwidth}{0.4pt}
-\vspace{0.4cm}
+
 
 \subsubsection*{2. Expected Length (Size) of the Index for 1,000,000 Records}
 
@@ -29572,7 +29593,7 @@ After all insertions, the Global Depth is 2, and all buckets are perfectly split
 \vspace{0.4cm}
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, thick,
+    >=stealth, thick,y=1.4cm, 
     dir node/.style={draw, rectangle, minimum width=1.5cm, minimum height=0.8cm, fill=gray!10, align=center},
     bucket/.style={draw, rectangle, rounded corners=3pt, minimum width=2.5cm, minimum height=1.2cm, fill=white, align=center},
     pointer/.style={->, thick, shorten >=2pt}
@@ -29635,8 +29656,7 @@ Insert all the data from the product table above, incrementally using the Produc
 \end{itemize}
 
 \vspace{0.3cm}
-\rule{\textwidth}{0.4pt}
-\vspace{0.3cm}
+
 
 \subsubsection*{Part 1: Extendible Hashing System}
 
@@ -29729,8 +29749,7 @@ Insert all the data from the product table above, incrementally using the Produc
 \end{center}
 
 \vspace{0.4cm}
-\rule{\textwidth}{0.4pt}
-\vspace{0.4cm}
+
 
 \subsubsection*{Part 2: Linear Hashing System}
 
@@ -29793,7 +29812,7 @@ Insert all the data from the product table above, incrementally using the Produc
 \draw[pointer] (b1.east) -- (o1.west);
 
 % Split Pointer 's'
-\node[font=\bfseries, text=red] (s_ptr) at (-2.5, 1.2) {s = 1};
+\node[font=\bfseries, text=red] (s_ptr) at (-3.5, 1.2) {s = 1};
 \draw[->, very thick, red] (s_ptr.east) -- ([xshift=-1.7cm]b1.west);
 
 % Info
@@ -29990,8 +30009,7 @@ blocks can be used if necessary.
 \end{itemize}
 
 \vspace{0.4cm}
-\rule{\textwidth}{0.4pt}
-\vspace{0.4cm}
+
 
 \subsubsection*{Step 1: Insert 0101}
 
@@ -30049,8 +30067,7 @@ blocks can be used if necessary.
 \end{center}
 
 \vspace{0.4cm}
-\rule{\textwidth}{0.4pt}
-\vspace{0.4cm}
+
 
 \subsubsection*{Step 2: Insert 0001}
 
@@ -30107,8 +30124,7 @@ blocks can be used if necessary.
 \end{center}
 
 \vspace{0.4cm}
-\rule{\textwidth}{0.4pt}
-\vspace{0.4cm}
+
 
 \subsubsection*{Step 3: Insert 0111}
 
@@ -30533,8 +30549,8 @@ We will construct the dynamic hash index using \textbf{Extendible Hashing}, inde
 \draw[->, thick] (b3.east) -- (o3.west);
 
 % Split Pointer
-\node[anchor=east, text=blue, font=\bfseries] (sptr) at (-2.0, -3.2) {Split Pointer ($s=2$)};
-\draw[ptr] (sptr) -- (-1.4, -3.2);
+\node[anchor=east, text=blue, font=\bfseries] (sptr) at (-3.3, -3.2) {Split Pointer ($s=2$)};
+\draw[ptr] (sptr) -- (-2, -3.2);
 
 \end{tikzpicture}
 \end{center}
@@ -30593,11 +30609,12 @@ We will construct the dynamic hash index using \textbf{Extendible Hashing}, inde
 \draw[->, thick] (b3.east) -- (o3.west);
 
 % Split Pointer
-\node[anchor=east, text=blue, font=\bfseries] (sptr) at (-2.0, -4.8) {Split Pointer ($s=3$)};
-\draw[ptr] (sptr) -- (-1.4, -4.8);
+\node[anchor=east, text=blue, font=\bfseries] (sptr) at (-3.3, -4.8) {Split Pointer ($s=3$)};
+\draw[ptr] (sptr) -- (-2, -4.8);
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -31121,7 +31138,7 @@ The following diagram illustrates how blocking operations (like standard aggrega
 \draw[pipe] (s) -- (join) node[midway, right, lbl, text=blue!70!black, xshift=0.2cm] {Pipelined \\ (Index Scan)};
 
 % Annotation
-\node[draw=red!70!black, fill=white, text=black, align=left, font=\footnotesize, rectangle, inner sep=5pt, right=1.5cm of agg] {
+\node[draw=red!70!black, fill=white, text=black, align=left, font=\footnotesize, rectangle, inner sep=5pt, right=3.5cm of agg] {
     \textbf{Aggregation ($\gamma$) is Blocking:} \\
     Must consume all output from \\
     the Join before emitting results. \\
@@ -31130,6 +31147,7 @@ The following diagram illustrates how blocking operations (like standard aggrega
 
 \end{tikzpicture}
 \end{center}
+
 
 \vspace{0.3cm}
 \subsubsection*{5. Summary Comparison Table}
@@ -31631,7 +31649,7 @@ The sort-based union algorithm operates by first sorting both relations and then
     \item[] \textbf{Output:} Set union $R \cup S$ (with no duplicates)
 \end{itemize}
 
-\hrule\vspace{0.2cm}
+ \vspace{0.2cm}
 \begin{enumerate}
     \item \textbf{Sort} relation $R$ using external sort to produce $Sorted\_R$.
     \item \textbf{Sort} relation $S$ using external sort to produce $Sorted\_S$.
@@ -31667,7 +31685,7 @@ The sort-based union algorithm operates by first sorting both relations and then
         \item Advance $p_S$, skipping duplicates.
     \end{enumerate}
 \end{enumerate}
-\vspace{0.1cm}\hrule\vspace{0.4cm}
+\vspace{0.1cm} \vspace{0.4cm}
 
 \subsubsection*{2. Conceptual Diagram of Execution}
 
@@ -32710,7 +32728,7 @@ $$ M \ge 1 $$
 Because the previous blocks are discarded after processing, \textbf{there is no upper limit on the size of $R$}. The relation $B(R)$ can be arbitrarily large regardless of the memory size $M$, as long as $M \ge 1$. Thus, $B(R)$ is independent of $M$ in this context.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. Two-Pass Aggregate Operation (Grouping and Aggregation)}
@@ -32967,7 +32985,7 @@ The fully optimized relational algebra expression is:
 \textit{Note: The final outermost join ($\bowtie$) represents a Natural Join on the common attribute $e$ between $S$ and $T$.}
 
 \vspace{1.5em}
-\hrule
+ 
 \vspace{1.5em}
 
 \subsubsection*{Query Tree Diagrams}
@@ -33081,7 +33099,7 @@ Let the projection list be $L = \{A\}$.
 Since $\{ (1) \} \neq \{ (1), (1) \}$, the statement is \textbf{false}.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{2. $\delta(\sigma_C(R)) = \sigma_C(\delta(R))$}
@@ -33096,7 +33114,7 @@ The selection operator ($\sigma$) evaluates a condition $C$ against each tuple i
 Since selection operations are completely orthogonal to tuple multiplicities, the two operators commute.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{3. $\pi_L(R \cup S) = \pi_L(R) \cup \pi_L(S)$}
@@ -33211,7 +33229,7 @@ Enroll (sid, course, section, term, grade) \\
 Class (course, section, term, instructor, room, time)
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.2cm}
 
 \begin{lstlisting}
@@ -33223,7 +33241,7 @@ AND C.instructor = 'Hinon' AND S.major = 'ML' ;
 \end{lstlisting}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.2cm}
 
 \textbf{Equivalence Rules (The notations carry usual meaning)}
@@ -33448,7 +33466,7 @@ Applying the pushdown heuristics yields the highly optimized execution plan belo
 \end{enumerate}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{0.5em}
 \noindent\textbf{Exam Tip:} Always double-check your attribute tracking when introducing intermediate projections. A common pitfall is discarding an attribute (like $C$) too early, breaking a join condition located higher up in the tree!
 
@@ -33519,7 +33537,7 @@ An expression tree visually represents the relational algebra operations used to
 \end{center}
 \vspace{0.5cm}
 
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{2. Explanation of Evaluation Methods}
@@ -35457,7 +35475,7 @@ The \textbf{Two-Phase Locking (2PL)} protocol ensures serializability by requiri
 \end{itemize}
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \section*{2. Proof: A 2PL Schedule is Conflict-Serializable}
@@ -35538,7 +35556,7 @@ A schedule is \textbf{conflict-serializable} if and only if its corresponding pr
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{Schedule 1: $S_1 = r_1(A); w_2(A); w_3(A); w_2(B); r_2(C); r_2(B); w_2(C)$}
@@ -35579,7 +35597,7 @@ $T_1$, $T_2$, and $T_3$.
 The precedence graph for $S_1$ is a Directed Acyclic Graph (DAG) as there are \textbf{no cycles}. Therefore, \textbf{Schedule 1 is conflict-serializable}. It is equivalent to the serial schedule $T_1 \to T_2 \to T_3$.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{Schedule 2: $S_2 = w_1(A); r_2(A); w_2(B); r_2(B); w_3(C); r_4(C); w_4(D); r_3(D); r_3(C)$}
@@ -35661,7 +35679,7 @@ $$ \text{Total Schedules} = \frac{(2 + 3)!}{2! \cdot 3!} = \frac{5!}{2! \cdot 3!
 \textbf{Result:} There are \textbf{10} possible schedules.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{2. Number of Conflict-Serializable Schedules}
@@ -35724,7 +35742,7 @@ By evaluating all 10 possible interleavings against these cycle conditions:
 \textbf{Result:} There are $10 - 3 =$ \textbf{7} conflict-serializable schedules.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{3. Number of Serializable (View-Serializable) Schedules}
@@ -35805,7 +35823,7 @@ $t_4$ & $xl_1(B)$ & & $T_1$ waits (blocked by $T_2$'s lock on $B$). \\
 \end{center}
 
 \vspace{0.5em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{2. Does Introducing Update Locks Solve the Deadlock?}
@@ -35823,7 +35841,7 @@ In the given scenario, the transactions are requesting locks on \textit{differen
 This is a standard \textbf{circular wait across disjoint resources}. Even if we replace the initial $sl$ requests with update locks ($ul$), $T_1$ would hold $U(A)$ and $T_2$ would hold $U(B)$. When $T_1$ requests $X(B)$, it is blocked by $T_2$'s $U(B)$. When $T_2$ requests $X(A)$, it is blocked by $T_1$'s $U(A)$. The deadlock remains entirely unaffected. Preventing this type of deadlock requires techniques like strict lock ordering (e.g., all transactions must lock $A$ before $B$) or deadlock detection.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{3. Lock Compatibility Matrix}
@@ -35875,7 +35893,7 @@ Before analyzing the schedules, we must define the conditions for recoverability
 \textit{Note: Every ACR schedule is automatically a recoverable schedule, but the reverse is not true.}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{Analysis of Schedule 1}
@@ -35900,7 +35918,7 @@ $$S_1\colon r_1(A); w_1(A); r_2(A); w_2(A); c_2; r_1(B); w_1(B); c_1$$
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{Analysis of Schedule 2}
@@ -35926,7 +35944,7 @@ $$S_2\colon r_1(A); w_1(A); r_2(B); w_2(B); c_2; r_1(B); w_1(B); c_1$$
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \subsection*{Analysis of Schedule 3}
@@ -36024,7 +36042,7 @@ For a serial schedule to be equivalent to $S_1$, $T_2$ must be the last transact
 \textbf{Conclusion for VSR:} $S_1$ is \textbf{not view-serializable} (and therefore, not serializable at all).
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{Analysis of Schedule 2}
@@ -36108,7 +36126,7 @@ To prove that a Strict Two-Phase Locking (Strict 2PL) schedule avoids cascading 
 \end{itemize}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{2. Logical Proof}
@@ -36128,7 +36146,7 @@ The proof that Strict 2PL guarantees ACR follows directly from the lock compatib
 \textbf{Conclusion:} Because $T_j$ was blocked until $T_i$ committed, the read operation $r_j(X)$ strictly occurs after the commit $c_i$. Since a transaction can only ever read data from committed transactions, the schedule \textbf{strictly avoids cascading rollback}.
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{3. Visual Representation: Strict 2PL Blocking Mechanism}
@@ -36212,8 +36230,8 @@ To rigorously prove that the Two-Phase Locking (2PL) protocol ensures conflict s
     \item \textbf{Conflict Serializability (CSR):} A schedule is conflict-serializable if and only if its precedence graph (serialization graph) is \textbf{acyclic} (contains no directed cycles).
 \end{itemize}
 
-\vspace{1em}
-\hrule
+
+ 
 \vspace{1em}
 
 \section*{2. The Fundamental Lemma of 2PL}
@@ -36235,7 +36253,7 @@ Before the main proof, we establish a critical relationship between conflicting 
 \end{enumerate}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{3. Proof by Contradiction}
@@ -36265,7 +36283,7 @@ We will prove that a 2PL schedule is always conflict-serializable using a proof 
 \textbf{Conclusion:} Because a cycle inherently creates a logical contradiction, the precedence graph of any 2PL schedule must be acyclic. Therefore, \textbf{every schedule that follows the 2PL protocol is guaranteed to be conflict-serializable.}
 
 \vspace{1em}
-\hrule
+ 
 \vspace{1em}
 
 \section*{4. Visualizing the Fundamental Lemma}
@@ -36349,7 +36367,7 @@ Assuming the basic lock $l(A)$ functions as a general exclusive lock for the ent
 Because both transactions compete for a single resource ($A$) and acquire only one lock each, there is no circular wait condition. One transaction simply blocks the other, ensuring serializability without deadlocking.
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \item \textbf{Lock Upgrades (Shared and Exclusive Locks)}
@@ -36369,7 +36387,7 @@ T_2&\colon sl_2(A), r_2(A), xl_2(A), w_2(A), u_2(A)
 \end{align*}
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \item \textbf{Concurrent Schedule Causing a Deadlock}
@@ -36411,7 +36429,7 @@ The following Wait-For Graph illustrates the circular dependency, which is the d
 \end{center}
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \item \textbf{Using Update Locks to Prevent Deadlock}
@@ -36477,7 +36495,7 @@ The choice between timestamp-based and lock-based concurrency control protocols 
 \end{center}
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \subsubsection*{2. Multi-Version Concurrency Control (MVCC)}
@@ -36600,7 +36618,7 @@ For any data item $X$, the system maintains two timestamps, initialized to 0:
 \textit{Note: The ``Wait'' action is generally not used in pure timestamp-based protocols as they are non-blocking, deadlock-free mechanisms.}
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \subsubsection*{2. Step-by-Step Schedule Evaluation}
@@ -36690,7 +36708,7 @@ Construct precedence graphs for the given schedules $S_1$ and $S_2$. Are the sch
 \textbf{Concept:} A schedule is \textbf{conflict-serializable} if and only if its precedence graph (serializability graph) contains \textbf{no directed cycles}. A precedence graph consists of nodes representing transactions and directed edges representing conflicting operations (Read-Write, Write-Read, or Write-Write on the same data item by different transactions) in the order they occur.
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \subsubsection*{1. Analysis of Schedule $S_1$}
@@ -36743,7 +36761,7 @@ The precedence graph for $S_1$ contains \textbf{multiple cycles}:
 Because of these cycles, \textbf{Schedule $S_1$ is NOT conflict-serializable.}
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \subsubsection*{2. Analysis of Schedule $S_2$}
@@ -36811,7 +36829,7 @@ To prove that every schedule adhering to the \textbf{Strict Two-Phase Locking (S
 \end{itemize}
 
 \vspace*{0.5em}
-\hrule
+ 
 \vspace*{0.5em}
 
 \subsection*{2. Formal Proof by Contradiction}
@@ -36844,7 +36862,7 @@ Since assuming $S$ is not ACR leads directly to a violation of the Strict 2PL ru
 $$\therefore \text{Every schedule that satisfies Strict 2PL must also be ACR.}$$
 
 \vspace*{0.5em}
-\hrule
+ 
 \vspace*{0.5em}
 
 \subsection*{3. Visualizing the Blocked Execution in Strict 2PL}
@@ -36927,7 +36945,7 @@ Therefore, the concurrent schedule $S_c$ is logically equivalent to the serial s
 \[ \mathbf{S_{serial}\colon} \ T_1 \to T_2 \quad (\text{i.e., } r_1(A); \ w_1(A); \ w_2(A)) \]
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \item \textbf{The Problem with Allowing the Thomas Write Rule}
@@ -37018,7 +37036,7 @@ The cyclic dependency that characterizes this deadlock can be visualized using a
 \end{center}
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \item \textbf{Preventing Deadlock using Update Locks}
@@ -37081,7 +37099,7 @@ Given Timestamps: $TS(T_1)=1$, $TS(T_2)=2$, $TS(T_3)=3$, $TS(T_4)=4$. \\
 Initial States: $RT(X)=0, WT(X)=0$ for all $X \in \{A, B, C\}$.
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \begin{enumerate}
@@ -37152,7 +37170,7 @@ $TS(T_1) < WT(C) \implies 1 < 4$ &
 \textit{\textbf{Note on System Recovery:}} When $w_2(B)$ is rejected, transaction $T_2$ is rolled back. In a rigorous DBMS execution, rolling back $T_2$ dictates that its prior successful write ($w_2(A)$) must be undone. Consequently, $WT(A)$ reverts from $2$ back to its previous state of $0$. Therefore, when $r_4(A)$ executes, it observes $WT(A)=0$. (Even if the rollback effect is delayed and $WT(A)$ remains $2$, $r_4(A)$ would still successfully execute since $4 \ge 2$).
 
 \vspace*{1em}
-\hrule
+ 
 \vspace*{1em}
 
 \item \textbf{Actions Causing Rollbacks}
@@ -39088,7 +39106,7 @@ The diagram below illustrates the timeline of the example, highlighting the diff
 };
 
 % Arrow from op2 to eval box
-\draw[->, thick, dashed, blue!70!black] (op2.east) -- ++(1.5,0) |- (eval.west);
+\draw[->, thick, dashed, blue!70!black] (op2.east) -- ++(0.3,0) |- (eval.west);
 
 \end{tikzpicture}
 \end{center}
@@ -40444,7 +40462,7 @@ This yields three types of conflicts: \textbf{Read-Write (RW)}, \textbf{Write-Re
 \end{itemize}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{3. Case 1: A Conflict Serializable Schedule}
@@ -40498,7 +40516,7 @@ $t_6$ & & $w_2(X)$ \\
 The precedence graph contains \textbf{no cycles} (it only flows from $T_1$ to $T_2$). Therefore, $S_1$ is \textbf{conflict serializable}. The equivalent serial schedule is $\langle T_1, T_2 \rangle$.
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{4. Case 2: A Non-Conflict Serializable Schedule}
@@ -43025,10 +43043,10 @@ The common (join) attributes are $C$ and $D$. Let us assume the final join resul
 
 \vspace{1em}
 \begin{center}
-\begin{tikzpicture}[>=stealth, thick, node distance=2cm, align=center]
+\begin{tikzpicture}[>=stealth, thick, node distance=2cm, y=1.3cm,align=center]
     
     % Sites
-    \node[draw, rounded corners, minimum width=3.5cm, minimum height=4.5cm, fill=white] (S1) at (0,0) {};
+    \node[draw, rounded corners, minimum width=3.7cm, minimum height=4.5cm, fill=white] (S1) at (0,0) {};
     \node[above, font=\bfseries] at (0, 1.8) {Site 1 ($S_1$)};
     \node[font=\small] at (0, 1.2) {Holds $R_1(A, B, C, D)$};
     
@@ -43048,6 +43066,7 @@ The common (join) attributes are $C$ and $D$. Let us assume the final join resul
 
 \end{tikzpicture}
 \end{center}
+
 \vspace{0.5em}
 
 ---

@@ -218,7 +218,7 @@
       & --- \LaTeX\ Typesetting\\[3pt]
       \textbf{NotebookLM} & --- Research \& Extraction\\[3pt]
       \textbf{Claude AI} & --- \LaTeX\ Typesetting\\[3pt]
-      \textbf{Gemini} & --- Diagram Generation\\[3pt]
+      \textbf{Gemini} & --- Answer \& Diagram Generation\\[3pt]
     \end{tabular}
 \end{tcolorbox}
 \newpage
@@ -8576,7 +8576,7 @@ For each max-flow computation, we construct a directed flow network $G' = (V', E
 
 \medskip
 
-\noindent Suppose we are given the communication distance $D$, parameters $b$ and $k$, and an array $d[1 \dots n, 1 \dots n]$ of distances, where $d[i, j]$ is the distance between device $i$ and device $j$. The problem is to design and analyze an algorithm that either computes a backup set of size $k$ for each of the $n$ devices, such that no device appears in more than $b$ backup sets, or correctly reports that no good collection of backup sets exists. Now answer the following questions: \textbf{(10+7+3)}
+\noindent Suppose we are given the communication distance $D$, parameters $b$ and $k$, and an array $d[1 \dots n, 1 \dots n]$ of distances, where $d[i, j]$ is the distance between device $i$ and device $j$. The problem is to design and analyze an algorithm that either computes a backup set of size $k$ for each of the $n$ devices, such that no device appears in more than $b$ backup sets, or correctly reports that no good collection of backup sets exists. Now answer the following questions: 
 
 \begin{enumerate}
     \item Reduce this problem to a max-flow problem. Describe a max-flow problem (a directed, capacitated graph $G$, a source and sink pair) such that a good collection of backup sets exist if and only if the max-flow in $G$ has a certain size. What is this size?
@@ -9232,7 +9232,7 @@ The \textbf{Edmonds-Karp algorithm} is a specific implementation of the Ford-Ful
 
 \begin{itemize}
     \item \textbf{Breadth-First Search (BFS):} The algorithm must always choose the shortest augmenting path from the source $s$ to the sink $t$ in the residual graph.
-    \item \textbf{Unit Edge Weights:} "Shortest" is defined in terms of the \textit{number of edges}, not the capacities. All edges in the residual graph $G_f$ with $c_f(u, v) > 0$ are treated as having a weight of $1$.
+    \item \textbf{Unit Edge Weights:} ``Shortest" is defined in terms of the \textit{number of edges}, not the capacities. All edges in the residual graph $G_f$ with $c_f(u, v) > 0$ are treated as having a weight of $1$.
 \end{itemize}
 
 By using BFS, the algorithm finds the path with the minimum number of edges, which is the "minimum path length augmentation" method.
@@ -9710,32 +9710,33 @@ The Edmonds-Karp algorithm is a specific implementation of the Ford-Fulkerson me
 
 \vspace{0.5em}
 \noindent\textbf{Pseudocode:}
-\begin{enumerate}
-    \item \textbf{Initialize Flow:} For each edge $(u, v) \in E$:
-    \begin{itemize}
-        \item $f(u, v) = 0$
-        \item $f(v, u) = 0$
-    \end{itemize}
-    \item \textbf{Find Augmenting Path:} \textbf{while} there exists a path $p$ from $s$ to $t$ in the residual network $G_f$, found using \textbf{BFS} (where all edge weights are considered 1):
-    \begin{enumerate}
-        \item \textit{// Find the bottleneck capacity of path $p$}
-        \item $c_f(p) = \min \{ c_f(u, v) \mid (u, v) \text{ is in } p \}$
-        
-        \item \textit{// Augment flow along the path}
-        \item \textbf{for} each edge $(u, v)$ in $p$:
-        \begin{itemize}
-            \item \textbf{if} $(u, v)$ is a forward edge in the original graph:
-            \begin{itemize}
-                \item $f(u, v) = f(u, v) + c_f(p)$
-            \end{itemize}
-            \item \textbf{else} (it is a backward edge representing flow $f(v, u)$):
-            \begin{itemize}
-                \item $f(v, u) = f(v, u) - c_f(p)$
-            \end{itemize}
-        \end{itemize}
-    \end{enumerate}
-    \item \textbf{Return} the maximum flow $f$.
-\end{enumerate}
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=white, colframe=cA!50, arc=3pt, title=\textbf{Algorithm: Edmonds-Karp Algorithm}]
+\begin{algorithmic}[1]
+\Require{A directed graph $G = (V, E)$, capacities $c: E \to \mathbb{R}^+$, source $s \in V$, and sink $t \in V$}
+\Ensure{The maximum flow $f$ from $s$ to $t$}
+\For{each edge $(u, v) \in E$}
+    \State $f(u, v) = 0$
+    \State $f(v, u) = 0$
+\EndFor
+\While{there exists a shortest path $p$ from $s$ to $t$ in the residual network $G_f$ (found via BFS)}
+    \State \textit{// Find the bottleneck capacity of path $p$}
+    \State $c_f(p) = \min \{ c_f(u, v) \mid (u, v) \text{ is in } p \}$
+    
+    \State \textit{// Augment flow along the path}
+    \For{each edge $(u, v)$ in $p$}
+        \If{$(u, v)$ is a forward edge in original graph $G$}
+            \State $f(u, v) = f(u, v) + c_f(p)$
+        \Else{ (it is a backward edge)}
+            \State $f(v, u) = f(v, u) - c_f(p)$
+        \EndIf
+    \EndFor
+\EndWhile
+\State \Return the maximum flow $f$
+\end{algorithmic}
+\end{tcolorbox}
 
 \vspace{1em}
 \hrulefill
@@ -10349,21 +10350,33 @@ The Ford-Fulkerson method relies on the concept of a \textbf{residual network}. 
 
 \vspace{0.5em}
 \noindent\textbf{Pseudocode:}
-\begin{enumerate}
-    \item \textbf{Initialize:} For every edge $(u, v) \in E$, set the initial flow to zero: $f(u, v) = 0$ and $f(v, u) = 0$.
-    \item \textbf{While} there exists a path $p$ from $s$ to $t$ in the residual network $G_f$ (found using any search algorithm like DFS or BFS):
-    \begin{enumerate}
-        \item \textit{// Find the bottleneck capacity of the path $p$}
-        \item $c_f(p) = \min \{ c_f(u, v) \mid (u, v) \text{ is an edge in } p \}$
-        \item \textit{// Augment flow along the path}
-        \item \textbf{For} each edge $(u, v)$ in path $p$:
-        \begin{itemize}
-            \item \textbf{If} $(u, v)$ is a forward edge: $f(u, v) = f(u, v) + c_f(p)$
-            \item \textbf{Else} (it is a backward edge): $f(v, u) = f(v, u) - c_f(p)$
-        \end{itemize}
-    \end{enumerate}
-    \item \textbf{Return} the flow $f$.
-\end{enumerate}
+
+\vspace{1em}
+
+\begin{tcolorbox}[colback=white, colframe=cA!50, arc=3pt, title=\textbf{Algorithm: Ford-Fulkerson Method}]
+\begin{algorithmic}[1]
+\Require{A directed graph $G = (V, E)$, capacities $c: E \to \mathbb{R}^+$, source $s \in V$, and sink $t \in V$}
+\Ensure{The maximum flow $f$ from $s$ to $t$}
+\For{each edge $(u, v) \in E$}
+    \State $f(u, v) = 0$
+    \State $f(v, u) = 0$
+\EndFor
+\While{there exists a path $p$ from $s$ to $t$ in the residual network $G_f$ (using DFS, BFS, etc.)}
+    \State \textit{// Find the bottleneck capacity of the path $p$}
+    \State $c_f(p) = \min \{ c_f(u, v) \mid (u, v) \text{ is an edge in } p \}$
+    
+    \State \textit{// Augment flow along the path}
+    \For{each edge $(u, v)$ in $p$}
+        \If{$(u, v)$ is a forward edge in original graph $G$}
+            \State $f(u, v) = f(u, v) + c_f(p)$
+        \Else{ (it is a backward edge)}
+            \State $f(v, u) = f(v, u) - c_f(p)$
+        \EndIf
+    \EndFor
+\EndWhile
+\State \Return the flow $f$
+\end{algorithmic}
+\end{tcolorbox}
 
 \vspace{1em}
 \hrulefill
@@ -10397,7 +10410,7 @@ The Edmonds-Karp algorithm is an implementation of the Ford-Fulkerson method tha
 \begin{itemize}
     \item \textbf{The Strategy:} Instead of picking \textit{any} augmenting path, Edmonds-Karp strictly uses \textbf{Breadth-First Search (BFS)} to find the \textbf{shortest augmenting path} (where "shortest" means the fewest number of edges, treating all edge weights as $1$).
     \item \textbf{Monotonicity:} By always picking the shortest path, it guarantees that the shortest-path distance from the source to any node in the residual network \textit{increases monotonically} over the algorithm's execution.
-    \item \textbf{Bounding Augmentations:} Because of this monotonic property, any specific edge can become a "critical edge" (the bottleneck of a path) at most $(V - 1) / 2$ times. Since there are $O(E)$ edges in the residual network, the total number of flow augmentations is strictly bounded to $\mathbf{O(V E)}$.
+    \item \textbf{Bounding Augmentations:} Because of this monotonic property, any specific edge can become a ``critical edge" (the bottleneck of a path) at most $(V - 1) / 2$ times. Since there are $O(E)$ edges in the residual network, the total number of flow augmentations is strictly bounded to $\mathbf{O(V E)}$.
 \end{itemize}
 
 \textbf{New Time Complexity:} 
@@ -33243,6 +33256,8 @@ The Vertex Cover optimization problem aims to find the minimum number of vertice
 
 The strategy is simple: iteratively select an arbitrary uncovered edge, add \textit{both} of its endpoints to the vertex cover, and remove all edges incident to either endpoint.
 
+\vspace{0.2cm}
+
 \begin{tcolorbox}[colback=white, colframe=cE!50, arc=3pt, title=\textbf{Algorithm: 2-Approximation Algorithm for Vertex Cover}]
 \begin{algorithmic}[1]
 \Require An undirected graph $G = (V, E)$
@@ -35406,8 +35421,8 @@ Since $101$ is a valid complete tour and is $\le$ the $LB$ of all other unexplor
 The diagram visually depicts how the state space is pruned, naturally guiding the algorithm towards the exact optimal path via bounding calculations.
 
 \begin{center}
-\begin{tikzpicture}[y=1.3cm,
-    level distance=1.6cm,
+\begin{tikzpicture}[
+    level distance=2cm,
     level 1/.style={sibling distance=3cm},
     level 2/.style={sibling distance=2.5cm},
     level 3/.style={sibling distance=2.5cm},
@@ -35448,6 +35463,7 @@ The diagram visually depicts how the state space is pruned, naturally guiding th
     };
 \end{tikzpicture}
 \end{center}
+
 
 \vspace{0.2cm}
  

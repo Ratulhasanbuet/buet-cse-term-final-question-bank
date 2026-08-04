@@ -31,6 +31,7 @@
 \usetikzlibrary{circuits.logic.US, positioning, calc}
 \usetikzlibrary{calc, positioning, backgrounds, fit}
 \usetikzlibrary{positioning, arrows.meta, calc, shadows}
+\tikzset{every picture/.append style={thick}}
 
 
 \newcounter{myboxcount}
@@ -166,7 +167,7 @@
       & --- \LaTeX\ Typesetting\\[3pt]
       \textbf{NotebookLM} & --- Research \& Extraction\\[3pt]
       \textbf{Claude AI} & --- \LaTeX\ Typesetting\\[3pt]
-      \textbf{Gemini} & --- Diagram Generation\\[3pt]
+      \textbf{Gemini} & --- Answer \& Diagram Generation\\[3pt]
     \end{tabular}
 
 \end{tcolorbox}
@@ -230,13 +231,13 @@
         \item \hyperref[sub:s4-overflow]{Overflow Detection}
         \item \hyperref[sub:s4-multiplier]{Binary Multiplier}
         \item \hyperref[sub:s4-incrementer]{Incrementer}
-        \item \hyperref[sub:s4-encoders]{Encoders \& Decoders}
-        \item \hyperref[sub:s4-decoder-func]{Function Implementation using Decoder}
+        \item \hyperref[sub:s4-comparator]{Magnitude Comparator}
+        \item \hyperref[sub:s4-encoders]{Encoders}
+        \item \hyperref[sub:s4-decoder-func]{Decoders}
         \item \hyperref[sub:s4-demux]{Decoder as Demultiplexer}
         \item \hyperref[sub:s4-bcd]{BCD to 7-Segment Decoder \& BCD Error Detector}
         \item \hyperref[sub:s4-mux]{Multiplexers \& Demultiplexers}
         \item \hyperref[sub:s4-comb-custom]{Custom Combinational Circuit Design}
-        \item \hyperref[sub:s4-comparator]{Magnitude Comparator}
       \end{itemize}
   \end{itemize}
 \end{tcolorbox}
@@ -298,11 +299,14 @@
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cG}{$\cdot$}}]
         \item \hyperref[sub:s8-rom]{ROM Design \& Expansion}
         \item \hyperref[sub:s8-pla]{PLA Design}
+        \item \hyperref[sub:s8-ram]{RAM Design}
+        \item \hyperref[sub:s6-sync-design]{Synchronous Sequential Circuit Design}
       \end{itemize}
   \end{itemize}
 \end{tcolorbox}
 
 \newpage
+
 
 %% ══════════════════════════════════════════════════════════════════════
 %%  SECTION 1: BOOLEAN ALGEBRA, THEOREMS & LOGIC GATES
@@ -2599,7 +2603,7 @@ F &= A + B && \text{(Double Negation Law)}
 Because the NAND gate can implement NOT, AND, and OR functions, it is formally proven to be a \textbf{universal gate}.
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \section*{Part 2: Non-Associativity of the NAND Operation}
@@ -3315,7 +3319,7 @@ F &= w'x' + w'yz' && \text{(Identity Law: } X \cdot 1 = X \text{)}
 \end{align*}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{1. NOR Gates Only (NOR-NOR Form)}
@@ -3355,7 +3359,7 @@ F &= \overline{w + (x' + y)' + (x' + z')'} && \text{(De Morgan's Law)}
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{2. AND-NOR Form}
@@ -3395,7 +3399,7 @@ F &= \overline{w + xy' + xz} && \text{(Substitution)}
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{3. NAND Gates Only (NAND-NAND Form)}
@@ -3433,7 +3437,7 @@ F &= \overline{(w'x')' \cdot (w'yz')'} && \text{(De Morgan's Law)}
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{4. OR-NAND Form}
@@ -3543,7 +3547,7 @@ Given the Boolean function:
 \[ F(A, B, C) = A'B + BC + AC \]
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{1. Implementation using AND, OR, and NOT gates}
@@ -3607,7 +3611,7 @@ To implement the unminimized function $F$, we analyze its structure:
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{2. K-Map Minimization in SOP Form}
@@ -3642,7 +3646,7 @@ The minimized SOP function is:
 \end{equation*}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{3. Implementation of Minimized $F$ using only NAND gates}
@@ -3703,7 +3707,7 @@ We are given the Boolean function in Sum of Products (SOP) form:
 \[ F(x, y, z) = xy + x'y' + y'z \]
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \subsection*{(i) Implementation using AND, OR, and NOT gates}
@@ -3759,7 +3763,7 @@ To implement $F$ directly using standard logic gates, we require:
 \end{center}
 
 \vspace{0.4cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \subsection*{(ii) Implementation using ONLY NAND gates}
@@ -3865,7 +3869,7 @@ All three groups are essential prime implicants. The minimized SOP expression is
 \end{equation}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Implementation (i) NOR-OR Logic}
@@ -3914,7 +3918,7 @@ We then sum these terms together using a second-level OR gate. Since both normal
 \end{center}
 
 \vspace{0.4cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Implementation (ii) OR-NAND Logic}
@@ -4025,7 +4029,7 @@ The minimized function in POS form is:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Conversion to NOR Logic}
@@ -4045,7 +4049,7 @@ This final equation dictates a two-level NOR structure:
 \end{enumerate}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Circuit Diagram}
@@ -4172,7 +4176,7 @@ We group the $0$s of $f$ (which are the $1$s of $f'$) to find the SOP expression
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: (i) NOR-OR Logic Implementation}
@@ -4220,7 +4224,7 @@ This gives us a first level of NOR gates generating the required product terms, 
 \end{center}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: (ii) AND-NOR Logic Implementation}
@@ -4293,7 +4297,7 @@ Substituting this back into our primary expression yields:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Truth Table Evaluation}
@@ -4323,7 +4327,7 @@ From the truth table, the function evaluates to $1$ at minterms $0, 5,$ and $7$.
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Karnaugh Map Minimization}
@@ -4354,7 +4358,7 @@ The minimized SOP expression is:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 4: Mathematical Conversion to NOR-Only Logic}
@@ -4386,7 +4390,7 @@ This maps perfectly to a multi-stage NOR architecture:
 \end{enumerate}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 5: Logic Gate Schematic}
@@ -4458,7 +4462,7 @@ To minimize the number of required logic gates, we first simplify the expression
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Conversion to NOR Logic}
@@ -4482,7 +4486,7 @@ Let us analyze the components of this final equation to map them to NOR gates:
 Thus, the function can be perfectly realized using exactly \textbf{three NOR gates}.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Logic Gate Implementation}
@@ -4564,7 +4568,7 @@ The minimized SOP expression is:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Boolean Factoring \& NOR Conversion}
@@ -4593,7 +4597,7 @@ Let us analyze the required operations mapping perfectly to two-input NOR gates:
 Since we are given that the \textbf{complements of literals are available as input}, we do not need to use an additional NOR gate to generate $\bar{C}$. The complete function requires exactly \textbf{two} NOR gates.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Logic Gate Implementation}
@@ -4649,7 +4653,7 @@ Let $f(A, B)$ represent the Boolean function for the Exclusive-OR (XOR) operatio
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Deriving the Dual of the XOR Function}
@@ -4680,7 +4684,7 @@ Thus, the minimized dual of the XOR function is:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Deriving the Complement of the XOR Function}
@@ -4707,7 +4711,7 @@ Thus, the complement of the XOR function is the Exclusive-NOR (XNOR) function:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 4: Conclusion}
@@ -4740,7 +4744,7 @@ Therefore, for the Exclusive-OR ($\oplus$) operation to be distributive over the
 We will test this hypothesis using both algebraic expansion and a truth table.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Algebraic Expansion and Comparison}
@@ -4771,7 +4775,7 @@ Comparing the minimized forms, we clearly see that:
 Because the expressions are not identical, the XOR operation is \textbf{not} distributive over the AND operation.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Proof by Truth Table \& Counterexample}
@@ -4828,7 +4832,7 @@ Mathematically, for a multiple-variable XOR function:
 This property makes XOR gates the fundamental building blocks of parity generators and checkers in digital circuits.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Part 2: Conversion to Canonical Maxterm Form}
@@ -4926,7 +4930,7 @@ From the truth table, the Sum-of-Minterms expression for the error function is:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Karnaugh Map Minimization}
@@ -4943,7 +4947,7 @@ We map the canonical expression onto a 3-variable Karnaugh Map to explore potent
 The K-map reveals a classic \textbf{checkerboard pattern}. None of the $1$s are logically adjacent, which implies that no prime implicants can be grouped to eliminate variables. This specific diagonal pattern is the definitive signature of a parity function, indicating an Exclusive-OR (XOR) or Exclusive-NOR (XNOR) relationship.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Algebraic Derivation}
@@ -4975,7 +4979,7 @@ Substituting $X$ back into the expression gives the final minimized logic equati
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 4: Logic Circuit Implementation}
@@ -5127,7 +5131,7 @@ Below are the logic circuit realizations for both the generator (transmitter sid
 A critical principle in Digital Logic Design is that \textbf{parity generation and checking are independent of the semantic meaning of the data}. Whether the 3-bit data represents a standard binary number, a Gray code, or an \textbf{Excess-3 code}, the parity circuitry evaluates only the physical logic levels (0s and 1s) of the bits. Therefore, we will define our 3-bit Excess-3 code word as $X, Y,$ and $Z$, and design the standard 3-bit odd parity logic.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Part 1: Odd Parity Generator Design (Transmitter Side)}
@@ -5175,7 +5179,7 @@ Let $W = Y \oplus Z$. Substituting $W$ into the equation yields the standard def
 \end{align*}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Part 2: Odd Parity Checker Design (Receiver Side)}
@@ -5194,7 +5198,7 @@ To optimize the logic circuit implementation, we can group the terms:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Part 3: Logic Circuit Implementations}
@@ -5270,7 +5274,7 @@ Mathematically, if $X_L$ represents the logical Boolean variable and $X_V$ repre
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Part 1: Negative Logic 4-Bit Parity Generator}
@@ -5319,7 +5323,7 @@ To isolate the physical output $P_V$, we invert both sides:
 \end{center}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Part 2: Negative Logic 4-Bit Parity Checker}
@@ -5405,7 +5409,7 @@ Inverting both sides to isolate the physical voltage output $E_V$:
 In Boolean Algebra, logic functions can be expressed in various algebraic formats. These formats are broadly classified into two main categories: \textbf{\textcolor{cB}{Canonical Forms}} and \textbf{\textcolor{cB}{Standard Forms}}. Understanding the distinction between them is crucial for both theoretical analysis and practical logic gate minimization.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{1. Canonical Forms}
@@ -5435,7 +5439,7 @@ A maxterm is a sum (OR) term that contains all variables of the function exactly
 \end{itemize}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{2. Standard Forms}
@@ -5462,7 +5466,7 @@ An expression consisting of two or more OR terms that are ANDed together. These 
 \end{itemize}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{3. Summary Comparison Table}
@@ -5514,7 +5518,7 @@ In Boolean Algebra, logic expressions can be written in different algebraic form
 \end{center}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{(b) Preferable Form for Logic Gate Implementation}
@@ -5530,7 +5534,7 @@ When implementing a Boolean function with physical hardware (logic gates), the \
 \end{itemize}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsection*{(c) Form Obtained Directly from a Truth Table}
@@ -5594,7 +5598,7 @@ Notice the presence of the term $yz$. According to the \textbf{Consensus Theorem
 \end{align*}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Expand to Canonical Sum of Minterms}
@@ -5617,7 +5621,7 @@ Rearranging the terms in logical order of their binary equivalents ($x$ as MSB, 
 \end{align*}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Convert to Minterm Notation}
@@ -5676,7 +5680,7 @@ Now, we simplify using fundamental Boolean theorems:
 The function is now in a standard Product of Sums (POS) form.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Expand to Canonical Product of Maxterms}
@@ -5715,7 +5719,7 @@ By the \textbf{Idempotent Law} ($A \cdot A = A$), we can eliminate duplicate ter
 \end{align*}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Convert to Maxterm Notation}
@@ -5763,7 +5767,7 @@ To express this function as a Sum of Minterms (Canonical SOP form), every term m
 \end{itemize}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Algebraic Expansion into Canonical Form}
@@ -5790,7 +5794,7 @@ We introduce the missing variable $A$:
 \end{align*}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Combine and Simplify}
@@ -5806,7 +5810,7 @@ Rearrange the terms (Commutative Law) and apply the \textbf{Idempotent Law} ($X 
 \end{align*}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 4: Convert to Minterm Notation}
@@ -5961,7 +5965,7 @@ By tracing the provided logic circuit, we can determine the global inputs applie
 Therefore, for both multiplexers, the select lines are $(S_1, S_0) = (x, y)$.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{2. Derivation of Output Function $A$ (Sum of Minterms)}
@@ -5993,7 +5997,7 @@ Thus, the function $A$ as a sum of minterms is:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{3. Derivation of Output Function $B$ (Product of Maxterms)}
@@ -6035,7 +6039,7 @@ Thus, the function $B$ as a product of maxterms is:
 \end{equation}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{4. Comprehensive Truth Table Verification}
@@ -6114,7 +6118,7 @@ An \textbf{\textcolor{cC}{Essential Prime Implicant}} is a specific type of Prim
 \end{itemize}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Key Differences}
@@ -6134,7 +6138,7 @@ An \textbf{\textcolor{cC}{Essential Prime Implicant}} is a specific type of Prim
 \end{center}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Illustrative Example}
@@ -6222,7 +6226,7 @@ We plot the given minterms (1s) onto a 4-variable Karnaugh Map. Empty cells are 
 \end{center}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 2: Identifying All Prime Implicants (PIs)}
@@ -6239,7 +6243,7 @@ A \textbf{Prime Implicant} is a maximally sized grouping of 1s (size $2^n$) that
 \end{itemize}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 3: Prime Implicant Coverage Chart}
@@ -6263,7 +6267,7 @@ To systematically determine which of these PIs are \textbf{essential}, we constr
 \end{center}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{Step 4: Conclusion}
@@ -6452,7 +6456,7 @@ To maintain visual clarity, the K-maps below explicitly show the groupings for \
 \end{center}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{2. Identification of Prime Implicants (PIs)}
@@ -6469,7 +6473,7 @@ By systematically grouping the maximum number of adjacent $1$s and $X$s (in size
 \end{itemize}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{3. Essential Prime Implicants (EPIs) and Coverage}
@@ -6505,7 +6509,7 @@ By scanning the columns for single 'X' marks, we find the EPIs and their respons
 \end{align*}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.4cm}
 
 \section*{4. Minimal Sums}
@@ -9292,9 +9296,9 @@ We implement the minimal SOP expression using a standard logic bus architecture.
     \node[or port, number inputs=3] (orOut) at (12, 0) {};
     
     % Routing to OR Gate
-    \draw (and1.out) -| (10, 1.43) -- (orOut.in 1);
-    \draw (and2.out) -- (orOut.in 2);
-    \draw (and3.out) -| (10, -1.43) -- (orOut.in 3);
+    \draw (and1.out) -| (orOut.in 1);
+    \draw (and2.out) -| (orOut.in 2);
+    \draw (and3.out) -| (orOut.in 3);
 
     % Final Output Label
     \node[right] at (orOut.out) {$Y$};
@@ -9849,7 +9853,7 @@ Using the simplified Boolean expressions, we can draw the full subtractor circui
 \draw (0, 7) -- (4, 7) -- (4, 0);
 
 % NOT gate for x' (on x=2 vertical bus)
-\draw (1, 8.5) node[circ]{} -- (2, 8.5) node[not port, scale=0.6, rotate=-90, anchor=in] (notx) {};
+\draw (1, 8.5) node[circ]{} -- (2, 8.5) --++(0, -3) node[not port, scale=0.6, rotate=-90, anchor=in] (notx) {};
 \draw (notx.out) -- (2, 0);
 
 % Diff Output (x XOR y XOR Bin)
@@ -9892,7 +9896,127 @@ Using the simplified Boolean expressions, we can draw the full subtractor circui
 \draw (or1.out) -- (12, 2.5) node[right] {$B_{out}$};
 \end{circuitikz}\end{center}
 
+
 \end{tcolorbox}
+
+\item Using 4-bit binary adder and XOR gate, design a circuit which takes two 4-bit BCD inputs $A$ and $B$, and returns $A+1$ if the control input is $00$, $A'$ if the control input is $01$, $A'+1$ when the control input is $10$, and $A$ when the control input is $11$.\mk{13}
+\yr{CSE 205 | L-2/T-1 | 2018--19}
+
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\subsection*{1. Problem Interpretation and Strategy}
+The problem asks to design a circuit that performs four specific operations on a 4-bit input $A$ based on a 2-bit condition ("input is 00, 01, 10, 11"). Although the prompt mentions "two 4-bit BCD inputs A and B", the requested operations ($A+1$, $A'$, $A'+1$, $A$) do not utilize the 4-bit input $B$. Therefore, we assume the condition is driven by a 2-bit control signal, which we will designate as $S_1$ and $S_0$.
+
+We are constrained to use a \textbf{4-bit binary adder} and \textbf{XOR gates}. 
+A 4-bit binary adder computes $F = X + Y + C_{in}$. We can permanently ground the second input ($Y = 0000$) and selectively modify the first input ($X$) and the carry-in ($C_{in}$) using XOR gates to achieve the desired operations.
+
+\vspace{0.2cm}
+\subsection*{2. Operation Analysis and Truth Table}
+We analyze the required operations to determine the necessary values for the adder's inputs $X$ and $C_{in}$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{cc | c | cc | c}
+\toprule
+\multicolumn{2}{c|}{\textbf{Control Input}} & \textbf{Desired} & \multicolumn{2}{c|}{\textbf{Adder Inputs}} & \textbf{Operation Result} \\
+$S_1$ & $S_0$ & \textbf{Output ($F$)} & $X$ & $C_{in}$ & $X + Y + C_{in}$ \\
+\midrule
+0 & 0 & $A + 1$ & $A$ & 1 & $A + 0 + 1 = A + 1$ \\
+0 & 1 & $A'$ & $A'$ & 0 & $A' + 0 + 0 = A'$ \\
+1 & 0 & $A' + 1$ & $A'$ & 1 & $A' + 0 + 1 = A' + 1$ (2's Complement) \\
+1 & 1 & $A$ & $A$ & 0 & $A + 0 + 0 = A$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.2cm}
+\subsection*{3. Boolean Logic Derivation for Adder Inputs}
+From the truth table, we can derive the logic expressions for $X_i$ (each bit of $X$) and $C_{in}$ in terms of $A_i$, $S_1$, and $S_0$.
+
+\textbf{A. Deriving $X_i$:}
+Notice that $X = A$ when the control inputs $S_1 S_0$ are equal ($00$ or $11$), and $X = A'$ when they are different ($01$ or $10$).
+This behavior perfectly matches the Exclusive-OR (XOR) logic for the control bits.
+Let the inversion control signal be $Inv = S_1 \oplus S_0$.
+\begin{align*}
+    Inv &= S_1 \oplus S_0 \\
+    X_i &= A_i \oplus Inv = A_i \oplus (S_1 \oplus S_0)
+\end{align*}
+If $Inv = 0$, $X_i = A_i \oplus 0 = A_i$. \\
+If $Inv = 1$, $X_i = A_i \oplus 1 = A_i'$.
+
+\textbf{B. Deriving $C_{in}$:}
+Looking at the table, $C_{in} = 1$ when $S_0 = 0$, and $C_{in} = 0$ when $S_0 = 1$. Thus, $C_{in} = \overline{S_0}$. 
+Since we are restricted to using only XOR gates, we can implement the NOT operation by XORing $S_0$ with Logic 1 ($V_{cc}$).
+\begin{align*}
+    C_{in} &= S_0 \oplus 1 = \overline{S_0}
+\end{align*}
+
+\vspace{0.2cm}
+\subsection*{4. Logic Circuit Diagram}
+
+\begin{center}
+\begin{circuitikz}[scale=1.1, transform shape, thick]
+    
+    % 4-bit Adder Block
+    \draw[fill=white, rounded corners=2pt] (5, -0.5) rectangle (8, 7.5);
+    \node[align=center, font=\bfseries] at (6.5, 3.5) {4-bit \\ Binary \\ Adder};
+
+    % Control Logic (S1 XOR S0)
+    \node[xor port, scale=0.8, fill=cD!10, draw=cD] (xorS) at (0, -2) {};
+    \draw  (xorS.in 1) --++ (-1.5, 0) node[left, font=\bfseries] {$S_1$};
+
+    \draw  (xorS.in 2) --++ (-1.5, 0) node[left, font=\bfseries] {$S_0$};
+    
+    \fill (xorS.in 2) circle (2pt);
+    
+    % Inversion Bus (S1 XOR S0)
+    \draw (xorS.out) -- (0.5, -2) -- (0.5, 6);
+
+    % Cin Logic (S0 XOR 1)
+    \node[xor port, scale=0.8, fill=cD!10, draw=cD] (xorC) at (2, -3.5) {};
+    \draw (xorS.in 2) |- (xorC.in 1);
+    \draw[<-] (xorC.in 2) -- (-1.5, -3.78) node[left, font=\bfseries] {Logic 1 ($V_{cc}$)};
+    
+    % Cin Connection
+    \draw (xorC.out) -| (6.5, -0.5) node[above, font=\small\bfseries] {$C_{in}$};
+
+    % A Inputs and XOR Gates
+    \foreach \i in {0,1,2,3} {
+        \node[xor port, scale=0.8, fill=cD!10, draw=cD] (xorA\i) at (2, \i*1.5 + 1) {};
+        
+        % Connect A_i
+        \draw[<-] (xorA\i.in 1) -- (-1.5, \i*1.5 + 1.28) node[left, font=\bfseries] {$A_\i$};
+        
+        % Connect to Inversion Bus
+        \draw (0.5, \i*1.5 + 0.72) -- (xorA\i.in 2);
+        \fill (0.5, \i*1.5 + 0.72) circle (2pt);
+        
+        % Connect XOR output to X_i
+        \draw (xorA\i.out) -- (5, \i*1.5 + 1) node[right, font=\small\bfseries] {$X_\i$};
+    }
+
+    % Grounded Y inputs
+    \draw (3.5, 7) node[left, font=\bfseries] {Logic 0 (GND)} -- (4.5, 7);
+    \draw (4.5, 7) -- (4.5, 1.5);
+    \foreach \i in {0,1,2,3} {
+        \draw (4.5, \i*1.5 + 1.5) -- (5, \i*1.5 + 1.5) node[right, font=\small\bfseries] {$Y_\i$};
+        \fill (4.5, \i*1.5 + 1.5) circle (2pt);
+    }
+
+    % Outputs
+    \foreach \i in {0,1,2,3} {
+        \draw[->, thick, draw=cD] (8, \i*1.5 + 1.25) node[left, font=\small\bfseries, text=black] {$S_\i$} -- (9.5, \i*1.5 + 1.25) node[right, font=\bfseries, text=cD] {$F_\i$};
+    }
+    
+    % Cout Output
+    \draw[->, thick, draw=cD] (6.5, 7.5) node[below, font=\small\bfseries, text=black] {$C_{out}$} -- (6.5, 8.5) node[above, font=\bfseries, text=cD] {$C_{out}$};
+
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
 
 \item Write the advantages and disadvantages of serial and parallel adders.
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2015--16}
@@ -9956,143 +10080,7 @@ A parallel adder processes all bits of the corresponding operands simultaneously
 
 \end{tcolorbox}
 
-\item Design a 4-bit BCD adder using 4-bit binary adders and basic logic gates. Use a block diagram to draw a binary adder.
-\mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{\textcolor{cD}{1. Principle of Operation}}
-
-A 4-bit Binary Coded Decimal (BCD) adder performs the addition of two BCD digits (ranging from 0 to 9) and produces a valid BCD sum. Since a 4-bit binary adder natively computes base-16 (from 0000 to 1111), its output must be corrected if the sum exceeds the valid BCD range ($>9$) or if a carry is generated out of the most significant bit.
-
-The conditions for a valid BCD sum requiring \textbf{no correction} are:
-\begin{itemize}
-    \item The binary sum is less than or equal to $9$ ($1001_2$).
-    \item No final carry out is generated ($K=0$).
-\end{itemize}
-
-The condition requiring \textbf{correction} (adding $6_{10}$ or $0110_2$ to the sum) is met if the sum is invalid ($>9$). This happens under three specific scenarios:
-\begin{enumerate}
-    \item A carry ($K$) is generated out of the MSB of the binary adder (e.g., $9+9=18$, carry generated).
-    \item The sum bits $Z_3 Z_2 Z_1 Z_0$ fall in the range $1010$ to $1111$. This occurs when:
-    \begin{itemize}
-        \item $Z_3 = 1$ and $Z_2 = 1$ (Values 12, 13, 14, 15).
-        \item $Z_3 = 1$ and $Z_1 = 1$ (Values 10, 11).
-    \end{itemize}
-\end{enumerate}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{2. Correction Logic Derivation}}
-
-Based on the conditions above, we can express the logic for the final carry-out ($C_{out}$) which triggers the addition of $0110_2$:
-\begin{align*}
-    C_{out} &= K + (Z_3 \cdot Z_2) + (Z_3 \cdot Z_1)
-\end{align*}
-When $C_{out} = 1$, the second 4-bit binary adder adds $0110_2$ to the intermediate sum $Z_3 Z_2 Z_1 Z_0$ to produce the final valid BCD sum $S_3 S_2 S_1 S_0$. If $C_{out} = 0$, it adds $0000_2$, leaving the valid sum unchanged.
-
-\vspace{1em}
-\textbf{\textcolor{cD}{3. BCD Adder Block Diagram}}
-
-\begin{center}
-\begin{circuitikz}[line width=0.8pt, thick]
-    % --- Adder 1 ---
-    \draw[fill=white] (-1.5, 3) rectangle (1.5, 6);
-    \node at (0, 4.5) [align=center] {\textbf{4-bit Binary} \\ \textbf{Adder 1}};
-    
-    % Adder 1 Labels inside
-    \node[above] at (-1, 3) {$Z_3$};
-    \node[above] at (-0.3, 3) {$Z_2$};
-    \node[above] at (0.3, 3) {$Z_1$};
-    \node[above] at (1, 3) {$Z_0$};
-    
-    % Adder 1 Inputs
-    \draw (-3, 5) node[left] {Augend: $A_3 A_2 A_1 A_0$} -- (-1.5, 5);
-    \draw (-3, 4) node[left] {Addend: $B_3 B_2 B_1 B_0$} -- (-1.5, 4);
-    \draw (-3, 3.3) node[left] {$C_{in}$} -- (-1.5, 3.3);
-    
-    % --- Adder 2 ---
-    \draw[fill=white] (-1.5, -3.5) rectangle (1.5, -0.5);
-    \node at (0, -2) [align=center, scale=0.6] {\textbf{4-bit Binary} \\ \textbf{Adder 2}};
-    
-    % Adder 2 Labels inside
-    \node[below] at (-1, -0.5) {$Z_3$};
-    \node[below] at (-0.3, -0.5) {$Z_2$};
-    \node[below] at (0.3, -0.5) {$Z_1$};
-    \node[below] at (1, -0.5) {$Z_0$};
-    
-    \node[above] at (-1, -3.5) {$S_3$};
-    \node[above] at (-0.3, -3.5) {$S_2$};
-    \node[above] at (0.3, -3.5) {$S_1$};
-    \node[above] at (1, -3.5) {$S_0$};
-    
-    % Connect Z outputs from Adder 1 to Z inputs of Adder 2
-    \draw (-1, 3) -- (-1, -0.5);
-    \draw (-0.3, 3) -- (-0.3, -0.5);
-    \draw (0.3, 3) -- (0.3, -0.5);
-    \draw (1, 3) -- (1, -0.5);
-    
-    % --- Logic Gates for Cout = K + Z3Z2 + Z3Z1 ---
-    \node[and port] (and1) at (4.5, 2) {};
-    \node[and port] (and2) at (4.5, 0) {};
-    \node[or port, number inputs=3] (or1) at (7.5, 1) {};
-    
-    % Junctions for Z outputs
-    \draw (-1, 2.5) coordinate (jZ3_1); \fill (jZ3_1) circle (1.5pt);
-    \draw (-1, 0.5) coordinate (jZ3_2); \fill (jZ3_2) circle (1.5pt);
-    \draw (-0.3, 1.5) coordinate (jZ2); \fill (jZ2) circle (1.5pt);
-    \draw (0.3, -0.5) coordinate (jZ1); \fill (jZ1) circle (1.5pt);
-    
-    % Routes to AND 1 (Z3 AND Z2)
-    \draw (jZ3_1) -- (3, 2.5) |- (and1.in 1);
-    \draw (jZ2) -- (3, 1.5) |- (and1.in 2);
-    
-    % Routes to AND 2 (Z3 AND Z1)
-    \draw (jZ3_2) -- (3, 0.5) |- (and2.in 1);
-    \draw (jZ1) -- (3, -0.5) |- (and2.in 2);
-    
-    % Route K to OR
-    \draw (1.5, 4.5) coordinate (kout) node[right, xshift=2pt] {$K$};
-    \draw (kout) -- (5, 4.5) |- (or1.in 1);
-    
-    % Route ANDs to OR
-    \draw (and1.out) |- (or1.in 2);
-    \draw (and2.out) |- (or1.in 3);
-    
-    % Cout Output
-    \draw (or1.out) -- ++(1.5, 0) coordinate (Cout) node[right] {$C_{out}$ (Final BCD Carry)};
-    \draw (or1.out) ++(0.5, 0) coordinate (csplit); \fill (csplit) circle (1.5pt);
-    
-    % --- Adder 2 Correction Inputs ---
-    % Inputs from left to Add 6 (0 1 1 0)
-    \draw (-3.5, -1) node[left] {$0$} -- (-1.5, -1);
-    \draw (-3.5, -3) node[left] {$0$} -- (-1.5, -3);
-    
-    % Feedback Cout to middle inputs
-    \draw (csplit) -- ++(0, -5.5) -- ++(-11.5, 0) coordinate (croute) -- ++(0, 4);
-    \draw (croute |- {(-1.5, -1.66)}) -- (-1.5, -1.66);
-    \draw (croute |- {(-1.5, -2.33)}) -- (-1.5, -2.33);
-    \fill (croute |- {(-1.5, -2.33)}) circle (1.5pt);
-    
-    % Labels for connection points to Adder 2
-    \node[right, font=\small] at (-1.5, -1.66) {$C_{out}$};
-    \node[right, font=\small] at (-1.5, -2.33) {$C_{out}$};
-    
-    % --- Adder 2 Outputs (Final Sum) ---
-    \draw (-1, -3.5) -- (-1, -4.5) node[below] {$S_3$};
-    \draw (-0.3, -3.5) -- (-0.3, -4.5) node[below] {$S_2$};
-    \draw (0.3, -3.5) -- (0.3, -4.5) node[below] {$S_1$};
-    \draw (1, -3.5) -- (1, -4.5) node[below] {$S_0$};
-    
-    % Output brace for Final BCD Sum
-    \draw[decorate, decoration={brace, amplitude=5pt, mirror}] (-1.2, -5.2) -- (1.2, -5.2) node[midway, below=6pt] {Final BCD Sum};
-
-    % Ignored carry of Adder 2
-    \draw (1.5, -2) -- (2.5, -2) node[right] {Ignored Carry};
-
-\end{circuitikz}
-\end{center}
-
-\end{tcolorbox}
 
 \item Design a four-bit binary adder using a 1-bit full-adder circuit. How can it be modified to use as a four-bit subtractor?
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2013--14}
@@ -10205,10 +10193,10 @@ We introduce a control mode line, \textbf{$M$}, and add an \textbf{XOR gate} at 
 }
 
 % 4. Mode (M) line and its connections
-\draw (12.2, 4.2) node[right] {$M$} -- (11.5, 4.2) coordinate (M0);
+\draw (12.2, 4.2) node[right] {$M$} -- (11.8, 4.2) coordinate (M0);
 \fill (M0) circle (1.5pt);
-\draw (M0) -- (11.5, 0);
-\draw[-latex] (11.5, 0) -- (FA0.east) node[pos=0.7, above] {$C_0$};
+\draw (M0) -- (11.8, 0);
+\draw[-latex] (11.8, 0) -- (FA0.east) node[pos=0.7, above] {$C_0$};
 
 % Horizontal M wire routing
 \coordinate (MX0) at (XOR0.in 1 |- 0, 4.2);
@@ -10242,19 +10230,11 @@ We introduce a control mode line, \textbf{$M$}, and add an \textbf{XOR gate} at 
 \fill (C4dot) circle (1.5pt);
 \draw (C4dot) -- ++(-1.5, 0) node[left] {$C$};
 
-% 6. Overflow XOR gate (V)
-% Using xscale=-1 to orient the gate pointing to the left
-\node[american xor port, xscale=-1, gate] (XV) at (-3.2, -2.5) {};
-\draw (XV.out) -- ++(-0.8, 0) node[left] {$V$};
 
-% Route C4 to V (top input of XV, which is 'in 1')
-\draw[-latex] (C4dot) -- (C4dot |- XV.in 1) -- (XV.in 1);
-
-% Route C3 to V (bottom input of XV, which is 'in 2')
-\draw[-latex] (C3dot) -- (C3dot |- XV.in 2) -- (XV.in 2);
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -10399,264 +10379,211 @@ To implement this efficiently using XOR gates (sharing logic with the Difference
 \begin{enumerate}
 
 
-\item Design a BCD adder-subtractor which takes two 4-bit BCD numbers $A$ and $B$. Addition and subtraction is selected by a selector bit $S$: when $S=0$ the circuit produces $A+B$; when $S=1$ it produces $A-B$.
-\mk{12} \yr{CSE 205 | L-2/T-1 | 2020--21}
+\item Design a BCD adder-subtractor which takes two 4-bit BCD numbers $A$ and $B$. Addition and subtraction is selected by a selector bit $S$: when $S=0$ the circuit produces $A+B$; when $S=1$ it produces $A-B$. Explain the operations $9+7$ and $9-7$ with your designed circuit.
+\mk{12} \yr{CSE 205 | L-2/T-1 | 2020--21, 2017--18, 2016--17}
+
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
 
 \textbf{\textcolor{cD}{1. Principle of Operation}}
 
-A BCD (Binary Coded Decimal) adder-subtractor computes $A + B$ when the mode selector $S = 0$, and $A - B$ when $S = 1$. Both inputs $A$ and $B$ are 4-bit BCD digits. To perform subtraction, we utilize the \textbf{10's complement} arithmetic method:
-\begin{align*}
-    A - B &= A + (\text{10's complement of } B) \\
-          &= A + (\text{9's complement of } B) + 1
-\end{align*}
-We can achieve both operations seamlessly using a standard \textbf{BCD Adder} by feeding it $A$, a conditionally modified $B$ (let's call it $Y$), and setting the initial carry-in $C_{in} = S$.
+This circuit functions as a modified Arithmetic logic unit where the mode selector $S$ dictates whether it performs addition or subtraction.
 \begin{itemize}
-    \item \textbf{When $S = 0$ (Addition):} $Y = B$ and $C_{in} = 0$. The circuit computes $A + B + 0$.
-    \item \textbf{When $S = 1$ (Subtraction):} $Y = \text{9's complement of } B$ and $C_{in} = 1$. The circuit computes $A + (9 - B) + 1$, effectively performing $A - B$.
+    \item \textbf{When $S = 0$ (Addition):} The input $y_i$ passes through the XOR gates unchanged. With the initial carry-in $C_{i} = 0$, the first stage computes the standard binary sum of $A + B$.
+    \item \textbf{When $S = 1$ (Subtraction):} The XOR gates invert all bits of the $y_i$ input, producing the 1's complement ($\overline{y_i}$). Since $C_{i} = S = 1$, the first stage computes $A + \overline{y} + 1$, effectively performing a \textbf{2's complement subtraction} ($A - B$) at the binary level.
 \end{itemize}
 
 \vspace{1em}
-\textbf{\textcolor{cD}{2. Conditional 9's Complementer Logic}}
+\textbf{\textcolor{cD}{2. Input Modification Logic (XOR Gates)}}
 
-We need a combinational logic circuit that takes $B_3B_2B_1B_0$ and selector $S$, and outputs $Y_3Y_2Y_1Y_0$. 
-\begin{itemize}
-    \item If $S = 0$, $Y_i = B_i$.
-    \item If $S = 1$, $Y_i = (9 - B)_i$.
-\end{itemize}
+Instead of a complex combinational circuit, this design utilizes bitwise inversion using 2-input XOR gates to handle the $Y_i$ inputs fed into the top adder:
+\begin{align*}
+    Y_i &= y_i \oplus S
+\end{align*}
+If $S = 0$, $Y_i = y_i$ (Unchanged). If $S = 1$, $Y_i = \overline{y_i}$ (Inverted). 
 
-Let us analyze the relationships bit by bit for the $S=1$ case (9's complement, $9 = 1001_2$):
+\vspace{1em}
+\textbf{\textcolor{cD}{3. Derivation of BCD Correction Logic (\textit{Err})}}
+
+When adding two 4-bit BCD numbers (maximum $9 + 9 + 1 = 19$), the top binary adder produces a 5-bit result: a carry-out $C_y$ and a 4-bit sum $S_3S_2S_1S_0$. Since a binary adder operates in base-2, but BCD operates in base-10, any sum exceeding 9 is an \textbf{invalid BCD digit} and requires adding a correction factor of 6 ($0110_2$).
+
+Let's analyze the conditions where the sum requires correction ($Err = 1$):
+
+\textbf{Condition 1: Sum is between 16 and 19.} \\
+In this case, the binary adder automatically generates a carry-out. So, if $C_y = 1$, correction is needed.
+
+\textbf{Condition 2: Sum is between 10 and 15.} \\
+Here, $C_y = 0$, but the 4-bit sum is an invalid BCD digit. Let's look at the truth table for sums 10 to 15:
+
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}c|cccc|cccc@{}}
+\begin{tabular}{@{}c|c|cccc|c@{}}
 \toprule
-\textbf{Decimal} & $B_3$ & $B_2$ & $B_1$ & $B_0$ & $Y_3$ & $Y_2$ & $Y_1$ & $Y_0$ \\ \midrule
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\
-1 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 \\
-2 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 \\
-3 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 \\
-4 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 1 \\
-5 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 0 \\
-6 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 1 \\
-7 & 0 & 1 & 1 & 1 & 0 & 0 & 1 & 0 \\
-8 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 \\
-9 & 1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \bottomrule
+\textbf{Decimal Sum} & \textbf{$C_y$} & \textbf{$S_3$} & \textbf{$S_2$} & \textbf{$S_1$} & \textbf{$S_0$} & \textbf{Correction Needed (\textit{Err})} \\ \midrule
+0 to 9 & 0 & \multicolumn{4}{c|}{(Valid BCD range)} & 0 \\ \midrule
+10 & 0 & 1 & 0 & 1 & 0 & 1 \\
+11 & 0 & 1 & 0 & 1 & 1 & 1 \\
+12 & 0 & 1 & 1 & 0 & 0 & 1 \\
+13 & 0 & 1 & 1 & 0 & 1 & 1 \\
+14 & 0 & 1 & 1 & 1 & 0 & 1 \\
+15 & 0 & 1 & 1 & 1 & 1 & 1 \\ \midrule
+16 to 19 & 1 & \multicolumn{4}{c|}{(Don't cares for $S_{0-3}$)} & 1 \\ \bottomrule
 \end{tabular}
 \end{center}
 
-By applying Boolean algebra, we derive the generalized equations for $Y$ incorporating the mode $S$:
-\begin{align*}
-    Y_0 &= B_0 \oplus S && \text{(Toggles for 9's complement)} \\
-    Y_1 &= B_1 && \text{($Y_1$ remains identical to $B_1$ in valid BCD range)} \\
-    Y_2 &= B_2 \oplus (S \cdot B_1) && \text{(Inverts $B_2$ conditionally based on $B_1$ and $S$)} \\
-    Y_3 &= \bar{S}B_3 + S(\overline{B_3} \cdot \overline{B_2} \cdot \overline{B_1}) && \text{($Y_3=1$ only for $B=0,1$ during subtraction)}
-\end{align*}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{3. BCD Addition and Correction Logic}}
-
-The core of the circuit is a standard BCD Adder. It consists of:
-\begin{enumerate}
-    \item \textbf{Binary Adder 1:} Adds the 4-bit numbers $A$, $Y$, and $C_{in} = S$. It produces a 4-bit binary sum $Z_3Z_2Z_1Z_0$ and a carry-out $C_{out1}$.
-    \item \textbf{Correction Logic:} The binary sum may exceed 9 ($1001_2$), rendering it an invalid BCD digit. A correction factor of $6$ ($0110_2$) must be added if the sum is $>9$ or if a carry was generated. The condition for BCD correction $C_{BCD}$ is:
-    \begin{align*}
-        C_{BCD} = C_{out1} + (Z_3 \cdot Z_2) + (Z_3 \cdot Z_1)
-    \end{align*}
-    \item \textbf{Binary Adder 2:} Adds the correction factor $0, C_{BCD}, C_{BCD}, 0$ to the intermediate sum $Z$. The final output is the valid BCD sum/difference $S_3S_2S_1S_0$.
-\end{enumerate}
-
-\vspace{1em}
-\textbf{\textcolor{cD}{4. Complete System Block Diagram}}
-
-\begin{center}
-\begin{circuitikz}[line width=0.8pt, >=stealth, scale=1, transform shape]
-
-% ================= Inputs =================
-\node[above] (S) at (-4.5, 8) {\textbf{Select ($S$)}};
-\node[above] (B) at (-1.5, 8) {\textbf{$B_3 B_2 B_1 B_0$}};
-\node[above] (A) at (1.5, 8) {\textbf{$A_3 A_2 A_1 A_0$}};
-
-% ================= Conditional 9's Complementer =================
-\node[draw, thick, minimum width=3.5cm, minimum height=1.8cm, fill=white, rounded corners=2pt, align=center] 
-    (Comp) at (-1.5, 6) {\textbf{Conditional} \\ \textbf{9's Complementer}};
-
-\draw[->, thick] (B) -- (Comp.north);
-\draw[->, thick] (S) -- (-4.5, 6) |- (Comp.west);
-\fill (-4.5, 6) circle (2pt);
-
-% ================= First 4-Bit Binary Adder =================
-\node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
-    (Add1) at (0, 2.5) {\textbf{4-Bit Binary Adder 1} \\ (Computes $Z = A + Y + S$)};
-
-\draw[->, thick] (A) -- (A |- Add1.north) node[midway, right] {$A$};
-\draw[->, thick] (Comp.south) -- (Comp.south |- Add1.north) node[midway, left] {$Y$};
-\draw[->, thick] (-4.5, 6) -- (-4.5, 2.5) -- (Add1.west);
-\node[above right, inner sep=2pt] at (Add1.west) {$C_{in}=S$};
-
-% ================= Extracting bits from Z & Cout1 =================
-\coordinate (Cout1) at (3.25, 3.5);
-\coordinate (Z3) at (3.25, 3.0);
-\coordinate (Z2) at (3.25, 2.5);
-\coordinate (Z1) at (3.25, 2.0);
-
-\draw[thick] (Add1.east |- Cout1) -- (Cout1) node[above right, inner sep=1pt] {$C_{out1}$};
-\draw[thick] (Add1.east |- Z3) -- (Z3) node[above right, inner sep=1pt] {$Z_3$};
-\draw[thick] (Add1.east |- Z2) -- (Z2) node[above right, inner sep=1pt] {$Z_2$};
-\draw[thick] (Add1.east |- Z1) -- (Z1) node[above right, inner sep=1pt] {$Z_1$};
-
-% ================= BCD Correction Logic =================
-\node[and port] (AND1) at (7, 2.75) {};
-\node[and port] (AND2) at (7, 1.25) {};
-\node[or port, number inputs=3] (OR1) at (9.5, 2.5) {};
-
-% Wiring Z3, Z2, Z1 to AND Gates
-\draw[thick] (Z3) -- (4.5, 3.0) |- (AND1.in 1);
-\draw[thick] (4.5, 3.0) |- (AND2.in 1);
-\fill (4.5, 3.0) circle (1.5pt);
-
-\draw[thick] (Z2) -- (5.0, 2.5) |- (AND1.in 2);
-\draw[thick] (Z1) -- (5.5, 2.0) |- (AND2.in 2);
-
-% Wiring ANDs and Cout1 to OR Gate
-\draw[thick] (Cout1) -- (8, 3.5) |- (OR1.in 1);
-\draw[thick] (AND1.out) |- (OR1.in 2);
-\draw[thick] (AND2.out) |- (OR1.in 3);
-
-% ================= Second 4-Bit Binary Adder =================
-\node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
-    (Add2) at (0, -2.5) {\textbf{4-Bit Binary Adder 2} \\ (Adds Correction $0 C_{BCD} C_{BCD} 0$)};
-
-% Z Bus down to Adder 2
-\draw[->, ultra thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
-
-% Routing C_BCD back to Adder 2 and Out
-\draw[thick] (OR1.out) -- ++(0.5,0) coordinate (Cbcd_tap);
-\fill (Cbcd_tap) circle (2pt);
-\draw[->, thick] (Cbcd_tap) -- ++(1.8,0) node[right, font=\bfseries] {Final Carry-Out ($C_{BCD}$)};
-
-\draw[->, thick] (Cbcd_tap) -- (Cbcd_tap |- Add2.east) -- (Add2.east) node[midway, above] {Correction Vector};
-
-% ================= Final Result =================
-\draw[->, ultra thick] (Add2.south) -- ++(0, -1.5) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
-\end{circuitikz}
-\end{center}
-
-\end{tcolorbox}
-
-\item Design a BCD adder-subtractor for two BCD inputs $A$ and $B$. Addition and subtraction is selected by a selector bit $x$: when $x=0$ the circuit computes $A+B$; when $x=1$ it computes $A-B$. Explain the operations $9+7$ and $9-7$ with your designed circuit.
-\mk{9+4} \yr{CSE 205 | L-2/T-1 | 2017--18}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{\textcolor{cD}{1. Design of the BCD Adder-Subtractor}}
-
-A single-digit BCD Adder-Subtractor processes two 4-bit BCD inputs $A = A_3A_2A_1A_0$ and $B = B_3B_2B_1B_0$, controlled by a mode selector $x$. 
+From the truth table, we can extract the Boolean expression for the invalid states where $C_y = 0$:
 \begin{itemize}
-    \item \textbf{Addition ($x = 0$):} The circuit computes $A + B$. The carry-in is $0$.
-    \item \textbf{Subtraction ($x = 1$):} The circuit uses 10's complement arithmetic to compute $A - B = A + (\text{9's complement of } B) + 1$. The $+1$ is elegantly achieved by tying the selector $x$ directly to the initial carry-in $C_{in}$.
+    \item Notice that for Decimal 10 and 11, both \textbf{$S_3 = 1$} and \textbf{$S_1 = 1$}. This gives the term $(S_3 \cdot S_1)$.
+    \item For Decimal 12, 13, 14, and 15, both \textbf{$S_3 = 1$} and \textbf{$S_2 = 1$}. This gives the term $(S_3 \cdot S_2)$.
+\end{itemize}
+Therefore, if the sum is between 10 and 15, the condition is $(S_3 \cdot S_2) + (S_3 \cdot S_1)$. 
+
+\textbf{Final Correction Equation:} \\
+Combining Condition 1 ($C_y = 1$) and Condition 2, the final logic equation for the Error signal becomes:
+\begin{align*}
+    Err &= C_y + (S_3 \cdot S_2) + (S_3 \cdot S_1)
+\end{align*}
+This logic is implemented in the circuit using two AND gates and one 3-input OR gate.
+
+\vspace{1em}
+\textbf{\textcolor{cD}{4. Bottom Adder (Correction Execution)}}
+
+The bottom binary adder takes the uncorrected sum from the top adder and adds the correction factor based on the $Err$ signal:
+\begin{itemize}
+    \item The inputs to the bottom adder are hardwired as: $A_3=0, A_2=Err, A_1=Err, A_0=0$.
+    \item If $Err = 0$, it adds $0000_2$ (no correction applied).
+    \item If $Err = 1$, it adds $0110_2$ (Decimal 6), which adjusts the sum to the correct BCD format and generates the proper BCD carry for the next stage.
 \end{itemize}
 
-\textbf{Conditional 9's Complementer:}
-We need a combinational block that passes $B$ unchanged when $x=0$ and outputs the 9's complement of $B$ ($9 - B$) when $x=1$. Let the output of this block be $Y = Y_3Y_2Y_1Y_0$. The logic equations derived from a truth table for 9's complement are:
-\begin{align*}
-    Y_0 &= B_0 \oplus x \\
-    Y_1 &= B_1 \quad \text{(The 2nd bit remains unchanged in 9's complement)} \\
-    Y_2 &= B_2 \oplus (B_1 \cdot x) \\
-    Y_3 &= B_3\bar{x} + x(\overline{B_3} \cdot \overline{B_2} \cdot \overline{B_1})
-\end{align*}
-
-\textbf{BCD Adder Architecture:}
-The modified input $Y$ is added to $A$ along with $C_{in} = x$ using a \textbf{4-bit Binary Adder}. This yields a binary sum $Z$ and a carry $C_{out1}$. Because valid BCD ranges from $0$ to $9$, a result $> 9$ requires a correction. We add $6$ ($0110_2$) to the sum if a correction condition $C_{BCD}$ is met:
-\begin{align*}
-    C_{BCD} &= C_{out1} + Z_3Z_2 + Z_3Z_1
-\end{align*}
-A second \textbf{4-bit Binary Adder} adds the correction vector $0, C_{BCD}, C_{BCD}, 0$ to $Z$ to produce the final valid BCD result $S$.
-
 \vspace{1em}
-\textbf{\textcolor{cD}{2. Circuit Diagram}}
+\textbf{\textcolor{cD}{5. Complete System Block Diagram}}
 
 \begin{center}
-\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
-    \ctikzset{logic ports=ieee}
+    \begin{tikzpicture}[thick, y=1.8cm,  >=latex]
 
-    % ================= Inputs =================
-    \node (X) at (-2, 8) {\textbf{Select ($x$)}};
-    \node (B) at (2, 8) {\textbf{$B_3 B_2 B_1 B_0$}};
-    \node (A) at (6, 8) {\textbf{$A_3 A_2 A_1 A_0$}};
 
-    % ================= Conditional 9's Complementer =================
-    \node[draw, thick, minimum width=3.5cm, minimum height=1.6cm, fill=white, rounded corners=2pt, align=center] 
-        (Comp) at (2, 6) {\textbf{Conditional} \\ \textbf{9's Complementer}};
+    \coordinate (S_lvl) at (0, 10.0); 
+    \coordinate (Y_lvl) at (0, 10.5); 
+
     
-    \draw[->, thick] (B) -- (Comp.north);
-    \draw[->, thick] (X) |- (Comp.west);
-    \fill (-2, 6) circle (2pt);
+    \draw[thick] (9.5, 11) node[above, font=\bfseries] {S (Add/Sub)} 
+          -- (9.5, 7.5) 
+          -- (9, 7.5); 
+          
+    \draw[thick] (9.5, 10.0) -- (6.3, 10.0); 
+    \fill (9.5, 10.0) circle (1.5pt);
 
-    % ================= First 4-Bit Binary Adder =================
-    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
-        (Add1) at (4, 2.5) {\textbf{4-Bit Binary Adder 1} \\ ($Z = A + Y + x$)};
-
-    \draw[->, thick] (A) -- (A |- Add1.north) node[midway, right] {$A$};
-    \draw[->, thick] (Comp.south) -- (Comp.south |- Add1.north) node[midway, left] {$Y$};
-    \draw[->, thick] (-2, 6) -- (-2, 2.5) -- (Add1.west) node[pos=0.85, above] {$C_{in}=x$};
-
-    % ================= Extracting bits from Z & Cout1 =================
-    \coordinate (Z3) at (8.5, 3.5);
-    \coordinate (Z2) at (8.5, 3.0);
-    \coordinate (Z1) at (8.5, 2.5);
-    \coordinate (Cout1) at (8.5, 1.5);
+    % --- TOP ADDER BLOCK ---
+    \draw[line width=1pt, draw=cD, rounded corners=2pt] (3, 6.5) rectangle (9, 8.5);
+    \node[color=cD] at (6, 7.5) {Binary Adder};
     
-    \node[right] at (Z3) {$Z_3$};
-    \node[right] at (Z2) {$Z_2$};
-    \node[right] at (Z1) {$Z_1$};
-    \node[right] at (Cout1) {$C_{out1}$};
+    % Internal side labels
+    \node[right] at (3.1, 7.5) {$C_y$};
+    \node[left] at (8.9, 7.5) {$C_i$};
 
-    \draw[thick] (Add1.east |- Z3) -- (Z3);
-    \draw[thick] (Add1.east |- Z2) -- (Z2);
-    \draw[thick] (Add1.east |- Z1) -- (Z1);
-    \draw[thick] (Add1.east |- Cout1) -- (Cout1);
 
-    % ================= BCD Correction Logic =================
-    \node[and port] (AND1) at (11, 3.25) {};
-    \node[and port] (AND2) at (11, 0) {};
-    \node[or port, number inputs=3] (OR1) at (13.5, 2.5) {};
-
-    % Wiring Z3, Z2, Z1 to AND Gates
-    \draw[thick] (Z3) -- (9.5, 3.5) |- (AND1.in 1);
-    \draw[thick] (9.5, 3.5) |- (AND2.in 1);
-    \fill (9.5, 3.5) circle (1.5pt);
-
-    \draw[thick] (Z2) -- (10.0, 3.0) |- (AND1.in 2);
-    \draw[thick] (Z1) -- (8.5, 2.5) |- (AND2.in 2);
-
-    % Wiring ANDs and Cout1 to OR Gate
-    \draw[thick] (AND1.out) |- (OR1.in 1);
-    \draw[thick] (AND2.out) |- (OR1.in 2);
-    \draw[thick] (Cout1) -- (12.2, 1.5) |- (OR1.in 3);
-
-    % ================= Second 4-Bit Binary Adder =================
-    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
-        (Add2) at (4, -3.5) {\textbf{4-Bit Binary Adder 2} \\ ($S = Z + 0 C_{BCD} C_{BCD} 0$)};
-
-    % Z Bus down to Adder 2
-    \draw[->, ultra thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
-
-    % Routing C_BCD back to Adder 2 and Out
-    \draw[thick] (OR1.out) -- ++(0.5,0) coordinate (Cbcd_tap);
-    \fill (Cbcd_tap) circle (2pt);
-    \draw[->, thick] (Cbcd_tap) -- ++(1.5,0) node[right, font=\bfseries] {$C_{BCD}$ (Carry to Next Digit)};
+    \foreach \i/\x in {3/4.0, 2/4.6, 1/5.2, 0/5.8} {
+        \draw[thick] (\x, 10.5) node[above] {$x_\i$} -- (\x, 8.5) node[below] {$A_\i$};
+    }
     
-    \draw[->, thick] (Cbcd_tap) -- (Cbcd_tap |- Add2.east) -- (Add2.east) node[above right, pos=0.7] {Correction ($0, C_{BCD}, C_{BCD}, 0$)};
+% Top Adder Inputs (y -> B) with XOR Gates
+    \foreach \i/\x in {3/6.8, 2/7.4, 1/8.0, 0/8.6} {
+        % ওভারল্যাপ এড়ানোর জন্য scale=0.45 করা হয়েছে
+        \node[xor port, rotate=-90, scale=0.45] (XOR\i) at (\x, 9.2) {};
+        
+        % Y ইনপুট XOR এর ১নং পিনে (ডানপাশের পিন)
+        \draw[thick] (XOR\i.in 1) -- (XOR\i.in 1 |- Y_lvl) node[above] {$y_\i$};
+        
+        % S ইনপুট XOR এর ২নং পিনে (বামপাশের পিন)
+        \draw[thick] (XOR\i.in 2) -- (XOR\i.in 2 |- S_lvl);
+        \fill (XOR\i.in 2 |- S_lvl) circle (1.5pt);
+        
+        % XOR থেকে আউটপুট গিয়ে B_i তে কানেক্ট হলো
+        \draw[thick] (XOR\i.out) -- (\x, 8.5) node[below] {$B_\i$};
+    }
 
-    % ================= Final Result =================
-    \draw[->, ultra thick] (Add2.south) -- ++(0, -1.5) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
+    % --- BOTTOM ADDER BLOCK ---
+    \draw[line width=1pt, draw=cD, rounded corners=2pt] (3, 1.5) rectangle (9, 3.5);
+    \node[color=cD] at (6, 2.5) {Binary Adder};
+    
+    % Internal side labels
+    \node[right] at (3.1, 2.5) {$C_y$};
+    \node[left] at (8.9, 2.5) {$C_i$};
+    
+    % Bottom Adder Ci input (0)
+    \draw[thick] (9, 2.5) -- (9.5, 2.5) node[right] {\textbf{0}};
+    
+    % Bottom Adder Cy Output Arrow
+    \draw[thick, <-] (2.2, 2.5) -- (3, 2.5); 
 
-\end{circuitikz}
+    % Bottom Adder Inputs labels (inside)
+    \foreach \i/\x in {3/4.0, 2/4.6, 1/5.2, 0/5.8} {
+        \node[below] at (\x, 3.5) {$A_\i$};
+    }
+    \foreach \i/\x in {3/6.8, 2/7.4, 1/8.0, 0/8.6} {
+        \node[below] at (\x, 3.5) {$B_\i$};
+    }
+
+    % Bottom Adder specific inputs (0 for A3 and A0)
+    \draw[thick] (4.0, 3.6) node[above] {\textbf{0}} -- (4.0, 3.5);
+    \draw[thick] (5.8, 3.6) node[above] {\textbf{0}} -- (5.8, 3.5);
+
+    % Bottom Adder Outputs (Final S)
+    \foreach \i/\x in {3/6.8, 2/7.4, 1/8.0, 0/8.6} {
+        \node[above] at (\x, 1.5) {$S_\i$};
+        \draw[thick, ->] (\x, 1.5) -- (\x, 0.5) node[below] {$S_\i$};
+    }
+
+    % --- INTERCONNECTING S LINES (Top to Bottom) ---
+    \foreach \i/\x in {3/6.8, 2/7.4, 1/8.0, 0/8.6} {
+        \node[above] at (\x, 6.5) {$S_\i$};
+        \draw[thick] (\x, 6.5) -- (\x, 3.5);
+    }
+
+
+    \node[and port, xscale=-1] (and1) at (4.5, 5.5) {};
+    \node[and port, xscale=-1] (and2) at (4.5, 4.5) {};
+    \node[or port, number inputs=3, xscale=-1] (orgate) at (1, 5.0) {};
+
+    % --- ROUTING TO AND GATES (WITH JUMPS) ---
+    \draw[thick] let \p1=(and1.in 1) in 
+        (7.4, \y1) -- (6.9, \y1) arc (0:180:0.1) -- (\p1);
+    \fill let \p1=(and1.in 1) in (7.4, \y1) circle (1.5pt);
+    
+    \draw[thick] let \p1=(and1.in 2) in 
+        (6.8, \y1) -- (\p1);
+    \fill let \p1=(and1.in 2) in (6.8, \y1) circle (1.5pt);
+
+    \draw[thick] let \p1=(and2.in 1) in 
+        (8.0, \y1) -- (7.5, \y1) arc (0:180:0.1) -- (6.9, \y1) arc (0:180:0.1) -- (\p1);
+    \fill let \p1=(and2.in 1) in (8.0, \y1) circle (1.5pt);
+    
+    \draw[thick] let \p1=(and2.in 2) in 
+        (6.8, \y1) -- (\p1);
+    \fill let \p1=(and2.in 2) in (6.8, \y1) circle (1.5pt);
+
+    % --- ROUTING TO OR GATE ---
+    \draw[thick] (3, 7.5) -- (2.5, 7.5) |- (orgate.in 1);
+    \draw[thick] (and1.out) |- (orgate.in 2);
+    \draw[thick] (and2.out) |- (orgate.in 3);
+
+    % --- ERR LINE AND ITS CONNECTIONS ---
+    \draw[thick] (orgate.out) -- (-0.5, 5.0) node[above left, text=orange] {\textbf{\textit{Err}}};
+    \draw[thick, ->] (-0.5, 5.0) -- (-0.5, 0.5); 
+
+    \draw[thick] (-0.5, 4) -- (5.2, 4) -- (5.2, 3.5);
+    \draw[thick] (4.6, 4) -- (4.6, 3.5);
+    
+    \fill (-0.5, 4) circle (1.5pt);
+    \fill (4.6, 4) circle (1.5pt);
+
+\end{tikzpicture}
 \end{center}
 
+
+
 \vspace{1em}
-\textbf{\textcolor{cD}{3. Explanation of Operations}}
+\textbf{\textcolor{cD}{6. Explanation of Operations}}
 
 \textbf{Operation 1: Compute \boldmath$9 + 7$ ($x = 0$)}
 \begin{itemize}
@@ -10700,130 +10627,149 @@ A second \textbf{4-bit Binary Adder} adds the correction vector $0, C_{BCD}, C_{
 
 \end{tcolorbox}
 
-\item Design a circuit which computes $A - B$ and $A + B$ where $A$ and $B$ are 4-bit BCD values. Explain the design.
-\mk{15} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
+
+
+
+
+\item Design a 4-bit BCD adder using 4-bit binary adders and basic logic gates. Use a block diagram to draw a binary adder.
+\mk{15} \yr{CSE 205 | L-2/T-1 | 2014--15}
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
 
-\textbf{\textcolor{cD}{1. Theoretical Foundation}}
+\textbf{\textcolor{cD}{1. Principle of Operation}}
 
-To design a unified circuit capable of computing both the sum ($A + B$) and the difference ($A - B$) of two 4-bit BCD (Binary Coded Decimal) numbers, we utilize a mode control bit \textbf{$M$}:
+A 4-bit Binary Coded Decimal (BCD) adder performs the addition of two BCD digits (ranging from 0 to 9) and produces a valid BCD sum. Since a 4-bit binary adder natively computes base-16 (from 0000 to 1111), its output must be corrected if the sum exceeds the valid BCD range ($>9$) or if a carry is generated out of the most significant bit.
+
+The conditions for a valid BCD sum requiring \textbf{no correction} are:
 \begin{itemize}
-    \item \textbf{When $M = 0$ (Addition):} The circuit computes $A + B$.
-    \item \textbf{When $M = 1$ (Subtraction):} The circuit computes $A - B$ using \textbf{10's complement arithmetic}. Subtraction is realized as $A + (\text{9's complement of } B) + 1$.
+    \item The binary sum is less than or equal to $9$ ($1001_2$).
+    \item No final carry out is generated ($K=0$).
 \end{itemize}
 
-A fundamental property of BCD arithmetic is that standard binary addition can be used, provided we apply a \textbf{BCD correction}. If the result of a BCD digit addition exceeds $9$ (i.e., $> 1001_2$) or generates a binary carry-out, it is an invalid BCD digit. Adding $6$ ($0110_2$) corrects this invalid state. Remarkably, this exact same correction logic applies to 10's complement BCD subtraction.
+The condition requiring \textbf{correction} (adding $6_{10}$ or $0110_2$ to the sum) is met if the sum is invalid ($>9$). This happens under three specific scenarios:
+\begin{enumerate}
+    \item A carry ($K$) is generated out of the MSB of the binary adder (e.g., $9+9=18$, carry generated).
+    \item The sum bits $Z_3 Z_2 Z_1 Z_0$ fall in the range $1010$ to $1111$. This occurs when:
+    \begin{itemize}
+        \item $Z_3 = 1$ and $Z_2 = 1$ (Values 12, 13, 14, 15).
+        \item $Z_3 = 1$ and $Z_1 = 1$ (Values 10, 11).
+    \end{itemize}
+\end{enumerate}
 
 \vspace{1em}
-\textbf{\textcolor{cD}{2. Logic Design of Components}}
+\textbf{\textcolor{cD}{2. Correction Logic Derivation}}
 
-\textbf{A. Conditional 9's Complementer} \\
-We require a combinational circuit that takes the BCD digit $B$ and the mode bit $M$, outputting $Y$:
+Based on the conditions above, we can express the logic for the final carry-out ($C_{out}$) which triggers the addition of $0110_2$:
 \begin{align*}
-    \text{If } M = 0 &\implies Y = B \\
-    \text{If } M = 1 &\implies Y = 9 - B \quad \text{(9's complement)}
+    C_{out} &= K + (Z_3 \cdot Z_2) + (Z_3 \cdot Z_1)
 \end{align*}
-By analyzing the truth table for a 9's complementer ($9 = 1001_2$), we derive the boolean expressions for $Y_3 Y_2 Y_1 Y_0$:
-\begin{align*}
-    Y_0 &= B_0 \oplus M && \text{(Bit 0 toggles when subtracting)} \\
-    Y_1 &= B_1 && \text{(Bit 1 is unchanged for valid BCD inputs)} \\
-    Y_2 &= B_2 \oplus (B_1 \cdot M) && \text{(Bit 2 toggles if Bit 1 is high during subtraction)} \\
-    Y_3 &= B_3\overline{M} + M(\overline{B_3} \cdot \overline{B_2} \cdot \overline{B_1}) && \text{(Bit 3 logic for 9's complement)}
-\end{align*}
-
-\textbf{B. Binary Addition and Correction Logic} \\
-The inputs $A$, $Y$, and $M$ (acting as the $+1$ for 10's complement when $M=1$) are fed into a standard \textbf{4-bit Binary Adder}. 
-\begin{align*}
-    Z &= A + Y + M \quad \text{with carry-out } C_{out1}
-\end{align*}
-The correction condition $C_{BCD}$ evaluates whether the binary sum $Z = Z_3Z_2Z_1Z_0$ requires the $+6$ adjustment:
-\begin{align*}
-    C_{BCD} &= C_{out1} + (Z_3 \cdot Z_2) + (Z_3 \cdot Z_1)
-\end{align*}
-If $C_{BCD} = 1$, a second \textbf{4-bit Binary Adder} adds $0110_2$ to $Z$. If $C_{BCD} = 0$, it adds $0000_2$. The output of this second adder is the valid BCD result $S_3 S_2 S_1 S_0$.
+When $C_{out} = 1$, the second 4-bit binary adder adds $0110_2$ to the intermediate sum $Z_3 Z_2 Z_1 Z_0$ to produce the final valid BCD sum $S_3 S_2 S_1 S_0$. If $C_{out} = 0$, it adds $0000_2$, leaving the valid sum unchanged.
 
 \vspace{1em}
-\textbf{\textcolor{cD}{3. BCD Adder/Subtractor Circuit Diagram}}
+\textbf{\textcolor{cD}{3. BCD Adder Block Diagram}}
 
 \begin{center}
-\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
-    \ctikzset{logic ports=ieee}
+\begin{circuitikz}[line width=0.8pt,y=1.4cm,  thick]
+    % --- Adder 1 ---
+    \draw[fill=white] (-1.5, 3) rectangle (1.5, 6);
+    \node at (0, 4.5) [align=center] {\textbf{4-bit Binary} \\ \textbf{Adder 1}};
+    
+    % Adder 1 Labels inside
+    \node[above] at (-1, 3) {$Z_3$};
+    \node[above] at (-0.3, 3) {$Z_2$};
+    \node[above] at (0.3, 3) {$Z_1$};
+    \node[above] at (1, 3) {$Z_0$};
+    
+    % Adder 1 Inputs
+    \draw (-3, 5) node[left] {Augend: $A_3 A_2 A_1 A_0$} -- (-1.5, 5);
+    \draw (-3, 4) node[left] {Addend: $B_3 B_2 B_1 B_0$} -- (-1.5, 4);
+    \draw (-3, 3.3) node[left] {$C_{in}$} -- (-1.5, 3.3);
+    
+    % --- Adder 2 ---
+    \draw[fill=white] (-1.5, -3.5) rectangle (1.5, -0.5);
+    \node at (0, -2) [align=center, scale=0.6] {\textbf{4-bit Binary} \\ \textbf{Adder 2}};
+    
+    % Adder 2 Labels inside
+    \node[below] at (-1, -0.5) {$Z_3$};
+    \node[below] at (-0.3, -0.5) {$Z_2$};
+    \node[below] at (0.3, -0.5) {$Z_1$};
+    \node[below] at (1, -0.5) {$Z_0$};
+    
+    \node[above] at (-1, -3.5) {$S_3$};
+    \node[above] at (-0.3, -3.5) {$S_2$};
+    \node[above] at (0.3, -3.5) {$S_1$};
+    \node[above] at (1, -3.5) {$S_0$};
+    
+    % Connect Z outputs from Adder 1 to Z inputs of Adder 2
+    \draw (-1, 3) -- (-1, -0.5);
+    \draw (-0.3, 3) -- (-0.3, -0.5);
+    \draw (0.3, 3) -- (0.3, -0.5);
+    \draw (1, 3) -- (1, -0.5);
+    
+    % --- Logic Gates for Cout = K + Z3Z2 + Z3Z1 ---
+    \node[and port] (and1) at (4.5, 2) {};
+    \node[and port] (and2) at (4.5, 0) {};
+    \node[or port, number inputs=3] (or1) at (7.5, 1) {};
+    
+    % Junctions for Z outputs
+    \draw (-1, 2.5) coordinate (jZ3_1); \fill (jZ3_1) circle (1.5pt);
+    \draw (-1, 0.5) coordinate (jZ3_2); \fill (jZ3_2) circle (1.5pt);
+    \draw (-0.3, 1.5) coordinate (jZ2); \fill (jZ2) circle (1.5pt);
+    \draw (0.3, -0.2) coordinate (jZ1); \fill (jZ1) circle (1.5pt);
+    
+    % Routes to AND 1 (Z3 AND Z2)
+    \draw (jZ3_1) -- (3, 2.5) |- (and1.in 1);
+    \draw (jZ2) -- (3, 1.5) |- (and1.in 2);
+    
+    % Routes to AND 2 (Z3 AND Z1)
+    \draw (jZ3_2) -- (3, 0.5) |- (and2.in 1);
+    \draw (jZ1) -- (3, -0.2) |- (and2.in 2);
+    
+    % Route K to OR
+    \draw (1.5, 4.5) coordinate (kout) node[right, xshift=2pt] {$K$};
+    \draw (kout) -- (5, 4.5) |- (or1.in 1);
+    
+    % Route ANDs to OR
+    \draw (and1.out) |- (or1.in 2);
+    \draw (and2.out) |- (or1.in 3);
+    
+    % Cout Output
+    \draw (or1.out) -- ++(1.5, 0) coordinate (Cout) node[right] {$C_{out}$ (Final BCD Carry)};
+    \draw (or1.out) ++(0.5, 0) coordinate (csplit); \fill (csplit) circle (1.5pt);
+    
+    % --- Adder 2 Correction Inputs ---
+    % Inputs from left to Add 6 (0 1 1 0)
+    \draw (-2.7, -1) node[left] {$0$} -- (-1.5, -1);
+    \draw (-2.7, -3) node[left] {$0$} -- (-1.5, -3);
+    
+    % Feedback Cout to middle inputs
+    \draw (csplit) -- ++(0, -5.5) -- ++(-11.5, 0) coordinate (croute) -- ++(0, 4);
+    \draw (croute |- {(-1.5, -1.66)}) -- (-1.5, -1.66);
+    \draw (croute |- {(-1.5, -2.33)}) -- (-1.5, -2.33) ;
+    \fill (croute |- {(-1.5, -2.33)}) circle (1.5pt);
+    \fill (croute |- {(-1.5, -1.66)}) circle (1.5pt);
 
-    % ================= Inputs =================
-    \node (M) at (-1, 7.5) {\textbf{Mode ($M$)}};
-    \node (B) at (3, 7.5) {\textbf{$B_3 B_2 B_1 B_0$}};
-    \node (A) at (7, 7.5) {\textbf{$A_3 A_2 A_1 A_0$}};
+    
+    % Labels for connection points to Adder 2
+    \node[right, font=\small] at (-1.5, -1.66) {$C_{out}$};
+    \node[right, font=\small] at (-1.5, -2.33) {$C_{out}$};
+    
+    % --- Adder 2 Outputs (Final Sum) ---
+    \draw (-1, -3.5) -- (-1, -4) node[below] {$S_3$};
+    \draw (-0.3, -3.5) -- (-0.3, -4) node[below] {$S_2$};
+    \draw (0.3, -3.5) -- (0.3, -4) node[below] {$S_1$};
+    \draw (1, -3.5) -- (1, -4) node[below] {$S_0$};
+    
+    % Output brace for Final BCD Sum
+    \draw[decorate, decoration={brace, amplitude=5pt, mirror}] (-1.2, -5.2) -- (1.2, -5.2) node[midway, below=6pt] {Final BCD Sum};
 
-    % ================= Conditional 9's Complementer =================
-    \node[draw, thick, minimum width=3.5cm, minimum height=1.6cm, fill=white, rounded corners=2pt, align=center] 
-        (Comp) at (3, 5) {\textbf{Conditional} \\ \textbf{9's Complementer} \\ \small{$Y = B \oplus f(M)$}};
-    
-    \draw[->, thick] (B) -- (Comp.north);
-    \draw[->, thick] (M) |- (Comp.west);
-    \fill (-1, 5) circle (2pt);
-
-    % ================= First 4-Bit Binary Adder =================
-    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
-        (Add1) at (5, 2) {\textbf{4-Bit Binary Adder} \\ Sum $Z = A + Y + M$};
-
-    \draw[->, thick] (A) -- (A |- Add1.north) node[midway, right] {$A$};
-    \draw[->, thick] (Comp.south) -- (Comp.south |- Add1.north) node[midway, left] {$Y$};
-    \draw[->, thick] (-1, 5) -- (-1, 2) -- (Add1.west) node[pos=0.85, above] {$C_{in}$};
-
-    % ================= Extracting bits from Z & Cout1 =================
-    \coordinate (Z3) at (8.25, 3.0);
-    \coordinate (Z2) at (8.25, 2.5);
-    \coordinate (Z1) at (8.25, 2.0);
-    \coordinate (Cout1) at (8.25, 1.0);
-    
-    \node[right] at (Z3) {$Z_3$};
-    \node[right] at (Z2) {$Z_2$};
-    \node[right] at (Z1) {$Z_1$};
-    \node[right] at (Cout1) {$C_{out1}$};
-
-    \draw[thick] (Add1.east |- Z3) -- (Z3);
-    \draw[thick] (Add1.east |- Z2) -- (Z2);
-    \draw[thick] (Add1.east |- Z1) -- (Z1);
-    \draw[thick] (Add1.east |- Cout1) -- (Cout1);
-
-    % ================= BCD Correction Logic =================
-    \node[and port] (AND1) at (10.7, 3.5) {};
-    \node[and port] (AND2) at (10.7, 0) {};
-    \node[or port, number inputs=3] (OR1) at (13, 2.0) {};
-
-    % Wiring Z3, Z2, Z1 to AND Gates
-    \draw[thick] (Z3) -- (9.2, 3.0) |- (AND1.in 1);
-    \draw[thick] (9.2, 3.0) |- (AND2.in 1);
-    \fill (9.2, 3.0) circle (1.5pt);
-
-    \draw[thick] (Z2) -- (9.5, 2.5) |- (AND1.in 2);
-    \draw[thick] (Z1) -- (9.5, 2.0) |- (AND2.in 2);
-
-    % Wiring ANDs and Cout1 to OR Gate
-    \draw[thick] (AND1.out) |- (OR1.in 1);
-    \draw[thick] (AND2.out) |- (OR1.in 2);
-    \draw[thick] (Cout1) -- (11.5, 1.0) |- (OR1.in 3);
-
-    % ================= Second 4-Bit Binary Adder =================
-    \node[draw, thick, minimum width=6.5cm, minimum height=2.8cm, fill=white, rounded corners=2pt, align=center] 
-        (Add2) at (5, -3.5) {\textbf{4-Bit Binary Adder} \\ Result $= Z + 0 C_{BCD} C_{BCD} 0$};
-
-    % Z Bus down to Adder 2
-    \draw[->, ultra thick] (Add1.south) -- (Add2.north) node[midway, right] {$Z_3 Z_2 Z_1 Z_0$};
-
-    % Routing C_BCD back to Adder 2 and Out
-    \draw[thick] (OR1.out) -- ++(0.8,0) coordinate (Cbcd_tap);
-    \fill (Cbcd_tap) circle (2pt);
-    \draw[->, thick] (Cbcd_tap) -- ++(1.5,0) node[right, font=\bfseries] {$C_{BCD}$ (Carry/Borrow Out)};
-    
-    \draw[->, thick] (Cbcd_tap) |- (12, -3.5) -- (Add2.east) node[above right, pos=0.55] {\small{$0, C_{BCD}, C_{BCD}, 0$}};
-
-    % ================= Final Result =================
-    \draw[->, ultra thick] (Add2.south) -- ++(0, -1.5) node[below] {\textbf{Result ($S_3 S_2 S_1 S_0$)}};
+    % Ignored carry of Adder 2
+    \draw (1.5, -2) -- (2.5, -2) node[right] {Ignored Carry};
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -11024,43 +10970,59 @@ Once the carries are evaluated in parallel, the final sum is calculated as:
 
 To implement this design reliably, the hardware is structured into three parallel modules based on the equations above.
 
+\vspace{0.3cm}
 \begin{center}
-\begin{tikzpicture}[>=latex, node distance=3cm, scale=0.9, transform shape, font=\small]
+\begin{circuitikz}[scale=0.85, transform shape, thick]
 
-    \tikzstyle{block} = [draw, rectangle, minimum height=3em, minimum width=12cm, text centered, fill=blue!10, rounded corners=3pt, thick]
-    
-    % Stage 1
-    \node[block] (pg) {\textbf{Stage 1: P \& G Generator} $\quad (P_i = X_i \oplus Y_i, \quad G_i = X_i \cdot Y_i)$};
-    
-    % Stage 2
-    \node[block, below of=pg] (cla) {\textbf{Stage 2: Carry Look-Ahead Generator} $\quad (\text{Computes } C_1, C_2, C_3, C_4 \text{ via SOP logic})$};
-    
-    % Stage 3
-    \node[block, below of=cla] (sum) {\textbf{Stage 3: Sum Generator} $\quad (S_i = P_i \oplus C_i)$};
-    
-    % Inputs Top
-    \draw[<-] ([xshift=-3cm]pg.north) -- ++(0, 1.2) node[above] {$X_3 \dots X_0$};
-    \draw[<-] ([xshift=3cm]pg.north) -- ++(0, 1.2) node[above] {$Y_3 \dots Y_0$};
-    
-    % P and G from Stage 1 to Stage 2
-    \draw[->] ([xshift=-1.5cm]pg.south) -- ([xshift=-1.5cm]cla.north) node[midway, left] {$P_3 \dots P_0$};
-    \draw[->] ([xshift=1.5cm]pg.south) -- ([xshift=1.5cm]cla.north) node[midway, right] {$G_3 \dots G_0$};
-    
-    % Carries from Stage 2 to Stage 3
-    \draw[->] (cla.south) -- (sum.north) node[midway, right] {$C_3, C_2, C_1, C_0$};
-    
-    % P from Stage 1 bypass to Stage 3 (Routed wider to completely avoid C4)
-    \draw[->, rounded corners] ([yshift=-2mm]pg.west) -- ++(-3.5,0) node[midway, above] {$P_3 \dots P_0$} |- ([yshift=2mm]sum.west);
-    
-    % Carry In
-    \draw[<-] (cla.east) -- ++(1.5, 0) node[right] {$C_0$ (Carry In)};
-    
-    % Carry Out
-    \draw[->] (cla.west) -- ++(-1.5, 0) node[left] {$C_4$ (Carry Out)};
-    
-    % Sum Out
-    \draw[->] (sum.south) -- ++(0, -1.2) node[below] {\textbf{Sum Result:} $S_3 S_2 S_1 S_0$};
-\end{tikzpicture}
+
+
+    % ================= CLA Block Background =================
+    \draw[fill=cD!5, rounded corners, draw=cD] (5, 2.5) rectangle (8.5, -12.5);
+    \node[font=\large\bfseries, text=cD, align=center] at (6.75, -5.25) {4-Bit Carry\\Look-Ahead\\Generator};
+    \node[align=center, font=\footnotesize] at (6.75, -6.75) {(Implements\\SOP Logic for\\$C_1, C_2, C_3, C_4$)};
+
+    % ================= Initial Carry C0 =================
+    \draw (0, 1.8) node[left] {$C_0$} -- (5, 1.8) node[pos=0.85, above] {$C_0$};
+
+    % ================= 4-Bit Logic Loops =================
+    \foreach \i/\y in {0/0, 1/-3.5, 2/-7, 3/-10.5} {
+        
+        % --- P and G Generators (Left Side) ---
+        \node[xor port, scale=0.8] (pgx\i) at (3, \y+0.8) {};
+        \node[and port, scale=0.8] (pga\i) at (3, \y-0.8) {};
+        
+        % Inputs A_i, B_i
+        \draw (0, |- pgx\i.in 1) node[left] {$A_\i$} -- (pgx\i.in 1);
+        \draw (0, |- pga\i.in 2) node[left] {$B_\i$} -- (pga\i.in 2);
+        
+        % Tapping inputs for P and G
+        \draw (1.0, |- pgx\i.in 1) coordinate (tapA\i);
+        \fill (tapA\i) circle (1.5pt);
+        \draw (tapA\i) |- (pga\i.in 1);
+        
+        \draw (1.5, |- pga\i.in 2) coordinate (tapB\i);
+        \fill (tapB\i) circle (1.5pt);
+        \draw (tapB\i) |- (pgx\i.in 2);
+
+        % Connect P and G to CLA Block
+        \draw (pgx\i.out) -- (5, |- pgx\i.out) node[pos=0.5, above] {$P_\i$};
+        \draw (pga\i.out) -- (5, |- pga\i.out) node[pos=0.5, below] {$G_\i$};
+
+        % --- Sum Generators (Right Side) ---
+        \node[xor port, scale=0.8] (sum\i) at (10.5, \y) {};
+        
+        % Output Carries and Propagates from CLA to Sum Gates
+        \draw (8.5, |- sum\i.in 1) -- (sum\i.in 1) node[pos=0.4, above] {$P_\i$};
+        \draw (8.5, |- sum\i.in 2) -- (sum\i.in 2) node[pos=0.4, below] {$C_\i$};
+        
+        % Final Sum Output
+        \draw (sum\i.out) -- (12, |- sum\i.out) node[right, font=\bfseries] {$S_\i$};
+    }
+
+    % ================= Final Carry Out C4 =================
+    \draw (8.5, -11.8) -- (12, -11.8) node[right, font=\bfseries] {$C_4$ ($C_{out}$)};
+
+\end{circuitikz}
 \end{center}
 
 \vspace{0.5em}
@@ -11280,7 +11242,7 @@ The primary advantage of the \textbf{Carry Look-Ahead Adder (CLA)} is that it co
 \end{itemize}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsubsection*{Part 2: Total Propagation Delay Calculation}
@@ -11341,7 +11303,7 @@ We track the arrival times of the inputs to this final XOR logic:
 The total propagation delay to compute the final sum and carry-out in this Carry Look-Ahead Adder is \textcolor{cD}{\textbf{28\,ns}}.
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.2cm}
 \footnotesize
 \textit{Note:} If a simpler architecture is assumed where the XOR gate is treated intrinsically as a standard basic gate with a $4\,$ns delay (ignoring the provided NOT gate delay parameter), the calculation simplifies to: $P_i$ ready at $4\,$ns $\to$ Carry ANDs at $8\,$ns $\to$ Carry ORs at $12\,$ns $\to$ Final Sum XOR at $16\,$ns. However, utilizing the explicitly provided NOT delay requires the standard decomposition shown above.
@@ -11497,7 +11459,7 @@ A ``normal'' binary four-bit adder, typically implemented as a \textbf{Ripple Ca
 \end{itemize}
 
 \vspace{0.3cm}
-\hrule
+ 
 \vspace{0.3cm}
 
 \subsubsection*{2. Total Propagation Delay Calculation}
@@ -12526,7 +12488,7 @@ The circuit is constructed using four 2-input AND gates to generate the partial 
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
+\begin{circuitikz}[thick, scale=0.9, transform shape]
     
     % Input lines
     \node[above, font=\bfseries] at (0, 1) {$x_1$};
@@ -12798,11 +12760,730 @@ The circuit diagram below illustrates the implementation. The incoming carry fro
 
 \end{enumerate}
 
+
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Encoders \& Decoders}
+\subtopic{cD}{Magnitude Comparator}
+\label{sub:s4-comparator}
+
+\begin{enumerate}
+
+\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
+\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Problem Formulation}
+
+A magnitude comparator is a combinational logic circuit that compares two binary numbers and determines their relative magnitudes. We are given two 3-bit binary numbers, $X$ and $Y$:
+\begin{align*}
+    X &= X_2 X_1 X_0 \\
+    Y &= Y_2 Y_1 Y_0
+\end{align*}
+where $X_2$ and $Y_2$ are the Most Significant Bits (MSBs), and $X_0$ and $Y_0$ are the Least Significant Bits (LSBs). 
+
+The circuit will output three mutually exclusive signals:
+\begin{itemize}
+    \item $E$ (Equal): High (1) if $X = Y$.
+    \item $G$ (Greater): High (1) if $X > Y$.
+    \item $L$ (Less): High (1) if $X < Y$.
+\end{itemize}
+
+Since there are 6 input variables in total, a standard truth table would require $2^6 = 64$ rows. To simplify the design process, we derive the Boolean expressions directly using algorithmic logic based on bit significance.
+
+\vspace{1em}
+\textbf{2. Intermediate Bit-Level Functions}
+
+We first define the bit-wise comparison terms for any arbitrary bit position $i \in \{0, 1, 2\}$:
+
+\begin{itemize}
+    \item \textbf{Bit Equality ($e_i$):} The $i$-th bits are equal ($X_i = Y_i$) if both are 1 or both are 0. This is represented by the XNOR operation:
+    \begin{align*}
+        e_i &= X_i Y_i + \overline{X_i}\overline{Y_i} = X_i \odot Y_i
+    \end{align*}
+    
+    \item \textbf{Bit Greater ($g_i$):} The bit $X_i$ is strictly greater than $Y_i$ only when $X_i = 1$ and $Y_i = 0$. 
+    \begin{align*}
+        g_i &= X_i \overline{Y_i}
+    \end{align*}
+    
+    \item \textbf{Bit Less ($l_i$):} The bit $X_i$ is strictly less than $Y_i$ only when $X_i = 0$ and $Y_i = 1$.
+    \begin{align*}
+        l_i &= \overline{X_i} Y_i
+    \end{align*}
+\end{itemize}
+
+\vspace{1em}
+\textbf{3. Final Output Equations}
+
+Using the intermediate signals, we can construct the logic for the entire 3-bit word by evaluating from the MSB ($i=2$) down to the LSB ($i=0$).
+
+\textbf{Equality ($E$):}
+For the two numbers to be equal, all corresponding bits must be identical simultaneously.
+\begin{align*}
+    E &= e_2 \cdot e_1 \cdot e_0 \\
+    E &= (X_2 \odot Y_2)(X_1 \odot Y_1)(X_0 \odot Y_0)
+\end{align*}
+
+\textbf{Greater Than ($G$):}
+The number $X$ is greater than $Y$ if:
+1. $X_2 > Y_2$ (MSB is greater), OR
+2. $X_2 = Y_2$ AND $X_1 > Y_1$, OR
+3. $X_2 = Y_2$ AND $X_1 = Y_1$ AND $X_0 > Y_0$.
+Expressing this logically using our intermediate terms:
+\begin{align*}
+    G &= g_2 + e_2 g_1 + e_2 e_1 g_0 \\
+    G &= X_2 \overline{Y_2} + (X_2 \odot Y_2)X_1 \overline{Y_1} + (X_2 \odot Y_2)(X_1 \odot Y_1)X_0 \overline{Y_0}
+\end{align*}
+
+\textbf{Less Than ($L$):}
+Similarly, $X$ is less than $Y$ if the corresponding condition holds for the lesser bits:
+\begin{align*}
+    L &= l_2 + e_2 l_1 + e_2 e_1 l_0 \\
+    L &= \overline{X_2} Y_2 + (X_2 \odot Y_2)\overline{X_1} Y_1 + (X_2 \odot Y_2)(X_1 \odot Y_1)\overline{X_0} Y_0
+\end{align*}
+\textit{Note:} $L$ can also be obtained using a NOR gate since the states are mutually exclusive: $L = \overline{G + E}$.
+
+\vspace{1em}
+\textbf{4. Logic Circuit Implementation}
+
+To ensure high readability and avoid overlapping routing, the complete logic circuit is separated into two hierarchical tiers. The first tier generates the intermediate bit-level signals ($e_i, g_i, l_i$). The second tier uses these signals to compute the final outputs ($E, G, L$).
+
+\vspace{1em}
+\begin{center}
+\textbf{Tier 1: Bit-Level Signal Generation (Shown for bit $i$)} \\
+\vspace{1.5em}
+\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
+
+    % --- Inputs ---
+    \node[left, font=\bfseries] at (0, 4.28) {$X_i$};
+    \node[left, font=\bfseries] at (0, -0.28) {$Y_i$};
+
+    % --- Main Logic Gates ---
+    \node[and port] (ANDG) at (8, 4) {};
+    \node[xnor port] (XNORE) at (8, 2) {};
+    \node[and port] (ANDL) at (8, 0) {};
+
+    % --- Inverters ---
+    \node[not port, scale=0.7] (NOTY) at (5.5, 3.72) {};
+    \node[not port, scale=0.7] (NOTX) at (5.5, 0.28) {};
+
+    % --- Wiring X_i ---
+    % Direct to ANDG
+    \draw (0, 4.28) -- (ANDG.in 1);
+    % Tap down to XNORE
+    \draw (1, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 1);
+    % Tap down to NOTX
+    \draw (2.5, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTX.in);
+    % NOTX to ANDL
+    \draw (NOTX.out) -- (ANDL.in 1);
+
+    % --- Wiring Y_i ---
+    % Direct to ANDL
+    \draw (0, -0.28) -- (ANDL.in 2);
+    % Tap up to XNORE
+    \draw (1.5, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 2);
+    % Tap up to NOTY
+    \draw (4, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTY.in);
+    % NOTY to ANDG
+    \draw (NOTY.out) -- (ANDG.in 2);
+
+    % --- Outputs ---
+    \draw (ANDG.out) -- ++(0.5,0) node[right] {$g_i \ (X_i > Y_i)$};
+    \draw (XNORE.out) -- ++(0.5,0) node[right] {$e_i \ (X_i = Y_i)$};
+    \draw (ANDL.out) -- ++(0.5,0) node[right] {$l_i \ (X_i < Y_i)$};
+
+\end{circuitikz}
+\end{center}
+
+\vspace{1.5em}
+\begin{center}
+\textbf{Tier 2: Aggregate Output Generation ($E, G, L$)} \\
+\vspace{0.5em}
+\begin{circuitikz}[thick, scale=0.85, transform shape]
+    
+    % ==== E Generation ====
+    \node[and port, number inputs=3] (Eand) at (4, 8) {};
+    \node[left] at (Eand.in 1) {$e_2$};
+    \node[left] at (Eand.in 2) {$e_1$};
+    \node[left] at (Eand.in 3) {$e_0$};
+    \node[right] at (Eand.out) {\textbf{$E \ (X=Y)$}};
+    
+    % ==== G Generation ====
+    \node[left] at (0, 5) {$g_2$};
+    
+    \node[and port] (Gand1) at (2, 3.5) {};
+    \node[left] at (Gand1.in 1) {$e_2$};
+    \node[left] at (Gand1.in 2) {$g_1$};
+    
+    \node[and port, number inputs=3] (Gand2) at (2, 1.5) {};
+    \node[left] at (Gand2.in 1) {$e_2$};
+    \node[left] at (Gand2.in 2) {$e_1$};
+    \node[left] at (Gand2.in 3) {$g_0$};
+    
+    \node[or port, number inputs=3] (Gor) at (5, 3.5) {};
+    \draw (0, 5) -| (3.5, 5) |- (Gor.in 1);
+    \draw (Gand1.out) |- (Gor.in 2);
+    \draw (Gand2.out) -| (3.5, 1.5) |- (Gor.in 3);
+    \node[right] at (Gor.out) {\textbf{$G \ (X>Y)$}};
+    
+    % ==== L Generation ====
+    \node[left] at (8, 5) {$l_2$};
+    
+    \node[and port] (Land1) at (10, 3.5) {};
+    \node[left] at (Land1.in 1) {$e_2$};
+    \node[left] at (Land1.in 2) {$l_1$};
+    
+    \node[and port, number inputs=3] (Land2) at (10, 1.5) {};
+    \node[left] at (Land2.in 1) {$e_2$};
+    \node[left] at (Land2.in 2) {$e_1$};
+    \node[left] at (Land2.in 3) {$l_0$};
+    
+    \node[or port, number inputs=3] (Lor) at (13, 3.5) {};
+    \draw (8, 5) -| (11.5, 5) |- (Lor.in 1);
+    \draw (Land1.out) |- (Lor.in 2);
+    \draw (Land2.out) -| (11.5, 1.5) |- (Lor.in 3);
+    \node[right] at (Lor.out) {\textbf{$L \ (X<Y)$}};
+    
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
+\item Design a logic circuit which finds the maximum value between two 3-bit numbers. Explain the operation using the two numbers 7 and 3.
+\mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Strategy}
+
+To construct a logic circuit that finds the maximum value between two 3-bit numbers, $A$ ($A_2A_1A_0$) and $B$ ($B_2B_1B_0$), we utilize a Register Transfer Level (RTL) datapath approach. 
+The core components are:
+\begin{itemize}
+    \item \textbf{A 3-Bit Magnitude Comparator:} Evaluates whether $A > B$. It outputs a boolean signal $G$.
+    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Three multiplexers map each bit of the output $M_i$. The select pin of each MUX is driven by the comparator's output $G$.
+\end{itemize}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}c|c|l@{}}
+\toprule
+\textbf{Magnitude Condition} & \textbf{Select Signal ($G$)} & \textbf{Routed Output ($M$)} \\
+\midrule
+$A > B$ & 1 & $M = A$ (Input $A$ is routed) \\
+$A = B$ & 0 & $M = B$ (Since $A=B$, both are valid max values) \\
+$A < B$ & 0 & $M = B$ (Input $B$ is routed) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+\textbf{Step 2.1: Comparator Logic ($A > B$)} \\
+First, we define the bitwise equality signal (XNOR) for each bit position $i \in \{0,1,2\}$:
+\begin{align*}
+    E_i &= A_i \odot B_i = A_i B_i + \overline{A_i}\cdot \overline{B_i}
+\end{align*}
+The Greater-Than output $G$ (where $A > B$) becomes True if $A_2 > B_2$, or if they are equal but $A_1 > B_1$, and so on. The exact Boolean expression is:
+\begin{align*}
+    G &= A_2 \overline{B_2} + E_2 A_1 \overline{B_1} + E_2 E_1 A_0 \overline{B_0}
+\end{align*}
+
+\textbf{Step 2.2: Multiplexer Logic ($M_i$)} \\
+For each bit $i \in \{0, 1, 2\}$, the 2-to-1 MUX selects between $A_i$ and $B_i$ based on $G$. If $G=1$, $M_i = A_i$. If $G=0$, $M_i = B_i$.
+\begin{align*}
+    M_i &= G \cdot A_i + \overline{G} \cdot B_i
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. RTL Datapath Diagram}
+
+Given the complexity of drawing dozens of intersecting gate-level primitives for a 3-bit comparator and multiplexer array, the design is clearly presented using standard structural MSI blocks.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.95, transform shape, x=1.3cm]
+    % ==============================================
+    % 3-Bit Magnitude Comparator
+    % ==============================================
+    \draw[fill=cD!5, rounded corners] (0, 0.5) rectangle (4, 7.5);
+    \node[align=center, font=\bfseries] at (2, 4) {3-Bit\\Magnitude\\Comparator};
+    
+    % Comparator Inputs
+    \draw (0, 6) -- (-1.5, 6) node[left, font=\bfseries] {$A[2:0]$};
+    \draw (0, 2) -- (-1.5, 2) node[left, font=\bfseries] {$B[2:0]$};
+    
+    % Comparator Output
+    \draw (4, 4) node[above right, font=\bfseries] {$G \ (A>B)$} -- (6, 4);
+    \fill (6, 4) circle (2pt);
+    
+    % Vertical Select Bus
+    \draw (6, -0.25) -- (6, 5.75);
+
+    % ==============================================
+    % 2-to-1 Multiplexer Array
+    % ==============================================
+    \foreach \y/\i in {7/2, 4/1, 1/0} {
+        % Draw MUX Trapezoid
+        \draw[fill=cD!5] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
+        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
+        
+        % Data Inputs to MUX
+        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$A_\i$};
+        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$B_\i$};
+        
+        % Internal Pin Labels
+        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
+        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
+        
+        % Data Output
+        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$M_\i$};
+        
+        % Select Input Routing from Bus
+        \draw (8.25, \y-0.75) -- (8.25, \y-1.25) -- (6, \y-1.25);
+        \fill (6, \y-1.25) circle (2pt);
+    }
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Example: A = 7 and B = 3}
+
+We evaluate the system behavior when the inputs are initialized to decimal values $7$ and $3$. 
+First, we convert the operands to 3-bit binary notation:
+\begin{itemize}
+    \item $A = 7_{10} \implies A_2A_1A_0 = 111_2$
+    \item $B = 3_{10} \implies B_2B_1B_0 = 011_2$
+\end{itemize}
+
+\textbf{Step 4.1: Compute the Comparator Output ($G$)}
+Calculate the bitwise equality signals ($E_i = A_i \odot B_i$):
+\begin{align*}
+    E_2 &= 1 \odot 0 = (1\cdot0) + (0\cdot1) = 0 \\
+    E_1 &= 1 \odot 1 = (1\cdot1) + (0\cdot0) = 1 \\
+    E_0 &= 1 \odot 1 = (1\cdot1) + (0\cdot0) = 1 
+\end{align*}
+Substitute into the Greater-Than equation:
+\begin{align*}
+    G &= (A_2 \overline{B_2}) + (E_2 A_1 \overline{B_1}) + (E_2 E_1 A_0 \overline{B_0}) \\
+      &= (1 \cdot \overline{0}) + (0 \cdot 1 \cdot \overline{1}) + (0 \cdot 1 \cdot 1 \cdot \overline{1}) \\
+      &= (1 \cdot 1) + 0 + 0 \\
+      &= 1 \quad \text{(Confirming mathematically that } 7 > 3\text{)}
+\end{align*}
+
+\textbf{Step 4.2: Compute the Multiplexer Outputs ($M_i$)}
+Since the select signal $G = 1$, the logic maps to $M_i = (1 \cdot A_i) + (0 \cdot B_i) = A_i$. The circuit routes the bits of operand $A$ directly to the output:
+\begin{align*}
+    M_2 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
+    M_1 &= (1 \cdot 1) + (0 \cdot 1) = 1 \\
+    M_0 &= (1 \cdot 1) + (0 \cdot 1) = 1 
+\end{align*}
+
+\textbf{Conclusion:} 
+The final output is $M_2M_1M_0 = 111_2$, which converts to $7_{10}$. The hardware successfully identified and outputted the maximum value.
+
+\end{tcolorbox}
+
+\item Design a logic circuit which returns the smaller value between two 4-bit binary numbers $A$ and $B$. Show the operation with $A=7$, $B=9$.
+\mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Strategy}
+
+To design a combinational circuit that returns the smaller (minimum) value between two 4-bit binary numbers, $A = A_3A_2A_1A_0$ and $B = B_3B_2B_1B_0$, we employ a Register Transfer Level (RTL) architecture. The design requires two primary functional blocks:
+\begin{itemize}
+    \item \textbf{A 4-Bit Magnitude Comparator:} This block compares the two numbers and generates a boolean signal $L$, which is true ($1$) if $A < B$.
+    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Four discrete 2-to-1 multiplexers route either the bits of $A$ or the bits of $B$ to the final output $S = S_3S_2S_1S_0$. The selection is controlled by the comparator's output $L$.
+\end{itemize}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}c|c|l@{}}
+\toprule
+\textbf{Magnitude Condition} & \textbf{Select Signal ($L$)} & \textbf{Routed Output ($S$)} \\
+\midrule
+$A < B$ & 1 & $S = A$ (Input $A$ is routed as it is smaller) \\
+$A = B$ & 0 & $S = B$ (Either is valid; $B$ is routed) \\
+$A > B$ & 0 & $S = B$ (Input $B$ is routed as it is smaller) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+\textbf{Step 2.1: Comparator Logic ($A < B$)} \\
+First, we define the bitwise equality signal (XNOR) for each bit position $i \in \{0,1,2,3\}$:
+\begin{align*}
+    E_i &= A_i \odot B_i = A_i B_i + \overline{A_i}\cdot \overline{B_i}
+\end{align*}
+The Less-Than output $L$ evaluates to $1$ if $A_3 < B_3$ (i.e., $A_3=0$ and $B_3=1$), or if they are equal ($E_3=1$) and $A_2 < B_2$, cascading down to the least significant bit. The exact Boolean expression is:
+\begin{align*}
+    L &= \overline{A_3} B_3 + E_3 \overline{A_2} B_2 + E_3 E_2 \overline{A_1} B_1 + E_3 E_2 E_1 \overline{A_0} B_0
+\end{align*}
+
+\textbf{Step 2.2: Multiplexer Logic ($S_i$)} \\
+For each bit $i \in \{0, 1, 2, 3\}$, the 2-to-1 MUX selects between $A_i$ and $B_i$ based on the signal $L$. Since we route $A_i$ when $L=1$ and $B_i$ when $L=0$, the MUX Boolean equation is:
+\begin{align*}
+    S_i &= L \cdot A_i + \overline{L} \cdot B_i
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. RTL Datapath Diagram}
+
+Given the significant gate count of a 4-bit comparator and four multiplexers, the circuit is structurally modeled using standard MSI blocks to maintain professional clarity and strict correctness.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.9, transform shape, x=1.3cm]
+    % ==============================================
+    % 4-Bit Magnitude Comparator
+    % ==============================================
+    \draw[fill=cD!5, rounded corners] (0, 0.5) rectangle (4, 9.5);
+    \node[align=center, font=\bfseries] at (2, 5) {4-Bit\\Magnitude\\Comparator};
+    
+    % Comparator Inputs
+    \draw (0, 7.5) -- (-1.5, 7.5) node[left, font=\bfseries] {$A[3:0]$};
+    \draw (0, 2.5) -- (-1.5, 2.5) node[left, font=\bfseries] {$B[3:0]$};
+    
+    % Comparator Output
+    \draw (4, 5) node[above right, font=\bfseries, scale=0.7] {$L \ (A<B)$} -- (5.5, 5);
+    \fill (5.5, 5) circle (2pt);
+    
+    % Vertical Select Bus
+    \draw (5.5, -0.7) -- (5.5, 8.75);
+
+    % ==============================================
+    % 2-to-1 Multiplexer Array
+    % ==============================================
+    \foreach \y/\i in {8/3, 5.5/2, 3/1, 0.5/0} {
+        % Draw MUX Trapezoid
+        \draw[fill=cD!5] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
+        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
+        
+        % Data Inputs to MUX
+        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$A_\i$};
+        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$B_\i$};
+        
+        % Internal Pin Labels
+        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
+        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
+        
+        % Data Output
+        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$S_\i$};
+        
+        % Select Input Routing from Bus
+        \draw (8.25, \y-0.75) -- (8.25, \y-1.25) -- (5.5, \y-1.25);
+        \fill (5.5, \y-1.25) circle (2pt);
+    }
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Trace: $A = 7$ and $B = 9$}
+
+We evaluate the system behavior when the inputs are initialized to decimal values $7$ and $9$. 
+First, we express the operands in 4-bit binary notation:
+\begin{itemize}
+    \item $A = 7_{10} \implies A_3A_2A_1A_0 = 0111_2$
+    \item $B = 9_{10} \implies B_3B_2B_1B_0 = 1001_2$
+\end{itemize}
+
+\textbf{Step 4.1: Compute the Comparator Output ($L$)} \\
+Evaluate the Most Significant Bit (MSB, index 3):
+\begin{itemize}
+    \item $A_3 = 0$, $B_3 = 1$
+\end{itemize}
+Applying this to the Less-Than Boolean equation:
+\begin{align*}
+    L &= (\overline{A_3} \cdot B_3) + (\text{lower-order terms}) \\
+    L &= (\overline{0} \cdot 1) + (\text{lower-order terms}) \\
+    L &= (1 \cdot 1) + (\text{lower-order terms}) \\
+    L &= 1
+\end{align*}
+Because the MSB of $A$ is strictly less than the MSB of $B$, the comparator immediately asserts $L = 1$ without needing to evaluate the lower-order bits (short-circuit logic property of cascading OR gates). This mathematically confirms $7 < 9$.
+
+\textbf{Step 4.2: Compute the Multiplexer Outputs ($S_i$)} \\
+Because the select signal $L = 1$, the logic maps to $S_i = (1 \cdot A_i) + (0 \cdot B_i) = A_i$. The circuit routes the bits of operand $A$ directly to the output bus:
+\begin{align*}
+    S_3 &= (1 \cdot 0) + (0 \cdot 1) = 0 \\
+    S_2 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
+    S_1 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
+    S_0 &= (1 \cdot 1) + (0 \cdot 1) = 1 
+\end{align*}
+
+\textbf{Conclusion:} 
+The final aggregated output is $S_3S_2S_1S_0 = 0111_2$, which converts to $7_{10}$. The hardware successfully identified and outputted the smaller value.
+
+\end{tcolorbox}
+
+\item Design a digital circuit with logic gates which takes two 3-bit binary numbers $X$ and $Y$ and returns a 3-bit binary number $Z$ equal to the maximum between $X$ and $Y$. 
+($X$ can be expressed as $X_2X_1X_0$, $Y$ can be expressed as $Y_2XY_1Y_0$; and Z can be
+expressed as $Z_2Z_1Z_0$).
+\mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Design Strategy}
+
+To construct a digital circuit that determines the maximum value between two 3-bit binary numbers, $X = X_2X_1X_0$ and $Y = Y_2Y_1Y_0$, we utilize a modular Register Transfer Level (RTL) approach. The system requires two core functional blocks:
+\begin{itemize}
+    \item \textbf{A 3-Bit Magnitude Comparator:} Evaluates the logical condition $X > Y$. It generates a boolean control signal $G$.
+    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Three individual multiplexers are used to route the bits of either $X$ or $Y$ to the final output $Z = Z_2Z_1Z_0$. The selection is driven by the comparator's output $G$.
+\end{itemize}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}c|c|l@{}}
+\toprule
+\textbf{Magnitude Condition} & \textbf{Control Signal ($G$)} & \textbf{Selected Output ($Z$)} \\
+\midrule
+$X > Y$ & 1 & $Z = X$ (Since $X$ is the maximum) \\
+$X = Y$ & 0 & $Z = Y$ (Since $X=Y$, either is valid; $Y$ is routed) \\
+$X < Y$ & 0 & $Z = Y$ (Since $Y$ is the maximum) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+\textbf{Step 2.1: Comparator Logic ($X > Y$)} \\
+First, we define the bitwise equivalence signal (XNOR) for each bit position $i \in \{0,1,2\}$ to check if corresponding bits are identical:
+\begin{align*}
+    E_i &= X_i \odot Y_i \\
+        &= X_i Y_i + \overline{X_i} \cdot \overline{Y_i} \quad \text{(Definition of XNOR)}
+\end{align*}
+The Greater-Than output $G$ (asserting $X > Y$) becomes true if the most significant bit (MSB) of $X$ is greater than $Y$ ($X_2=1, Y_2=0$), or if they are equal ($E_2=1$) and the next bit $X_1 > Y_1$, and so on. The exact Boolean expression is expanded as:
+\begin{align*}
+    G &= X_2 \overline{Y_2} + E_2 (X_1 \overline{Y_1}) + E_2 E_1 (X_0 \overline{Y_0}) \quad \text{(Sum of Products logic for magnitude comparison)}
+\end{align*}
+
+\textbf{Step 2.2: Multiplexer Logic ($Z_i$)} \\
+For each bit $i \in \{0, 1, 2\}$, a 2-to-1 MUX selects between $X_i$ and $Y_i$ based on the control signal $G$. When $G=1$, $Z_i$ follows $X_i$. When $G=0$, $Z_i$ follows $Y_i$. We represent this behavior algebraically:
+\begin{align*}
+    Z_i &= G \cdot X_i + \overline{G} \cdot Y_i \quad \text{(Standard 2-to-1 Multiplexer Equation)}
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. Hardware Implementation (RTL Datapath)}
+
+Due to the combinatorial complexity of drawing individual primitive gates for a full comparator and multiplexer array, the schematic is modeled using highly readable, industry-standard structural Medium Scale Integration (MSI) blocks.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.95, transform shape]
+    % ==============================================
+    % 3-Bit Magnitude Comparator Block
+    % ==============================================
+    \draw[fill=cD!5, rounded corners, draw=cD] (0, 0.5) rectangle (4, 7.5);
+    \node[align=center, font=\bfseries] at (2, 4) {3-Bit\\Magnitude\\Comparator};
+    
+    % Comparator Inputs
+    \draw (0, 6) -- (-1.5, 6) node[left, font=\bfseries] {$X[2:0]$};
+    \draw (0, 2) -- (-1.5, 2) node[left, font=\bfseries] {$Y[2:0]$};
+    
+    % Comparator Output (G)
+    \draw (4, 4) node[above right, font=\bfseries, scale=0.7] {$G \ (X>Y)$} -- (5.8, 4);
+    \fill (5.8, 4) circle (2pt);
+    
+    % Vertical Select Control Bus
+    \draw[draw=cD] (5.8, -0.25) -- (5.8, 5.75);
+
+    % ==============================================
+    % 2-to-1 Multiplexer Array for Z_i
+    % ==============================================
+    \foreach \y/\i in {7/2, 4/1, 1/0} {
+        % Draw MUX Trapezoid
+        \draw[fill=cD!5, draw=cD] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
+        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
+        
+        % Data Inputs to MUX
+        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$X_\i$};
+        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$Y_\i$};
+        
+        % Internal Pin Labels (1 selected when G=1, 0 selected when G=0)
+        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
+        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
+        
+        % Data Output (Z_i)
+        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$Z_\i$};
+        
+        % Select Input Routing from Bus
+        \draw[draw=cD] (8.25, \y-0.75) -- (8.25, \y-1.25) -- (5.8, \y-1.25);
+        \fill[cD] (5.8, \y-1.25) circle (2pt);
+    }
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Summary}
+
+When the two 3-bit numbers are fed into the system:
+\begin{enumerate}
+    \item The \textbf{Magnitude Comparator} continuously monitors the bit patterns of $X$ and $Y$ starting from the Most Significant Bits ($X_2$ and $Y_2$). 
+    \item If $X$ is numerically greater than $Y$, the comparator asserts $G = 1$. The multiplexer array shifts its internal switches to pin `1`, bridging $X_2X_1X_0$ to the output bus $Z_2Z_1Z_0$.
+    \item If $X$ is less than or equal to $Y$, the comparator sets $G = 0$. The multiplexers switch to pin `0`, actively bridging $Y_2Y_1Y_0$ to the output bus $Z_2Z_1Z_0$.
+    \item The resulting 3-bit vector $Z$ consistently represents $\max(X, Y)$.
+\end{enumerate}
+
+\end{tcolorbox}
+
+\item Design and explain a 2-bit magnitude comparator.
+\mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\textbf{1. Architectural Overview}
+
+A \textbf{2-bit magnitude comparator} is a combinational logic circuit that compares two 2-bit binary numbers, $A = A_1 A_0$ and $B = B_1 B_0$. The circuit determines their relative magnitude and produces three distinct boolean outputs:
+\begin{itemize}
+    \item \textbf{Greater ($G$):} High (1) if $A > B$
+    \item \textbf{Equal ($E$):} High (1) if $A = B$
+    \item \textbf{Less ($L$):} High (1) if $A < B$
+\end{itemize}
+
+Instead of analyzing a cumbersome 16-row truth table, the operational logic can be efficiently mapped using a condensed conditional table based on bit-significance (evaluating the Most Significant Bit, $A_1$ and $B_1$, first):
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{@{}ll|ccc@{}}
+\toprule
+\textbf{MSB Comparison} & \textbf{LSB Comparison} & \textbf{$G \ (A>B)$} & \textbf{$E \ (A=B)$} & \textbf{$L \ (A<B)$} \\
+\midrule
+$A_1 > B_1$ ($A_1=1, B_1=0$) & Don't Care (X)       & 1 & 0 & 0 \\
+$A_1 < B_1$ ($A_1=0, B_1=1$) & Don't Care (X)       & 0 & 0 & 1 \\
+$A_1 = B_1$                  & $A_0 > B_0$          & 1 & 0 & 0 \\
+$A_1 = B_1$                  & $A_0 < B_0$          & 0 & 0 & 1 \\
+$A_1 = B_1$                  & $A_0 = B_0$          & 0 & 1 & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{2. Mathematical Formulation}
+
+To implement the circuit, we derive the Boolean expressions for each output using the properties of standard logic gates. 
+
+\textbf{Step 2.1: Equality ($E$)} \\
+Two bits are strictly equal if they are both $1$ or both $0$. This is mathematically represented by the XNOR operation. Let $x_i$ denote the equality of the bits at position $i$:
+\begin{align*}
+    x_1 &= A_1 \odot B_1 = A_1 B_1 + \overline{A_1}\cdot\overline{B_1} \\
+    x_0 &= A_0 \odot B_0 = A_0 B_0 + \overline{A_0}\cdot\overline{B_0}
+\end{align*}
+The numbers $A$ and $B$ are completely equal only if both the MSBs and LSBs are equal. Therefore:
+\begin{align*}
+    E &= x_1 \cdot x_0
+\end{align*}
+
+\textbf{Step 2.2: Greater Than ($G$)} \\
+The condition $A > B$ occurs if the MSB of $A$ is greater than the MSB of $B$, \textit{OR} if the MSBs are equal ($x_1=1$) but the LSB of $A$ is greater than the LSB of $B$.
+\begin{align*}
+    G &= (A_1 \cdot \overline{B_1}) + x_1 \cdot (A_0 \cdot \overline{B_0})
+\end{align*}
+
+\textbf{Step 2.3: Less Than ($L$)} \\
+Similarly, the condition $A < B$ occurs if the MSB of $A$ is less than the MSB of $B$, \textit{OR} if the MSBs are equal ($x_1=1$) but the LSB of $A$ is less than the LSB of $B$.
+\begin{align*}
+    L &= (\overline{A_1} \cdot B_1) + x_1 \cdot (\overline{A_0} \cdot B_0)
+\end{align*}
+
+\vspace{0.3cm}
+\textbf{3. Logic Gate Schematic}
+
+To ensure optimal clarity and avoid tangled wiring, the circuit is drafted in three independent, modular functional blocks corresponding to the three derived equations.
+
+\begin{center}
+\begin{circuitikz}[thick, scale=0.9, transform shape]
+    % ======================================
+    % Equality Block (E)
+    % ======================================
+    \node[xnor port] (xnor1) at (2, 8) {};
+    \node[left] at (xnor1.in 1) {$A_1$};
+    \node[left] at (xnor1.in 2) {$B_1$};
+    
+    \node[xnor port] (xnor0) at (2, 6) {};
+    \node[left] at (xnor0.in 1) {$A_0$};
+    \node[left] at (xnor0.in 2) {$B_0$};
+    
+    \node[and port] (andE) at (5, 7) {};
+    \draw (xnor1.out) |- (andE.in 1);
+    \draw (xnor0.out) |- (andE.in 2);
+    \draw (andE.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$E \ (A=B)$};
+    
+    % Label for the internal x_1 node to map to other blocks
+    \node[above] at (xnor1.out) {$x_1$};
+
+    % ======================================
+    % Greater Than Block (G)
+    % ======================================
+    \node[and port] (andG1) at (2, 4) {};
+    \node[left] at (andG1.in 1) {$A_1$};
+    \node[left] at (andG1.in 2) {$\overline{B_1}$};
+    
+    \node[and port] (andG0) at (2, 2) {};
+    \node[left] at (andG0.in 1) {$A_0$};
+    \node[left] at (andG0.in 2) {$\overline{B_0}$};
+    
+    \node[and port] (andG2) at (5, 2.5) {};
+    \node[left] at (andG2.in 1) {$x_1$}; % Connected conceptually from xnor1
+    \draw (andG0.out) |- (andG2.in 2);
+    
+    \node[or port] (orG) at (8, 3.25) {};
+    \draw (andG1.out) |- (orG.in 1);
+    \draw (andG2.out) |- (orG.in 2);
+    \draw (orG.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$G \ (A>B)$};
+
+    % ======================================
+    % Less Than Block (L)
+    % ======================================
+    \node[and port] (andL1) at (2, -1) {};
+    \node[left] at (andL1.in 1) {$\overline{A_1}$};
+    \node[left] at (andL1.in 2) {$B_1$};
+    
+    \node[and port] (andL0) at (2, -3) {};
+    \node[left] at (andL0.in 1) {$\overline{A_0}$};
+    \node[left] at (andL0.in 2) {$B_0$};
+    
+    \node[and port] (andL2) at (5, -2.5) {};
+    \node[left] at (andL2.in 1) {$x_1$}; % Connected conceptually from xnor1
+    \draw (andL0.out) |- (andL2.in 2);
+    
+    \node[or port] (orL) at (8, -1.75) {};
+    \draw (andL1.out) |- (orL.in 1);
+    \draw (andL2.out) |- (orL.in 2);
+    \draw (orL.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$L \ (A<B)$};
+\end{circuitikz}
+\end{center}
+
+\vspace{0.3cm}
+\textbf{4. Operational Example}
+
+Let us assume $A = 2_{10}$ ($A_1A_0 = 10_2$) and $B = 1_{10}$ ($B_1B_0 = 01_2$). We trace this step-by-step:
+\begin{enumerate}
+    \item \textbf{Evaluate Equality Factors:} 
+    \begin{itemize}
+        \item $x_1 = A_1 \odot B_1 = 1 \odot 0 = 0$
+        \item $x_0 = A_0 \odot B_0 = 0 \odot 1 = 0$
+    \end{itemize}
+    \item \textbf{Evaluate Outputs:}
+    \begin{itemize}
+        \item $E = x_1 \cdot x_0 = 0 \cdot 0 = \mathbf{0}$
+        \item $G = (1 \cdot \overline{0}) + 0 \cdot (0 \cdot \overline{1}) = (1 \cdot 1) + 0 = \mathbf{1}$
+        \item $L = (\overline{1} \cdot 0) + 0 \cdot (\overline{0} \cdot 1) = (0 \cdot 0) + 0 = \mathbf{0}$
+    \end{itemize}
+\end{enumerate}
+The circuit asserts $G=1$ and leaves $E=0, L=0$, successfully proving mathematically that $2 > 1$.
+
+\end{tcolorbox}
+
+\end{enumerate}
+
+
+%%──────────────────────────────────────────────────────────────────────
+\subtopic{cD}{Encoders}
 \label{sub:s4-encoders}
 
 \begin{enumerate}
+
 
 \item Design a light sensor based controller circuit for accessing eight servers A, B, C, D, E, F, G, H. The light sensors are numbered as $S_1, S_2, \ldots$ and so on. The sensors of the controller will be ON to show which server is active. The servers have some priority order: C, A, E, H, D, G, F, B (C has the highest priority and B has the lowest priority).
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2024--25}
@@ -12915,6 +13596,9 @@ The controller is implemented using Medium Scale Integration (MSI) blocks. The V
 
 \end{tcolorbox}
 
+
+
+
 \item Show the truth table of an 8-to-3 line priority encoder, where higher priority is given to lower numbered input.
 \mk{9} \yr{CSE 205 | L-2/T-1 | 2023--24}
 
@@ -12969,6 +13653,10 @@ Although not strictly asked, defining the Boolean equations based on the truth t
 \end{align*}
 
 \end{tcolorbox}
+
+
+
+
 
 \item After a school final result, Ishrat applied for college admission and gave her choices from eight colleges indexed A to H, following the priority order B, A, D, E, F, H, G, C (B has the highest priority, C has the lowest priority). Find the Boolean function of her choices and show the design steps.
 \mk{15} \yr{CSE 205 | L-2/T-1 | 2020--21}
@@ -13088,6 +13776,7 @@ The derived Boolean functions can be implemented using standard NOT, AND, and OR
 \end{center}
 
 \end{tcolorbox}
+
 
 \item Design an 8-to-3 priority encoder with the priority order: 5, 0, 7, 4, 6, 3, 2, 1 (5 has highest priority, 1 has lowest priority).
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2018--19}
@@ -13220,6 +13909,7 @@ The gate-level schematic is constructed directly from the simplified Boolean equ
 
 \end{tcolorbox}
 
+
 \item Design an 8-to-3 priority encoder with the priority order: 6, 0, 7, 4, 5, 3, 1, 2 (6 has highest priority, 2 has lowest priority).
 \mk{13} \yr{CSE 205 | L-2/T-1 | 2017--18}
 
@@ -13350,6 +14040,10 @@ The gate-level schematic can be mapped directly from the simplified Boolean expr
 \end{center}
 
 \end{tcolorbox}
+
+
+
+
 
 \item ``A lower-order code will get priority'' --- Design and explain a priority encoder with negative enable for 9 bits.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
@@ -13487,109 +14181,6 @@ Below is the block diagram representation of the encoder highlighting the priori
 
 \end{tcolorbox}
 
-\item Design a full adder with a decoder and basic logic gates.
-\mk{12} \yr{CSE 205 | L-2/T-1 | 2014--15}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\subsection*{1. Problem Analysis and Truth Table}
-A Full Adder is a combinational arithmetic circuit that adds three single-bit numbers: $A$, $B$, and a carry-in $C_{in}$. It produces two outputs: a Sum ($S$) and a Carry-out ($C_{out}$). 
-
-To design this using a decoder, we first construct the truth table to determine the active minterms for each output.
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{ccc|cc|c}
-\toprule
-\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{2}{c|}{\textbf{Outputs}} & \multirow{2}{*}{\textbf{Minterm ($m_i$)}} \\
-$A$ & $B$ & $C_{in}$ & $S$ (Sum) & $C_{out}$ (Carry) & \\
-\midrule
-0 & 0 & 0 & 0 & 0 & $m_0$ \\
-0 & 0 & 1 & 1 & 0 & $m_1$ \\
-0 & 1 & 0 & 1 & 0 & $m_2$ \\
-0 & 1 & 1 & 0 & 1 & $m_3$ \\
-1 & 0 & 0 & 1 & 0 & $m_4$ \\
-1 & 0 & 1 & 0 & 1 & $m_5$ \\
-1 & 1 & 0 & 0 & 1 & $m_6$ \\
-1 & 1 & 1 & 1 & 1 & $m_7$ \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\subsection*{2. Boolean Expressions in Minterm Form}
-From the truth table, we extract the standard Sum of Products (SOP) form for both outputs by identifying the rows where the output is logic `1`.
-
-\begin{align*}
-    S(A, B, C_{in}) &= \sum m(1, 2, 4, 7) \\
-    C_{out}(A, B, C_{in}) &= \sum m(3, 5, 6, 7)
-\end{align*}
-
-\subsection*{3. Decoder Implementation Strategy}
-A 3-to-8 line decoder activates exactly one of its 8 output lines (representing minterms $m_0$ to $m_7$) based on the 3-bit binary input. 
-By connecting the inputs $A, B, C_{in}$ to the select lines of the decoder, the decoder automatically generates all 8 minterms. 
-
-To implement the Full Adder logic:
-\begin{itemize}
-    \item We use a \textbf{4-input OR gate} to logically sum the activated minterms $m_1, m_2, m_4,$ and $m_7$ to generate the \textbf{Sum ($S$)}.
-    \item We use a second \textbf{4-input OR gate} to sum the activated minterms $m_3, m_5, m_6,$ and $m_7$ to generate the \textbf{Carry ($C_{out}$)}.
-\end{itemize}
-
-\vspace{0.5cm}
-
-\subsection*{4. Logic Circuit Diagram}
-Below is the complete schematic utilizing a 3-to-8 decoder and standard OR gates.
-
-\vspace{0.5cm}
-\begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
-    % Decoder Box
-    \draw[thick, draw=black, fill=white, rounded corners=3pt] (0,0) rectangle (3,9);
-    \node[align=center, font=\large\bfseries, text=black] at (1.5, 8.2) {$3 \times 8$\\Decoder};
-    
-    % Enable pin
-    \draw[thick] (1.5, 9) -- (1.5, 9.5) node[above, font=\bfseries] {Enable ($E=1$)};
-    
-    % Inputs
-    \draw[thick] (-1.5, 7) node[left, font=\bfseries] {$A$} -- (0, 7) node[right, font=\small\bfseries] {$I_2$};
-    \draw[thick] (-1.5, 5) node[left, font=\bfseries] {$B$} -- (0, 5) node[right, font=\small\bfseries] {$I_1$};
-    \draw[thick] (-1.5, 3) node[left, font=\bfseries] {$C_{in}$} -- (0, 3) node[right, font=\small\bfseries] {$I_0$};
-    
-    % Outputs (m0 to m7) labels and stubs
-    \foreach \i [evaluate=\i as \y using 8-\i] in {0,...,7} {
-        \draw[thick] (3, \y) -- (3.8, \y);
-        \node[above, font=\small] at (3.4, \y) {$m_\i$};
-    }
-
-    % OR gates
-    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (sumOR) at (9, 5.5) {};
-    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (coutOR) at (9, 2.5) {};
-    
-    \node[right, font=\bfseries, text=cD] at (sumOR.out) {Sum ($S$)};
-    \node[right, font=\bfseries, text=cD] at (coutOR.out) {Carry ($C_{out}$)};
-
-    % ----------------------------------------------------
-    % Wiring to Sum (1, 2, 4, 7)
-    % ----------------------------------------------------
-    \draw[thick, draw=cD] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
-    \draw[thick, draw=cD] (3.8, 6) -- (4.6, 6) |- (sumOR.in 2); % m2
-    \draw[thick, draw=cD] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
-    \draw[thick, draw=cD] (3.8, 1) -- (6.0, 1) |- (sumOR.in 4); % m7
-
-    % ----------------------------------------------------
-    % Wiring to Cout (3, 5, 6, 7)
-    % ----------------------------------------------------
-    \draw[thick, draw=black!70] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
-    \draw[thick, draw=black!70] (3.8, 3) -- (5, 3) |- (coutOR.in 2); % m5
-    \draw[thick, draw=black!70] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
-    
-    % Branch m7 to Cout
-    \draw[thick, draw=black!70] (6.0, 1) --++(0.5,0) |- (coutOR.in 4); 
-    \fill[cD] (6.0, 1) circle (2.5pt); % Connection dot
-
-\end{circuitikz}
-\end{center}
-
-\end{tcolorbox}
 
 \item An Octal-to-Binary Encoder may cause ambiguities if more than one input is simultaneously set to~1. How can this ambiguity be resolved?
 \mk{4} \yr{CSE 205 | L-2/T-1 | 2014--15}
@@ -13674,6 +14265,7 @@ By applying Boolean logic to the truth table, we can derive the equations that p
 By incorporating these negated terms ($\overline{D_n}$), the combinational circuit inherently locks out lower-order inputs whenever a higher-order input is detected, successfully resolving both multiple-input and zero-state ambiguities.
 
 \end{tcolorbox}
+
 
 \item What is a priority encoder? Design a four-input priority encoder with inputs $I_0, I_1, I_2, I_3$, where the priority order is $I_2 > I_3 > I_1 > I_0$.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
@@ -13772,119 +14364,7 @@ The derived equations use minimal standard logic gates. We require one NOT gate,
 
 \end{tcolorbox}
 
-\item You need a full adder for an experiment but in the lab you could only find plenty of $3 \times 8$ decoders. Can any such decoder be used as a full adder? Explain your answer with a truth table.
-\mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\subsection*{1. Direct Answer and Theoretical Justification}
-
-\textbf{Yes}, a $3 \times 8$ decoder can be used to implement a full adder, provided that we also have access to basic logic gates (specifically, OR gates) to combine the outputs. 
-
-\textbf{Reasoning:} An $n \times 2^n$ decoder functions as a universal minterm generator for $n$ input variables. Since a full adder is a combinational circuit with 3 inputs ($A, B, C_{in}$), a $3 \times 8$ decoder will generate all $2^3 = 8$ possible minterms ($m_0$ to $m_7$). Any Boolean function of 3 variables can be expressed in standard Sum of Products (SOP) form. Therefore, by logically ORing the specific minterms that produce a logic `1` for the Sum and Carry outputs, we can fully realize the full adder circuit.
-
-\subsection*{2. Truth Table Analysis}
-
-To determine which minterms to combine, we construct the truth table for a full adder. It adds two significant bits ($A, B$) and a carry-in bit ($C_{in}$), producing a Sum ($S$) and a Carry-out ($C_{out}$).
-
-\begin{center}
-\renewcommand{\arraystretch}{1.25}
-\begin{tabular}{ccc|cc|c}
-\toprule
-\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{2}{c|}{\textbf{Outputs}} & \multirow{2}{*}{\textbf{Minterm Designation}} \\
-$A$ & $B$ & $C_{in}$ & \textbf{Sum ($S$)} & \textbf{Carry ($C_{out}$)} & \\
-\midrule
-0 & 0 & 0 & 0 & 0 & $m_0$ \\
-0 & 0 & 1 & \textcolor{cD}{\textbf{1}} & 0 & \textcolor{cD}{\textbf{$m_1$}} \\
-0 & 1 & 0 & \textcolor{cD}{\textbf{1}} & 0 & \textcolor{cD}{\textbf{$m_2$}} \\
-0 & 1 & 1 & 0 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_3$}} \\
-1 & 0 & 0 & \textcolor{cD}{\textbf{1}} & 0 & \textcolor{cD}{\textbf{$m_4$}} \\
-1 & 0 & 1 & 0 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_5$}} \\
-1 & 1 & 0 & 0 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_6$}} \\
-1 & 1 & 1 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_7$}} \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\subsection*{3. Boolean Minterm Equations}
-
-From the truth table, we extract the Canonical Sum of Products (SOP) form by identifying the rows where the respective outputs evaluate to logic `1`.
-
-\textbf{Sum Output ($S$):}
-\begin{align*}
-    S(A, B, C_{in}) &= \sum m(1, 2, 4, 7) \\
-    \textcolor{cD}{S} &\textcolor{cD}{= m_1 + m_2 + m_4 + m_7}
-\end{align*}
-
-\textbf{Carry Output ($C_{out}$):}
-\begin{align*}
-    C_{out}(A, B, C_{in}) &= \sum m(3, 5, 6, 7) \\
-    \textcolor{cD}{C_{out}} &\textcolor{cD}{= m_3 + m_5 + m_6 + m_7}
-\end{align*}
-
-\subsection*{4. Logic Circuit Implementation}
-
-To implement the circuit:
-\begin{enumerate}
-    \item Connect the inputs $A$, $B$, and $C_{in}$ to the select lines $I_2$, $I_1$, and $I_0$ of the $3 \times 8$ decoder.
-    \item Assume the decoder has an active-high enable ($E = 1$) and active-high outputs.
-    \item Route the output pins corresponding to $m_1, m_2, m_4$, and $m_7$ into a 4-input OR gate to generate the \textbf{Sum ($S$)}.
-    \item Route the output pins corresponding to $m_3, m_5, m_6$, and $m_7$ into a second 4-input OR gate to generate the \textbf{Carry ($C_{out}$)}.
-\end{enumerate}
-
-\vspace{0.5cm}
-\begin{center}
-\begin{circuitikz}[scale=0.9, transform shape]
-    % Decoder Box
-    \draw[thick, draw=black, fill=white, rounded corners=3pt] (0,0) rectangle (3,9);
-    \node[align=center, font=\large\bfseries, text=black] at (1.5, 8.2) {$3 \times 8$\\Decoder};
-    
-    % Enable pin
-    \draw[thick] (1.5, 9) -- (1.5, 9.5) node[above, font=\bfseries] {Enable ($E=1$)};
-    
-    % Inputs
-    \draw[thick] (-1.5, 7) node[left, font=\bfseries] {$A$} -- (0, 7) node[right, font=\small\bfseries] {$I_2$};
-    \draw[thick] (-1.5, 5) node[left, font=\bfseries] {$B$} -- (0, 5) node[right, font=\small\bfseries] {$I_1$};
-    \draw[thick] (-1.5, 3) node[left, font=\bfseries] {$C_{in}$} -- (0, 3) node[right, font=\small\bfseries] {$I_0$};
-    
-    % Outputs (m0 to m7) labels and stubs
-    \foreach \i [evaluate=\i as \y using 8-\i] in {0,...,7} {
-        \draw[thick] (3, \y) -- (3.8, \y);
-        \node[above, font=\small] at (3.4, \y) {$m_\i$};
-    }
-
-    % OR gates
-    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (sumOR) at (9, 5.5) {};
-    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (coutOR) at (9, 2.5) {};
-    
-    \node[right, font=\bfseries, text=cD] at (sumOR.out) {Sum ($S$)};
-    \node[right, font=\bfseries, text=cD] at (coutOR.out) {Carry ($C_{out}$)};
-
-    % ----------------------------------------------------
-    % Wiring to Sum (1, 2, 4, 7)
-    % ----------------------------------------------------
-    \draw[thick, draw=cD] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
-    \draw[thick, draw=cD] (3.8, 6) -- (4.6, 6) |- (sumOR.in 2); % m2
-    \draw[thick, draw=cD] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
-    \draw[thick, draw=cD] (3.8, 1) -- (6.0, 1) |- (sumOR.in 4); % m7
-
-    % ----------------------------------------------------
-    % Wiring to Cout (3, 5, 6, 7)
-    % ----------------------------------------------------
-    \draw[thick, draw=black!70] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
-    \draw[thick, draw=black!70] (3.8, 3) -- (5, 3) |- (coutOR.in 2); % m5
-    \draw[thick, draw=black!70] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
-    
-    % Branch m7 to Cout
-    \draw[thick, draw=black!70] (6.0, 1) --++(0.5,0) |- (coutOR.in 4); 
-    \fill[cD] (6.0, 1) circle (2.5pt); % Connection dot
-
-\end{circuitikz}
-\end{center}
-\vspace{0.2cm}
-\textit{Note: If the $3 \times 8$ decoder in the lab features active-low outputs (such as the standard 74LS138), NAND gates must be used in place of the OR gates to properly assert the Sum and Carry logic levels according to De Morgan's Laws.}
-
-\end{tcolorbox}
 
 
 \item Design a 4-input priority encoder and show the gate-level circuit diagram.
@@ -13962,11 +14442,11 @@ Using the simplified Boolean equations, the priority encoder can be realized usi
     \draw (5, 6.0) -- (5, -0.2); \fill (5, 6.0) circle (2pt);
 
     % ================= Inverted D2 Bus =================
-    \node[not port, rotate=270, scale=0.8] (notD2) at (3, 6.2) {};
+    \node[not port, rotate=270, scale=0.5] (notD2) at (3, 3.8) {};
     \draw (2, 0 |- notD2.in) -- (notD2.in); 
     \fill (2, 0 |- notD2.in) circle (2pt);
     \draw (notD2.out) -- (3, -0.2);
-    \node[right, font=\small\bfseries] at (3, 5.5) {$\overline{D_2}$};
+    \node[right, font=\small\bfseries] at (3, 4.4) {$\overline{D_2}$};
 
     % ================= Logic Gates =================
     
@@ -14003,122 +14483,15 @@ Using the simplified Boolean equations, the priority encoder can be realized usi
 \end{circuitikz}
 \end{center}
 
-\end{tcolorbox}
-
-\item Design a $3 \times 8$ decoder using two $2 \times 4$ decoder circuits.
-\mk{8} \yr{CSE 205 | L-2/T-1 | 2011--12}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\subsection*{1. Design Principle}
-A $3 \times 8$ decoder takes 3 input lines ($A_2, A_1, A_0$) and activates exactly one of its 8 output lines ($Y_0$ to $Y_7$) based on the binary value of the inputs. We can construct this by cascading two $2 \times 4$ decoders (each possessing an Enable pin, $E$) using the following logic partition:
-
-\begin{itemize}
-    \item \textbf{Common Inputs (LSBs):} The two least significant bits, $A_1$ and $A_0$, are connected in parallel to the selection inputs of both $2 \times 4$ decoders. They dictate which of the four outputs within an active decoder is asserted.
-    \item \textbf{Selection Input (MSB):} The most significant bit, $A_2$, acts as a block selector. We connect $A_2$ directly to the enable pin of the second decoder and route it through a NOT gate to the enable pin of the first decoder.
-    \item \textbf{Operation:} 
-    \begin{itemize}
-        \item When $A_2 = 0$, the \textbf{Top Decoder} is enabled. It handles input combinations $000_2$ to $011_2$, asserting outputs $Y_0$ through $Y_3$.
-        \item When $A_2 = 1$, the \textbf{Bottom Decoder} is enabled. It handles input combinations $100_2$ to $111_2$, asserting outputs $Y_4$ through $Y_7$.
-    \end{itemize}
-\end{itemize}
-
-\subsection*{2. Truth Table Partitioning}
-The truth table clearly demonstrates how the MSB ($A_2$) partitions the outputs into two mutually exclusive sets, mapping perfectly to the two $2 \times 4$ decoders.
-
-\begin{center}
-\renewcommand{\arraystretch}{1.15}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{ccc|cccccccc|c}
-\toprule
-\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{8}{c|}{\textbf{Outputs}} & \multirow{2}{*}{\textbf{Active Hardware Block}} \\
-$A_2$ & $A_1$ & $A_0$ & $Y_0$ & $Y_1$ & $Y_2$ & $Y_3$ & $Y_4$ & $Y_5$ & $Y_6$ & $Y_7$ & \\
-\midrule
-\textcolor{cD}{\textbf{0}} & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \multirow{4}{*}{Decoder 0 ($E = \overline{A_2}$)} \\
-\textcolor{cD}{\textbf{0}} & 0 & 1 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & \\
-\textcolor{cD}{\textbf{0}} & 1 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & \\
-\textcolor{cD}{\textbf{0}} & 1 & 1 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & \\
-\midrule
-\textcolor{cD}{\textbf{1}} & 0 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & \multirow{4}{*}{Decoder 1 ($E = A_2$)} \\
-\textcolor{cD}{\textbf{1}} & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & \\
-\textcolor{cD}{\textbf{1}} & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & 0 & \\
-\textcolor{cD}{\textbf{1}} & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & \\
-\bottomrule
-\end{tabular}}
-\end{center}
-
-\vspace{0.3cm}
-\subsection*{3. Circuit Diagram}
-\textit{Assumption: The $2 \times 4$ decoders utilize active-high Enable ($E$) pins and active-high outputs.}
-
-\vspace{0.5cm}
-\begin{center}
-\begin{circuitikz}[scale=1, transform shape]
-    
-    %---------------------------------------------------
-    % Top Decoder (Decoder 0: Handles Y0 to Y3)
-    %---------------------------------------------------
-    \draw[thick, fill=white] (5, 5) rectangle (8, 9);
-    \node[align=center, font=\bfseries, scale=0.8] at (6.5, 7.5) {$2 \times 4$\\Decoder 0};
-    
-    % Input pins for Decoder 0
-    \node[right, font=\small\bfseries] at (5, 8.5) {$E$};
-    \node[right, font=\small\bfseries] at (5, 6.5) {$I_1$};
-    \node[right, font=\small\bfseries] at (5, 5.5) {$I_0$};
-    
-    % Output pins for Decoder 0
-    \foreach \i / \y in {0/8.5, 1/7.5, 2/6.5, 3/5.5} {
-        \node[left, font=\small\bfseries] at (8, \y) {$O_\i$};
-        \draw[thick, draw=cD] (8, \y) -- (9, \y) node[right, font=\bfseries, text=black] {$Y_\i$};
-    }
-
-    %---------------------------------------------------
-    % Bottom Decoder (Decoder 1: Handles Y4 to Y7)
-    %---------------------------------------------------
-    \draw[thick, fill=white] (5, 0) rectangle (8, 4);
-    \node[align=center, font=\bfseries, scale=0.8] at (6.5, 2.5) {$2 \times 4$\\Decoder 1};
-    
-    % Input pins for Decoder 1
-    \node[right, font=\small\bfseries] at (5, 3.5) {$E$};
-    \node[right, font=\small\bfseries] at (5, 1.5) {$I_1$};
-    \node[right, font=\small\bfseries] at (5, 0.5) {$I_0$};
-    
-    % Output pins for Decoder 1
-    \foreach \i [evaluate=\i as \y using 3.5-\i] in {0,...,3} {
-        \node[left, font=\small\bfseries] at (8, \y) {$O_\i$};
-        \pgfmathtruncatemacro{\idx}{\i+4}
-        \draw[thick, draw=cD] (8, \y) -- (9, \y) node[right, font=\bfseries, text=black] {$Y_{\idx}$};
-    }
-
-    %---------------------------------------------------
-    % Global Inputs and Wiring
-    %---------------------------------------------------
-    % A0 Routing
-    \draw[thick] (0, 0.5) node[left, font=\bfseries] {$A_0$ (LSB)} -- (3.5, 0.5) |- (5, 0.5); % To Decoder 1
-    \draw[thick] (3.5, 0.5) |- (5, 5.5); % Branch to Decoder 0
-    \fill (3.5, 0.5) circle (2pt);
-
-    % A1 Routing
-    \draw[thick] (0, 1.5) node[left, font=\bfseries] {$A_1$} -- (2.5, 1.5) |- (5, 1.5); % To Decoder 1
-    \draw[thick] (2.5, 1.5) |- (5, 6.5); % Branch to Decoder 0
-    \fill (2.5, 1.5) circle (2pt);
-
-    % A2 Routing (MSB Enable Logic)
-    \draw[thick] (0, 3.5) node[left, font=\bfseries] {$A_2$ (MSB)} -- (1.5, 3.5) |- (5, 3.5); % Direct to Decoder 1
-    \node[not port, scale=0.7, fill=cD!10, draw=cD] (notA2) at (3.5, 8.5) {};
-    \draw[thick] (1.5, 3.5) |- (notA2.in); % Branch through NOT to Decoder 0
-    \draw[thick, draw=cD] (notA2.out) -- (5, 8.5);
-    \fill (1.5, 3.5) circle (2pt);
-
-\end{circuitikz}
-\end{center}
 
 \end{tcolorbox}
 
 \end{enumerate}
 
+
+
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Function Implementation using Decoder}
+\subtopic{cD}{Decoders}
 \label{sub:s4-decoder-func}
 
 \begin{enumerate}
@@ -14845,6 +15218,138 @@ To use the \textbf{minimum number of extra logic gates}, we note the complementa
 \end{circuitikz}
 \end{center}
 
+\vspace{0.3cm}
+
+\subsection{Another Solution(Not a minimum gate solution) :}
+
+\subsection*{1. Shannon Expansion with Selection Inputs $A=w, B=x$}
+We expand $f(w,x,y,z) = \Sigma\,(0, 2, 6, 7, 10, 11, 12, 14)$ around variables $w$ and $x$:
+\begin{align*}
+    f(w,x,y,z) &= \overline{w}\overline{x} \cdot f(0,0,y,z) + \overline{w}x \cdot f(0,1,y,z) + w\overline{x} \cdot f(1,0,y,z) + wx \cdot f(1,1,y,z)
+\end{align*}
+
+\subsection*{2. Evaluating Simplified Residual Functions}
+We extract the residual functions for $y$ and $z$ from the minterm definitions:
+
+\begin{itemize}
+    \item \textbf{For $w=0, x=0$ (Decoder Output $O_0 = \overline{w}\overline{x}$):}\\
+    Contains minterms $0 (0000)$ and $2 (0010)$.
+    \begin{align*}
+        f(0,0,y,z) &= \overline{y}\overline{z} + y\overline{z} = \overline{z}(\overline{y} + y) = \mathbf{\overline{z}}
+    \end{align*}
+    
+    \item \textbf{For $w=0, x=1$ (Decoder Output $O_1 = \overline{w}x$):}\\
+    Contains minterms $6 (0110)$ and $7 (0111)$.
+    \begin{align*}
+        f(0,1,y,z) &= y\overline{z} + yz = y(\overline{z} + z) = \mathbf{y}
+    \end{align*}
+    
+    \item \textbf{For $w=1, x=0$ (Decoder Output $O_2 = w\overline{x}$):}\\
+    Contains minterms $10 (1010)$ and $11 (1011)$.
+    \begin{align*}
+        f(1,0,y,z) &= y\overline{z} + yz = y(\overline{z} + z) = \mathbf{y}
+    \end{align*}
+    
+    \item \textbf{For $w=1, x=1$ (Decoder Output $O_3 = wx$):}\\
+    Contains minterms $12 (1100)$ and $14 (1110)$.
+    \begin{align*}
+        f(1,1,y,z) &= \overline{y}\overline{z} + y\overline{z} = \overline{z}(\overline{y} + y) = \mathbf{\overline{z}}
+    \end{align*}
+\end{itemize}
+
+\subsection*{3. Simplified Boolean Expression}
+Substituting the simplified literal outputs back into the expansion equation:
+\begin{align*}
+    f(w,x,y,z) &= O_0 \cdot \overline{z} + O_1 \cdot y + O_2 \cdot y + O_3 \cdot \overline{z}
+\end{align*}
+Factoring common literals $y$ and $\overline{z}$:
+\begin{align*}
+    \textcolor{cD}{f(w,x,y,z)} &\textcolor{cD}{= (O_0 + O_3) \cdot \overline{z} + (O_1 + O_2) \cdot y}
+\end{align*}
+
+
+\vspace{0.3cm}
+\subsection*{4. Logic Circuit Implementation}
+
+\vspace{0.3cm}
+\begin{center}
+\begin{circuitikz}[scale=0.9, transform shape, thick]
+    
+    % ==========================
+    % Decoder Block
+    % ==========================
+    \draw[fill=white, rounded corners=3pt] (0, 0) rectangle (3, 6.5);
+    \node[align=center, font=\large\bfseries] at (1.5, 3.25) {$2 \times 4$\\Decoder};
+    
+    % Enables (Active Low)
+    \draw (-1.5, 5.5) node[left, font=\bfseries] {Logic `0'} -- (0, 5.5);
+    \draw (-1.5, 4.8) node[left, font=\bfseries] {Logic `0'} -- (0, 4.8);
+    \node[right, font=\small\bfseries] at (0, 5.5) {$\overline{EN_1}$};
+    \node[right, font=\small\bfseries] at (0, 4.8) {$\overline{EN_2}$};
+    \draw[{Circle[open]}-] (0, 5.5) -- (-0.1, 5.5);
+    \draw[{Circle[open]}-] (0, 4.8) -- (-0.1, 4.8);
+
+    % Decoder Inputs (A=w, B=x)
+    \draw (-1.5, 2.5) node[left, font=\bfseries] {$w$} -- (0, 2.5) node[right, font=\small\bfseries] {$A$};
+    \draw (-1.5, 1.5) node[left, font=\bfseries] {$x$} -- (0, 1.5) node[right, font=\small\bfseries] {$B$};
+
+    % Decoder Outputs
+    \draw (3, 5.5) -- (4.2, 5.5) node[above left, font=\small] {$O_0$};
+    \draw (3, 4.0) -- (4.2, 4.0) node[above left, font=\small] {$O_1$};
+    \draw (3, 2.5) -- (4.2, 2.5) node[above left, font=\small] {$O_2$};
+    \draw (3, 1.0) -- (4.2, 1.0) node[above left, font=\small] {$O_3$};
+
+    % ==========================
+    % Intermediate OR Gates
+    % ==========================
+    \node[or port, scale=0.8, fill=cD!10, draw=cD] (or1) at (5.8, 5.0) {}; % O0 + O3
+    \node[or port, scale=0.8, fill=cD!10, draw=cD] (or2) at (5.8, 2.5) {}; % O1 + O2
+
+    % Routing to OR1 (O0 + O3)
+    \draw[draw=cD] (4.2, 5.5) |- (or1.in 1);
+    \draw[draw=cD] (4.2, 1.0) -- (4.7, 1.0) |- (or1.in 2);
+
+    % Routing to OR2 (O1 + O2)
+    \draw[draw=cD] (4.2, 4.0) -- (4.6, 4.0) |- (or2.in 1);
+    \draw[draw=cD] (4.2, 2.5) |- (or2.in 2);
+
+    % ==========================
+    % Variable Inputs (y, z)
+    % ==========================
+    \draw (-1.5, 7.5) node[left, font=\bfseries] {$z$} -- (4.5, 7.5);
+    \node[not port, scale=0.7] (notZ) at (5, 7.5) {};
+    \draw (4.5, 7.5) -- (notZ.in);
+
+    \draw (-1.5, -0.5) node[left, font=\bfseries] {$y$} -- (7.5, -0.5);
+
+    % ==========================
+    % AND Gates & Final OR
+    % ==========================
+    \node[and port, fill=cD!10, draw=cD] (and1) at (8.5, 6.0) {};
+    \node[and port, fill=cD!10, draw=cD] (and2) at (8.5, 1.5) {};
+    \node[or port, fill=cD!10, draw=cD] (or3) at (11.5, 3.75) {};
+
+    % Wiring to AND1: (O0 + O3) * z'
+    \draw[draw=cD] (or1.out) |- (and1.in 2);
+    \draw[draw=cD] (notZ.out) |- (and1.in 1);
+
+    % Wiring to AND2: (O1 + O2) * y
+    \draw[draw=cD] (or2.out) |- (and2.in 1);
+    \draw[draw=cD] (7, -0.5) |- (and2.in 2);
+
+    % Wiring to Final OR3
+    \draw[draw=cD] (and1.out) |- (or3.in 1);
+    \draw[draw=cD] (and2.out) |- (or3.in 2);
+
+    % Final Output Label
+    \node[right, font=\large\bfseries, text=cD] at (or3.out) {$f(w,x,y,z)$};
+
+\end{circuitikz}
+\end{center}
+
+
+
+
 \end{tcolorbox}
 
 \item Design a logic circuit for $f(w, x, y, z) = \mathrm{SOP}(0, 2, 6, 7, 8, 10, 11, 13, 14)$ with a $2\times4$ line decoder that has inputs $A$, $B$, active-low enable $\overline{EN}$ and active-low outputs $D_0', D_1', D_2', D_3'$. (Use the minimum number of extra logic gates.)
@@ -14922,8 +15427,9 @@ Final optimized Boolean equation mapping directly to gates:
 \vspace{0.4cm}
 \subsection*{4. Logic Circuit Implementation}
 \vspace{0.2cm}
+
 \begin{center}
-\begin{circuitikz}[scale=0.9, transform shape, thick]
+\begin{circuitikz}[y=1.4cm, scale=0.9, transform shape, thick]
 
     % ================= Decoder Block =================
     \draw[fill=white, rounded corners=2pt] (0, 0) rectangle (2.5, 6);
@@ -14992,7 +15498,7 @@ Final optimized Boolean equation mapping directly to gates:
     % ================= Final NAND Routing =================
     % Staggered vertical buses to prevent overlapping lines
     \draw (or0.out) -- (9.2, 0 |- or0.out) -- (9.2, 0 |- finalNand.in 1) -- (finalNand.in 1);
-    \draw (or1.out) -- (9.6, 0 |- or1.out) -- (9.6, 0 |- finalNand.in 2) -- (finalNand.in 2);
+    \draw (or1.out) |- (finalNand.in 2);
     
     % D2' routes directly to NAND4, bypassing OR stage
     \draw (2.7, 2.6) -- (8.0, 2.6) -- (8.0, 0 |- finalNand.in 3) -- (finalNand.in 3);
@@ -15005,7 +15511,164 @@ Final optimized Boolean equation mapping directly to gates:
 \end{circuitikz}
 \end{center}
 
+\vspace{0.4cm}
+\subsection{Another Solution(Not a minimum gate solution) :}
+
+\vspace{0.2cm}
+\subsection*{1. Functional Partitioning via Shannon's Expansion}
+We partition the function $f(w, x, y, z) = \sum(0, 2, 6, 7, 8, 10, 11, 13, 14)$ around variables $w$ and $x$. The $2 \times 4$ decoder yields active-low outputs corresponding to the complemented minterms of $(w,x)$:
+\begin{align*}
+    D_0' &= \overline{\overline{w}\,\overline{x}} & D_1' &= \overline{\overline{w}\,x} & D_2' &= \overline{w\,\overline{x}} & D_3' &= \overline{w\,x}
+\end{align*}
+
+The Shannon expansion becomes:
+\begin{align*}
+    f(w, x, y, z) &= \overline{D_0'} \cdot I_0(y, z) + \overline{D_1'} \cdot I_1(y, z) + \overline{D_2'} \cdot I_2(y, z) + \overline{D_3'} \cdot I_3(y, z)
+\end{align*}
+
+\subsection*{2. Evaluating the Residual Functions $I_i(y, z)$}
+We extract the active minterms from $f$ for each combination of $(w,x)$:
+
+\begin{itemize}
+    \item \textbf{For $w=0, x=0$ (Decoder Output $D_0'$):}\\
+    Minterms $0, 1, 2, 3$. Present in $f$: $\{0, 2\}$.
+    \begin{align*}
+        I_0(y, z) &= \overline{y}\,\overline{z} + y\overline{z} = \overline{z}(\overline{y} + y) = \mathbf{\overline{z}}
+    \end{align*}
+    
+    \item \textbf{For $w=0, x=1$ (Decoder Output $D_1'$):}\\
+    Minterms $4, 5, 6, 7$. Present in $f$: $\{6, 7\}$.
+    \begin{align*}
+        I_1(y, z) &= y\overline{z} + yz = y(\overline{z} + z) = \mathbf{y}
+    \end{align*}
+    
+    \item \textbf{For $w=1, x=0$ (Decoder Output $D_2'$):}\\
+    Minterms $8, 9, 10, 11$. Present in $f$: $\{8, 10, 11\}$.
+    \begin{align*}
+        I_2(y, z) &= \overline{y}\,\overline{z} + y\overline{z} + yz = \overline{z}(\overline{y} + y) + yz = \overline{z} + yz = \mathbf{\overline{z} + y}
+    \end{align*}
+    
+    \item \textbf{For $w=1, x=1$ (Decoder Output $D_3'$):}\\
+    Minterms $12, 13, 14, 15$. Present in $f$: $\{13, 14\}$.
+    \begin{align*}
+        I_3(y, z) &= \overline{y}z + y\overline{z} = \mathbf{y \oplus z}
+    \end{align*}
+\end{itemize}
+
+\subsection*{3. Gate Minimization using De Morgan's Laws}
+Substitute the residual functions back into the expanded equation:
+\begin{align*}
+    f(w, x, y, z) &= \overline{D_0'} \cdot \overline{z} + \overline{D_1'} \cdot y + \overline{D_2'} \cdot (y + \overline{z}) + \overline{D_3'} \cdot (y \oplus z)
+\end{align*}
+
+Because the decoder outputs $D_i'$ are active-low, we apply \textbf{De Morgan's Involution Law} ($\overline{\overline{f}} = f$) to convert the outer Sum-of-Products into a NAND-NAND structure compatible with OR gates:
+\begin{align*}
+    f(w, x, y, z) &= \overline{ \overline{\overline{D_0'} \cdot \overline{z}} \cdot \overline{\overline{D_1'} \cdot y} \cdot \overline{\overline{D_2'} \cdot (y + \overline{z})} \cdot \overline{\overline{D_3'} \cdot (y \oplus z)} }
+\end{align*}
+
+Applying De Morgan's Law ($\overline{A \cdot B} = \overline{A} + \overline{B}$) to the inner terms:
+\begin{align*}
+    \overline{\overline{D_0'} \cdot \overline{z}} &= D_0' + z \\
+    \overline{\overline{D_1'} \cdot y} &= D_1' + \overline{y} \\
+    \overline{\overline{D_2'} \cdot (y + \overline{z})} &= D_2' + \overline{y + \overline{z}} = D_2' + \overline{y}z \quad \text{(De Morgan's again)}\\
+    \overline{\overline{D_3'} \cdot (y \oplus z)} &= D_3' + \overline{y \oplus z} = D_3' + (y \odot z) \quad \text{(XNOR)}
+\end{align*}
+
+Final logic equation mapping directly to gates:
+\begin{align*}
+    \textcolor{cD}{f(w, x, y, z)} &\textcolor{cD}{= \text{NAND}_4 \Big( (D_0' + z),\; (D_1' + \overline{y}),\; (D_2' + \overline{y}z),\; (D_3' + (y \odot z)) \Big)}
+\end{align*}
+
+\vspace{0.3cm}
+\subsection*{4. Logic Circuit Implementation}
+\vspace{0.2cm}
+
+\begin{center}
+\begin{circuitikz}[y=1.4cm, scale=0.9, transform shape, thick]
+
+    % ================= Decoder Block =================
+    \draw[fill=white, rounded corners=2pt] (0, 0) rectangle (2.5, 6);
+    \node[align=center, font=\bfseries] at (1.25, 3) {$2\times4$\\Decoder};
+    
+    % Decoder Inputs (A=w, B=x)
+    \draw (-1.5, 4.5) node[left, font=\bfseries] {$w$} -- (0, 4.5) node[right, font=\small\bfseries] {$A$};
+    \draw (-1.5, 3.5) node[left, font=\bfseries] {$x$} -- (0, 3.5) node[right, font=\small\bfseries] {$B$};
+    
+    \draw (-1.5, 1.5) node[left, font=\bfseries] {Logic `0'} -- (-0.15, 1.5);
+    \node[ocirc] at (-0.05, 1.5) {};
+    \node[right, font=\small\bfseries] at (0, 1.5) {$\overline{EN}$};
+    
+    % Decoder Active-Low Outputs Nodes & Labels
+    \foreach \y/\i in {5.2/0, 3.9/1, 2.6/2, 1.3/3} {
+        \draw (2.5, \y) -- (2.7, \y);
+        \node[ocirc] at (2.6, \y) {};
+        \node[above, font=\small] at (3.3, \y) {$D_\i'$};
+    }
+
+    % ================= Variable Inputs (y, z) & Extra Gates =================
+    % Note: Moved y, z logic below decoder
+    \draw (-1.5, -0.5) node[left, font=\bfseries] {$y$} -- (2.0, -0.5);
+    \draw (-1.5, -2.5) node[left, font=\bfseries] {$z$} -- (2.0, -2.5);
+    
+    \node[not port, scale=0.7] (notY) at (3.0, -0.5) {};
+    \draw (2.0, -0.5) -- (notY.in);
+    
+    \node[and port, fill=cD!10, draw=cD, scale=0.8] (andYZ) at (5.0, -1.0) {};
+    \node[xnor port, fill=cD!10, draw=cD, scale=0.8] (xnorYZ) at (5.0, -2.5) {};
+    
+    % Routing to AND(y', z)
+    \fill (3.5, -0.5) circle (2pt);
+    \draw (3.5, -0.5) |- (andYZ.in 1);
+    \fill (1.5, -2.5) circle (2pt);
+    \draw (1.5, -2.5) -- (1.5, -1.2) |- (andYZ.in 2);
+    
+    % Routing to XNOR(y, z)
+    \fill (1.0, -0.5) circle (2pt);
+    \draw (1.0, -0.5) -- (1.0, -2.2) |- (xnorYZ.in 1);
+    \draw (2.0, -2.5) |- (xnorYZ.in 2);
+
+    % ================= Intermediate OR Gates =================
+    \node[or port, fill=cD!5, draw=cD] (or0) at (8.0, 5.2) {};
+    \node[or port, fill=cD!5, draw=cD] (or1) at (8.0, 3.9) {};
+    \node[or port, fill=cD!5, draw=cD] (or2) at (8.0, 2.6) {};
+    \node[or port, fill=cD!5, draw=cD] (or3) at (8.0, 1.3) {};
+    
+    % Final NAND4 Gate
+    \node[nand port, number inputs=4, fill=cD!20, draw=cD, scale=1.3] (finalNand) at (12.0, 3.25) {};
+
+    % ================= Routing to OR gates =================
+    % D0' + z
+    \draw (2.7, 5.2) -- (4.0, 5.2) -- (4.0, 0 |- or0.in 1) -- (or0.in 1);
+    \fill (0.5, -2.5) circle (2pt);
+    \draw (0.5, -2.5) -- ++(0, -1) --++ (5.0, 0) |- (or0.in 2);
+    
+    % D1' + y'
+    \draw (2.7, 3.9) -- (4.2, 3.9) -- (4.2, 0 |- or1.in 1) -- (or1.in 1);
+    \draw (notY.out) -- (6.0, -0.5) -- (6.0, 0 |- or1.in 2) -- (or1.in 2);
+    
+    % D2' + y'z
+    \draw (2.7, 2.6) -- (4.4, 2.6) -- (4.4, 0 |- or2.in 1) -- (or2.in 1);
+    \draw (andYZ.out) -- (6.3, 0 |- andYZ.out) -- (6.3, 0 |- or2.in 2) -- (or2.in 2);
+    
+    % D3' + (y XNOR z)
+    \draw (2.7, 1.3) -- (4.6, 1.3) -- (4.6, 0 |- or3.in 1) -- (or3.in 1);
+    \draw (xnorYZ.out) -- (6.6, 0 |- xnorYZ.out) -- (6.6, 0 |- or3.in 2) -- (or3.in 2);
+
+    % ================= Final NAND Routing =================
+    \draw (or0.out) -- (9.5, 0 |- or0.out) -- (9.5, 0 |- finalNand.in 1) -- (finalNand.in 1);
+    \draw (or1.out) |- (finalNand.in 2);
+    \draw (or2.out) |- (finalNand.in 3);
+    \draw (or3.out) -- (9.5, 0 |- or3.out) -- (9.5, 0 |- finalNand.in 4) -- (finalNand.in 4);
+
+    % ================= Output =================
+    \draw[->, thick, draw=cD] (finalNand.out) -- ++(1.5, 0) node[right, font=\bfseries\large, text=cD] {$f(w, x, y, z)$};
+
+\end{circuitikz}
+\end{center}
+
+
 \end{tcolorbox}
+
 
 \item Using a $2 \times 4$ line decoder, design a half subtractor. (Decoder outputs $D_0, D_1, D_2, D_3$ are active high; enable $\overline{EN}$ is active low.)
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
@@ -15381,6 +16044,339 @@ This translates directly into a \textbf{NAND} operation applied to the active-lo
     \draw (4.5, -1.5) -| (7.5, -3.65) |- (f2nand.in 3); \fill (4.5, -1.5) circle (2pt);
     \draw (4.5, -5.0) -| (7.0, -3.95) |- (f2nand.in 4); \fill (4.5, -5.0) circle (2pt);
     \draw (f2nand.out) -- (11.5, -3.5) node[right, font=\bfseries\large, text=cD] {$f_2$};
+
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
+
+\item Design a full adder with a decoder and basic logic gates.
+\mk{12} \yr{CSE 205 | L-2/T-1 | 2014--15}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\subsection*{1. Problem Analysis and Truth Table}
+A Full Adder is a combinational arithmetic circuit that adds three single-bit numbers: $A$, $B$, and a carry-in $C_{in}$. It produces two outputs: a Sum ($S$) and a Carry-out ($C_{out}$). 
+
+To design this using a decoder, we first construct the truth table to determine the active minterms for each output.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{ccc|cc|c}
+\toprule
+\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{2}{c|}{\textbf{Outputs}} & \multirow{2}{*}{\textbf{Minterm ($m_i$)}} \\
+$A$ & $B$ & $C_{in}$ & $S$ (Sum) & $C_{out}$ (Carry) & \\
+\midrule
+0 & 0 & 0 & 0 & 0 & $m_0$ \\
+0 & 0 & 1 & 1 & 0 & $m_1$ \\
+0 & 1 & 0 & 1 & 0 & $m_2$ \\
+0 & 1 & 1 & 0 & 1 & $m_3$ \\
+1 & 0 & 0 & 1 & 0 & $m_4$ \\
+1 & 0 & 1 & 0 & 1 & $m_5$ \\
+1 & 1 & 0 & 0 & 1 & $m_6$ \\
+1 & 1 & 1 & 1 & 1 & $m_7$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{2. Boolean Expressions in Minterm Form}
+From the truth table, we extract the standard Sum of Products (SOP) form for both outputs by identifying the rows where the output is logic `1`.
+
+\begin{align*}
+    S(A, B, C_{in}) &= \sum m(1, 2, 4, 7) \\
+    C_{out}(A, B, C_{in}) &= \sum m(3, 5, 6, 7)
+\end{align*}
+
+\subsection*{3. Decoder Implementation Strategy}
+A 3-to-8 line decoder activates exactly one of its 8 output lines (representing minterms $m_0$ to $m_7$) based on the 3-bit binary input. 
+By connecting the inputs $A, B, C_{in}$ to the select lines of the decoder, the decoder automatically generates all 8 minterms. 
+
+To implement the Full Adder logic:
+\begin{itemize}
+    \item We use a \textbf{4-input OR gate} to logically sum the activated minterms $m_1, m_2, m_4,$ and $m_7$ to generate the \textbf{Sum ($S$)}.
+    \item We use a second \textbf{4-input OR gate} to sum the activated minterms $m_3, m_5, m_6,$ and $m_7$ to generate the \textbf{Carry ($C_{out}$)}.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\subsection*{4. Logic Circuit Diagram}
+Below is the complete schematic utilizing a 3-to-8 decoder and standard OR gates.
+
+\vspace{0.5cm}
+\begin{center}
+\begin{circuitikz}[scale=0.9, transform shape]
+    % Decoder Box
+    \draw[thick, draw=black, fill=white, rounded corners=3pt] (0,0) rectangle (3,9);
+    \node[align=center, font=\large\bfseries, text=black] at (1.5, 8.2) {$3 \times 8$\\Decoder};
+    
+    % Enable pin
+    \draw[thick] (1.5, 9) -- (1.5, 9.5) node[above, font=\bfseries] {Enable ($E=1$)};
+    
+    % Inputs
+    \draw[thick] (-1.5, 7) node[left, font=\bfseries] {$A$} -- (0, 7) node[right, font=\small\bfseries] {$I_2$};
+    \draw[thick] (-1.5, 5) node[left, font=\bfseries] {$B$} -- (0, 5) node[right, font=\small\bfseries] {$I_1$};
+    \draw[thick] (-1.5, 3) node[left, font=\bfseries] {$C_{in}$} -- (0, 3) node[right, font=\small\bfseries] {$I_0$};
+    
+    % Outputs (m0 to m7) labels and stubs
+    \foreach \i [evaluate=\i as \y using 8-\i] in {0,...,7} {
+        \draw[thick] (3, \y) -- (3.8, \y);
+        \node[above, font=\small] at (3.4, \y) {$m_\i$};
+    }
+
+    % OR gates
+    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (sumOR) at (9, 5.5) {};
+    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (coutOR) at (9, 2.5) {};
+    
+    \node[right, font=\bfseries, text=cD] at (sumOR.out) {Sum ($S$)};
+    \node[right, font=\bfseries, text=cD] at (coutOR.out) {Carry ($C_{out}$)};
+
+    % ----------------------------------------------------
+    % Wiring to Sum (1, 2, 4, 7)
+    % ----------------------------------------------------
+    \draw[thick, draw=cD] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
+    \draw[thick, draw=cD] (3.8, 6) -- (4.6, 6) |- (sumOR.in 2); % m2
+    \draw[thick, draw=cD] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
+    \draw[thick, draw=cD] (3.8, 1) -- (6.0, 1) |- (sumOR.in 4); % m7
+
+    % ----------------------------------------------------
+    % Wiring to Cout (3, 5, 6, 7)
+    % ----------------------------------------------------
+    \draw[thick, draw=black!70] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
+    \draw[thick, draw=black!70] (3.8, 3) -- (5, 3) |- (coutOR.in 2); % m5
+    \draw[thick, draw=black!70] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
+    
+    % Branch m7 to Cout
+    \draw[thick, draw=black!70] (6.0, 1) --++(0.5,0) |- (coutOR.in 4); 
+    \fill[cD] (6.0, 1) circle (2.5pt); % Connection dot
+
+\end{circuitikz}
+\end{center}
+
+\end{tcolorbox}
+
+
+\item You need a full adder for an experiment but in the lab you could only find plenty of $3 \times 8$ decoders. Can any such decoder be used as a full adder? Explain your answer with a truth table.
+\mk{15} \yr{CSE 205 | L-2/T-1 | 2012--13}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\subsection*{1. Direct Answer and Theoretical Justification}
+
+\textbf{Yes}, a $3 \times 8$ decoder can be used to implement a full adder, provided that we also have access to basic logic gates (specifically, OR gates) to combine the outputs. 
+
+\textbf{Reasoning:} An $n \times 2^n$ decoder functions as a universal minterm generator for $n$ input variables. Since a full adder is a combinational circuit with 3 inputs ($A, B, C_{in}$), a $3 \times 8$ decoder will generate all $2^3 = 8$ possible minterms ($m_0$ to $m_7$). Any Boolean function of 3 variables can be expressed in standard Sum of Products (SOP) form. Therefore, by logically ORing the specific minterms that produce a logic `1` for the Sum and Carry outputs, we can fully realize the full adder circuit.
+
+\subsection*{2. Truth Table Analysis}
+
+To determine which minterms to combine, we construct the truth table for a full adder. It adds two significant bits ($A, B$) and a carry-in bit ($C_{in}$), producing a Sum ($S$) and a Carry-out ($C_{out}$).
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{ccc|cc|c}
+\toprule
+\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{2}{c|}{\textbf{Outputs}} & \multirow{2}{*}{\textbf{Minterm Designation}} \\
+$A$ & $B$ & $C_{in}$ & \textbf{Sum ($S$)} & \textbf{Carry ($C_{out}$)} & \\
+\midrule
+0 & 0 & 0 & 0 & 0 & $m_0$ \\
+0 & 0 & 1 & \textcolor{cD}{\textbf{1}} & 0 & \textcolor{cD}{\textbf{$m_1$}} \\
+0 & 1 & 0 & \textcolor{cD}{\textbf{1}} & 0 & \textcolor{cD}{\textbf{$m_2$}} \\
+0 & 1 & 1 & 0 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_3$}} \\
+1 & 0 & 0 & \textcolor{cD}{\textbf{1}} & 0 & \textcolor{cD}{\textbf{$m_4$}} \\
+1 & 0 & 1 & 0 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_5$}} \\
+1 & 1 & 0 & 0 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_6$}} \\
+1 & 1 & 1 & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{1}} & \textcolor{cD}{\textbf{$m_7$}} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{3. Boolean Minterm Equations}
+
+From the truth table, we extract the Canonical Sum of Products (SOP) form by identifying the rows where the respective outputs evaluate to logic `1`.
+
+\textbf{Sum Output ($S$):}
+\begin{align*}
+    S(A, B, C_{in}) &= \sum m(1, 2, 4, 7) \\
+    \textcolor{cD}{S} &\textcolor{cD}{= m_1 + m_2 + m_4 + m_7}
+\end{align*}
+
+\textbf{Carry Output ($C_{out}$):}
+\begin{align*}
+    C_{out}(A, B, C_{in}) &= \sum m(3, 5, 6, 7) \\
+    \textcolor{cD}{C_{out}} &\textcolor{cD}{= m_3 + m_5 + m_6 + m_7}
+\end{align*}
+
+\subsection*{4. Logic Circuit Implementation}
+
+To implement the circuit:
+\begin{enumerate}
+    \item Connect the inputs $A$, $B$, and $C_{in}$ to the select lines $I_2$, $I_1$, and $I_0$ of the $3 \times 8$ decoder.
+    \item Assume the decoder has an active-high enable ($E = 1$) and active-high outputs.
+    \item Route the output pins corresponding to $m_1, m_2, m_4$, and $m_7$ into a 4-input OR gate to generate the \textbf{Sum ($S$)}.
+    \item Route the output pins corresponding to $m_3, m_5, m_6$, and $m_7$ into a second 4-input OR gate to generate the \textbf{Carry ($C_{out}$)}.
+\end{enumerate}
+
+\vspace{0.5cm}
+\begin{center}
+\begin{circuitikz}[scale=0.9, transform shape]
+    % Decoder Box
+    \draw[thick, draw=black, fill=white, rounded corners=3pt] (0,0) rectangle (3,9);
+    \node[align=center, font=\large\bfseries, text=black] at (1.5, 8.2) {$3 \times 8$\\Decoder};
+    
+    % Enable pin
+    \draw[thick] (1.5, 9) -- (1.5, 9.5) node[above, font=\bfseries] {Enable ($E=1$)};
+    
+    % Inputs
+    \draw[thick] (-1.5, 7) node[left, font=\bfseries] {$A$} -- (0, 7) node[right, font=\small\bfseries] {$I_2$};
+    \draw[thick] (-1.5, 5) node[left, font=\bfseries] {$B$} -- (0, 5) node[right, font=\small\bfseries] {$I_1$};
+    \draw[thick] (-1.5, 3) node[left, font=\bfseries] {$C_{in}$} -- (0, 3) node[right, font=\small\bfseries] {$I_0$};
+    
+    % Outputs (m0 to m7) labels and stubs
+    \foreach \i [evaluate=\i as \y using 8-\i] in {0,...,7} {
+        \draw[thick] (3, \y) -- (3.8, \y);
+        \node[above, font=\small] at (3.4, \y) {$m_\i$};
+    }
+
+    % OR gates
+    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (sumOR) at (9, 5.5) {};
+    \node[or port, number inputs=4, fill=cD!10, draw=cD, thick] (coutOR) at (9, 2.5) {};
+    
+    \node[right, font=\bfseries, text=cD] at (sumOR.out) {Sum ($S$)};
+    \node[right, font=\bfseries, text=cD] at (coutOR.out) {Carry ($C_{out}$)};
+
+    % ----------------------------------------------------
+    % Wiring to Sum (1, 2, 4, 7)
+    % ----------------------------------------------------
+    \draw[thick, draw=cD] (3.8, 7) -- (4.8, 7) |- (sumOR.in 1); % m1
+    \draw[thick, draw=cD] (3.8, 6) -- (4.6, 6) |- (sumOR.in 2); % m2
+    \draw[thick, draw=cD] (3.8, 4) -- (5.4, 4) |- (sumOR.in 3); % m4
+    \draw[thick, draw=cD] (3.8, 1) -- (6.0, 1) |- (sumOR.in 4); % m7
+
+    % ----------------------------------------------------
+    % Wiring to Cout (3, 5, 6, 7)
+    % ----------------------------------------------------
+    \draw[thick, draw=black!70] (3.8, 5) -- (5.2, 5) |- (coutOR.in 1); % m3
+    \draw[thick, draw=black!70] (3.8, 3) -- (5, 3) |- (coutOR.in 2); % m5
+    \draw[thick, draw=black!70] (3.8, 2) -- (5.8, 2) |- (coutOR.in 3); % m6
+    
+    % Branch m7 to Cout
+    \draw[thick, draw=black!70] (6.0, 1) --++(0.5,0) |- (coutOR.in 4); 
+    \fill[cD] (6.0, 1) circle (2.5pt); % Connection dot
+
+\end{circuitikz}
+\end{center}
+\vspace{0.2cm}
+\textit{Note: If the $3 \times 8$ decoder in the lab features active-low outputs (such as the standard 74LS138), NAND gates must be used in place of the OR gates to properly assert the Sum and Carry logic levels according to De Morgan's Laws.}
+
+\end{tcolorbox}
+
+
+
+
+\item Design a $3 \times 8$ decoder using two $2 \times 4$ decoder circuits.
+\mk{8} \yr{CSE 205 | L-2/T-1 | 2011--12}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
+
+\subsection*{1. Design Principle}
+A $3 \times 8$ decoder takes 3 input lines ($A_2, A_1, A_0$) and activates exactly one of its 8 output lines ($Y_0$ to $Y_7$) based on the binary value of the inputs. We can construct this by cascading two $2 \times 4$ decoders (each possessing an Enable pin, $E$) using the following logic partition:
+
+\begin{itemize}
+    \item \textbf{Common Inputs (LSBs):} The two least significant bits, $A_1$ and $A_0$, are connected in parallel to the selection inputs of both $2 \times 4$ decoders. They dictate which of the four outputs within an active decoder is asserted.
+    \item \textbf{Selection Input (MSB):} The most significant bit, $A_2$, acts as a block selector. We connect $A_2$ directly to the enable pin of the second decoder and route it through a NOT gate to the enable pin of the first decoder.
+    \item \textbf{Operation:} 
+    \begin{itemize}
+        \item When $A_2 = 0$, the \textbf{Top Decoder} is enabled. It handles input combinations $000_2$ to $011_2$, asserting outputs $Y_0$ through $Y_3$.
+        \item When $A_2 = 1$, the \textbf{Bottom Decoder} is enabled. It handles input combinations $100_2$ to $111_2$, asserting outputs $Y_4$ through $Y_7$.
+    \end{itemize}
+\end{itemize}
+
+\subsection*{2. Truth Table Partitioning}
+The truth table clearly demonstrates how the MSB ($A_2$) partitions the outputs into two mutually exclusive sets, mapping perfectly to the two $2 \times 4$ decoders.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{ccc|cccccccc|c}
+\toprule
+\multicolumn{3}{c|}{\textbf{Inputs}} & \multicolumn{8}{c|}{\textbf{Outputs}} & \multirow{2}{*}{\textbf{Active Hardware Block}} \\
+$A_2$ & $A_1$ & $A_0$ & $Y_0$ & $Y_1$ & $Y_2$ & $Y_3$ & $Y_4$ & $Y_5$ & $Y_6$ & $Y_7$ & \\
+\midrule
+\textcolor{cD}{\textbf{0}} & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \multirow{4}{*}{Decoder 0 ($E = \overline{A_2}$)} \\
+\textcolor{cD}{\textbf{0}} & 0 & 1 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & 0 & \\
+\textcolor{cD}{\textbf{0}} & 1 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & 0 & \\
+\textcolor{cD}{\textbf{0}} & 1 & 1 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & 0 & \\
+\midrule
+\textcolor{cD}{\textbf{1}} & 0 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & 0 & \multirow{4}{*}{Decoder 1 ($E = A_2$)} \\
+\textcolor{cD}{\textbf{1}} & 0 & 1 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & 0 & 0 & \\
+\textcolor{cD}{\textbf{1}} & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & 0 & \\
+\textcolor{cD}{\textbf{1}} & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \textbf{1} & \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\vspace{0.3cm}
+\subsection*{3. Circuit Diagram}
+\textit{Assumption: The $2 \times 4$ decoders utilize active-high Enable ($E$) pins and active-high outputs.}
+
+\vspace{0.5cm}
+\begin{center}
+\begin{circuitikz}[scale=1, transform shape]
+    
+    %---------------------------------------------------
+    % Top Decoder (Decoder 0: Handles Y0 to Y3)
+    %---------------------------------------------------
+    \draw[thick, fill=white] (5, 5) rectangle (8, 9);
+    \node[align=center, font=\bfseries, scale=0.8] at (6.5, 7.5) {$2 \times 4$\\Decoder 0};
+    
+    % Input pins for Decoder 0
+    \node[right, font=\small\bfseries] at (5, 8.5) {$E$};
+    \node[right, font=\small\bfseries] at (5, 6.5) {$I_1$};
+    \node[right, font=\small\bfseries] at (5, 5.5) {$I_0$};
+    
+    % Output pins for Decoder 0
+    \foreach \i / \y in {0/8.5, 1/7.5, 2/6.5, 3/5.5} {
+        \node[left, font=\small\bfseries] at (8, \y) {$O_\i$};
+        \draw[thick, draw=cD] (8, \y) -- (9, \y) node[right, font=\bfseries, text=black] {$Y_\i$};
+    }
+
+    %---------------------------------------------------
+    % Bottom Decoder (Decoder 1: Handles Y4 to Y7)
+    %---------------------------------------------------
+    \draw[thick, fill=white] (5, 0) rectangle (8, 4);
+    \node[align=center, font=\bfseries, scale=0.8] at (6.5, 2.5) {$2 \times 4$\\Decoder 1};
+    
+    % Input pins for Decoder 1
+    \node[right, font=\small\bfseries] at (5, 3.5) {$E$};
+    \node[right, font=\small\bfseries] at (5, 1.5) {$I_1$};
+    \node[right, font=\small\bfseries] at (5, 0.5) {$I_0$};
+    
+    % Output pins for Decoder 1
+    \foreach \i [evaluate=\i as \y using 3.5-\i] in {0,...,3} {
+        \node[left, font=\small\bfseries] at (8, \y) {$O_\i$};
+        \pgfmathtruncatemacro{\idx}{\i+4}
+        \draw[thick, draw=cD] (8, \y) -- (9, \y) node[right, font=\bfseries, text=black] {$Y_{\idx}$};
+    }
+
+    %---------------------------------------------------
+    % Global Inputs and Wiring
+    %---------------------------------------------------
+    % A0 Routing
+    \draw[thick] (0, 0.5) node[left, font=\bfseries] {$A_0$ (LSB)} -- (3.5, 0.5) |- (5, 0.5); % To Decoder 1
+    \draw[thick] (3.5, 0.5) |- (5, 5.5); % Branch to Decoder 0
+    \fill (3.5, 0.5) circle (2pt);
+
+    % A1 Routing
+    \draw[thick] (0, 1.5) node[left, font=\bfseries] {$A_1$} -- (2.5, 1.5) |- (5, 1.5); % To Decoder 1
+    \draw[thick] (2.5, 1.5) |- (5, 6.5); % Branch to Decoder 0
+    \fill (2.5, 1.5) circle (2pt);
+
+    % A2 Routing (MSB Enable Logic)
+    \draw[thick] (0, 3.5) node[left, font=\bfseries] {$A_2$ (MSB)} -- (1.5, 3.5) |- (5, 3.5); % Direct to Decoder 1
+    \node[not port, scale=0.7, fill=cD!10, draw=cD] (notA2) at (3.5, 8.5) {};
+    \draw[thick] (1.5, 3.5) |- (notA2.in); % Branch through NOT to Decoder 0
+    \draw[thick, draw=cD] (notA2.out) -- (5, 8.5);
+    \fill (1.5, 3.5) circle (2pt);
 
 \end{circuitikz}
 \end{center}
@@ -15957,32 +16953,32 @@ Using the \textbf{Distributive Law} of Boolean Algebra, we can factor out $A_3$ 
 The optimized expression requires only a single 2-input OR gate and a single 2-input AND gate. 
 
 \begin{center}
-\begin{circuitikz}[scale=1.2, transform shape, thick]
-    % Inputs
-    \node[left, font=\bfseries] (A1) at (0, 0.3) {$A_1$};
-    \node[left, font=\bfseries] (A2) at (0, 0.7) {$A_2$};
-    \node[left, font=\bfseries] (A3) at (0, 2) {$A_3$};
-    \node[left, font=\bfseries, text=gray] (A0) at (0, -1) {$A_0$ (Unused)};
+\begin{circuitikz}[scale=1.2, transform shape, thick, >=latex]
 
-    % Gates
+    % Gates (আগে গেটগুলো বসিয়ে নিলে তার টানতে সুবিধা হয়)
     \node[or port, fill=cD!10, draw=cD] (or_gate) at (2.5, 0.5) {};
     \node[and port, fill=cD!10, draw=cD] (and_gate) at (5, 1.5) {};
 
-    % Connections
-    \draw (A1.east) -- (or_gate.in 2);
-    \draw (A2.east) -- (or_gate.in 1);
+    % Inputs (গেটের পিন থেকে সরাসরি সোজা লাইন টেনে ইনপুট লেবেল বসানো হয়েছে)
+    \draw (or_gate.in 1) -- ++(-1.5,0) node[left, font=\bfseries] (A2) {$A_2$};
+    \draw (or_gate.in 2) -- ++(-1.5,0) node[left, font=\bfseries] (A1) {$A_1$};
+    \draw (and_gate.in 1) -- ++(-4,0) node[left, font=\bfseries] (A3) {$A_3$};
     
-    \draw (A3.east) -- (and_gate.in 1);
-    \draw (or_gate.out) -- ++(0.5,0) |- (and_gate.in 2);
+    % Unused A0 (A1 এর পজিশন থেকে ১ ইউনিট নিচে অ্যালাইন করা হয়েছে)
+    \path (A1) ++(0, -1) node[left, font=\bfseries, text=gray] (A0) {$A_0$ (Unused)};
+
+    % Connections (Joint তৈরি করে নিখুঁত 90-degree অ্যাঙ্গেল করা হয়েছে)
+    \draw (or_gate.out) -- ++(0.7,0) coordinate (joint) |- (and_gate.in 2);
     
     % Output
     \draw[->, draw=cD, thick] (and_gate.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$E$ (Error)};
     
-    % Label intermediate wire
-    \node[above] at (3.7, 0.5) {$(A_2 + A_1)$};
+    % Label intermediate wire (জয়েন্টের ঠিক উপরে বসানো হয়েছে)
+    \node[above] at (joint) {$(A_2 + A_1)$};
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -17832,7 +18828,7 @@ The logical expressions for the inputs can be implemented using standard basic g
 
 \vspace{0.5cm}
 \begin{center}
-\begin{tikzpicture}[>=latex, y=1.3cm]
+\begin{tikzpicture}[thick, >=latex, y=1.3cm]
 
     % --- Data Rails ---
     % y and y_bar rails
@@ -17871,26 +18867,26 @@ The logical expressions for the inputs can be implemented using standard basic g
 
     % I0 = y_bar + z (OR Gate)
     \node[or port] (or1) at (2.5, 6.5) {};
-    \draw[thick, fill=black] (-2, 6.78) circle (1.2pt);
-    \draw[thick] (-2, 6.78) -- (or1.in 1);
-    \draw[thick, fill=black] (-1, 6.22) circle (1.2pt);
-    \draw[thick] (-1, 6.22) -- (or1.in 2);
+    \draw[thick, fill=black] (-2, 6.74) circle (1.2pt);
+    \draw[thick] (-2, 6.74) -- (or1.in 1);
+    \draw[thick, fill=black] (-1, 6.26) circle (1.2pt);
+    \draw[thick] (-1, 6.26) -- (or1.in 2);
     \draw[thick] (or1.out) -- (4, 6.5);
 
     % I1 = y * z_bar (AND Gate)
     \node[and port] (and1) at (2.5, 4.5) {};
-    \draw[thick, fill=black] (-3, 4.78) circle (1.2pt);
-    \draw[thick] (-3, 4.78) -- (and1.in 1);
-    \draw[thick, fill=black] (0, 4.22) circle (1.2pt);
-    \draw[thick] (0, 4.22) -- (and1.in 2);
+    \draw[thick, fill=black] (-3, 4.75) circle (1.2pt);
+    \draw[thick] (-3, 4.75) -- (and1.in 1);
+    \draw[thick, fill=black] (0, 4.25) circle (1.2pt);
+    \draw[thick] (0, 4.25) -- (and1.in 2);
     \draw[thick] (and1.out) -- (4, 4.5);
 
     % I2 = (yz)_bar (NAND Gate implementing y_bar + z_bar)
     \node[nand port] (nand1) at (2.5, 2.5) {};
-    \draw[thick, fill=black] (-3, 2.78) circle (1.2pt);
-    \draw[thick] (-3, 2.78) -- (nand1.in 1);
-    \draw[thick, fill=black] (-1, 2.22) circle (1.2pt);
-    \draw[thick] (-1, 2.22) -- (nand1.in 2);
+    \draw[thick, fill=black] (-3, 2.75) circle (1.2pt);
+    \draw[thick] (-3, 2.75) -- (nand1.in 1);
+    \draw[thick, fill=black] (-1, 2.25) circle (1.2pt);
+    \draw[thick] (-1, 2.25) -- (nand1.in 2);
     \draw[thick] (nand1.out) -- (4, 2.5);
 
     % I3 = y (Direct connection)
@@ -19131,721 +20127,7 @@ Based on the optimized expressions, the combinational logic circuit is construct
 
 \end{enumerate}
 
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Magnitude Comparator}
-\label{sub:s4-comparator}
 
-\begin{enumerate}
-
-\item Design a magnitude comparator for comparing two 3-bit binary numbers $X$ and $Y$.
-\mk{14} \yr{CSE 205 | L-2/T-1 | 2024--25}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{1. Problem Formulation}
-
-A magnitude comparator is a combinational logic circuit that compares two binary numbers and determines their relative magnitudes. We are given two 3-bit binary numbers, $X$ and $Y$:
-\begin{align*}
-    X &= X_2 X_1 X_0 \\
-    Y &= Y_2 Y_1 Y_0
-\end{align*}
-where $X_2$ and $Y_2$ are the Most Significant Bits (MSBs), and $X_0$ and $Y_0$ are the Least Significant Bits (LSBs). 
-
-The circuit will output three mutually exclusive signals:
-\begin{itemize}
-    \item $E$ (Equal): High (1) if $X = Y$.
-    \item $G$ (Greater): High (1) if $X > Y$.
-    \item $L$ (Less): High (1) if $X < Y$.
-\end{itemize}
-
-Since there are 6 input variables in total, a standard truth table would require $2^6 = 64$ rows. To simplify the design process, we derive the Boolean expressions directly using algorithmic logic based on bit significance.
-
-\vspace{1em}
-\textbf{2. Intermediate Bit-Level Functions}
-
-We first define the bit-wise comparison terms for any arbitrary bit position $i \in \{0, 1, 2\}$:
-
-\begin{itemize}
-    \item \textbf{Bit Equality ($e_i$):} The $i$-th bits are equal ($X_i = Y_i$) if both are 1 or both are 0. This is represented by the XNOR operation:
-    \begin{align*}
-        e_i &= X_i Y_i + \overline{X_i}\overline{Y_i} = X_i \odot Y_i
-    \end{align*}
-    
-    \item \textbf{Bit Greater ($g_i$):} The bit $X_i$ is strictly greater than $Y_i$ only when $X_i = 1$ and $Y_i = 0$. 
-    \begin{align*}
-        g_i &= X_i \overline{Y_i}
-    \end{align*}
-    
-    \item \textbf{Bit Less ($l_i$):} The bit $X_i$ is strictly less than $Y_i$ only when $X_i = 0$ and $Y_i = 1$.
-    \begin{align*}
-        l_i &= \overline{X_i} Y_i
-    \end{align*}
-\end{itemize}
-
-\vspace{1em}
-\textbf{3. Final Output Equations}
-
-Using the intermediate signals, we can construct the logic for the entire 3-bit word by evaluating from the MSB ($i=2$) down to the LSB ($i=0$).
-
-\textbf{Equality ($E$):}
-For the two numbers to be equal, all corresponding bits must be identical simultaneously.
-\begin{align*}
-    E &= e_2 \cdot e_1 \cdot e_0 \\
-    E &= (X_2 \odot Y_2)(X_1 \odot Y_1)(X_0 \odot Y_0)
-\end{align*}
-
-\textbf{Greater Than ($G$):}
-The number $X$ is greater than $Y$ if:
-1. $X_2 > Y_2$ (MSB is greater), OR
-2. $X_2 = Y_2$ AND $X_1 > Y_1$, OR
-3. $X_2 = Y_2$ AND $X_1 = Y_1$ AND $X_0 > Y_0$.
-Expressing this logically using our intermediate terms:
-\begin{align*}
-    G &= g_2 + e_2 g_1 + e_2 e_1 g_0 \\
-    G &= X_2 \overline{Y_2} + (X_2 \odot Y_2)X_1 \overline{Y_1} + (X_2 \odot Y_2)(X_1 \odot Y_1)X_0 \overline{Y_0}
-\end{align*}
-
-\textbf{Less Than ($L$):}
-Similarly, $X$ is less than $Y$ if the corresponding condition holds for the lesser bits:
-\begin{align*}
-    L &= l_2 + e_2 l_1 + e_2 e_1 l_0 \\
-    L &= \overline{X_2} Y_2 + (X_2 \odot Y_2)\overline{X_1} Y_1 + (X_2 \odot Y_2)(X_1 \odot Y_1)\overline{X_0} Y_0
-\end{align*}
-\textit{Note:} $L$ can also be obtained using a NOR gate since the states are mutually exclusive: $L = \overline{G + E}$.
-
-\vspace{1em}
-\textbf{4. Logic Circuit Implementation}
-
-To ensure high readability and avoid overlapping routing, the complete logic circuit is separated into two hierarchical tiers. The first tier generates the intermediate bit-level signals ($e_i, g_i, l_i$). The second tier uses these signals to compute the final outputs ($E, G, L$).
-
-\vspace{1em}
-\begin{center}
-\textbf{Tier 1: Bit-Level Signal Generation (Shown for bit $i$)} \\
-\vspace{1.5em}
-\begin{circuitikz}[line width=0.8pt, >=stealth, scale=0.9, transform shape]
-
-    % --- Inputs ---
-    \node[left, font=\bfseries] at (0, 4.28) {$X_i$};
-    \node[left, font=\bfseries] at (0, -0.28) {$Y_i$};
-
-    % --- Main Logic Gates ---
-    \node[and port] (ANDG) at (8, 4) {};
-    \node[xnor port] (XNORE) at (8, 2) {};
-    \node[and port] (ANDL) at (8, 0) {};
-
-    % --- Inverters ---
-    \node[not port, scale=0.7] (NOTY) at (5.5, 3.72) {};
-    \node[not port, scale=0.7] (NOTX) at (5.5, 0.28) {};
-
-    % --- Wiring X_i ---
-    % Direct to ANDG
-    \draw (0, 4.28) -- (ANDG.in 1);
-    % Tap down to XNORE
-    \draw (1, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 1);
-    % Tap down to NOTX
-    \draw (2.5, 4.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTX.in);
-    % NOTX to ANDL
-    \draw (NOTX.out) -- (ANDL.in 1);
-
-    % --- Wiring Y_i ---
-    % Direct to ANDL
-    \draw (0, -0.28) -- (ANDL.in 2);
-    % Tap up to XNORE
-    \draw (1.5, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (XNORE.in 2);
-    % Tap up to NOTY
-    \draw (4, -0.28) node[circle, fill, inner sep=1.5pt] {} |- (NOTY.in);
-    % NOTY to ANDG
-    \draw (NOTY.out) -- (ANDG.in 2);
-
-    % --- Outputs ---
-    \draw (ANDG.out) -- ++(0.5,0) node[right] {$g_i \ (X_i > Y_i)$};
-    \draw (XNORE.out) -- ++(0.5,0) node[right] {$e_i \ (X_i = Y_i)$};
-    \draw (ANDL.out) -- ++(0.5,0) node[right] {$l_i \ (X_i < Y_i)$};
-
-\end{circuitikz}
-\end{center}
-
-\vspace{1.5em}
-\begin{center}
-\textbf{Tier 2: Aggregate Output Generation ($E, G, L$)} \\
-\vspace{0.5em}
-\begin{circuitikz}[thick, scale=0.85, transform shape]
-    
-    % ==== E Generation ====
-    \node[and port, number inputs=3] (Eand) at (4, 8) {};
-    \node[left] at (Eand.in 1) {$e_2$};
-    \node[left] at (Eand.in 2) {$e_1$};
-    \node[left] at (Eand.in 3) {$e_0$};
-    \node[right] at (Eand.out) {\textbf{$E \ (X=Y)$}};
-    
-    % ==== G Generation ====
-    \node[left] at (0, 5) {$g_2$};
-    
-    \node[and port] (Gand1) at (2, 3.5) {};
-    \node[left] at (Gand1.in 1) {$e_2$};
-    \node[left] at (Gand1.in 2) {$g_1$};
-    
-    \node[and port, number inputs=3] (Gand2) at (2, 1.5) {};
-    \node[left] at (Gand2.in 1) {$e_2$};
-    \node[left] at (Gand2.in 2) {$e_1$};
-    \node[left] at (Gand2.in 3) {$g_0$};
-    
-    \node[or port, number inputs=3] (Gor) at (5, 3.5) {};
-    \draw (0, 5) -| (3.5, 5) |- (Gor.in 1);
-    \draw (Gand1.out) |- (Gor.in 2);
-    \draw (Gand2.out) -| (3.5, 1.5) |- (Gor.in 3);
-    \node[right] at (Gor.out) {\textbf{$G \ (X>Y)$}};
-    
-    % ==== L Generation ====
-    \node[left] at (8, 5) {$l_2$};
-    
-    \node[and port] (Land1) at (10, 3.5) {};
-    \node[left] at (Land1.in 1) {$e_2$};
-    \node[left] at (Land1.in 2) {$l_1$};
-    
-    \node[and port, number inputs=3] (Land2) at (10, 1.5) {};
-    \node[left] at (Land2.in 1) {$e_2$};
-    \node[left] at (Land2.in 2) {$e_1$};
-    \node[left] at (Land2.in 3) {$l_0$};
-    
-    \node[or port, number inputs=3] (Lor) at (13, 3.5) {};
-    \draw (8, 5) -| (11.5, 5) |- (Lor.in 1);
-    \draw (Land1.out) |- (Lor.in 2);
-    \draw (Land2.out) -| (11.5, 1.5) |- (Lor.in 3);
-    \node[right] at (Lor.out) {\textbf{$L \ (X<Y)$}};
-    
-\end{circuitikz}
-\end{center}
-
-\end{tcolorbox}
-
-\item Design a logic circuit which finds the maximum value between two 3-bit numbers. Explain the operation using the two numbers 7 and 3.
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2020--21}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{1. Architectural Strategy}
-
-To construct a logic circuit that finds the maximum value between two 3-bit numbers, $A$ ($A_2A_1A_0$) and $B$ ($B_2B_1B_0$), we utilize a Register Transfer Level (RTL) datapath approach. 
-The core components are:
-\begin{itemize}
-    \item \textbf{A 3-Bit Magnitude Comparator:} Evaluates whether $A > B$. It outputs a boolean signal $G$.
-    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Three multiplexers map each bit of the output $M_i$. The select pin of each MUX is driven by the comparator's output $G$.
-\end{itemize}
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}c|c|l@{}}
-\toprule
-\textbf{Magnitude Condition} & \textbf{Select Signal ($G$)} & \textbf{Routed Output ($M$)} \\
-\midrule
-$A > B$ & 1 & $M = A$ (Input $A$ is routed) \\
-$A = B$ & 0 & $M = B$ (Since $A=B$, both are valid max values) \\
-$A < B$ & 0 & $M = B$ (Input $B$ is routed) \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{2. Mathematical Formulation}
-
-\textbf{Step 2.1: Comparator Logic ($A > B$)} \\
-First, we define the bitwise equality signal (XNOR) for each bit position $i \in \{0,1,2\}$:
-\begin{align*}
-    E_i &= A_i \odot B_i = A_i B_i + \overline{A_i}\cdot \overline{B_i}
-\end{align*}
-The Greater-Than output $G$ (where $A > B$) becomes True if $A_2 > B_2$, or if they are equal but $A_1 > B_1$, and so on. The exact Boolean expression is:
-\begin{align*}
-    G &= A_2 \overline{B_2} + E_2 A_1 \overline{B_1} + E_2 E_1 A_0 \overline{B_0}
-\end{align*}
-
-\textbf{Step 2.2: Multiplexer Logic ($M_i$)} \\
-For each bit $i \in \{0, 1, 2\}$, the 2-to-1 MUX selects between $A_i$ and $B_i$ based on $G$. If $G=1$, $M_i = A_i$. If $G=0$, $M_i = B_i$.
-\begin{align*}
-    M_i &= G \cdot A_i + \overline{G} \cdot B_i
-\end{align*}
-
-\vspace{0.3cm}
-\textbf{3. RTL Datapath Diagram}
-
-Given the complexity of drawing dozens of intersecting gate-level primitives for a 3-bit comparator and multiplexer array, the design is clearly presented using standard structural MSI blocks.
-
-\begin{center}
-\begin{circuitikz}[thick, scale=0.95, transform shape, x=1.3cm]
-    % ==============================================
-    % 3-Bit Magnitude Comparator
-    % ==============================================
-    \draw[fill=cD!5, rounded corners] (0, 0.5) rectangle (4, 7.5);
-    \node[align=center, font=\bfseries] at (2, 4) {3-Bit\\Magnitude\\Comparator};
-    
-    % Comparator Inputs
-    \draw (0, 6) -- (-1.5, 6) node[left, font=\bfseries] {$A[2:0]$};
-    \draw (0, 2) -- (-1.5, 2) node[left, font=\bfseries] {$B[2:0]$};
-    
-    % Comparator Output
-    \draw (4, 4) node[above right, font=\bfseries] {$G \ (A>B)$} -- (6, 4);
-    \fill (6, 4) circle (2pt);
-    
-    % Vertical Select Bus
-    \draw (6, -0.25) -- (6, 5.75);
-
-    % ==============================================
-    % 2-to-1 Multiplexer Array
-    % ==============================================
-    \foreach \y/\i in {7/2, 4/1, 1/0} {
-        % Draw MUX Trapezoid
-        \draw[fill=cD!5] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
-        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
-        
-        % Data Inputs to MUX
-        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$A_\i$};
-        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$B_\i$};
-        
-        % Internal Pin Labels
-        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
-        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
-        
-        % Data Output
-        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$M_\i$};
-        
-        % Select Input Routing from Bus
-        \draw (8.25, \y-0.75) -- (8.25, \y-1.25) -- (6, \y-1.25);
-        \fill (6, \y-1.25) circle (2pt);
-    }
-\end{circuitikz}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{4. Operational Example: A = 7 and B = 3}
-
-We evaluate the system behavior when the inputs are initialized to decimal values $7$ and $3$. 
-First, we convert the operands to 3-bit binary notation:
-\begin{itemize}
-    \item $A = 7_{10} \implies A_2A_1A_0 = 111_2$
-    \item $B = 3_{10} \implies B_2B_1B_0 = 011_2$
-\end{itemize}
-
-\textbf{Step 4.1: Compute the Comparator Output ($G$)}
-Calculate the bitwise equality signals ($E_i = A_i \odot B_i$):
-\begin{align*}
-    E_2 &= 1 \odot 0 = (1\cdot0) + (0\cdot1) = 0 \\
-    E_1 &= 1 \odot 1 = (1\cdot1) + (0\cdot0) = 1 \\
-    E_0 &= 1 \odot 1 = (1\cdot1) + (0\cdot0) = 1 
-\end{align*}
-Substitute into the Greater-Than equation:
-\begin{align*}
-    G &= (A_2 \overline{B_2}) + (E_2 A_1 \overline{B_1}) + (E_2 E_1 A_0 \overline{B_0}) \\
-      &= (1 \cdot \overline{0}) + (0 \cdot 1 \cdot \overline{1}) + (0 \cdot 1 \cdot 1 \cdot \overline{1}) \\
-      &= (1 \cdot 1) + 0 + 0 \\
-      &= 1 \quad \text{(Confirming mathematically that } 7 > 3\text{)}
-\end{align*}
-
-\textbf{Step 4.2: Compute the Multiplexer Outputs ($M_i$)}
-Since the select signal $G = 1$, the logic maps to $M_i = (1 \cdot A_i) + (0 \cdot B_i) = A_i$. The circuit routes the bits of operand $A$ directly to the output:
-\begin{align*}
-    M_2 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
-    M_1 &= (1 \cdot 1) + (0 \cdot 1) = 1 \\
-    M_0 &= (1 \cdot 1) + (0 \cdot 1) = 1 
-\end{align*}
-
-\textbf{Conclusion:} 
-The final output is $M_2M_1M_0 = 111_2$, which converts to $7_{10}$. The hardware successfully identified and outputted the maximum value.
-
-\end{tcolorbox}
-
-\item Design a logic circuit which returns the smaller value between two 4-bit binary numbers $A$ and $B$. Show the operation with $A=7$, $B=9$.
-\mk{12} \yr{CSE 205 | L-2/T-1 | 2018--19}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{1. Architectural Strategy}
-
-To design a combinational circuit that returns the smaller (minimum) value between two 4-bit binary numbers, $A = A_3A_2A_1A_0$ and $B = B_3B_2B_1B_0$, we employ a Register Transfer Level (RTL) architecture. The design requires two primary functional blocks:
-\begin{itemize}
-    \item \textbf{A 4-Bit Magnitude Comparator:} This block compares the two numbers and generates a boolean signal $L$, which is true ($1$) if $A < B$.
-    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Four discrete 2-to-1 multiplexers route either the bits of $A$ or the bits of $B$ to the final output $S = S_3S_2S_1S_0$. The selection is controlled by the comparator's output $L$.
-\end{itemize}
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}c|c|l@{}}
-\toprule
-\textbf{Magnitude Condition} & \textbf{Select Signal ($L$)} & \textbf{Routed Output ($S$)} \\
-\midrule
-$A < B$ & 1 & $S = A$ (Input $A$ is routed as it is smaller) \\
-$A = B$ & 0 & $S = B$ (Either is valid; $B$ is routed) \\
-$A > B$ & 0 & $S = B$ (Input $B$ is routed as it is smaller) \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{2. Mathematical Formulation}
-
-\textbf{Step 2.1: Comparator Logic ($A < B$)} \\
-First, we define the bitwise equality signal (XNOR) for each bit position $i \in \{0,1,2,3\}$:
-\begin{align*}
-    E_i &= A_i \odot B_i = A_i B_i + \overline{A_i}\cdot \overline{B_i}
-\end{align*}
-The Less-Than output $L$ evaluates to $1$ if $A_3 < B_3$ (i.e., $A_3=0$ and $B_3=1$), or if they are equal ($E_3=1$) and $A_2 < B_2$, cascading down to the least significant bit. The exact Boolean expression is:
-\begin{align*}
-    L &= \overline{A_3} B_3 + E_3 \overline{A_2} B_2 + E_3 E_2 \overline{A_1} B_1 + E_3 E_2 E_1 \overline{A_0} B_0
-\end{align*}
-
-\textbf{Step 2.2: Multiplexer Logic ($S_i$)} \\
-For each bit $i \in \{0, 1, 2, 3\}$, the 2-to-1 MUX selects between $A_i$ and $B_i$ based on the signal $L$. Since we route $A_i$ when $L=1$ and $B_i$ when $L=0$, the MUX Boolean equation is:
-\begin{align*}
-    S_i &= L \cdot A_i + \overline{L} \cdot B_i
-\end{align*}
-
-\vspace{0.3cm}
-\textbf{3. RTL Datapath Diagram}
-
-Given the significant gate count of a 4-bit comparator and four multiplexers, the circuit is structurally modeled using standard MSI blocks to maintain professional clarity and strict correctness.
-
-\begin{center}
-\begin{circuitikz}[thick, scale=0.9, transform shape, x=1.3cm]
-    % ==============================================
-    % 4-Bit Magnitude Comparator
-    % ==============================================
-    \draw[fill=cD!5, rounded corners] (0, 0.5) rectangle (4, 9.5);
-    \node[align=center, font=\bfseries] at (2, 5) {4-Bit\\Magnitude\\Comparator};
-    
-    % Comparator Inputs
-    \draw (0, 7.5) -- (-1.5, 7.5) node[left, font=\bfseries] {$A[3:0]$};
-    \draw (0, 2.5) -- (-1.5, 2.5) node[left, font=\bfseries] {$B[3:0]$};
-    
-    % Comparator Output
-    \draw (4, 5) node[above right, font=\bfseries, scale=0.7] {$L \ (A<B)$} -- (5.5, 5);
-    \fill (5.5, 5) circle (2pt);
-    
-    % Vertical Select Bus
-    \draw (5.5, -0.7) -- (5.5, 8.75);
-
-    % ==============================================
-    % 2-to-1 Multiplexer Array
-    % ==============================================
-    \foreach \y/\i in {8/3, 5.5/2, 3/1, 0.5/0} {
-        % Draw MUX Trapezoid
-        \draw[fill=cD!5] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
-        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
-        
-        % Data Inputs to MUX
-        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$A_\i$};
-        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$B_\i$};
-        
-        % Internal Pin Labels
-        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
-        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
-        
-        % Data Output
-        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$S_\i$};
-        
-        % Select Input Routing from Bus
-        \draw (8.25, \y-0.75) -- (8.25, \y-1.25) -- (5.5, \y-1.25);
-        \fill (5.5, \y-1.25) circle (2pt);
-    }
-\end{circuitikz}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{4. Operational Trace: $A = 7$ and $B = 9$}
-
-We evaluate the system behavior when the inputs are initialized to decimal values $7$ and $9$. 
-First, we express the operands in 4-bit binary notation:
-\begin{itemize}
-    \item $A = 7_{10} \implies A_3A_2A_1A_0 = 0111_2$
-    \item $B = 9_{10} \implies B_3B_2B_1B_0 = 1001_2$
-\end{itemize}
-
-\textbf{Step 4.1: Compute the Comparator Output ($L$)} \\
-Evaluate the Most Significant Bit (MSB, index 3):
-\begin{itemize}
-    \item $A_3 = 0$, $B_3 = 1$
-\end{itemize}
-Applying this to the Less-Than Boolean equation:
-\begin{align*}
-    L &= (\overline{A_3} \cdot B_3) + (\text{lower-order terms}) \\
-    L &= (\overline{0} \cdot 1) + (\text{lower-order terms}) \\
-    L &= (1 \cdot 1) + (\text{lower-order terms}) \\
-    L &= 1
-\end{align*}
-Because the MSB of $A$ is strictly less than the MSB of $B$, the comparator immediately asserts $L = 1$ without needing to evaluate the lower-order bits (short-circuit logic property of cascading OR gates). This mathematically confirms $7 < 9$.
-
-\textbf{Step 4.2: Compute the Multiplexer Outputs ($S_i$)} \\
-Because the select signal $L = 1$, the logic maps to $S_i = (1 \cdot A_i) + (0 \cdot B_i) = A_i$. The circuit routes the bits of operand $A$ directly to the output bus:
-\begin{align*}
-    S_3 &= (1 \cdot 0) + (0 \cdot 1) = 0 \\
-    S_2 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
-    S_1 &= (1 \cdot 1) + (0 \cdot 0) = 1 \\
-    S_0 &= (1 \cdot 1) + (0 \cdot 1) = 1 
-\end{align*}
-
-\textbf{Conclusion:} 
-The final aggregated output is $S_3S_2S_1S_0 = 0111_2$, which converts to $7_{10}$. The hardware successfully identified and outputted the smaller value.
-
-\end{tcolorbox}
-
-\item Design a digital circuit with logic gates which takes two 3-bit binary numbers $X$ and $Y$ and returns a 3-bit binary number $Z$ equal to the maximum between $X$ and $Y$. 
-($X$ can be expressed as $X_2X_1X_0$, $Y$ can be expressed as $Y_2XY_1Y_0$; and Z can be
-expressed as $Z_2Z_1Z_0$).
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2017--18}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{1. Architectural Design Strategy}
-
-To construct a digital circuit that determines the maximum value between two 3-bit binary numbers, $X = X_2X_1X_0$ and $Y = Y_2Y_1Y_0$, we utilize a modular Register Transfer Level (RTL) approach. The system requires two core functional blocks:
-\begin{itemize}
-    \item \textbf{A 3-Bit Magnitude Comparator:} Evaluates the logical condition $X > Y$. It generates a boolean control signal $G$.
-    \item \textbf{An Array of 2-to-1 Multiplexers (MUX):} Three individual multiplexers are used to route the bits of either $X$ or $Y$ to the final output $Z = Z_2Z_1Z_0$. The selection is driven by the comparator's output $G$.
-\end{itemize}
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}c|c|l@{}}
-\toprule
-\textbf{Magnitude Condition} & \textbf{Control Signal ($G$)} & \textbf{Selected Output ($Z$)} \\
-\midrule
-$X > Y$ & 1 & $Z = X$ (Since $X$ is the maximum) \\
-$X = Y$ & 0 & $Z = Y$ (Since $X=Y$, either is valid; $Y$ is routed) \\
-$X < Y$ & 0 & $Z = Y$ (Since $Y$ is the maximum) \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{2. Mathematical Formulation}
-
-\textbf{Step 2.1: Comparator Logic ($X > Y$)} \\
-First, we define the bitwise equivalence signal (XNOR) for each bit position $i \in \{0,1,2\}$ to check if corresponding bits are identical:
-\begin{align*}
-    E_i &= X_i \odot Y_i \\
-        &= X_i Y_i + \overline{X_i} \cdot \overline{Y_i} \quad \text{(Definition of XNOR)}
-\end{align*}
-The Greater-Than output $G$ (asserting $X > Y$) becomes true if the most significant bit (MSB) of $X$ is greater than $Y$ ($X_2=1, Y_2=0$), or if they are equal ($E_2=1$) and the next bit $X_1 > Y_1$, and so on. The exact Boolean expression is expanded as:
-\begin{align*}
-    G &= X_2 \overline{Y_2} + E_2 (X_1 \overline{Y_1}) + E_2 E_1 (X_0 \overline{Y_0}) \quad \text{(Sum of Products logic for magnitude comparison)}
-\end{align*}
-
-\textbf{Step 2.2: Multiplexer Logic ($Z_i$)} \\
-For each bit $i \in \{0, 1, 2\}$, a 2-to-1 MUX selects between $X_i$ and $Y_i$ based on the control signal $G$. When $G=1$, $Z_i$ follows $X_i$. When $G=0$, $Z_i$ follows $Y_i$. We represent this behavior algebraically:
-\begin{align*}
-    Z_i &= G \cdot X_i + \overline{G} \cdot Y_i \quad \text{(Standard 2-to-1 Multiplexer Equation)}
-\end{align*}
-
-\vspace{0.3cm}
-\textbf{3. Hardware Implementation (RTL Datapath)}
-
-Due to the combinatorial complexity of drawing individual primitive gates for a full comparator and multiplexer array, the schematic is modeled using highly readable, industry-standard structural Medium Scale Integration (MSI) blocks.
-
-\begin{center}
-\begin{circuitikz}[thick, scale=0.95, transform shape]
-    % ==============================================
-    % 3-Bit Magnitude Comparator Block
-    % ==============================================
-    \draw[fill=cD!5, rounded corners, draw=cD] (0, 0.5) rectangle (4, 7.5);
-    \node[align=center, font=\bfseries] at (2, 4) {3-Bit\\Magnitude\\Comparator};
-    
-    % Comparator Inputs
-    \draw (0, 6) -- (-1.5, 6) node[left, font=\bfseries] {$X[2:0]$};
-    \draw (0, 2) -- (-1.5, 2) node[left, font=\bfseries] {$Y[2:0]$};
-    
-    % Comparator Output (G)
-    \draw (4, 4) node[above right, font=\bfseries, scale=0.7] {$G \ (X>Y)$} -- (5.8, 4);
-    \fill (5.8, 4) circle (2pt);
-    
-    % Vertical Select Control Bus
-    \draw[draw=cD] (5.8, -0.25) -- (5.8, 5.75);
-
-    % ==============================================
-    % 2-to-1 Multiplexer Array for Z_i
-    % ==============================================
-    \foreach \y/\i in {7/2, 4/1, 1/0} {
-        % Draw MUX Trapezoid
-        \draw[fill=cD!5, draw=cD] (7.5, \y+1) -- (9, \y+0.5) -- (9, \y-0.5) -- (7.5, \y-1) -- cycle;
-        \node[font=\bfseries, rotate=-90, scale=0.7] at (8.25, \y) {MUX \i};
-        
-        % Data Inputs to MUX
-        \draw (7.5, \y+0.5) -- (6.5, \y+0.5) node[left] {$X_\i$};
-        \draw (7.5, \y-0.5) -- (6.5, \y-0.5) node[left] {$Y_\i$};
-        
-        % Internal Pin Labels (1 selected when G=1, 0 selected when G=0)
-        \node[right, font=\tiny, text=gray] at (7.5, \y+0.5) {1};
-        \node[right, font=\tiny, text=gray] at (7.5, \y-0.5) {0};
-        
-        % Data Output (Z_i)
-        \draw (9, \y) -- (10.5, \y) node[right, font=\bfseries, text=cD] {$Z_\i$};
-        
-        % Select Input Routing from Bus
-        \draw[draw=cD] (8.25, \y-0.75) -- (8.25, \y-1.25) -- (5.8, \y-1.25);
-        \fill[cD] (5.8, \y-1.25) circle (2pt);
-    }
-\end{circuitikz}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{4. Operational Summary}
-
-When the two 3-bit numbers are fed into the system:
-\begin{enumerate}
-    \item The \textbf{Magnitude Comparator} continuously monitors the bit patterns of $X$ and $Y$ starting from the Most Significant Bits ($X_2$ and $Y_2$). 
-    \item If $X$ is numerically greater than $Y$, the comparator asserts $G = 1$. The multiplexer array shifts its internal switches to pin `1`, bridging $X_2X_1X_0$ to the output bus $Z_2Z_1Z_0$.
-    \item If $X$ is less than or equal to $Y$, the comparator sets $G = 0$. The multiplexers switch to pin `0`, actively bridging $Y_2Y_1Y_0$ to the output bus $Z_2Z_1Z_0$.
-    \item The resulting 3-bit vector $Z$ consistently represents $\max(X, Y)$.
-\end{enumerate}
-
-\end{tcolorbox}
-
-\item Design and explain a 2-bit magnitude comparator.
-\mk{10} \yr{CSE 205 | L-2/T-1 | 2016--17}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cD!4,colframe=cD,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cD]
-
-\textbf{1. Architectural Overview}
-
-A \textbf{2-bit magnitude comparator} is a combinational logic circuit that compares two 2-bit binary numbers, $A = A_1 A_0$ and $B = B_1 B_0$. The circuit determines their relative magnitude and produces three distinct boolean outputs:
-\begin{itemize}
-    \item \textbf{Greater ($G$):} High (1) if $A > B$
-    \item \textbf{Equal ($E$):} High (1) if $A = B$
-    \item \textbf{Less ($L$):} High (1) if $A < B$
-\end{itemize}
-
-Instead of analyzing a cumbersome 16-row truth table, the operational logic can be efficiently mapped using a condensed conditional table based on bit-significance (evaluating the Most Significant Bit, $A_1$ and $B_1$, first):
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\begin{tabular}{@{}ll|ccc@{}}
-\toprule
-\textbf{MSB Comparison} & \textbf{LSB Comparison} & \textbf{$G \ (A>B)$} & \textbf{$E \ (A=B)$} & \textbf{$L \ (A<B)$} \\
-\midrule
-$A_1 > B_1$ ($A_1=1, B_1=0$) & Don't Care (X)       & 1 & 0 & 0 \\
-$A_1 < B_1$ ($A_1=0, B_1=1$) & Don't Care (X)       & 0 & 0 & 1 \\
-$A_1 = B_1$                  & $A_0 > B_0$          & 1 & 0 & 0 \\
-$A_1 = B_1$                  & $A_0 < B_0$          & 0 & 0 & 1 \\
-$A_1 = B_1$                  & $A_0 = B_0$          & 0 & 1 & 0 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{2. Mathematical Formulation}
-
-To implement the circuit, we derive the Boolean expressions for each output using the properties of standard logic gates. 
-
-\textbf{Step 2.1: Equality ($E$)} \\
-Two bits are strictly equal if they are both $1$ or both $0$. This is mathematically represented by the XNOR operation. Let $x_i$ denote the equality of the bits at position $i$:
-\begin{align*}
-    x_1 &= A_1 \odot B_1 = A_1 B_1 + \overline{A_1}\cdot\overline{B_1} \\
-    x_0 &= A_0 \odot B_0 = A_0 B_0 + \overline{A_0}\cdot\overline{B_0}
-\end{align*}
-The numbers $A$ and $B$ are completely equal only if both the MSBs and LSBs are equal. Therefore:
-\begin{align*}
-    E &= x_1 \cdot x_0
-\end{align*}
-
-\textbf{Step 2.2: Greater Than ($G$)} \\
-The condition $A > B$ occurs if the MSB of $A$ is greater than the MSB of $B$, \textit{OR} if the MSBs are equal ($x_1=1$) but the LSB of $A$ is greater than the LSB of $B$.
-\begin{align*}
-    G &= (A_1 \cdot \overline{B_1}) + x_1 \cdot (A_0 \cdot \overline{B_0})
-\end{align*}
-
-\textbf{Step 2.3: Less Than ($L$)} \\
-Similarly, the condition $A < B$ occurs if the MSB of $A$ is less than the MSB of $B$, \textit{OR} if the MSBs are equal ($x_1=1$) but the LSB of $A$ is less than the LSB of $B$.
-\begin{align*}
-    L &= (\overline{A_1} \cdot B_1) + x_1 \cdot (\overline{A_0} \cdot B_0)
-\end{align*}
-
-\vspace{0.3cm}
-\textbf{3. Logic Gate Schematic}
-
-To ensure optimal clarity and avoid tangled wiring, the circuit is drafted in three independent, modular functional blocks corresponding to the three derived equations.
-
-\begin{center}
-\begin{circuitikz}[thick, scale=0.9, transform shape]
-    % ======================================
-    % Equality Block (E)
-    % ======================================
-    \node[xnor port] (xnor1) at (2, 8) {};
-    \node[left] at (xnor1.in 1) {$A_1$};
-    \node[left] at (xnor1.in 2) {$B_1$};
-    
-    \node[xnor port] (xnor0) at (2, 6) {};
-    \node[left] at (xnor0.in 1) {$A_0$};
-    \node[left] at (xnor0.in 2) {$B_0$};
-    
-    \node[and port] (andE) at (5, 7) {};
-    \draw (xnor1.out) |- (andE.in 1);
-    \draw (xnor0.out) |- (andE.in 2);
-    \draw (andE.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$E \ (A=B)$};
-    
-    % Label for the internal x_1 node to map to other blocks
-    \node[above] at (xnor1.out) {$x_1$};
-
-    % ======================================
-    % Greater Than Block (G)
-    % ======================================
-    \node[and port] (andG1) at (2, 4) {};
-    \node[left] at (andG1.in 1) {$A_1$};
-    \node[left] at (andG1.in 2) {$\overline{B_1}$};
-    
-    \node[and port] (andG0) at (2, 2) {};
-    \node[left] at (andG0.in 1) {$A_0$};
-    \node[left] at (andG0.in 2) {$\overline{B_0}$};
-    
-    \node[and port] (andG2) at (5, 2.5) {};
-    \node[left] at (andG2.in 1) {$x_1$}; % Connected conceptually from xnor1
-    \draw (andG0.out) |- (andG2.in 2);
-    
-    \node[or port] (orG) at (8, 3.25) {};
-    \draw (andG1.out) |- (orG.in 1);
-    \draw (andG2.out) |- (orG.in 2);
-    \draw (orG.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$G \ (A>B)$};
-
-    % ======================================
-    % Less Than Block (L)
-    % ======================================
-    \node[and port] (andL1) at (2, -1) {};
-    \node[left] at (andL1.in 1) {$\overline{A_1}$};
-    \node[left] at (andL1.in 2) {$B_1$};
-    
-    \node[and port] (andL0) at (2, -3) {};
-    \node[left] at (andL0.in 1) {$\overline{A_0}$};
-    \node[left] at (andL0.in 2) {$B_0$};
-    
-    \node[and port] (andL2) at (5, -2.5) {};
-    \node[left] at (andL2.in 1) {$x_1$}; % Connected conceptually from xnor1
-    \draw (andL0.out) |- (andL2.in 2);
-    
-    \node[or port] (orL) at (8, -1.75) {};
-    \draw (andL1.out) |- (orL.in 1);
-    \draw (andL2.out) |- (orL.in 2);
-    \draw (orL.out) -- ++(1,0) node[right, font=\bfseries, text=cD] {$L \ (A<B)$};
-\end{circuitikz}
-\end{center}
-
-\vspace{0.3cm}
-\textbf{4. Operational Example}
-
-Let us assume $A = 2_{10}$ ($A_1A_0 = 10_2$) and $B = 1_{10}$ ($B_1B_0 = 01_2$). We trace this step-by-step:
-\begin{enumerate}
-    \item \textbf{Evaluate Equality Factors:} 
-    \begin{itemize}
-        \item $x_1 = A_1 \odot B_1 = 1 \odot 0 = 0$
-        \item $x_0 = A_0 \odot B_0 = 0 \odot 1 = 0$
-    \end{itemize}
-    \item \textbf{Evaluate Outputs:}
-    \begin{itemize}
-        \item $E = x_1 \cdot x_0 = 0 \cdot 0 = \mathbf{0}$
-        \item $G = (1 \cdot \overline{0}) + 0 \cdot (0 \cdot \overline{1}) = (1 \cdot 1) + 0 = \mathbf{1}$
-        \item $L = (\overline{1} \cdot 0) + 0 \cdot (\overline{0} \cdot 1) = (0 \cdot 0) + 0 = \mathbf{0}$
-    \end{itemize}
-\end{enumerate}
-The circuit asserts $G=1$ and leaves $E=0, L=0$, successfully proving mathematically that $2 > 1$.
-
-\end{tcolorbox}
-
-\end{enumerate}
 
 
 %% ══════════════════════════════════════════════════════════════════════
@@ -20061,7 +20343,7 @@ The synthesized sequential logic circuit uses standard logic gates for the combi
     \node[nand port] (nandR) at (4, 1.7) {};
     
     \node[not port,scale =0.5] (not1) at (2, 1.98) {};
-    \node[not port, scale=0.5] (not2) at (2, 1.42) {};
+    \node[not port, scale=0.5] (not2) at (2, 0) {};
     
     % Inputs and Splits
     \draw (0, 4.28) node[left, font=\bfseries] {$x_1$} 
@@ -20080,7 +20362,7 @@ The synthesized sequential logic circuit uses standard logic gates for the combi
     \draw (X2_split) |- (not2.in);
     
     \draw (not1.out) -- (nandR.in 1);
-    \draw (not2.out) -- (nandR.in 2);
+    \draw (not2.out) |- (nandR.in 2);
     
     % Latch Gates
     \node[nand port] (latchS) at (8, 3.5) {};
@@ -20111,6 +20393,7 @@ The synthesized sequential logic circuit uses standard logic gates for the combi
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -21414,7 +21697,7 @@ To solve this, the master-slave configuration cascades two distinct latches—a 
     \draw[thick] ([yshift=0cm]master.west) -- ++(-0.5,0) coordinate(clk_node) -- ++(-1,0) node[left] {\textbf{CLK}};
     \fill (clk_node) circle (2pt);
     \draw[thick] (clk_node) |- (2.0, -2.5) node[not port, right, scale=0.8] (not1) {};
-    \draw[thick, ->] (not1.out) -| ([yshift=0cm]slave.west);
+    \draw[thick, ->] (not1.out) |- ([yshift=0cm]slave.west);
 \end{circuitikz}
 \end{center}
 
@@ -21466,7 +21749,7 @@ In this configuration, the Master latch is enabled when the clock is HIGH, and t
     
     % Inverter for Slave Clock
     \draw[thick] (clk_node) |- (2, -2.5) node[not port, anchor=in, scale=0.8] (not1) {};
-    \draw[thick, ->] (not1.out) -| ([yshift=-0.8cm]slave.west);
+    \draw[thick, ->] (not1.out) |- ([yshift=-0.8cm]slave.west);
 
     % Connection between Master and Slave
     \draw[thick, ->] ([yshift=0.8cm]master.east) -- ([yshift=0.8cm]slave.west) node[midway, above] {$Y$};
@@ -21487,6 +21770,7 @@ In this configuration, the Master latch is enabled when the clock is HIGH, and t
     \node[left, font=\scriptsize, text=black!70] at ([yshift=-0.8cm]slave.east) {$\overline{Q}$};
 \end{circuitikz}
 \end{center}
+
 
 \vspace{1em}
 \textbf{\large 2. Principle of Operation}
@@ -22416,7 +22700,7 @@ To build this, we feed the output of the combinational logic $J\overline{Q_n} + 
 
     % CLK
     \draw[thick] (6, -1.0) -- (6.3, -1.2) -- (6, -1.4);
-    \draw[thick] (0, 0) node[left, font=\bfseries] {CLK} |- (6, -1.2);
+    \draw[thick] (5, -1.2) node[left, font=\bfseries] {CLK} |- (6, -1.2);
     
     % Gates
     \node[and port] (and1) at (3, 2.0) {};
@@ -22451,6 +22735,7 @@ To build this, we feed the output of the combinational logic $J\overline{Q_n} + 
     \draw[thick, -latex] (9, -0.5) -- (9.5, -0.5) node[right, font=\bfseries] {$\overline{Q}$};
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -23836,9 +24121,9 @@ The logic diagram is implemented using two T flip-flops. To maintain a clean and
     \draw (andB.in 1) node[left] {$A'$};
     \draw (andB.in 2) node[left] {$x$};
     
-    \draw (xorB.out) -- (orB.in 1);
-    \draw (andB.out) -- (orB.in 2);
-    \draw (orB.out) -- (7, 0.5);
+    \draw (xorB.out) -| (orB.in 1);
+    \draw (andB.out) -| (orB.in 2);
+    \draw (orB.out) -| (7, 0.5);
 
     % -----------------------------------------
     % Global Clock Routing
@@ -23932,10 +24217,7 @@ The schematic below presents the complete structural architecture of the serial 
 
 \begin{center}
 \begin{circuitikz}[thick]
-    \ctikzset{
-        logic ports=ieee,
-        logic ports origin=center
-    }
+
 
     % ==========================
     % D Flip-Flop
@@ -29515,9 +29797,9 @@ Using the hazard-free equation $Y = G D + y G' + y D$ and setting $Q = Y$, the c
     
     % Output OR gate
     \node[or port, number inputs=3] (or1) at (3, 1.5) {};
-    \draw (and1.out) -- (or1.in 1);
-    \draw (and2.out) -- (or1.in 2);
-    \draw (and3.out) -- (or1.in 3);
+    \draw (and1.out) -| (or1.in 1);
+    \draw (and2.out) -| (or1.in 2);
+    \draw (and3.out) -| (or1.in 3);
     
     % Output node
     \draw (or1.out) -- ++(1,0) node[right] {$Y \ (Q)$};
@@ -29525,7 +29807,7 @@ Using the hazard-free equation $Y = G D + y G' + y D$ and setting $Q = Y$, the c
 \end{center}
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{Part 2: Analysis of the Asynchronous Sequential Circuit}
@@ -29693,7 +29975,7 @@ The added redundant term $yD$ ensures that the transition between $G=1, D=1$ and
 \end{center}
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{Part 2: Analysis of the Asynchronous Sequential Circuit}
@@ -29840,9 +30122,9 @@ The added redundant term $yD$ ensures that the transition between the stable sta
     
     % Output OR gate
     \node[or port, number inputs=3] (or1) at (3, 1.5) {};
-    \draw (and1.out) -- (or1.in 1);
-    \draw (and2.out) -- (or1.in 2);
-    \draw (and3.out) -- (or1.in 3);
+    \draw (and1.out) -| (or1.in 1);
+    \draw (and2.out) -| (or1.in 2);
+    \draw (and3.out) -| (or1.in 3);
     
     % Output node
     \draw (or1.out) -- ++(1,0) node[right] {$Y \ (Q)$};
@@ -29850,7 +30132,7 @@ The added redundant term $yD$ ensures that the transition between the stable sta
 \end{center}
 
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{Part 2: Static-1 Hazard}
@@ -29991,6 +30273,7 @@ In asynchronous design, we must eliminate static hazards to prevent transient fa
 The added redundant term $yD$ ensures that the transition between $G=1, D=1$ and $G=0, D=1$ does not cause a momentary logic-0 glitch.
 
 \subsubsection*{Step 3: Logic Circuit Diagram}
+
 \begin{center}
 \begin{circuitikz}[label distance=2mm, scale=1, transform shape]
     % Gate 1: GD
@@ -30010,17 +30293,18 @@ The added redundant term $yD$ ensures that the transition between $G=1, D=1$ and
     
     % Output OR gate
     \node[or port, number inputs=3] (or1) at (3, 1.5) {};
-    \draw (and1.out) -- (or1.in 1);
-    \draw (and2.out) -- (or1.in 2);
-    \draw (and3.out) -- (or1.in 3);
+    \draw (and1.out) -| (or1.in 1);
+    \draw (and2.out) -| (or1.in 2);
+    \draw (and3.out) -| (or1.in 3);
     
     % Output node
     \draw (or1.out) -- ++(1,0) node[right] {$Y \ (Q)$};
 \end{circuitikz}
 \end{center}
 
+
 \vspace{0.5cm}
-\hrule
+ 
 \vspace{0.5cm}
 
 \subsection*{Part 2: Design of a Serial Parity Generation Circuit}
@@ -31302,8 +31586,8 @@ Using standard logic gates, the final schematic is constructed below. For drawin
     \node[left] at (and5.in 2) {$x_2$};
     
     \node[or port] (or2) at (5, -2.25) {};
-    \draw (and4.out) |- (or2.in 1);
-    \draw (and5.out) |- (or2.in 2);
+    \draw (and4.out)--++(0.5,0) |- (or2.in 1);
+    \draw (and5.out) --++(0.5,0) |- (or2.in 2);
     \draw (or2.out) |- (FF2.pin 1); % S2 input
 
     % Logic for R2
@@ -31333,6 +31617,7 @@ Using standard logic gates, the final schematic is constructed below. For drawin
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -37074,7 +37359,7 @@ $Q_1(t)$ & $Q_0(t)$ & $J_1 = \overline{Q_0}$ & $K_1 = \overline{Q_0}$ & $Q_1(t+1
 The sequence is $3 \rightarrow 2 \rightarrow 1 \rightarrow 0 \rightarrow 3$. It is strictly a \textbf{Modulo-4 Down Counter}.
 
 \vspace{1.5em}
-\hrule height 0.8pt
+ 
 \vspace{1.5em}
 
 \textbf{4. Required Alteration for Upward Counting}

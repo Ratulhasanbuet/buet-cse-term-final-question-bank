@@ -18,7 +18,19 @@
 \usepackage{tikz}
 \usepackage{listings}
 \usepackage{makecell}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{colortbl}
+\usepackage{mathtools}
+\usepackage{caption}
+\usepackage{forest}
+\usepackage{tabularx}
 
+\usetikzlibrary{shadows}
+
+\usetikzlibrary{snakes}
+\usetikzlibrary{er}
+\usetikzlibrary{chains}
 \usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
 \usetikzlibrary{shapes.geometric, positioning}
 \usetikzlibrary{matrix, positioning, arrows.meta, calc}
@@ -26,8 +38,13 @@
 \usetikzlibrary{tikzmark, calc, arrows.meta}
 \usetikzlibrary{shapes.geometric, positioning, arrows.meta}
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 \usetikzlibrary{patterns}
+
+\usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
+\usetikzlibrary{decorations.pathreplacing}
+\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
+
 %% ── Colors ────────────────────────────────────────────────────────────
 \definecolor{pblue}{RGB}{13,71,161}
 \definecolor{dgray}{RGB}{66,66,66}
@@ -37,8 +54,8 @@
 \definecolor{cD}{RGB}{106,27,154}
 \definecolor{cE}{RGB}{230,81,0}
 \definecolor{cF}{RGB}{0,96,100}
-\definecolor{cG}{RGB}{136,14,79}
 \definecolor{cH}{RGB}{0,77,64}
+\definecolor{cG}{RGB}{136,14,79}
 \definecolor{cI}{RGB}{62,39,35}
 
 \definecolor{tableblue}{RGB}{201, 233, 245}
@@ -175,6 +192,7 @@
 \setlist[enumerate,1]{label=\textbf{Q\arabic*.},leftmargin=*,itemsep=14pt,parsep=2pt}
 \setlist[enumerate,2]{label=(\alph*),leftmargin=2em,itemsep=3pt}
 \setlist[enumerate,3]{label=(\roman*),leftmargin=2.5em,itemsep=2pt}
+
 
 \begin{document}
 
@@ -415,6 +433,7 @@
 \mk{8} \yr{CSE 215 | L-2/T-2 | 2020--21}
 
 
+
 \item Should a primary key have any semantic meaning? Explain your answer.
 \mk{6} \yr{CSE 303 | L-3/T-1 | 2014--15}
 
@@ -443,6 +462,10 @@
 
 \item Define weak entity set. Also give an example of a weak entity set.
 \mk{5} \yr{CSE 215 | L-2/T-2 | 2017--18}
+
+
+
+
 
 
 \item Show an example of specialization hierarchy in the context of ERD with disjoint and overlapping subtypes.
@@ -647,6 +670,7 @@ end date.
 \mk{20} \yr{CSE 215 | L-2/T-1 | 2022--23}
 
 
+
 \item Give an example of a Non-Binary Relationship. What issues arise for Non-Binary Relationships?
 \mk{5} \yr{CSE 215 | L-2/T-1 | 2022--23}
 
@@ -688,6 +712,7 @@ Construct a clean and concise E/R diagram for the BPL database. List your assump
     \item Convert the E/R diagram into a set of relational database schema. You should avoid keeping null values in attributes.
 \end{itemize}
 \mk{20} \yr{CSE 215 | L-2/T-2 | 2021--22}
+
 
 
 \item Convert the E/R diagram of Figure below into a relational database schema.
@@ -1448,6 +1473,7 @@ Write SQL statements for the following:
 \mk{18} \yr{CSE 215 | L-2/T-1 | 2024--25}
 
 
+
 \item Create a table in SQL from a real-life scenario where you need to apply all types of integrity constraints.
 \mk{10} \yr{CSE 215 | L-2/T-1 | 2024--25}
 
@@ -1587,7 +1613,7 @@ The relation contains a tuple $(u_1, u_2, t)$ every time a user $u_1$ discussed 
 \mk{24} \yr{CSE 215 | L-2/T-2 | 2020--21}
 
 
-\item You are in charge of managing the program committee for an important conference. The \textbf{conference database} stores information about papers submitted to the conference (table Paper), reviewers on the program committee (table Reviewer), and the assignment of reviewers to papers (table Reviews). Each reviewer on the program committee will have to review a set of papers. Each paper will be reviewed by a subset of reviewers. \hfill \textbf{(15)}
+\item You are in charge of managing the program committee for an important conference. The \textbf{conference database} stores information about papers submitted to the conference (table Paper), reviewers on the program committee (table Reviewer), and the assignment of reviewers to papers (table Reviews). Each reviewer on the program committee will have to review a set of papers. Each paper will be reviewed by a subset of reviewers.
 
 \vspace{0.2cm}
 \noindent Paper(\underline{pid}, title) \\
@@ -2148,6 +2174,7 @@ Write SQL statements to answer the following queries:
 \end{tabular}
 \end{center}
 \mk{9} \yr{CSE 215 | L-2/T-1 | 2024--25}
+
 
 
 \item Consider the following schema:
@@ -2974,6 +3001,7 @@ PROD\_PRICE & \$49.95 & \$3.45 & \$39.99 & \$49.95 & \$87.75\\
 \mk{20} \yr{CSE 215 | L-2/T-2 | 2021--22}
 
 
+
 \item What do you know about BCNF and 3NF? What is the major difference between them? Let $R$ be a schema that is not in BCNF and $\alpha \to \beta$ be the functional dependency that causes a violation of BCNF. How can $R$ be decomposed such that $R$ will be in BCNF?
 \mk{10} \yr{CSE 215 | L-2/T-2 | 2019--20}
 
@@ -3262,7 +3290,6 @@ CREATE TABLE STUDENT(
 There are three blocks 1, 2 and 3 and the size of each block is 4000 bytes. Show the storage of 5 sample records of the student relation in these blocks using fixed-length record structure. No record can overlap the block boundary.
 \mk{10} \yr{CSE 215 | L-2/T-2 | 2020--21}
 
-
  
 \item Show and explain the slotted-page structure by inserting two variable length records with size $S_1$ and $S_2$. The block size is 4000 bytes. Show the structure after deletion of the record of size $S_1$.
 \mk{15} \yr{CSE 215 | L-2/T-2 | 2020--21}
@@ -3421,6 +3448,7 @@ Show the finishing time and latency for each request using the elevator algorith
 \mk{10} \yr{CSE 303 | L-3/T-1 | 2016--17}
 
 
+
 \item Figure shows a fixed-length record file structure for a \texttt{Customer} relation with fields: record\#, CustomerID, Name, Street, City, Balance (records C0001--C0010). Show the file structure after deletion of records with customer IDs C004 and C007 for different file deletion methods. Compare the advantages and disadvantages among the different deletion methods.
 \medskip
 \begin{center}
@@ -3540,6 +3568,7 @@ Show the finishing time and latency for each request using the elevator algorith
 
 \item What are the different types of disk failures? How does a DBMS handle a disk crash?
 \mk{8} \yr{CSE 303 | L-3/T-1 | 2011--12}
+
 
 
 \item Find a RAID level 6 scheme with ten disks, such that it is possible to recover from the failure of any three disks simultaneously. You should use as many data disks as you can.
@@ -3973,6 +4002,7 @@ Draw the state of this B$^+$ tree after each of the following operations:
 
 \item For a degree-5 B$^+$ tree, what will be the height of the B$^+$ tree when the numbers from 1 to 100 are inserted sequentially? \textit{Hint:} A tree with $l$ leaves and internal nodes of degree $d$ has height approximately $\log_d l$.
 \mk{5} \yr{CSE 215 | L-2/T-1 | 2022--23}
+
 
 
 \item
@@ -4529,7 +4559,7 @@ Enroll (sid, course, section, term, grade) \\
 Class (course, section, term, instructor, room, time)
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.2cm}
 
 \begin{lstlisting}
@@ -4541,7 +4571,7 @@ AND C.instructor = 'Hinon' AND S.major = 'ML' ;
 \end{lstlisting}
 
 \vspace{0.2cm}
-\hrule
+ 
 \vspace{0.2cm}
 
 \textbf{Equivalence Rules (The notations carry usual meaning)}
@@ -4699,11 +4729,11 @@ WHERE starName IN (
 Prepare a concurrent schedule for the above two transactions and prove that the schedule is conflict serializable.
 \mk{15} \yr{CSE 215 | L-2/T-2 | 2018--19}
 
-  
 
 \item Briefly explain each of the ACID properties in DBMS.
 \mk{8} \yr{CSE 303 | L-3/T-1 | 2016--17}
 \variant{2017--18 / 2018--19: ``Explain the ACID properties of a transaction with an example. Why are these properties essential for the concurrent execution of transactions?''}
+
 
 
 \item What do you mean by the ACID properties of a DBMS? Give real-life examples (one for each property) showing the necessity of these properties.
@@ -5070,6 +5100,7 @@ Insert shared locks, exclusive locks, and unlock actions in appropriate places. 
 \mk{6} \yr{CSE 303 | L-3/T-1 | 2012--13}
 
 
+
 \item Draw the precedence graph of the following schedule. Is the schedule conflict serializable? If so, what are all the equivalent serial schedules?
 \[r_1(A);\ r_2(A);\ r_3(B);\ w_1(A);\ r_2(C);\ r_2(B);\ w_2(B);\ w_1(C)\]
 
@@ -5099,6 +5130,8 @@ Is the above schedule conflict serializable? If so, what are all the equivalent 
 
 \item A concurrent schedule of three transactions $T_1$, $T_2$ and $T_3$ is given in Figure 3. Show the steps to transform the above schedule into an equivalent conflict serial schedule.
 \mk{10} \yr{CSE 303 | L-3/T-1 | 2010--11}\textcolor{cG}{No Figure found in PDF }
+
+
 
 
 \item Explain with examples, the testing of serializability by using precedence graph. Show the cases of both conflict and non-conflict schedules.
@@ -5149,7 +5182,6 @@ Also explain how the lock manager processes a lock request using the structure.
 \end{enumerate}
   \mk{13} \yr{CSE 215 | L-2/T-1 | 2023--24}
 
-  
 
 \item Consider the following schedule of actions involving four transactions $T_1, T_2, T_3$ and $T_4$:
 \[r_1(A); r_2(B); w_1(C); r_3(D); w_3(B); w_2(C); w_4(A); w_1(D); w_1(B)\]
@@ -5232,7 +5264,6 @@ The recovery manager takes an action $\langle X, V\rangle$ meaning database elem
 \end{enumerate}
   \mk{9} \yr{CSE 215 | L-2/T-1 | 2022--23}
 
-  
 
 \item Suppose you are given the following sequence of log records representing the actions of a transaction $T$:
 \begin{center}
@@ -5375,7 +5406,6 @@ Describe the action of the recovery manager, including changes to both the disk 
 \end{enumerate}
   \mk{12} \yr{CSE 303 | L-3/T-1 | 2011--12}
 
-  
 
 \item Describe log-based recovery methodology. For the given transactions $\langle T_1, T_2, T_3 \rangle$, write the log records.
 
@@ -5533,6 +5563,7 @@ Write(A)     &             & B = B + 50\\
 
 \item Suppose BIIS has a large number of records in its Course Registration table, accumulated over the last 20 years. Explain how table partitioning can be done on this table, and what benefits and drawbacks it could offer.
 \mk{10} \yr{CSE 215 | L-2/T-2 | 2021--22}
+
 
 
 \end{enumerate}
