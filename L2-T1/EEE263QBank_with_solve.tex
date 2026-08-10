@@ -13724,7 +13724,7 @@ Graphically, $R_E > 0$ transforms the bias condition from a completely rigid ver
         % Upper Transistor Q2
         \draw (5, 4.8) node[npn] (Q2) {};
         \node[right=0.5cm] at (Q2.B) {$Q_2$};
-        \draw (B2) -- (Q2.B);
+        \draw (B2) -| (Q2.B);
         
         % Connection between Q1 and Q2
         \draw (Q1.C) -- (Q2.E);
@@ -21341,7 +21341,7 @@ $$I_D = 0.50\text{ mA}$$
         % M2 Gate, Drain, and Source Branches
         % ==========================================
         % Gate connection to M1 Drain
-        \draw (D1) -- (M2.G);
+        \draw (D1) -| (M2.G);
 
         % Drain connection (Direct to +5V)
         \draw (M2.D) -- (M2.D |- 0, 3);
@@ -21353,6 +21353,7 @@ $$I_D = 0.50\text{ mA}$$
 
     \end{circuitikz}
 \end{center}
+
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
@@ -25849,7 +25850,7 @@ node[left] {$v_2$};
     \coordinate (pos2_node) at ($(op2.+) + (-0.5,0)$);
     \draw (op2.+) -- (pos2_node);
     \node[circ] at (pos2_node) {};
-    \draw (in_node2) to[R, l=$500\,\Omega$] ++(-2.5,-2) node[ocirc] {} node[left] {$v_4$};
+    \draw (in_node2)--++(0,-0.6) to[R, l=$500\,\Omega$] ++(-2.5,0) node[ocirc] {} node[left] {$v_4$};
     \draw (pos2_node) -- ++(0,-0.8) node[ground] {};
     
     % ==========================================
@@ -25859,6 +25860,7 @@ node[left] {$v_2$};
     
 \end{circuitikz}
 \end{center}
+
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2018--19}
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
@@ -25867,78 +25869,81 @@ node[left] {$v_2$};
 The given circuit is a two-stage operational amplifier circuit. We assume ideal op-amps, which implies infinite input impedance (zero input current) and infinite open-loop gain (resulting in a virtual short between the inverting and non-inverting terminals). Let the output of the first op-amp be denoted as $v_x$.
 
 \begin{center}
-    \begin{circuitikz}[american, scale=1.1, thick]
-        % ==========================================
-        % First Op-Amp Stage
-        % ==========================================
-        \node[op amp] (op1) at (0,0) {};
-        
-        % Inverting Input (-) Node for Op-Amp 1
-        \coordinate (in_node1) at ($(op1.-) + (-0.5,0)$);
-        \draw (op1.-) -- (in_node1);
-        \node[circ] at (in_node1) {};
-        
-        % v1 Input Branch
-        \draw (in_node1) 
-        to[R, l_=$1\,\text{k}\Omega$] ++(-2.5,0) 
-        node[ocirc] {} 
-        node[left] {$v_1$};
+    
+\begin{circuitikz}[thick,american, scale=1.2, thick]
 
-        % v2 Input Branch
-        \draw (in_node1) -- ++(0,-1) 
-        to[R, l=$5\,\text{k}\Omega$] ++(-2.5,0) 
-        node[ocirc] {} 
-        node[left] {$v_2$};
-        
-        % Non-inverting Input (+) and Ground for Op-Amp 1
-        \coordinate (pos1_node) at ($(op1.+) + (-0.5,0)$);
-        \draw (op1.+) -- (pos1_node) -- ++(0,-0.8) node[ground] {};
-        
-        % Feedback Path for Op-Amp 1
-        \coordinate (out1) at (op1.out);
-        \coordinate (fb1_left) at ($(in_node1) + (0, 1.5)$);
-        \draw (in_node1) -- (fb1_left) to[R, l=$5\,\text{k}\Omega$] (fb1_left -| out1) -- (out1);
-        \node[circ] at (out1) {};
-        \node[above] at (out1) {$v_x$};
-        
-        % ==========================================
-        % Second Op-Amp Stage
-        % ==========================================
-        \node[op amp] (op2) at (6.5, -0.5) {}; 
-        
-        % Interstage Connection
-        \coordinate (in_node2) at ($(op2.-) + (-0.5,0)$);
-        \draw (out1) to[R, l=$1\,\text{k}\Omega$] (in_node2);
-        \draw (in_node2) -- (op2.-);
-        \node[circ] at (in_node2) {};
-        
-        % Inverting Input (-) vertical line to Feedback and v3
-        \coordinate (top_node2) at ($(in_node2) + (0, 1.5)$);
-        \draw (in_node2) -- (top_node2);
-        \node[circ] at (top_node2) {};
-        
-        % v3 Input Branch
-        \draw (top_node2) to[R, l=$500\,\Omega$] ++(-2.5,0) node[ocirc] {} node[left] {$v_3$};
-        
-        % Feedback Path for Op-Amp 2
-        \coordinate (out2) at (op2.out);
-        \draw (top_node2) to[R, l=$1\,\text{k}\Omega$] (top_node2 -| out2) -- (out2);
-        \node[circ] at (out2) {};
-        
-        % Non-inverting Input (+) for Op-Amp 2, v4, and Ground
-        \coordinate (pos2_node) at ($(op2.+) + (-0.5,0)$);
-        \draw (op2.+) -- (pos2_node);
-        \node[circ] at (pos2_node) {};
-        \draw (in_node2) to[R, l=$500\,\Omega$] ++(-2.5,-2) node[ocirc] {} node[left] {$v_4$};
-        \draw (pos2_node) -- ++(0,-0.8) node[ground] {};
-        
-        % ==========================================
-        % Output Terminal
-        % ==========================================
-        \draw (out2) -- ++(1.5,0) node[ocirc] {} node[right] {$v_o$};
-        
-    \end{circuitikz}
+    % ==========================================
+    % First Op-Amp Stage
+    % ==========================================
+    \node[op amp] (op1) at (0,0) {};
+    
+    % Inverting Input (-) Node for Op-Amp 1
+    \coordinate (in_node1) at ($(op1.-) + (-0.5,0)$);
+    \draw (op1.-) -- (in_node1);
+    \node[circ] at (in_node1) {};
+    
+% v1 Input Branch
+\draw (in_node1) 
+to[R, l_=$1\text{ k}\Omega$] ++(-2.5,0) 
+node[ocirc] {} 
+node[left] {$v_1$};
+
+% v2 Input Branch
+\draw (in_node1) -- ++(0,-0.5) 
+to[R, l=$5\text{ k}\Omega$] ++(-2.5,0) 
+node[ocirc] {} 
+node[left] {$v_2$};
+    
+    % Non-inverting Input (+) and Ground for Op-Amp 1
+    \coordinate (pos1_node) at ($(op1.+) + (-0.5,0)$);
+    \draw (op1.+) -- (pos1_node) -- ++(0,-0.8) node[ground] {};
+    
+    % Feedback Path for Op-Amp 1
+    \coordinate (out1) at (op1.out);
+    \coordinate (fb1_left) at ($(in_node1) + (0, 1.5)$);
+    \draw (in_node1) -- (fb1_left) to[R, l=$5\text{ k}\Omega$] (fb1_left -| out1) -- (out1);
+    \node[circ] at (out1) {};
+    
+    % ==========================================
+    % Second Op-Amp Stage
+    % Offset downwards so its '-' input perfectly aligns horizontally with out1
+    % ==========================================
+    \node[op amp] (op2) at (6.5, -0.5) {}; 
+    
+    % Interstage Connection
+    \coordinate (in_node2) at ($(op2.-) + (-0.5,0)$);
+    \draw (out1) to[R, l=$1\text{ k}\Omega$] (in_node2);
+    \draw (in_node2) -- (op2.-);
+    \node[circ] at (in_node2) {};
+    
+    % Inverting Input (-) vertical line to Feedback and v3
+    \coordinate (top_node2) at ($(in_node2) + (0, 1.5)$);
+    \draw (in_node2) -- (top_node2);
+    \node[circ] at (top_node2) {};
+    
+    % v3 Input Branch
+    \draw (top_node2) to[R, l=$500\,\Omega$] ++(-2.5,0) node[ocirc] {} node[left] {$v_3$};
+    
+    % Feedback Path for Op-Amp 2
+    \coordinate (out2) at (op2.out);
+    \draw (top_node2) to[R, l=$1\text{ k}\Omega$] (top_node2 -| out2) -- (out2);
+    \node[circ] at (out2) {};
+    
+    % Non-inverting Input (+) for Op-Amp 2, v4, and Ground
+    \coordinate (pos2_node) at ($(op2.+) + (-0.5,0)$);
+    \draw (op2.+) -- (pos2_node);
+    \node[circ] at (pos2_node) {};
+    \draw (in_node2)--++(0,-0.6) to[R, l=$500\,\Omega$] ++(-2.5,0) node[ocirc] {} node[left] {$v_4$};
+    \draw (pos2_node) -- ++(0,-0.8) node[ground] {};
+    
+    % ==========================================
+    % Output Terminal and Caption
+    % ==========================================
+    \draw (out2) -- ++(1.5,0) node[ocirc] {} node[right] {$v_o$};
+    
+\end{circuitikz}
 \end{center}
+
 
 \vspace{0.3cm}
 
@@ -39489,13 +39494,13 @@ The PDN consists of 3 parallel branches connected to ground, utilizing 7 NMOS tr
     \draw (0, -4.5) node[ground] {};
     
     % Labels
-    \node[left] at (p1a.G) {$\bar{X_1}$}; \node[right] at (p1b.G) {$X_4$};
-    \node[left] at (p2a.G) {$\bar{X_2}$}; \node[right] at (p2b.G) {$X_3$};
-    \node[left] at (p3a.G) {$X_1$};      \node[left] at (p3b.G) {$X_2$}; \node[right] at (p3c.G) {$\bar{X_4}$};
+    \node[left] at (p1a.G) {$\bar{X_1}$}; \node[left] at (p1b.G) {$X_4$};
+    \node[left] at (p2a.G) {$\bar{X_2}$}; \node[left] at (p2b.G) {$X_3$};
+    \node[left] at (p3a.G) {$X_1$};      \node[left] at (p3b.G) {$X_2$}; \node[left] at (p3c.G) {$\bar{X_4}$};
     
     \node[left] at (n1a.G) {$\bar{X_1}$}; \node[left] at (n1b.G) {$X_4$};
     \node[left] at (n2a.G) {$\bar{X_2}$}; \node[left] at (n2b.G) {$X_3$};
-    \node[right] at (n3a.G) {$X_1$};      \node[right] at (n3b.G) {$X_2$}; \node[right] at (n3c.G) {$\bar{X_4}$};
+    \node[left] at (n3a.G) {$X_1$};      \node[left] at (n3b.G) {$X_2$}; \node[left] at (n3c.G) {$\bar{X_4}$};
 \end{circuitikz}
 \end{center}
 
@@ -39568,7 +39573,7 @@ This implementation minimizes transistor count down to exactly 10 transistors (5
     
     % Output Node
     \draw (-1.5, 0.5) -- (1.5, 0.5);
-    \draw (0, 0.5) to[short, *-o] (3, 0.5) node[right] {\large $f_2$};
+    \draw (0, 0.5) --++(0,0.5)to[short, *-o] ++(3, 0) node[right] {\large $f_2$};
     
     % --- PDN (NMOS Network) ---
     % Branch 1: B and C in series
@@ -39599,13 +39604,14 @@ This implementation minimizes transistor count down to exactly 10 transistors (5
     \draw (0, -5.5) node[ground] {};
     
     % Labels
-    \node[left] at (pb.G) {$B$}; \node[right] at (pc.G) {$C$};
-    \node[left] at (pd.G) {$D$}; \node[right] at (pa2.G) {$A$}; \node[right] at (pb2.G) {$B$};
+    \node[left] at (pb.G) {$B$}; \node[left] at (pc.G) {$C$};
+    \node[left] at (pd.G) {$D$}; \node[left] at (pa2.G) {$A$}; \node[left] at (pb2.G) {$B$};
     
     \node[left] at (nb_pdn.G) {$B$}; \node[left] at (nc_pdn.G) {$C$};
-    \node[right] at (nd_pdn.G) {$D$}; \node[left] at (na_pdn.G) {$A$}; \node[right] at (nb2_pdn.G) {$B$};
+    \node[left] at (nd_pdn.G) {$D$}; \node[left] at (na_pdn.G) {$A$}; \node[left] at (nb2_pdn.G) {$B$};
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -41427,133 +41433,116 @@ To force $Q_{next} = 0$, we require $T = Q_{current}$. Therefore, a built-in syn
 \textbf{4. Circuit Implementation}
 
 \begin{center}
-\begin{circuitikz}[thick, scale=0.75, transform shape, font=\sffamily]
+\begin{circuitikz}[thick, scale=0.85, transform shape, font=\sffamily]
     
-    % Control Input M (\overline{UP}/DOWN)
-    \node[left] at (-1, 5) {\textbf{$\overline{UP}$/DOWN} ($M$)};
-    \draw (-1, 5) -- (2, 5) node[circ]{} |- (5.5, 0.22); % M to and1b.in 2 (y=0.22 approx)
-    \node[not port, scale=0.6] (inv) at (3, 5.5) {};
-    \draw (2, 5) |- (inv.in);
-    \draw (inv.out) -- (3.5, 5.5) |- (5.5, 3.78); % \overline{M} to and1a.in 1 (y=3.78 approx)
+    % ==========================================
+    % Global Power, Clock and Reset Rails
+    % ==========================================
+    \node[left] at (-2.5, 1.5) {\textbf{Logic 1 (+Vcc)}};
+    \draw (-2.5, 1.5) -- (0, 1.5);
     
-    % FF0 Stage
-    \draw (0, 0.5) rectangle (3, 3.5);
-    \node at (1.5, 2.5) {\textbf{FF0}};
-    \node at (1.5, 1.8) {T-Type};
-    \node[right] at (0, 2) {$T$};
-    \node[right] at (0, 1) {$CLK$};
-    \draw (0, 0.8) -- (0.3, 1) -- (0, 1.2); % Clock triangle
-    \node[left] at (3, 2.5) {$Q_0$};
-    \node[left] at (3, 1.5) {$\overline{Q}_0$};
-    \node[above] at (1.5, 0.5) {$\overline{SRST}$};
-    \draw (1.5, 0.5) circle (0.15) coordinate (rst0);
+    \node[left] at (-2.5, -2.5) {\textbf{Clock (CLK)}};
+    \draw (-2.5, -2.5) -- (20, -2.5);
     
-    \node[left] at (-1, 2) {\textbf{Logic 1 (+Vcc)}};
-    \draw (-1, 2) -- (0, 2);
+    \node[left] at (-2.5, -3.5) {\textbf{$\overline{\text{RESET}}$ (Sync)}};
+    \draw (-2.5, -3.5) -- (21, -3.5);
     
-    % Logic Gates Stage 1
-    \node[and port, scale=0.8] (and1a) at (5.5, 3.5) {};
-    \node[and port, scale=0.8] (and1b) at (5.5, 0.5) {};
-    \node[or port, scale=0.8] (or1) at (7.5, 2) {};
+    % ==========================================
+    % Flip-Flops and Output Routing
+    % ==========================================
+    \foreach \i/\lsb in {0/ (LSB), 1/, 2/, 3/ (MSB)} {
+        \pgfmathsetmacro{\X}{\i * 6.5}
+        
+        % Draw FF Box
+        \draw[fill=white] (\X, 0) rectangle ++(1.5, 2);
+        \node at (\X+0.75, 1.5) {\small\textbf{FF\i}};
+        \node[font=\scriptsize] at (\X+0.75, 1) {T-Type};
+        
+        % Inputs (T and CLK)
+        \node[right, font=\scriptsize] at (\X, 1.5) {$T$};
+        \node[right, font=\scriptsize] at (\X, 0.5) {$CLK$};
+        \draw (\X, 0.3) -- ++(0.2, 0.2) -- ++(-0.2, 0.2); % CLK Triangle
+        
+        % Outputs (Q and Q_bar)
+        \node[left] at (\X+1.5, 1.5) {$Q_\i$};
+        \node[left] at (\X+1.5, 0.5) {$\overline{Q}_\i$};
+        \coordinate (Q\i) at (\X+1.5, 1.5);
+        \coordinate (Qbar\i) at (\X+1.5, 0.5);
+        
+        % Reset Pin (Bottom)
+        \draw (\X+0.75, -0.1) circle (0.1);
+        \node[above, font=\tiny] at (\X+0.75, 0) {$\overline{SRST}$};
+        
+        % Top Outputs / LED Labels
+        \draw (Q\i) -- ++(0.5, 0) coordinate (Qsplit\i) -- ++(0, 3.5) node[above] {\textbf{$Q_\i$\lsb}};
+        \fill (Qsplit\i) circle (2pt);
+        
+        % Connect to Global CLK
+        \draw (\X, 0.5) -- ++(-0.4, 0) -- ++(0, -3) coordinate (clkdrop\i);
+        \fill (clkdrop\i) circle (2pt);
+        
+        % Connect to Global RST
+        \draw (\X+0.75, -0.2) -- ++(0, -3.3) coordinate (rstdrop\i);
+        \fill (rstdrop\i) circle (2pt);
+    }
     
-    \draw (3, 2.5) -- (3.5, 2.5) node[circ]{} -- (4.5, 2.5) |- (and1a.in 2);
-    \draw (3.5, 2.5) -- (3.5, 6) node[above]{\textbf{$Q_0$ (LSB)}};
-    \draw (3, 1.5) -- (4.5, 1.5) |- (and1b.in 1);
+    % ==========================================
+    % Logic Gates (Stages 0, 1, 2)
+    % ==========================================
+    \foreach \i in {0, 1, 2} {
+        \pgfmathsetmacro{\X}{\i * 6.5}
+        \pgfmathsetmacro{\NextX}{(\i + 1) * 6.5}
+        
+        % Place AND and OR gates
+        \node[and port, scale=0.8] (andU\i) at (\X+3.5, 3.5) {};
+        \node[and port, scale=0.8] (andD\i) at (\X+3.5, -1) {};
+        \node[or port, scale=0.8] (or\i) at (\X+5.8, 1.5) {};
+        
+        % Connect Q to AND_UP
+        \draw (Qsplit\i) |- (andU\i.in 2);
+        
+        % Connect Q_bar to AND_DOWN
+        \draw (Qbar\i) -- (\X+2, 0.5) coordinate (Qbarsplit\i) |- (andD\i.in 1);
+        \fill (Qbarsplit\i) circle (2pt);
+        
+        % Connect AND outputs to OR inputs
+        \draw (andU\i.out) -- (\X+4.5, 3.5) coordinate (andUout\i) |- (or\i.in 1);
+        \fill (andUout\i) circle (2pt);
+        
+        \draw (andD\i.out) -- (\X+4.5, -1) coordinate (andDout\i) |- (or\i.in 2);
+        \fill (andDout\i) circle (2pt);
+        
+        % Connect OR output to next FF T input
+        \draw (or\i.out) -- (\NextX, 1.5);
+    }
     
-    \draw (and1a.out) -- (6.5, 3.5) node[circ]{} |- (or1.in 1);
-    \draw (and1b.out) -- (6.5, 0.5) node[circ]{} |- (or1.in 2);
+    % ==========================================
+    % Control Input (M) & Cascading Logic
+    % ==========================================
+    % M (DOWN) Input aligned with AND_DOWN
+    \coordinate (Min) at (-2.5, -1.28 |- andD0.in 2); 
+    \node[left] at (Min) {\textbf{$\overline{\text{UP}}$/DOWN} ($M$)};
     
-    % FF1 Stage
-    \draw (9, 0.5) rectangle (12, 3.5);
-    \node at (10.5, 2.5) {\textbf{FF1}};
-    \node at (10.5, 1.8) {T-Type};
-    \node[right] at (9, 2) {$T$};
-    \node[right] at (9, 1) {$CLK$};
-    \draw (9, 0.8) -- (9.3, 1) -- (9, 1.2);
-    \node[left] at (12, 2.5) {$Q_1$};
-    \node[left] at (12, 1.5) {$\overline{Q}_1$};
-    \node[above] at (10.5, 0.5) {$\overline{SRST}$};
-    \draw (10.5, 0.5) circle (0.15);
+    % Wire M to the first AND_DOWN gate
+    \draw (Min) -- (-1.5, -1.28 |- andD0.in 2) coordinate (Msplit) -- (andD0.in 2);
+    \fill (Msplit) circle (2pt);
     
-    \draw (or1.out) -- (9, 2);
+    % NOT Gate for \overline{M} (UP) aligned with AND_UP
+    \node[not port, scale=0.6] (inv) at (-0.5, 3.5 |- andU0.in 1) {};
+    \draw (Msplit) |- (inv.in);
+    \draw (inv.out) -- (andU0.in 1);
+    \node[above left] at (inv.in) {\textbf{$\overline{M}$ (UP)}};
     
-    % Logic Gates Stage 2
-    \node[and port, scale=0.8] (and2a) at (14.5, 3.5) {};
-    \node[and port, scale=0.8] (and2b) at (14.5, 0.5) {};
-    \node[or port, scale=0.8] (or2) at (16.5, 2) {};
+    % Inter-stage Cascade Connections (Carry Chain)
+    \draw (andUout0) |- (andU1.in 1);
+    \draw (andDout0) |- (andD1.in 2);
     
-    \draw (6.5, 3.5) -- (6.5, 4.5) -- (13.5, 4.5) |- (and2a.in 1); % U0 line
-    \draw (12, 2.5) -- (12.5, 2.5) node[circ]{} -- (13.5, 2.5) |- (and2a.in 2);
-    \draw (12.5, 2.5) -- (12.5, 6) node[above]{\textbf{$Q_1$}};
+    \draw (andUout1) |- (andU2.in 1);
+    \draw (andDout1) |- (andD2.in 2);
     
-    \draw (6.5, 0.5) -- (6.5, -1.5) -- (13.5, -1.5) |- (and2b.in 2); % D0 line
-    \draw (12, 1.5) -- (13.5, 1.5) |- (and2b.in 1);
-    
-    \draw (and2a.out) -- (15.5, 3.5) node[circ]{} |- (or2.in 1);
-    \draw (and2b.out) -- (15.5, 0.5) node[circ]{} |- (or2.in 2);
-    
-    % FF2 Stage
-    \draw (18, 0.5) rectangle (21, 3.5);
-    \node at (19.5, 2.5) {\textbf{FF2}};
-    \node at (19.5, 1.8) {T-Type};
-    \node[right] at (18, 2) {$T$};
-    \node[right] at (18, 1) {$CLK$};
-    \draw (18, 0.8) -- (18.3, 1) -- (18, 1.2);
-    \node[left] at (21, 2.5) {$Q_2$};
-    \node[left] at (21, 1.5) {$\overline{Q}_2$};
-    \node[above] at (19.5, 0.5) {$\overline{SRST}$};
-    \draw (19.5, 0.5) circle (0.15);
-    
-    \draw (or2.out) -- (18, 2);
-    
-    % Logic Gates Stage 3
-    \node[and port, scale=0.8] (and3a) at (23.5, 3.5) {};
-    \node[and port, scale=0.8] (and3b) at (23.5, 0.5) {};
-    \node[or port, scale=0.8] (or3) at (25.5, 2) {};
-    
-    \draw (15.5, 3.5) -- (15.5, 4.5) -- (22.5, 4.5) |- (and3a.in 1); % U1 line
-    \draw (21, 2.5) -- (21.5, 2.5) node[circ]{} -- (22.5, 2.5) |- (and3a.in 2);
-    \draw (21.5, 2.5) -- (21.5, 6) node[above]{\textbf{$Q_2$}};
-    
-    \draw (15.5, 0.5) -- (15.5, -1.5) -- (22.5, -1.5) |- (and3b.in 2); % D1 line
-    \draw (21, 1.5) -- (22.5, 1.5) |- (and3b.in 1);
-    
-    \draw (and3a.out) |- (or3.in 1);
-    \draw (and3b.out) |- (or3.in 2);
-    
-    % FF3 Stage (MSB)
-    \draw (27, 0.5) rectangle (30, 3.5);
-    \node at (28.5, 2.5) {\textbf{FF3}};
-    \node at (28.5, 1.8) {T-Type};
-    \node[right] at (27, 2) {$T$};
-    \node[right] at (27, 1) {$CLK$};
-    \draw (27, 0.8) -- (27.3, 1) -- (27, 1.2);
-    \node[left] at (30, 2.5) {$Q_3$};
-    \node[left] at (30, 1.5) {$\overline{Q}_3$};
-    \node[above] at (28.5, 0.5) {$\overline{SRST}$};
-    \draw (28.5, 0.5) circle (0.15);
-    
-    \draw (or3.out) -- (27, 2);
-    \draw (30, 2.5) -- (31, 2.5) -- (31, 6) node[above]{\textbf{$Q_3$ (MSB)}};
-    
-    % Global Clock Routing
-    \node[left] at (-1, -3) {\textbf{Clock (CLK)}};
-    \draw (-1, -3) -- (28, -3);
-    \draw (0, -3) node[circ]{} -- (0, 0.5);
-    \draw (9, -3) node[circ]{} -- (9, 0.5);
-    \draw (18, -3) node[circ]{} -- (18, 0.5);
-    \draw (27, -3) node[circ]{} -- (27, 0.5);
-    
-    % Global Synchronous Reset Routing
-    \node[left] at (-1, -4) {\textbf{$\overline{\text{RESET}}$ (Sync)}};
-    \draw (-1, -4) -- (28.5, -4);
-    \draw (1.5, -4) node[circ]{} -- (1.5, 0.35);
-    \draw (10.5, -4) node[circ]{} -- (10.5, 0.35);
-    \draw (19.5, -4) node[circ]{} -- (19.5, 0.35);
-    \draw (28.5, -4) node[circ]{} -- (28.5, 0.35);
-
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 

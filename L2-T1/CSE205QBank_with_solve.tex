@@ -20173,10 +20173,11 @@ Applying the input condition $S = 1$ and $R = 1$ is universally restricted (ofte
     \draw (nor2.out) -- ++(1.5,0) node[right, font=\bfseries] {$\overline{Q}$};
     
     % Cross-Coupling Feedback Loops
-    \draw (nor1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0,-0.8) -- ++(-3,-0.4) -- (nor2.in 1);
-    \draw (nor2.out) ++(0.7,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0, 0.8) -- ++(-3.4, 0.4) -- (nor1.in 2);
+    \draw (nor1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0,-0.8) -- ++(-3,-0.4) |- (nor2.in 1);
+    \draw (nor2.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0, 0.8) -- ++(-3, 0.4) |- (nor1.in 2);
 \end{circuitikz}
 \end{center}
+
 
 \vspace{0.2cm}
 \textbf{2. Mathematical Proof of the Complementarity Violation}
@@ -20485,10 +20486,11 @@ For completeness, the logic diagram of the active-high NOR SR Latch correspondin
     \draw (nor2.out) -- ++(1.5,0) node[right, font=\bfseries] {$\overline{Q}$};
     
     % Cross-Coupling Feedback Loops
-    \draw (nor1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0,-0.8) -- ++(-3,-0.4) -- (nor2.in 1);
-    \draw (nor2.out) ++(0.7,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0, 0.8) -- ++(-3.4, 0.4) -- (nor1.in 2);
+    \draw (nor1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0,-0.8) -- ++(-3,-0.4) |- (nor2.in 1);
+    \draw (nor2.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} -- ++(0, 0.8) -- ++(-3, 0.4) |- (nor1.in 2);
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -20846,11 +20848,11 @@ The circuit consists of two 2-input NAND gates. The output of the top gate ($Q$)
     % Cross-Coupling Feedback Loops
     % Feedback from Q to bottom NAND
     \draw (nand1.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} 
-        -- ++(0,-0.8) -- ++(-3.0,-0.4) -- (nand2.in 1);
+        -- ++(0,-0.8) -- ++(-3.0,-0.4) |- (nand2.in 1);
         
     % Feedback from Q-bar to top NAND
-    \draw (nand2.out) ++(0.7,0) node[circle,fill,inner sep=1.2pt]{} 
-        -- ++(0, 0.8) -- ++(-3.4, 0.4) -- (nand1.in 2);
+    \draw (nand2.out) ++(0.5,0) node[circle,fill,inner sep=1.2pt]{} 
+        -- ++(0, 0.8) -- ++(-3.0, 0.4) |- (nand1.in 2);
 \end{circuitikz}
 \end{center}
 
@@ -29866,9 +29868,9 @@ To guarantee a clean, professional schematic without an unreadable web of crossi
     \node[left] at (y1and3.in 2) {$y_1$};
     
     \node[or port, number inputs=3] (y1or) at (3, 4.5) {};
-    \draw (y1and1.out) -- (y1or.in 1);
-    \draw (y1and2.out) -- (y1or.in 2);
-    \draw (y1and3.out) -- (y1or.in 3);
+    \draw (y1and1.out) -| (y1or.in 1);
+    \draw (y1and2.out) -| (y1or.in 2);
+    \draw (y1and3.out) -| (y1or.in 3);
     \draw (y1or.out) -- ++(1,0) node[right] {$Y_1$};
 
     % --- Y2 Circuit ---
@@ -29883,8 +29885,8 @@ To guarantee a clean, professional schematic without an unreadable web of crossi
     
     \node[or port, number inputs=3] (y2or) at (3, -0.75) {};
     \draw (y2or.in 1) -- ++(-0.5, 0) node[left] {$x_2$};
-    \draw (y2and1.out) -- (y2or.in 2);
-    \draw (y2and2.out) -- (y2or.in 3);
+    \draw (y2and1.out) |- (y2or.in 2);
+    \draw (y2and2.out) |- (y2or.in 3);
     \draw (y2or.out) -- ++(1,0) node[right] {$Y_2$};
 
     % --- Z Circuit ---
@@ -29965,9 +29967,9 @@ The added redundant term $yD$ ensures that the transition between $G=1, D=1$ and
     
     % Output OR gate
     \node[or port, number inputs=3] (or1) at (3, 1.5) {};
-    \draw (and1.out) -- (or1.in 1);
-    \draw (and2.out) -- (or1.in 2);
-    \draw (and3.out) -- (or1.in 3);
+    \draw (and1.out) -| (or1.in 1);
+    \draw (and2.out) -| (or1.in 2);
+    \draw (and3.out) -| (or1.in 3);
     
     % Output node
     \draw (or1.out) -- ++(1,0) node[right] {$Y \ (Q)$};
@@ -35421,7 +35423,6 @@ Notice that the product term $\mathbf{\overline{Q_2}Q_1}$ is shared between $T_2
 To maintain a pristine, cross-talk-free schematic, local input tags are used to route signals into the logic gates feeding the T inputs.
 
 \vspace{0.5cm}
-
 \begin{tikzpicture}[
     >=latex,
     thick,
@@ -35429,8 +35430,7 @@ To maintain a pristine, cross-talk-free schematic, local input tags are used to 
     scale=1,
     transform shape
 ]
-    % Set IEEE logic gates
-    \ctikzset{logic ports=ieee}
+
 
     % ====================================================
     % DRAW FLIP-FLOPS
@@ -35492,7 +35492,7 @@ To maintain a pristine, cross-talk-free schematic, local input tags are used to 
     \draw[thick] (A1_1.out) -- ++(0.6,0) |- (O1.in 1);
     
     % Direct Q0 input to OR input 2
-    \draw[thick] (O1.in 2) -- ++(-2.88,0) node[left, font=\scriptsize] {$Q_0$};
+    \draw[thick] (O1.in 2) -- ++(0,-1) node[left, font=\scriptsize] {$Q_0$};
     
     % Input labels for A1_1
     \draw[thick] (A1_1.in 1) -- ++(-0.6,0) node[left, font=\scriptsize] {$\overline{Q}_2$};
@@ -35510,7 +35510,7 @@ To maintain a pristine, cross-talk-free schematic, local input tags are used to 
     \draw[thick] (A0_1.out) -- ++(0.6,0) |- (O0.in 2);
     
     % Direct Q0-bar input to OR input 1
-    \draw[thick] (O0.in 1) -- ++(-2.88,0) node[left, font=\scriptsize] {$\overline{Q}_0$};
+    \draw[thick] (O0.in 1) -- ++(0,1) node[right, font=\scriptsize] {$\overline{Q}_0$};
     
     % Input labels for A0_1
     \draw[thick] (A0_1.in 1) -- ++(-0.6,0) node[left, font=\scriptsize] {$\overline{Q}_2$};
@@ -38181,8 +38181,8 @@ Below is the complete architectural schematic of the 4-bit universal shift regis
         
         % Route to J
         \coordinate (j_drop) at (\posx - 0.9, 1.8);
-        \fill (j_drop) circle (2pt);
-        \draw[->, line width=1.2pt] (j_drop) -- ($(ff\i.west) + (0, 0.6)$);
+        \fill (j_drop)++(-0.4,0) circle (2pt);
+        \draw[->, line width=1.2pt] (j_drop)++(-0.4,0) |- ($(ff\i.west) + (0, 0.6)$);
 
         % ---------- FF Outputs ----------
         \draw[->, line width=1.2pt] ($(ff\i.east) + (0, 0.6)$) -- ++(0.6, 0) node[right, font=\small] {$Q_\i$};
@@ -38324,7 +38324,7 @@ B(t_4) &= A(t_0) = [a_3, a_2, a_1, a_0]
 The schematic structure below maps the register blocks, the recirculation lines, and the clock-gating hardware configuration required to automate the copy sequence.
 
 \begin{center}
-\begin{tikzpicture}[scale=0.95, transform shape, >=latex]
+\begin{tikzpicture}[scale=0.95, transform shape, >=latex, y=1.3cm, x=1.3cm]
 
   % Core Component Styles
   \tikzset{
@@ -38375,8 +38375,8 @@ The schematic structure below maps the register blocks, the recirculation lines,
   \draw[->, line width=1.2pt, blue] (ctrl.east) -- ++(1.2, 0) coordinate (clk_split) node[above, midway, font=\scriptsize] {Gated CLK};
   
   % Route Gated Clock to both Registers
-  \draw[->, line width=1.2pt, blue] (clk_split) |- ($(regA.south west)!0.2!(regA.south east)$);
-  \draw[->, line width=1.2pt, blue] (clk_split) |- ($(regB.south west)!0.2!(regB.south east)$);
+  \draw[->, line width=1.2pt, blue] (clk_split) -| ($(regA.south west)!0.2!(regA.south east)$);
+  \draw[->, line width=1.2pt, blue] (clk_split) --++( 0, -2.5) -| ($(regB.south west)!0.2!(regB.south east)$);
   \fill (clk_split) circle (2.5pt);
 
   % Dynamic edge trigger markers inside the registers
@@ -38385,6 +38385,7 @@ The schematic structure below maps the register blocks, the recirculation lines,
 
 \end{tikzpicture}
 \end{center}
+
 
 \end{tcolorbox}
 

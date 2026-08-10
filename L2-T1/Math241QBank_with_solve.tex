@@ -192,9 +192,7 @@
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cE}{$\triangleright$}}]
     \item \hyperref[sec:S5]{\textbf{S2.} Complex Calculus}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cE}{$\cdot$}}]
-        \item \hyperref[sub:s5-geometry]{Geometry of Complex Numbers}
-        \item \hyperref[sub:s5-roots]{Roots of Complex Numbers}
-        \item \hyperref[sub:s5-complexnums]{Complex Numbers: Argument \& Polar Form}
+        \item \hyperref[sub:s5-geometry]{Roots \& Geometry of Complex Numbers}
         \item \hyperref[sub:s5-limcont]{Limits and Continuity}
         \item \hyperref[sub:s5-analytic]{Analytic Functions \& Cauchy-Riemann Equations}
         \item \hyperref[sub:s5-elementary]{Elementary Complex Functions}
@@ -220,7 +218,8 @@
     \item \hyperref[sec:S6]{\textbf{S3.} Partial Differential Equations}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cF}{$\cdot$}}]
         \item \hyperref[sub:s6-formation]{Introduction \& Formation of PDE}
-        \item \hyperref[sub:s6-first]{First Order Linear \& Non-linear PDE}
+        \item \hyperref[sub:s6-first]{First Order Linear PDE}
+        \item \hyperref[sub:s6-firstNon]{First Order Non-linear PDE}
         \item \hyperref[sub:s6-second]{Second Order Linear PDE: Classifications}
         \item \hyperref[sub:s6-higher]{Higher Order PDE}
         \item \hyperref[sub:s6-separation]{Solution by Separation of Variables}
@@ -228,6 +227,7 @@
       \end{itemize}
   \end{itemize}
 \end{tcolorbox}
+
 
 \newpage
 
@@ -5229,125 +5229,10 @@ Summing up the values of the three terms:
 \markboth{S2. Complex Calculus}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Geometry of Complex Numbers}
+\subtopic{cE}{Roots \& Geometry of Complex Numbers}
 \label{sub:s5-geometry}
 
 \begin{enumerate}
-    
-\item Find the bilinear transformation which maps $z_{1}=-i$, $z_{2}=0$, $z_{3}=i$ into $w_{1}=-1$, $w_{2}=i$, $w_{3}=1$. Hence find the image of the $y$-axis.
-\mk{10} \yr{MATH 241 | L-2/T-1 | 2024--25}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
-
-\textbf{1. Finding the Bilinear Transformation}
-
-The bilinear (or Möbius) transformation that maps three distinct points $z_1, z_2, z_3$ in the $z$-plane to three distinct points $w_1, w_2, w_3$ in the $w$-plane preserves the cross-ratio. The implicit equation is given by:
-\begin{equation}
-    \frac{(w - w_1)(w_2 - w_3)}{(w - w_2)(w_1 - w_3)} = \frac{(z - z_1)(z_2 - z_3)}{(z - z_2)(z_1 - z_3)}
-\end{equation}
-
-Given the mappings:
-\begin{align*}
-    z_1 &= -i & w_1 &= -1 \\
-    z_2 &= 0 & w_2 &= i \\
-    z_3 &= i & w_3 &= 1
-\end{align*}
-
-Substitute these values into the cross-ratio formula:
-\begin{align*}
-    \frac{(w - (-1))(i - 1)}{(w - i)(-1 - 1)} &= \frac{(z - (-i))(0 - i)}{(z - 0)(-i - i)} \\[1em]
-    \frac{(w + 1)(i - 1)}{-2(w - i)} &= \frac{(z + i)(-i)}{z(-2i)}
-\end{align*}
-
-Simplify the right-hand side:
-\begin{equation*}
-    \frac{(w + 1)(i - 1)}{-2(w - i)} = \frac{z + i}{2z}
-\end{equation*}
-
-Multiply both sides by $-2$:
-\begin{equation*}
-    \frac{(w + 1)(i - 1)}{w - i} = \frac{-(z + i)}{z}
-\end{equation*}
-
-Cross-multiply to solve for $w$:
-\begin{align*}
-    z(i - 1)(w + 1) &= -(w - i)(z + i) \\
-    wz(i - 1) + z(i - 1) &= - (wz + wi - iz - i^2) \\
-    wzi - wz + zi - z &= -wz - wi + iz - 1
-\end{align*}
-
-Bring all terms involving $w$ to the left side and the rest to the right side:
-\begin{align*}
-    wzi - wz + wz + wi &= -iz + iz + z - 1 \\
-    wzi + wi &= z - 1 \\
-    w(zi + i) &= z - 1 \\
-    wi(z + 1) &= z - 1
-\end{align*}
-
-Divide by $i(z+1)$ to isolate $w$:
-\begin{equation*}
-    w = \frac{z - 1}{i(z + 1)} = -i \left( \frac{z - 1}{z + 1} \right)
-\end{equation*}
-\begin{equation*}
-    \boxed{w = \frac{-iz + i}{z + 1}}
-\end{equation*}
-
-\vspace{0.5cm}
-\textbf{2. Finding the Image of the $y$-axis}
-
-The $y$-axis in the $z$-plane is the imaginary axis, which consists of all points where $\text{Re}(z) = 0$, or $z = iy$ for $y \in \mathbb{R}$.
-
-\textit{Method 1: Using properties of bilinear transformations}\\
-A bilinear transformation maps circles and lines in the $z$-plane to circles and lines in the $w$-plane. The $y$-axis is a line passing through $z_1 = -i$, $z_2 = 0$, and $z_3 = i$. Their respective images are $w_1 = -1$, $w_2 = i$, and $w_3 = 1$. The unique circle passing through $-1, i$, and $1$ in the $w$-plane is the unit circle, $|w| = 1$. Therefore, the image of the $y$-axis is the unit circle.
-
-\textit{Method 2: Analytical verification}\\
-Let $z = iy$. Substitute this into the transformation:
-\begin{equation*}
-    w = -i \left( \frac{iy - 1}{iy + 1} \right)
-\end{equation*}
-Calculate the magnitude of $w$:
-\begin{equation*}
-    |w| = |-i| \cdot \left| \frac{-1 + iy}{1 + iy} \right| = 1 \cdot \frac{\sqrt{(-1)^2 + y^2}}{\sqrt{1^2 + y^2}} = \frac{\sqrt{1 + y^2}}{\sqrt{1 + y^2}} = 1
-\end{equation*}
-Thus, for any point on the $y$-axis, its image satisfies $|w| = 1$.
-
-\begin{equation*}
-    \boxed{\text{The image of the } y\text{-axis is the unit circle } |w| = 1 \text{ in the } w\text{-plane.}}
-\end{equation*}
-
-\vspace{0.5cm}
-\begin{center}
-\begin{tikzpicture}[scale=1.3, every node/.style={scale=0.9}]
-    % Z-plane
-    \draw[->, thick] (-1.5,0) -- (1.5,0) node[right] {$\text{Re}(z)$};
-    \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}(z)$};
-    \draw[very thick, blue, <->] (0,-1.5) -- (0,1.5) node[pos=0.15, right] {$y$-axis};
-    
-    \filldraw[red] (0,-1) circle (1.5pt) node[right] {$z_1 = -i$};
-    \filldraw[red] (0,0) circle (1.5pt) node[anchor=north west] {$z_2 = 0$};
-    \filldraw[red] (0,1) circle (1.5pt) node[right] {$z_3 = i$};
-    \node at (0,-2.3) {\textbf{(a) $z$-plane}};
-
-    % Mapping arrow
-    \draw[->, thick, shorten >= 5pt, shorten <= 5pt] (1.8,0) -- (3.5,0) node[midway, above] {$w = \frac{-iz+i}{z+1}$};
-
-    % W-plane
-    \begin{scope}[xshift=5.3cm]
-        \draw[->, thick] (-1.8,0) -- (1.8,0) node[right] {$\text{Re}(w)$};
-        \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}(w)$};
-        
-        \draw[very thick, blue] (0,0) circle (1);
-        \node[blue] at (1.1,1.1) {$|w|=1$};
-        
-        \filldraw[red] (-1,0) circle (1.5pt) node[above left] {$w_1 = -1$};
-        \filldraw[red] (0,1) circle (1.5pt) node[above right] {$w_2 = i$};
-        \filldraw[red] (1,0) circle (1.5pt) node[above right] {$w_3 = 1$};
-        \node at (0,-2.3) {\textbf{(b) $w$-plane}};
-    \end{scope}
-\end{tikzpicture}
-\end{center}
-
-\end{tcolorbox}
 
 \item Find all values of $z$ for which $z^{5}=-32$, and locate these values in the complex plane.
 \mk{10} \yr{MATH 241 | L-2/T-1 | 2023--24}
@@ -5650,6 +5535,75 @@ The diagram below illustrates how doubling the argument of $z$ crosses the branc
 
 \end{tcolorbox}
 
+
+\item Find all roots of $(-8)^{1/6}$ in rectangular coordinates, exhibit them as vertices of a regular polygon, and identify the principal root.
+\mk{10} \yr{MATH 245 | L-2/T-1 | 2021--22}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+To find all the 6th roots of $-8$, we first express the complex number $z = -8$ in its polar form. 
+The magnitude is $r = |-8| = 8$, and the argument is $\theta = \pi + 2k\pi$ for any integer $k$. Thus, we can write:
+\[ z = 8 e^{i(\pi + 2k\pi)} \]
+
+The 6th roots of $z$ are given by the formula:
+\[ w_k = z^{1/6} = 8^{1/6} e^{i \left( \frac{\pi + 2k\pi}{6} \right)} = \sqrt{2} e^{i \left( \frac{\pi}{6} + \frac{k\pi}{3} \right)} \]
+for $k = 0, 1, 2, 3, 4, 5$.
+
+Now, we evaluate each root and convert it to rectangular coordinates ($x + iy$) using Euler's formula $e^{i\theta} = \cos\theta + i\sin\theta$:
+
+\begin{align*}
+    k=0: \quad w_0 &= \sqrt{2} \left( \cos\frac{\pi}{6} + i\sin\frac{\pi}{6} \right) = \sqrt{2} \left( \frac{\sqrt{3}}{2} + i\frac{1}{2} \right) = \frac{\sqrt{6}}{2} + i\frac{\sqrt{2}}{2} \\
+    k=1: \quad w_1 &= \sqrt{2} \left( \cos\frac{\pi}{2} + i\sin\frac{\pi}{2} \right) = \sqrt{2} \left( 0 + i(1) \right) = i\sqrt{2} \\
+    k=2: \quad w_2 &= \sqrt{2} \left( \cos\frac{5\pi}{6} + i\sin\frac{5\pi}{6} \right) = \sqrt{2} \left( -\frac{\sqrt{3}}{2} + i\frac{1}{2} \right) = -\frac{\sqrt{6}}{2} + i\frac{\sqrt{2}}{2} \\
+    k=3: \quad w_3 &= \sqrt{2} \left( \cos\frac{7\pi}{6} + i\sin\frac{7\pi}{6} \right) = \sqrt{2} \left( -\frac{\sqrt{3}}{2} - i\frac{1}{2} \right) = -\frac{\sqrt{6}}{2} - i\frac{\sqrt{2}}{2} \\
+    k=4: \quad w_4 &= \sqrt{2} \left( \cos\frac{3\pi}{2} + i\sin\frac{3\pi}{2} \right) = \sqrt{2} \left( 0 - i(1) \right) = -i\sqrt{2} \\
+    k=5: \quad w_5 &= \sqrt{2} \left( \cos\frac{11\pi}{6} + i\sin\frac{11\pi}{6} \right) = \sqrt{2} \left( \frac{\sqrt{3}}{2} - i\frac{1}{2} \right) = \frac{\sqrt{6}}{2} - i\frac{\sqrt{2}}{2}
+\end{align*}
+
+\textbf{Principal Root:}
+The principal root of a complex number corresponds to the principal argument $\text{Arg}(z) \in (-\pi, \pi]$. For $z = -8$, the principal argument is $\pi$. The principal $n$-th root is obtained by evaluating $k=0$ using the principal argument. Therefore, the principal root is:
+\[ \boxed{w_0 = \frac{\sqrt{6}}{2} + i\frac{\sqrt{2}}{2}} \]
+
+\vspace{1em}
+\textbf{Geometric Representation:}
+The six roots lie on a circle of radius $R = \sqrt{2} \approx 1.414$ centered at the origin in the complex plane. Because they are evenly spaced by an angle of $\frac{2\pi}{6} = \frac{\pi}{3} = 60^\circ$, they form the vertices of a regular hexagon.
+
+\begin{center}
+\begin{tikzpicture}[scale=2]
+    % Draw axes
+    \draw[->, gray, thick] (-2, 0) -- (2, 0) node[right, text=black] {$\text{Re}$};
+    \draw[->, gray, thick] (0, -2) -- (0, 2) node[above, text=black] {$\text{Im}$};
+    
+    % Draw circle of radius sqrt(2)
+    \draw[dashed, gray] (0,0) circle (1.414);
+    
+    % Draw the regular hexagon
+    \draw[thick, blue] (30:1.414) \foreach \ang in {90, 150, 210, 270, 330} { -- (\ang:1.414) } -- cycle;
+    
+    % Plot and label the roots
+    \fill[red] (30:1.414) circle (1.5pt) node[above right, black] {$w_0$ (Principal)};
+    \fill[black] (90:1.414) circle (1.5pt) node[above right] {$w_1$};
+    \fill[black] (150:1.414) circle (1.5pt) node[above left] {$w_2$};
+    \fill[black] (210:1.414) circle (1.5pt) node[below left] {$w_3$};
+    \fill[black] (270:1.414) circle (1.5pt) node[below right] {$w_4$};
+    \fill[black] (330:1.414) circle (1.5pt) node[below right] {$w_5$};
+    
+    % Origin
+    \fill[black] (0,0) circle (1pt) node[below right] {$0$};
+    
+    % Tick marks for radius
+    \draw[thick] (1.414, 0.05) -- (1.414, -0.05) node[below] {$\sqrt{2}$};
+    \draw[thick] (-1.414, 0.05) -- (-1.414, -0.05) node[below left] {$-\sqrt{2}$};
+    \draw[thick] (0.05, 1.414) -- (-0.05, 1.414) node[above left] {$i\sqrt{2}$};
+    \draw[thick] (0.05, -1.414) -- (-0.05, -1.414) node[below left] {$-i\sqrt{2}$};
+
+    % Angle arc for principal root
+    \draw[->, red, thick] (0.4, 0) arc (0:30:0.4);
+    \node[red] at (15:0.6) {$\frac{\pi}{6}$};
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
 
 \item Identify $|z-3i|+|z+3i|=8$ and $|z-1|=|z+i|$ geometrically.
 \mk{15} \yr{MATH 245 | L-2/T-1 | 2021--22}
@@ -6190,7 +6144,7 @@ The roots lie symmetrically on a circle of radius $\sqrt{2}$ centered at the ori
 \end{tcolorbox}
 
 \item Describe mathematically and graphically the region represented by $z(\bar{z}+2)=3$.
-\mk{10} \yr{MATH 241 | L-2/T-1 | 2015--16}
+\mk{10} \yr{MATH 241 | L-2/T-1 | 2015--16, 2014--15}
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
@@ -6383,6 +6337,59 @@ The sketches below illustrate the right half-plane in the $z$-plane mapping to t
 
 \end{tikzpicture}
 \end{center}
+
+\end{tcolorbox}
+
+\item Find the principal argument of $z=(\sqrt{3}-i)^{6}$.
+\mk{10} \yr{MATH 241 | L-2/T-1 | 2014--15}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\subsection*{1. Polar Form of the Base}
+
+Let the complex number inside the parentheses be $w = \sqrt{3} - i$. We first convert $w$ into its polar form, $w = re^{i\theta}$.
+
+The modulus $r$ is:
+\[
+r = |w| = \sqrt{(\sqrt{3})^2 + (-1)^2} = \sqrt{3 + 1} = \sqrt{4} = 2
+\]
+
+To find the principal argument $\theta$ (where $-\pi < \theta \le \pi$), we observe that the real part ($\sqrt{3}$) is positive and the imaginary part ($-1$) is negative, placing the complex number in the fourth quadrant.
+\[
+\theta = \tan^{-1}\left(\frac{-1}{\sqrt{3}}\right) = -\frac{\pi}{6}
+\]
+Thus, the polar form of $w$ is:
+\[
+w = 2 \exp\left(-i\frac{\pi}{6}\right)
+\]
+
+\subsection*{2. Application of the Exponent}
+
+We are given $z = w^6$. Using De Moivre's Theorem or standard exponentiation properties for polar forms, we evaluate $z$:
+\begin{align*}
+z &= \left( 2 \exp\left(-i\frac{\pi}{6}\right) \right)^6 \\
+&= 2^6 \exp\left(6 \cdot -i\frac{\pi}{6}\right) \\
+&= 64 \exp(-i\pi)
+\end{align*}
+
+\subsection*{3. Finding the Principal Argument}
+
+The expression for $z$ gives an argument of $-\pi$. However, the standard convention for the principal argument $\text{Arg}(z)$ is restricted to the interval $(-\pi, \pi]$. 
+
+Since angles differing by integer multiples of $2\pi$ represent the same complex number, we find the equivalent angle in the principal range:
+\[
+-\pi + 2\pi = \pi
+\]
+
+We can also verify this by converting $z$ back to rectangular coordinates:
+\[
+z = 64(\cos(-\pi) + i\sin(-\pi)) = 64(-1 + 0i) = -64
+\]
+For any negative real number, the principal argument is $\pi$.
+
+\vspace{5pt}
+\textbf{Conclusion:} 
+The principal argument of $z = (\sqrt{3}-i)^{6}$ is $\mathbf{\pi}$.
 
 \end{tcolorbox}
 
@@ -6586,92 +6593,114 @@ Thus, the expression is proven. $\blacksquare$
 
 \end{tcolorbox}
 
-\item Describe mathematically and graphically the region represented by $z(\bar{z}+2)=3$.
-\mk{10} \yr{MATH 241 | L-2/T-1 | 2014--15}
+\item Find all the roots of $(-2\sqrt{3}-2i)^{1/4}$ in rectangular coordinates and exhibit the distinct roots graphically.
+\mk{10} \yr{MATH 241 | L-2/T-1 | 2013--14, 2011--12}
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\subsection*{1. Mathematical Description}
+\subsection*{1. Polar Form of the Complex Number}
 
-To find the region represented by the equation $z(\bar{z}+2)=3$, we express the complex number $z$ in its rectangular form, $z = x + iy$, where $x$ and $y$ are real numbers. The complex conjugate of $z$ is $\bar{z} = x - iy$.
+Let the given complex number be $w = -2\sqrt{3} - 2i$. To find its roots, we first convert $w$ into its polar form, $w = r(\cos \theta + i \sin \theta) = re^{i\theta}$.
 
-Substitute $z$ and $\bar{z}$ into the given equation:
-\begin{align*}
-    z(\bar{z} + 2) &= 3 \\
-    z\bar{z} + 2z &= 3
-\end{align*}
-
-Using the property $z\bar{z} = |z|^2 = x^2 + y^2$, we can rewrite the equation in terms of $x$ and $y$:
-\begin{align*}
-    (x^2 + y^2) + 2(x + iy) &= 3 \\
-    (x^2 + y^2 + 2x) + i(2y) &= 3 + i(0)
-\end{align*}
-
-For two complex numbers to be equal, their real parts and imaginary parts must respectively be equal. This gives us a system of two real equations:
-\begin{align}
-    x^2 + y^2 + 2x &= 3 \\
-    2y &= 0 
-\end{align}
-
-From Equation (2), it is immediately clear that:
+The modulus $r$ is given by:
 \[
-y = 0
-\]
-This indicates that any solution must lie strictly on the real axis. Substituting $y = 0$ into Equation (1) yields:
-\begin{align*}
-    x^2 + 0^2 + 2x &= 3 \\
-    x^2 + 2x - 3 &= 0
-\end{align*}
-
-Factoring the quadratic equation, we obtain:
-\[
-    (x + 3)(x - 1) = 0
-\]
-Which gives the roots:
-\[
-    x = -3 \quad \text{or} \quad x = 1
+r = |w| = \sqrt{(-2\sqrt{3})^2 + (-2)^2} = \sqrt{12 + 4} = \sqrt{16} = 4
 \]
 
-\textbf{Conclusion:} 
-Because the imaginary part $y$ is constrained to be precisely zero, the solution does not form a continuous 2D region or a curve (such as a circle). Instead, the "region" consists entirely of \textbf{two discrete points} on the real axis: 
-\begin{equation*}
-\boxed{z = 1 \quad \text{and} \quad z = -3}
-\end{equation*}
+The argument $\theta$ is found using the real and imaginary parts. Since both the real part ($-2\sqrt{3}$) and the imaginary part ($-2$) are negative, the complex number lies in the third quadrant.
+\[
+\tan \alpha = \left| \frac{-2}{-2\sqrt{3}} \right| = \frac{1}{\sqrt{3}} \implies \alpha = \frac{\pi}{6}
+\]
+Thus, the principal argument (or a valid positive argument) is:
+\[
+\theta = \pi + \frac{\pi}{6} = \frac{7\pi}{6}
+\]
+So, the polar form of $w$ is:
+\[
+w = 4 \exp\left(i \frac{7\pi}{6}\right)
+\]
 
-\subsection*{2. Graphical Representation}
+\subsection*{2. Finding the Fourth Roots}
 
-Graphically, this set of solutions is represented by plotting the two exact coordinates $(-3, 0)$ and $(1, 0)$ in the complex plane. 
+We are looking for $z = w^{1/4}$. According to De Moivre's formula for roots, the $n$-th roots of a complex number $re^{i\theta}$ are given by:
+\[
+z_k = r^{1/n} \exp\left( i \frac{\theta + 2k\pi}{n} \right) \quad \text{for } k = 0, 1, 2, \dots, n-1
+\]
+For $n = 4$:
+\[
+r^{1/4} = 4^{1/4} = (2^2)^{1/4} = 2^{1/2} = \sqrt{2}
+\]
+The angles for the roots are:
+\[
+\theta_k = \frac{\frac{7\pi}{6} + 2k\pi}{4} = \frac{7\pi}{24} + \frac{k\pi}{2} = \frac{7\pi + 12k\pi}{24}
+\]
+
+\subsection*{3. Roots in Rectangular Coordinates}
+
+We evaluate $z_k = x_k + iy_k = \sqrt{2}(\cos \theta_k + i \sin \theta_k)$ for $k = 0, 1, 2, 3$.
+
+\begin{align*}
+\textbf{For } k=0: \quad \theta_0 &= \frac{7\pi}{24} \\
+z_0 &= \sqrt{2}\cos\left(\frac{7\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{7\pi}{24}\right) \\
+&\approx 0.862 + 1.122i \\[8pt]
+\textbf{For } k=1: \quad \theta_1 &= \frac{19\pi}{24} \\
+z_1 &= \sqrt{2}\cos\left(\frac{19\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{19\pi}{24}\right) \\
+&\approx -1.122 + 0.862i \\[8pt]
+\textbf{For } k=2: \quad \theta_2 &= \frac{31\pi}{24} \\
+z_2 &= \sqrt{2}\cos\left(\frac{31\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{31\pi}{24}\right) \\
+&\approx -0.862 - 1.122i \quad (\text{Note: } z_2 = -z_0) \\[8pt]
+\textbf{For } k=3: \quad \theta_3 &= \frac{43\pi}{24} \\
+z_3 &= \sqrt{2}\cos\left(\frac{43\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{43\pi}{24}\right) \\
+&\approx 1.122 - 0.862i \quad (\text{Note: } z_3 = -z_1)
+\end{align*}
+
+\subsection*{4. Graphical Representation}
+
+The four roots lie on a circle of radius $\sqrt{2} \approx 1.414$ centered at the origin. They form the vertices of a square, separated by angular intervals of $\frac{\pi}{2}$ ($90^\circ$).
 
 \begin{center}
-\begin{tikzpicture}[scale=1.5, >=stealth]
-    % Grid lines
-    \draw[color=gray!30, thin, step=1.0] (-4.5,-2.5) grid (2.5,2.5);
+\begin{tikzpicture}[scale=2.5, >=stealth]
+    % Grid
+    \draw[color=gray!20, thin, step=0.5] (-1.7,-1.7) grid (1.7,1.7);
     
     % Axes
-    \draw[->, thick] (-4.5,0) -- (2.8,0) node[right] {$\text{Re}(z)$};
-    \draw[->, thick] (0,-2.5) -- (0,2.8) node[above] {$\text{Im}(z)$};
-    
-    % Tick marks for Re(z)
-    \foreach \x in {-4,-3,-2,-1,1,2} {
-        \draw (\x, 0.08) -- (\x, -0.08) node[below] {\footnotesize $\x$};
-    }
-    
-    % Tick marks for Im(z)
-    \foreach \y in {-2,-1,1,2} {
-        \draw (0.08, \y) -- (-0.08, \y) node[left] {\footnotesize $\y i$};
-    }
-    
-    % The two solution points
-    \filldraw[red] (1,0) circle (2.5pt) node[above right, text=black] {$z_1 = 1$};
-    \filldraw[red] (-3,0) circle (2.5pt) node[above left, text=black] {$z_2 = -3$};
-    
-    % Highlight that they are on the real axis
-    \draw[red, thick, dashed] (-3.5,0) -- (1.5,0);
+    \draw[->, thick] (-1.8,0) -- (1.8,0) node[right] {$\text{Re}$};
+    \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}$};
 
+    % Circle of radius sqrt(2)
+    \draw[dashed, blue!60, thick] (0,0) circle ({sqrt(2)});
+    
+    % Radius ticks
+    \draw ({sqrt(2)}, 0.05) -- ({sqrt(2)}, -0.05) node[below right, inner sep=1pt] {\footnotesize $\sqrt{2}$};
+    \draw (-{sqrt(2)}, 0.05) -- (-{sqrt(2)}, -0.05) node[below left, inner sep=1pt] {\footnotesize $-\sqrt{2}$};
+    \draw (0.05, {sqrt(2)}) -- (-0.05, {sqrt(2)}) node[above left, inner sep=1pt] {\footnotesize $\sqrt{2}i$};
+    
+    % Define angles
+    \def\angA{7*180/24}   % 52.5 degrees
+    \def\angB{19*180/24}  % 142.5 degrees
+    \def\angC{31*180/24}  % 232.5 degrees
+    \def\angD{43*180/24}  % 322.5 degrees
+
+    % Draw vectors
+    \draw[->, thick, teal] (0,0) -- (\angA:{sqrt(2)});
+    \draw[->, thick, teal] (0,0) -- (\angB:{sqrt(2)});
+    \draw[->, thick, teal] (0,0) -- (\angC:{sqrt(2)});
+    \draw[->, thick, teal] (0,0) -- (\angD:{sqrt(2)});
+
+    % Draw points
+    \filldraw[red] (\angA:{sqrt(2)}) circle (1pt) node[above right, text=black] {$z_0$};
+    \filldraw[red] (\angB:{sqrt(2)}) circle (1pt) node[above left, text=black] {$z_1$};
+    \filldraw[red] (\angC:{sqrt(2)}) circle (1pt) node[below left, text=black] {$z_2$};
+    \filldraw[red] (\angD:{sqrt(2)}) circle (1pt) node[below right, text=black] {$z_3$};
+
+    % Angle arcs
+    \draw[->, gray!80!black] (0.4,0) arc (0:\angA:0.4) node[midway, right, xshift=2pt, yshift=2pt] {\footnotesize $\frac{7\pi}{24}$};
+    
 \end{tikzpicture}
 \end{center}
 
 \end{tcolorbox}
+
 
 \item Prove that $|z_{1}+z_{2}|^{2}+|z_{1}-z_{2}|^{2}=2|z_{1}|^{2}+2|z_{2}|^{2}$ and hence deduce that
 \[
@@ -6884,6 +6913,155 @@ The angle of inclination of the major axis is $\tan^{-1}\left(\frac{-3 - 3}{2 - 
     % Add region label
     \node[blue!80!black, fill=white, inner sep=2pt, rounded corners] at (3.5, 3.5) {$|z-z_1| + |z-z_2| < 10$};
 
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
+\item Find all the roots of the following equations in rectangular coordinates, exhibit them geometrically, and point out which is the principal root:
+\begin{enumerate}
+  \item $z^{4}+2\sqrt{3}+2i=0$
+  \item $z^{3}+1-i=0$
+\end{enumerate}
+\mk{18} \yr{MATH 241 | L-2/T-1 | 2012--13}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\subsection*{Part (a): $z^{4}+2\sqrt{3}+2i=0$}
+
+\textbf{1. Algebraic Formulation}
+
+Rewrite the equation to isolate $z$:
+\[
+z^4 = -2\sqrt{3} - 2i
+\]
+Let $w = -2\sqrt{3} - 2i$. We first convert $w$ to its polar form, $w = r e^{i\Theta}$, where $\Theta$ is the principal argument ($-\pi < \Theta \le \pi$).
+The modulus $r$ is:
+\[
+r = \sqrt{(-2\sqrt{3})^2 + (-2)^2} = \sqrt{12 + 4} = 4
+\]
+Since $w$ is in the third quadrant, the principal argument is:
+\[
+\Theta = \tan^{-1}\left(\frac{-2}{-2\sqrt{3}}\right) - \pi = \frac{\pi}{6} - \pi = -\frac{5\pi}{6}
+\]
+Thus, $w = 4 \exp\left(-i\frac{5\pi}{6}\right)$.
+
+\textbf{2. Roots and the Principal Root}
+
+By De Moivre's theorem, the fourth roots of $w$ are given by:
+\[
+z_k = r^{1/4} \exp\left( i \frac{\Theta + 2k\pi}{4} \right) \quad \text{for } k = 0, 1, 2, 3
+\]
+The radius for all roots is $R = 4^{1/4} = \sqrt{2}$.
+The \textbf{principal root} corresponds to $k=0$ (using the principal argument $\Theta$):
+\begin{align*}
+\textbf{Principal Root } (k=0): \quad z_0 &= \sqrt{2} \exp\left(-i\frac{5\pi}{24}\right) \\
+&= \sqrt{2}\cos\left(-\frac{5\pi}{24}\right) + i\sqrt{2}\sin\left(-\frac{5\pi}{24}\right) \\
+&\approx 1.122 - 0.862i
+\end{align*}
+
+The remaining roots are separated by $\frac{2\pi}{4} = \frac{\pi}{2}$:
+\begin{align*}
+(k=1): \quad z_1 &= \sqrt{2} \exp\left(i\frac{7\pi}{24}\right) \approx 0.862 + 1.122i \\
+(k=2): \quad z_2 &= \sqrt{2} \exp\left(i\frac{19\pi}{24}\right) \approx -1.122 + 0.862i \\
+(k=3): \quad z_3 &= \sqrt{2} \exp\left(i\frac{31\pi}{24}\right) = \sqrt{2} \exp\left(-i\frac{17\pi}{24}\right) \approx -0.862 - 1.122i
+\end{align*}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5, >=stealth]
+    \draw[color=gray!20, thin, step=0.5] (-1.7,-1.7) grid (1.7,1.7);
+    \draw[->, thick] (-1.8,0) -- (1.8,0) node[right] {$\text{Re}$};
+    \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}$};
+
+    \draw[dashed, blue!60, thick] (0,0) circle ({sqrt(2)});
+    
+    \def\angA{-5*180/24}  
+    \def\angB{7*180/24}  
+    \def\angC{19*180/24} 
+    \def\angD{31*180/24} 
+
+    \draw[->, thick, teal] (0,0) -- (\angB:{sqrt(2)});
+    \draw[->, thick, teal] (0,0) -- (\angC:{sqrt(2)});
+    \draw[->, thick, teal] (0,0) -- (\angD:{sqrt(2)});
+    \draw[->, very thick, red] (0,0) -- (\angA:{sqrt(2)}); % Principal
+
+    \filldraw[black] (\angB:{sqrt(2)}) circle (1.5pt) node[above right] {$z_1$};
+    \filldraw[black] (\angC:{sqrt(2)}) circle (1.5pt) node[above left] {$z_2$};
+    \filldraw[black] (\angD:{sqrt(2)}) circle (1.5pt) node[below left] {$z_3$};
+    
+    \filldraw[red] (\angA:{sqrt(2)}) circle (2pt) node[below right] {\textbf{$z_0$ (Principal)}};
+    
+    \draw[->, red!80!black] (0.5,0) arc (0:\angA:0.5) node[midway, right] {\footnotesize $-\frac{5\pi}{24}$};
+\end{tikzpicture}
+\end{center}
+
+\vspace{15pt}
+\hrule
+\vspace{15pt}
+
+\subsection*{Part (b): $z^{3}+1-i=0$}
+
+\textbf{1. Algebraic Formulation}
+
+Isolate $z$:
+\[
+z^3 = -1 + i
+\]
+Let $w = -1 + i$. The modulus $r$ is:
+\[
+r = \sqrt{(-1)^2 + 1^2} = \sqrt{2}
+\]
+Since $w$ is in the second quadrant, the principal argument is:
+\[
+\Theta = \pi - \tan^{-1}\left(\frac{1}{1}\right) = \pi - \frac{\pi}{4} = \frac{3\pi}{4}
+\]
+Thus, $w = \sqrt{2} \exp\left(i\frac{3\pi}{4}\right)$.
+
+\textbf{2. Roots and the Principal Root}
+
+The cube roots are given by:
+\[
+z_k = (\sqrt{2})^{1/3} \exp\left( i \frac{\frac{3\pi}{4} + 2k\pi}{3} \right) = 2^{1/6} \exp\left( i \left( \frac{\pi}{4} + \frac{2k\pi}{3} \right) \right) \quad \text{for } k = 0, 1, 2
+\]
+The common radius is $R = 2^{1/6} \approx 1.122$.
+The \textbf{principal root} corresponds to $k=0$:
+\begin{align*}
+\textbf{Principal Root } (k=0): \quad z_0 &= 2^{1/6} \exp\left(i\frac{\pi}{4}\right) \\
+&= 2^{1/6}\left( \frac{\sqrt{2}}{2} + i\frac{\sqrt{2}}{2} \right) = 2^{1/6 - 1/2}(1+i) = 2^{-1/3}(1+i) \\
+&= \frac{1}{\sqrt[3]{2}} + i\frac{1}{\sqrt[3]{2}} \approx 0.794 + 0.794i
+\end{align*}
+
+The remaining roots are separated by $\frac{2\pi}{3}$:
+\begin{align*}
+(k=1): \quad z_1 &= 2^{1/6} \exp\left(i\frac{11\pi}{12}\right) \\
+&= 2^{1/6} \left( \frac{-\sqrt{6}-\sqrt{2}}{4} + i\frac{\sqrt{6}-\sqrt{2}}{4} \right) \approx -1.084 + 0.290i \\[6pt]
+(k=2): \quad z_2 &= 2^{1/6} \exp\left(i\frac{19\pi}{12}\right) = 2^{1/6} \exp\left(-i\frac{5\pi}{12}\right) \\
+&= 2^{1/6} \left( \frac{\sqrt{6}-\sqrt{2}}{4} - i\frac{\sqrt{6}+\sqrt{2}}{4} \right) \approx 0.290 - 1.084i
+\end{align*}
+
+\begin{center}
+\begin{tikzpicture}[scale=2, >=stealth]
+    \draw[color=gray!20, thin, step=0.5] (-1.5,-1.5) grid (1.5,1.5);
+    \draw[->, thick] (-1.6,0) -- (1.6,0) node[right] {$\text{Re}$};
+    \draw[->, thick] (0,-1.6) -- (0,1.6) node[above] {$\text{Im}$};
+
+    \def\rad{1.12246}
+    \draw[dashed, blue!60, thick] (0,0) circle (\rad);
+    
+    \def\angA{45}  
+    \def\angB{165}  
+    \def\angC{285} 
+
+    \draw[->, thick, teal] (0,0) -- (\angB:\rad);
+    \draw[->, thick, teal] (0,0) -- (\angC:\rad);
+    \draw[->, very thick, red] (0,0) -- (\angA:\rad); % Principal
+
+    \filldraw[black] (\angB:\rad) circle (1pt) node[above left] {$z_1$};
+    \filldraw[black] (\angC:\rad) circle (1pt) node[below right] {$z_2$};
+    
+    \filldraw[red] (\angA:\rad) circle (1.5pt) node[above right] {\textbf{$z_0$ (Principal)}};
+    
+    \draw[->, red!80!black] (0.4,0) arc (0:\angA:0.4) node[midway, right, xshift=2pt] {\footnotesize $\frac{\pi}{4}$};
 \end{tikzpicture}
 \end{center}
 
@@ -7141,403 +7319,8 @@ The two circles intersect exactly on the real axis at $z = 1$ and $z = -1$.
 
 \end{enumerate}
 
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Roots of Complex Numbers}
-\label{sub:s5-roots}
 
-\begin{enumerate}
 
-    
-\item Find all roots of $(-8)^{1/6}$ in rectangular coordinates, exhibit them as vertices of a regular polygon, and identify the principal root.
-\mk{10} \yr{MATH 245 | L-2/T-1 | 2021--22}
-
-    \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
-
-To find all the 6th roots of $-8$, we first express the complex number $z = -8$ in its polar form. 
-The magnitude is $r = |-8| = 8$, and the argument is $\theta = \pi + 2k\pi$ for any integer $k$. Thus, we can write:
-\[ z = 8 e^{i(\pi + 2k\pi)} \]
-
-The 6th roots of $z$ are given by the formula:
-\[ w_k = z^{1/6} = 8^{1/6} e^{i \left( \frac{\pi + 2k\pi}{6} \right)} = \sqrt{2} e^{i \left( \frac{\pi}{6} + \frac{k\pi}{3} \right)} \]
-for $k = 0, 1, 2, 3, 4, 5$.
-
-Now, we evaluate each root and convert it to rectangular coordinates ($x + iy$) using Euler's formula $e^{i\theta} = \cos\theta + i\sin\theta$:
-
-\begin{align*}
-    k=0: \quad w_0 &= \sqrt{2} \left( \cos\frac{\pi}{6} + i\sin\frac{\pi}{6} \right) = \sqrt{2} \left( \frac{\sqrt{3}}{2} + i\frac{1}{2} \right) = \frac{\sqrt{6}}{2} + i\frac{\sqrt{2}}{2} \\
-    k=1: \quad w_1 &= \sqrt{2} \left( \cos\frac{\pi}{2} + i\sin\frac{\pi}{2} \right) = \sqrt{2} \left( 0 + i(1) \right) = i\sqrt{2} \\
-    k=2: \quad w_2 &= \sqrt{2} \left( \cos\frac{5\pi}{6} + i\sin\frac{5\pi}{6} \right) = \sqrt{2} \left( -\frac{\sqrt{3}}{2} + i\frac{1}{2} \right) = -\frac{\sqrt{6}}{2} + i\frac{\sqrt{2}}{2} \\
-    k=3: \quad w_3 &= \sqrt{2} \left( \cos\frac{7\pi}{6} + i\sin\frac{7\pi}{6} \right) = \sqrt{2} \left( -\frac{\sqrt{3}}{2} - i\frac{1}{2} \right) = -\frac{\sqrt{6}}{2} - i\frac{\sqrt{2}}{2} \\
-    k=4: \quad w_4 &= \sqrt{2} \left( \cos\frac{3\pi}{2} + i\sin\frac{3\pi}{2} \right) = \sqrt{2} \left( 0 - i(1) \right) = -i\sqrt{2} \\
-    k=5: \quad w_5 &= \sqrt{2} \left( \cos\frac{11\pi}{6} + i\sin\frac{11\pi}{6} \right) = \sqrt{2} \left( \frac{\sqrt{3}}{2} - i\frac{1}{2} \right) = \frac{\sqrt{6}}{2} - i\frac{\sqrt{2}}{2}
-\end{align*}
-
-\textbf{Principal Root:}
-The principal root of a complex number corresponds to the principal argument $\text{Arg}(z) \in (-\pi, \pi]$. For $z = -8$, the principal argument is $\pi$. The principal $n$-th root is obtained by evaluating $k=0$ using the principal argument. Therefore, the principal root is:
-\[ \boxed{w_0 = \frac{\sqrt{6}}{2} + i\frac{\sqrt{2}}{2}} \]
-
-\vspace{1em}
-\textbf{Geometric Representation:}
-The six roots lie on a circle of radius $R = \sqrt{2} \approx 1.414$ centered at the origin in the complex plane. Because they are evenly spaced by an angle of $\frac{2\pi}{6} = \frac{\pi}{3} = 60^\circ$, they form the vertices of a regular hexagon.
-
-\begin{center}
-\begin{tikzpicture}[scale=2]
-    % Draw axes
-    \draw[->, gray, thick] (-2, 0) -- (2, 0) node[right, text=black] {$\text{Re}$};
-    \draw[->, gray, thick] (0, -2) -- (0, 2) node[above, text=black] {$\text{Im}$};
-    
-    % Draw circle of radius sqrt(2)
-    \draw[dashed, gray] (0,0) circle (1.414);
-    
-    % Draw the regular hexagon
-    \draw[thick, blue] (30:1.414) \foreach \ang in {90, 150, 210, 270, 330} { -- (\ang:1.414) } -- cycle;
-    
-    % Plot and label the roots
-    \fill[red] (30:1.414) circle (1.5pt) node[above right, black] {$w_0$ (Principal)};
-    \fill[black] (90:1.414) circle (1.5pt) node[above right] {$w_1$};
-    \fill[black] (150:1.414) circle (1.5pt) node[above left] {$w_2$};
-    \fill[black] (210:1.414) circle (1.5pt) node[below left] {$w_3$};
-    \fill[black] (270:1.414) circle (1.5pt) node[below right] {$w_4$};
-    \fill[black] (330:1.414) circle (1.5pt) node[below right] {$w_5$};
-    
-    % Origin
-    \fill[black] (0,0) circle (1pt) node[below right] {$0$};
-    
-    % Tick marks for radius
-    \draw[thick] (1.414, 0.05) -- (1.414, -0.05) node[below] {$\sqrt{2}$};
-    \draw[thick] (-1.414, 0.05) -- (-1.414, -0.05) node[below left] {$-\sqrt{2}$};
-    \draw[thick] (0.05, 1.414) -- (-0.05, 1.414) node[above left] {$i\sqrt{2}$};
-    \draw[thick] (0.05, -1.414) -- (-0.05, -1.414) node[below left] {$-i\sqrt{2}$};
-
-    % Angle arc for principal root
-    \draw[->, red, thick] (0.4, 0) arc (0:30:0.4);
-    \node[red] at (15:0.6) {$\frac{\pi}{6}$};
-\end{tikzpicture}
-\end{center}
-
-\end{tcolorbox}
-    
-\item Find all the roots of $(-2\sqrt{3}-2i)^{1/4}$ in rectangular coordinates and exhibit the distinct roots graphically.
-\mk{10} \yr{MATH 241 | L-2/T-1 | 2013--14, 2011--12}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
-
-\subsection*{1. Polar Form of the Complex Number}
-
-Let the given complex number be $w = -2\sqrt{3} - 2i$. To find its roots, we first convert $w$ into its polar form, $w = r(\cos \theta + i \sin \theta) = re^{i\theta}$.
-
-The modulus $r$ is given by:
-\[
-r = |w| = \sqrt{(-2\sqrt{3})^2 + (-2)^2} = \sqrt{12 + 4} = \sqrt{16} = 4
-\]
-
-The argument $\theta$ is found using the real and imaginary parts. Since both the real part ($-2\sqrt{3}$) and the imaginary part ($-2$) are negative, the complex number lies in the third quadrant.
-\[
-\tan \alpha = \left| \frac{-2}{-2\sqrt{3}} \right| = \frac{1}{\sqrt{3}} \implies \alpha = \frac{\pi}{6}
-\]
-Thus, the principal argument (or a valid positive argument) is:
-\[
-\theta = \pi + \frac{\pi}{6} = \frac{7\pi}{6}
-\]
-So, the polar form of $w$ is:
-\[
-w = 4 \exp\left(i \frac{7\pi}{6}\right)
-\]
-
-\subsection*{2. Finding the Fourth Roots}
-
-We are looking for $z = w^{1/4}$. According to De Moivre's formula for roots, the $n$-th roots of a complex number $re^{i\theta}$ are given by:
-\[
-z_k = r^{1/n} \exp\left( i \frac{\theta + 2k\pi}{n} \right) \quad \text{for } k = 0, 1, 2, \dots, n-1
-\]
-For $n = 4$:
-\[
-r^{1/4} = 4^{1/4} = (2^2)^{1/4} = 2^{1/2} = \sqrt{2}
-\]
-The angles for the roots are:
-\[
-\theta_k = \frac{\frac{7\pi}{6} + 2k\pi}{4} = \frac{7\pi}{24} + \frac{k\pi}{2} = \frac{7\pi + 12k\pi}{24}
-\]
-
-\subsection*{3. Roots in Rectangular Coordinates}
-
-We evaluate $z_k = x_k + iy_k = \sqrt{2}(\cos \theta_k + i \sin \theta_k)$ for $k = 0, 1, 2, 3$.
-
-\begin{align*}
-\textbf{For } k=0: \quad \theta_0 &= \frac{7\pi}{24} \\
-z_0 &= \sqrt{2}\cos\left(\frac{7\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{7\pi}{24}\right) \\
-&\approx 0.862 + 1.122i \\[8pt]
-\textbf{For } k=1: \quad \theta_1 &= \frac{19\pi}{24} \\
-z_1 &= \sqrt{2}\cos\left(\frac{19\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{19\pi}{24}\right) \\
-&\approx -1.122 + 0.862i \\[8pt]
-\textbf{For } k=2: \quad \theta_2 &= \frac{31\pi}{24} \\
-z_2 &= \sqrt{2}\cos\left(\frac{31\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{31\pi}{24}\right) \\
-&\approx -0.862 - 1.122i \quad (\text{Note: } z_2 = -z_0) \\[8pt]
-\textbf{For } k=3: \quad \theta_3 &= \frac{43\pi}{24} \\
-z_3 &= \sqrt{2}\cos\left(\frac{43\pi}{24}\right) + i\sqrt{2}\sin\left(\frac{43\pi}{24}\right) \\
-&\approx 1.122 - 0.862i \quad (\text{Note: } z_3 = -z_1)
-\end{align*}
-
-\subsection*{4. Graphical Representation}
-
-The four roots lie on a circle of radius $\sqrt{2} \approx 1.414$ centered at the origin. They form the vertices of a square, separated by angular intervals of $\frac{\pi}{2}$ ($90^\circ$).
-
-\begin{center}
-\begin{tikzpicture}[scale=2.5, >=stealth]
-    % Grid
-    \draw[color=gray!20, thin, step=0.5] (-1.7,-1.7) grid (1.7,1.7);
-    
-    % Axes
-    \draw[->, thick] (-1.8,0) -- (1.8,0) node[right] {$\text{Re}$};
-    \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}$};
-
-    % Circle of radius sqrt(2)
-    \draw[dashed, blue!60, thick] (0,0) circle ({sqrt(2)});
-    
-    % Radius ticks
-    \draw ({sqrt(2)}, 0.05) -- ({sqrt(2)}, -0.05) node[below right, inner sep=1pt] {\footnotesize $\sqrt{2}$};
-    \draw (-{sqrt(2)}, 0.05) -- (-{sqrt(2)}, -0.05) node[below left, inner sep=1pt] {\footnotesize $-\sqrt{2}$};
-    \draw (0.05, {sqrt(2)}) -- (-0.05, {sqrt(2)}) node[above left, inner sep=1pt] {\footnotesize $\sqrt{2}i$};
-    
-    % Define angles
-    \def\angA{7*180/24}   % 52.5 degrees
-    \def\angB{19*180/24}  % 142.5 degrees
-    \def\angC{31*180/24}  % 232.5 degrees
-    \def\angD{43*180/24}  % 322.5 degrees
-
-    % Draw vectors
-    \draw[->, thick, teal] (0,0) -- (\angA:{sqrt(2)});
-    \draw[->, thick, teal] (0,0) -- (\angB:{sqrt(2)});
-    \draw[->, thick, teal] (0,0) -- (\angC:{sqrt(2)});
-    \draw[->, thick, teal] (0,0) -- (\angD:{sqrt(2)});
-
-    % Draw points
-    \filldraw[red] (\angA:{sqrt(2)}) circle (1pt) node[above right, text=black] {$z_0$};
-    \filldraw[red] (\angB:{sqrt(2)}) circle (1pt) node[above left, text=black] {$z_1$};
-    \filldraw[red] (\angC:{sqrt(2)}) circle (1pt) node[below left, text=black] {$z_2$};
-    \filldraw[red] (\angD:{sqrt(2)}) circle (1pt) node[below right, text=black] {$z_3$};
-
-    % Angle arcs
-    \draw[->, gray!80!black] (0.4,0) arc (0:\angA:0.4) node[midway, right, xshift=2pt, yshift=2pt] {\footnotesize $\frac{7\pi}{24}$};
-    
-\end{tikzpicture}
-\end{center}
-
-\end{tcolorbox}
-
-\item Find all the roots of the following equations in rectangular coordinates, exhibit them geometrically, and point out which is the principal root:
-\begin{enumerate}
-  \item $z^{4}+2\sqrt{3}+2i=0$
-  \item $z^{3}+1-i=0$
-\end{enumerate}
-\mk{18} \yr{MATH 241 | L-2/T-1 | 2012--13}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
-
-\subsection*{Part (a): $z^{4}+2\sqrt{3}+2i=0$}
-
-\textbf{1. Algebraic Formulation}
-
-Rewrite the equation to isolate $z$:
-\[
-z^4 = -2\sqrt{3} - 2i
-\]
-Let $w = -2\sqrt{3} - 2i$. We first convert $w$ to its polar form, $w = r e^{i\Theta}$, where $\Theta$ is the principal argument ($-\pi < \Theta \le \pi$).
-The modulus $r$ is:
-\[
-r = \sqrt{(-2\sqrt{3})^2 + (-2)^2} = \sqrt{12 + 4} = 4
-\]
-Since $w$ is in the third quadrant, the principal argument is:
-\[
-\Theta = \tan^{-1}\left(\frac{-2}{-2\sqrt{3}}\right) - \pi = \frac{\pi}{6} - \pi = -\frac{5\pi}{6}
-\]
-Thus, $w = 4 \exp\left(-i\frac{5\pi}{6}\right)$.
-
-\textbf{2. Roots and the Principal Root}
-
-By De Moivre's theorem, the fourth roots of $w$ are given by:
-\[
-z_k = r^{1/4} \exp\left( i \frac{\Theta + 2k\pi}{4} \right) \quad \text{for } k = 0, 1, 2, 3
-\]
-The radius for all roots is $R = 4^{1/4} = \sqrt{2}$.
-The \textbf{principal root} corresponds to $k=0$ (using the principal argument $\Theta$):
-\begin{align*}
-\textbf{Principal Root } (k=0): \quad z_0 &= \sqrt{2} \exp\left(-i\frac{5\pi}{24}\right) \\
-&= \sqrt{2}\cos\left(-\frac{5\pi}{24}\right) + i\sqrt{2}\sin\left(-\frac{5\pi}{24}\right) \\
-&\approx 1.122 - 0.862i
-\end{align*}
-
-The remaining roots are separated by $\frac{2\pi}{4} = \frac{\pi}{2}$:
-\begin{align*}
-(k=1): \quad z_1 &= \sqrt{2} \exp\left(i\frac{7\pi}{24}\right) \approx 0.862 + 1.122i \\
-(k=2): \quad z_2 &= \sqrt{2} \exp\left(i\frac{19\pi}{24}\right) \approx -1.122 + 0.862i \\
-(k=3): \quad z_3 &= \sqrt{2} \exp\left(i\frac{31\pi}{24}\right) = \sqrt{2} \exp\left(-i\frac{17\pi}{24}\right) \approx -0.862 - 1.122i
-\end{align*}
-
-\begin{center}
-\begin{tikzpicture}[scale=1.5, >=stealth]
-    \draw[color=gray!20, thin, step=0.5] (-1.7,-1.7) grid (1.7,1.7);
-    \draw[->, thick] (-1.8,0) -- (1.8,0) node[right] {$\text{Re}$};
-    \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}$};
-
-    \draw[dashed, blue!60, thick] (0,0) circle ({sqrt(2)});
-    
-    \def\angA{-5*180/24}  
-    \def\angB{7*180/24}  
-    \def\angC{19*180/24} 
-    \def\angD{31*180/24} 
-
-    \draw[->, thick, teal] (0,0) -- (\angB:{sqrt(2)});
-    \draw[->, thick, teal] (0,0) -- (\angC:{sqrt(2)});
-    \draw[->, thick, teal] (0,0) -- (\angD:{sqrt(2)});
-    \draw[->, very thick, red] (0,0) -- (\angA:{sqrt(2)}); % Principal
-
-    \filldraw[black] (\angB:{sqrt(2)}) circle (1.5pt) node[above right] {$z_1$};
-    \filldraw[black] (\angC:{sqrt(2)}) circle (1.5pt) node[above left] {$z_2$};
-    \filldraw[black] (\angD:{sqrt(2)}) circle (1.5pt) node[below left] {$z_3$};
-    
-    \filldraw[red] (\angA:{sqrt(2)}) circle (2pt) node[below right] {\textbf{$z_0$ (Principal)}};
-    
-    \draw[->, red!80!black] (0.5,0) arc (0:\angA:0.5) node[midway, right] {\footnotesize $-\frac{5\pi}{24}$};
-\end{tikzpicture}
-\end{center}
-
-\vspace{15pt}
-\hrule
-\vspace{15pt}
-
-\subsection*{Part (b): $z^{3}+1-i=0$}
-
-\textbf{1. Algebraic Formulation}
-
-Isolate $z$:
-\[
-z^3 = -1 + i
-\]
-Let $w = -1 + i$. The modulus $r$ is:
-\[
-r = \sqrt{(-1)^2 + 1^2} = \sqrt{2}
-\]
-Since $w$ is in the second quadrant, the principal argument is:
-\[
-\Theta = \pi - \tan^{-1}\left(\frac{1}{1}\right) = \pi - \frac{\pi}{4} = \frac{3\pi}{4}
-\]
-Thus, $w = \sqrt{2} \exp\left(i\frac{3\pi}{4}\right)$.
-
-\textbf{2. Roots and the Principal Root}
-
-The cube roots are given by:
-\[
-z_k = (\sqrt{2})^{1/3} \exp\left( i \frac{\frac{3\pi}{4} + 2k\pi}{3} \right) = 2^{1/6} \exp\left( i \left( \frac{\pi}{4} + \frac{2k\pi}{3} \right) \right) \quad \text{for } k = 0, 1, 2
-\]
-The common radius is $R = 2^{1/6} \approx 1.122$.
-The \textbf{principal root} corresponds to $k=0$:
-\begin{align*}
-\textbf{Principal Root } (k=0): \quad z_0 &= 2^{1/6} \exp\left(i\frac{\pi}{4}\right) \\
-&= 2^{1/6}\left( \frac{\sqrt{2}}{2} + i\frac{\sqrt{2}}{2} \right) = 2^{1/6 - 1/2}(1+i) = 2^{-1/3}(1+i) \\
-&= \frac{1}{\sqrt[3]{2}} + i\frac{1}{\sqrt[3]{2}} \approx 0.794 + 0.794i
-\end{align*}
-
-The remaining roots are separated by $\frac{2\pi}{3}$:
-\begin{align*}
-(k=1): \quad z_1 &= 2^{1/6} \exp\left(i\frac{11\pi}{12}\right) \\
-&= 2^{1/6} \left( \frac{-\sqrt{6}-\sqrt{2}}{4} + i\frac{\sqrt{6}-\sqrt{2}}{4} \right) \approx -1.084 + 0.290i \\[6pt]
-(k=2): \quad z_2 &= 2^{1/6} \exp\left(i\frac{19\pi}{12}\right) = 2^{1/6} \exp\left(-i\frac{5\pi}{12}\right) \\
-&= 2^{1/6} \left( \frac{\sqrt{6}-\sqrt{2}}{4} - i\frac{\sqrt{6}+\sqrt{2}}{4} \right) \approx 0.290 - 1.084i
-\end{align*}
-
-\begin{center}
-\begin{tikzpicture}[scale=2, >=stealth]
-    \draw[color=gray!20, thin, step=0.5] (-1.5,-1.5) grid (1.5,1.5);
-    \draw[->, thick] (-1.6,0) -- (1.6,0) node[right] {$\text{Re}$};
-    \draw[->, thick] (0,-1.6) -- (0,1.6) node[above] {$\text{Im}$};
-
-    \def\rad{1.12246}
-    \draw[dashed, blue!60, thick] (0,0) circle (\rad);
-    
-    \def\angA{45}  
-    \def\angB{165}  
-    \def\angC{285} 
-
-    \draw[->, thick, teal] (0,0) -- (\angB:\rad);
-    \draw[->, thick, teal] (0,0) -- (\angC:\rad);
-    \draw[->, very thick, red] (0,0) -- (\angA:\rad); % Principal
-
-    \filldraw[black] (\angB:\rad) circle (1pt) node[above left] {$z_1$};
-    \filldraw[black] (\angC:\rad) circle (1pt) node[below right] {$z_2$};
-    
-    \filldraw[red] (\angA:\rad) circle (1.5pt) node[above right] {\textbf{$z_0$ (Principal)}};
-    
-    \draw[->, red!80!black] (0.4,0) arc (0:\angA:0.4) node[midway, right, xshift=2pt] {\footnotesize $\frac{\pi}{4}$};
-\end{tikzpicture}
-\end{center}
-
-\end{tcolorbox}
-
-
-
-\end{enumerate}
-
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Complex Numbers: Argument \& Polar Form}
-\label{sub:s5-complexnums}
-
-\begin{enumerate}
-    
-    \item Find the principal argument of $z=(\sqrt{3}-i)^{6}$.
-\mk{10} \yr{MATH 241 | L-2/T-1 | 2014--15}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
-
-\subsection*{1. Polar Form of the Base}
-
-Let the complex number inside the parentheses be $w = \sqrt{3} - i$. We first convert $w$ into its polar form, $w = re^{i\theta}$.
-
-The modulus $r$ is:
-\[
-r = |w| = \sqrt{(\sqrt{3})^2 + (-1)^2} = \sqrt{3 + 1} = \sqrt{4} = 2
-\]
-
-To find the principal argument $\theta$ (where $-\pi < \theta \le \pi$), we observe that the real part ($\sqrt{3}$) is positive and the imaginary part ($-1$) is negative, placing the complex number in the fourth quadrant.
-\[
-\theta = \tan^{-1}\left(\frac{-1}{\sqrt{3}}\right) = -\frac{\pi}{6}
-\]
-Thus, the polar form of $w$ is:
-\[
-w = 2 \exp\left(-i\frac{\pi}{6}\right)
-\]
-
-\subsection*{2. Application of the Exponent}
-
-We are given $z = w^6$. Using De Moivre's Theorem or standard exponentiation properties for polar forms, we evaluate $z$:
-\begin{align*}
-z &= \left( 2 \exp\left(-i\frac{\pi}{6}\right) \right)^6 \\
-&= 2^6 \exp\left(6 \cdot -i\frac{\pi}{6}\right) \\
-&= 64 \exp(-i\pi)
-\end{align*}
-
-\subsection*{3. Finding the Principal Argument}
-
-The expression for $z$ gives an argument of $-\pi$. However, the standard convention for the principal argument $\text{Arg}(z)$ is restricted to the interval $(-\pi, \pi]$. 
-
-Since angles differing by integer multiples of $2\pi$ represent the same complex number, we find the equivalent angle in the principal range:
-\[
--\pi + 2\pi = \pi
-\]
-
-We can also verify this by converting $z$ back to rectangular coordinates:
-\[
-z = 64(\cos(-\pi) + i\sin(-\pi)) = 64(-1 + 0i) = -64
-\]
-For any negative real number, the principal argument is $\pi$.
-
-\vspace{5pt}
-\textbf{Conclusion:} 
-The principal argument of $z = (\sqrt{3}-i)^{6}$ is $\mathbf{\pi}$.
-
-\end{tcolorbox}
-
-\end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Limits and Continuity of Complex Functions}
@@ -7880,38 +7663,63 @@ Since $v_{xx} + v_{yy} = 0$, $v(x,y)$ is a \textbf{harmonic function}.
 \hrule
 \vspace{10pt}
 
-\subsection*{2. Finding the Analytic Function $f(z)$}
-To find the analytic function $f(z) = u + iv$ expressed in terms of $z$, we can use the \textbf{Milne-Thomson method}.
+\subsection*{2. Finding the Harmonic Conjugate $u(x,y)$ and $f(z)$}
+To find the analytic function $f(z) = u + iv$, we first determine the real part $u(x,y)$ using the Cauchy-Riemann equations:
+\begin{equation}
+u_x = v_y \quad \text{and} \quad u_y = -v_x
+\end{equation}
 
-We know that the derivative of an analytic function can be written as:
-\[
-f'(z) = u_x + iv_x
-\]
-Using the Cauchy-Riemann equations ($u_x = v_y$), we can substitute $u_x$:
-\[
-f'(z) = v_y + iv_x
-\]
-Substitute the expressions for $v_y$ and $v_x$ derived above:
-\[
-f'(z) = \left( \frac{-2xy}{(x^2+y^2)^2} - \cosh x \sin y \right) + i \left( \frac{y^2-x^2}{(x^2+y^2)^2} + \sinh x \cos y \right)
-\]
-According to the Milne-Thomson method, we can obtain $f'(z)$ in terms of $z$ by substituting $x = z$ and $y = 0$:
+From the first equation, we substitute $v_y$:
+\begin{equation}
+u_x = \frac{-2xy}{(x^2+y^2)^2} - \cosh x \sin y
+\end{equation}
+Integrating $u_x$ with respect to $x$ (treating $y$ as a constant):
 \begin{align*}
-f'(z) &= \left( 0 - \cosh(z)\sin(0) \right) + i \left( \frac{0 - z^2}{z^4} + \sinh(z)\cos(0) \right) \\
-&= 0 + i \left( -\frac{1}{z^2} + \sinh z \right) \\
-f'(z) &= -i\frac{1}{z^2} + i\sinh z
+u(x,y) &= \int \left( \frac{-2xy}{(x^2+y^2)^2} - \cosh x \sin y \right) dx \\
+&= \frac{y}{x^2+y^2} - \sinh x \sin y + g(y)
+\end{align*}
+where $g(y)$ is an arbitrary function of $y$.
+
+Next, we differentiate this $u(x,y)$ with respect to $y$:
+\begin{align*}
+u_y &= \frac{\partial}{\partial y} \left( \frac{y}{x^2+y^2} - \sinh x \sin y + g(y) \right) \\
+&= \frac{1 \cdot (x^2+y^2) - y \cdot (2y)}{(x^2+y^2)^2} - \sinh x \cos y + g'(y) \\
+&= \frac{x^2 - y^2}{(x^2+y^2)^2} - \sinh x \cos y + g'(y)
 \end{align*}
 
-Now, we integrate $f'(z)$ with respect to $z$ to find $f(z)$:
-\begin{align*}
-f(z) &= \int \left( -i\frac{1}{z^2} + i\sinh z \right) dz \\
-&= i\left(\frac{1}{z}\right) + i\cosh z + C \\
-&= i\left(\cosh z + \frac{1}{z}\right) + C
-\end{align*}
-where $C$ is a constant of integration. Since $v(x,y)$ provides the exact imaginary part of $f(z)$, and verifying $\text{Im}\left[i\left(\cosh z + \frac{1}{z}\right)\right]$ gives exactly $v(x,y)$, the constant $C$ must be purely real. Let $C = c \in \mathbb{R}$.
+Using the second Cauchy-Riemann equation $u_y = -v_x$, we substitute $-v_x$:
+\[
+\frac{x^2 - y^2}{(x^2+y^2)^2} - \sinh x \cos y + g'(y) = - \left( \frac{y^2-x^2}{(x^2+y^2)^2} + \sinh x \cos y \right)
+\]
+\[
+\frac{x^2 - y^2}{(x^2+y^2)^2} - \sinh x \cos y + g'(y) = \frac{x^2 - y^2}{(x^2+y^2)^2} - \sinh x \cos y
+\]
+Comparing both sides, we get:
+\[
+g'(y) = 0 \implies g(y) = c
+\]
+where $c$ is a real constant. Thus, the real part is:
+\[
+\boxed{ u(x,y) = \frac{y}{x^2+y^2} - \sinh x \sin y + c }
+\]
 
+Now, we construct the analytic function $f(z) = u(x,y) + i v(x,y)$:
+\begin{align*}
+f(z) &= \left( \frac{y}{x^2+y^2} - \sinh x \sin y + c \right) + i \left( \frac{x}{x^2+y^2} + \cosh x \cos y \right) \\
+&= \frac{y + ix}{x^2+y^2} + i(\cosh x \cos y + i \sinh x \sin y) + c
+\end{align*}
+We now express the terms in $z = x+iy$ and $\bar{z} = x-iy$. 
+Observe that $x^2+y^2 = z\bar{z}$ and $y+ix = i(x-iy) = i\bar{z}$:
+\[
+\frac{y+ix}{x^2+y^2} = \frac{i\bar{z}}{z\bar{z}} = \frac{i}{z}
+\]
+Also, using the hyperbolic addition formula $\cosh z = \cosh(x+iy) = \cosh x \cos y + i \sinh x \sin y$:
+\[
+i(\cosh x \cos y + i \sinh x \sin y) = i\cosh z
+\]
+Substituting these back into the expression for $f(z)$, we obtain:
 \begin{equation*}
-\boxed{ f(z) = i\left(\cosh z + \frac{1}{z}\right) + c }
+\boxed{ f(z) = i\left( \frac{1}{z} + \cosh z \right) + c }
 \end{equation*}
 
 \end{tcolorbox}
@@ -8746,10 +8554,6 @@ The contour curves of the real part $u(x,y) = c_1$ and the imaginary part $v(x,y
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Evaluate the integral $\displaystyle\int\sqrt{1+\sqrt{1+z}}\,dz$ and state the conditions under which the result is valid.
-
-\vspace{1em}
-\textbf{Solution:}
 
 Let the integral be defined as:
 \begin{equation*}
@@ -8857,10 +8661,7 @@ Therefore, the result is mathematically valid for real values where $\mathbf{z \
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Test the differentiability of the function $f(z)=\dfrac{z^{4}}{64}$ in its natural domain.
 
-\vspace{1em}
-\textbf{Solution:}
 
 Let $z = x + iy$ be a complex variable. The natural domain of the polynomial function $f(z) = \dfrac{z^4}{64}$ is the entire complex plane, $\mathbb{C}$.
 
@@ -8947,9 +8748,7 @@ The function $f(z) = \dfrac{z^4}{64}$ is an \textbf{entire function}; it is diff
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Prove that $u(x,y)=\sinh x\sin y+\dfrac{y}{x^{2}+y^{2}}$ is harmonic. Find a harmonic conjugate of $u(x,y)$.
 
-\vspace{1em}
 \textbf{Part 1: Proving $u(x,y)$ is harmonic}
 
 A function $u(x,y)$ is harmonic if it satisfies Laplace's equation, $\nabla^2 u = u_{xx} + u_{yy} = 0$, in its domain. 
@@ -9063,10 +8862,7 @@ Comparing both sides, we find $h'(x) = 0$, which implies $h(x) = C$ for some rea
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Show that $|\cos z|^{2}=(\cos x)^{2}+(\sinh y)^{2}$ for all $z=x+iy$.
 
-\vspace{1em}
-\textbf{Solution:}
 
 Let $z$ be a complex number given by $z = x + iy$, where $x, y \in \mathbb{R}$. We want to evaluate the complex cosine function $\cos(z)$. 
 
@@ -9151,11 +8947,7 @@ Thus, we have successfully shown that:
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Determine which of the following functions $f(z)$ are entire and which are not. Find $f'(z)$ if entire: 
-(i) $f(z)=\dfrac{1}{1+|z-1|^{2}}$
-(ii) $f(z)=5^{(2^{z})}$
 
-\vspace{1em}
 \textbf{Solution for (i):} $f(z)=\dfrac{1}{1+|z-1|^{2}}$
 
 A function is entire if it is analytic (complex differentiable) everywhere in the complex plane $\mathbb{C}$. 
@@ -9246,9 +9038,7 @@ Let $w(z) = 2^z$. Its derivative is $w'(z) = 2^z \ln 2$. Substituting this into 
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Show that $u(x,y)=3x^{2}y+2x^{2}-y^{3}-2y^{2}$ is harmonic. Find $v(x,y)$ such that $f(z)=u+iv$ is analytic. Also express $f(z)$ as a function of $z$.
 
-\vspace{1em}
 \textbf{Part 1: Prove that $u(x,y)$ is harmonic}
 
 A function $u(x,y)$ is harmonic if it satisfies Laplace's equation, $\nabla^2 u = u_{xx} + u_{yy} = 0$, in its domain, and its second-order partial derivatives are continuous. 
@@ -9371,9 +9161,7 @@ Since $u(0,0) = 0$ and $v(0,0) = C$, the constant of integration $c$ must be pur
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Write down the Cauchy-Riemann equations in polar form. If $f(z)=u(r,\theta)+ iv(r,\theta)$ then test the differentiability of $f(z)=\sqrt{r}\,e^{i\theta/2}$ for $r>0$, $\alpha<\theta<\alpha+2\pi$, and hence show that $f'(z)=\dfrac{1}{2f(z)}$.
 
-\vspace{1em}
 \textbf{Part 1: Cauchy-Riemann Equations in Polar Form}
 
 Let $z = re^{i\theta}$, where $r > 0$ and $\theta$ is the principal or chosen argument. For a complex-valued function $f(z) = u(r,\theta) + iv(r,\theta)$ to be complex differentiable at a point, its real and imaginary parts must satisfy the polar Cauchy-Riemann equations:
@@ -9502,9 +9290,7 @@ Since we originally defined $f(z) = r^{1/2}e^{i\theta/2}$, we can substitute $f(
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Show that $u=e^{x}\cos y$ is a harmonic function. Find an analytic function $f(z)=u(x,y)+iv(x,y)$ and express $f(z)$ in terms of $z$.
 
-\vspace{1em}
 \textbf{Part 1: Prove that $u(x,y)$ is harmonic}
 
 A function $u(x,y)$ is harmonic if its second-order partial derivatives are continuous and it satisfies Laplace's equation, $\nabla^2 u = u_{xx} + u_{yy} = 0$.
@@ -9622,14 +9408,7 @@ where the partial derivatives are evaluated at $(r_{0},\theta_{0})$.
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Let $f(z)=u+iv$ be differentiable at a nonzero point $z_{0}=r_{0}e^{i\theta_{0}}$. Show that
-\[
-f'(z_{0})=e^{-i\theta_{0}}(u_{r}+iv_{r})=-\frac{i}{z_{0}}(u_{\theta}+iv_{\theta}),
-\]
-where $u_{r},v_{r},u_{\theta},v_{\theta}$ are evaluated at $(r_{0},\theta_{0})$.
 
-\vspace{1em}
-\textbf{Solution:}
 
 Because $f(z)$ is differentiable at the point $z_0 = r_0e^{i\theta_0}$, the derivative $f'(z_0)$ exists and its value is independent of the direction in which $\Delta z$ approaches $0$. We can evaluate the fundamental limit definition of the derivative along two specific, orthogonal paths: radially and angularly.
 
@@ -9729,9 +9508,7 @@ Since $f(z)$ is differentiable at $z_0$, the derivatives obtained from Equation 
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
 
-\textbf{Problem:} Prove that $u(x,y)=e^{x}(x\cos y - y\sin y)$ is harmonic. Hence find $v(x,y)$ such that $f(z)=u+iv$ is analytic. Also express $f(z)$ as a function of $z$.
 
-\vspace{1em}
 \textbf{Part 1: Prove that $u(x,y)$ is harmonic}
 
 A function $u(x,y)$ is harmonic if it satisfies Laplace's equation, $\nabla^2 u = u_{xx} + u_{yy} = 0$, and its second-order partial derivatives are continuous.
@@ -17283,6 +17060,121 @@ Therefore, the image is a circle in the $w$-plane with its center at $(-2, 0)$ a
 \begin{enumerate}
 \setcounter{enumi}{4}
 
+\item Find the bilinear transformation which maps $z_{1}=-i$, $z_{2}=0$, $z_{3}=i$ into $w_{1}=-1$, $w_{2}=i$, $w_{3}=1$. Hence find the image of the $y$-axis.
+\mk{10} \yr{MATH 241 | L-2/T-1 | 2024--25}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cE!4,colframe=cE,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cE]
+
+\textbf{1. Finding the Bilinear Transformation}
+
+The bilinear (or Möbius) transformation that maps three distinct points $z_1, z_2, z_3$ in the $z$-plane to three distinct points $w_1, w_2, w_3$ in the $w$-plane preserves the cross-ratio. The implicit equation is given by:
+\begin{equation}
+    \frac{(w - w_1)(w_2 - w_3)}{(w - w_2)(w_1 - w_3)} = \frac{(z - z_1)(z_2 - z_3)}{(z - z_2)(z_1 - z_3)}
+\end{equation}
+
+Given the mappings:
+\begin{align*}
+    z_1 &= -i & w_1 &= -1 \\
+    z_2 &= 0 & w_2 &= i \\
+    z_3 &= i & w_3 &= 1
+\end{align*}
+
+Substitute these values into the cross-ratio formula:
+\begin{align*}
+    \frac{(w - (-1))(i - 1)}{(w - i)(-1 - 1)} &= \frac{(z - (-i))(0 - i)}{(z - 0)(-i - i)} \\[1em]
+    \frac{(w + 1)(i - 1)}{-2(w - i)} &= \frac{(z + i)(-i)}{z(-2i)}
+\end{align*}
+
+Simplify the right-hand side:
+\begin{equation*}
+    \frac{(w + 1)(i - 1)}{-2(w - i)} = \frac{z + i}{2z}
+\end{equation*}
+
+Multiply both sides by $-2$:
+\begin{equation*}
+    \frac{(w + 1)(i - 1)}{w - i} = \frac{-(z + i)}{z}
+\end{equation*}
+
+Cross-multiply to solve for $w$:
+\begin{align*}
+    z(i - 1)(w + 1) &= -(w - i)(z + i) \\
+    wz(i - 1) + z(i - 1) &= - (wz + wi - iz - i^2) \\
+    wzi - wz + zi - z &= -wz - wi + iz - 1
+\end{align*}
+
+Bring all terms involving $w$ to the left side and the rest to the right side:
+\begin{align*}
+    wzi - wz + wz + wi &= -iz + iz + z - 1 \\
+    wzi + wi &= z - 1 \\
+    w(zi + i) &= z - 1 \\
+    wi(z + 1) &= z - 1
+\end{align*}
+
+Divide by $i(z+1)$ to isolate $w$:
+\begin{equation*}
+    w = \frac{z - 1}{i(z + 1)} = -i \left( \frac{z - 1}{z + 1} \right)
+\end{equation*}
+\begin{equation*}
+    \boxed{w = \frac{-iz + i}{z + 1}}
+\end{equation*}
+
+\vspace{0.5cm}
+\textbf{2. Finding the Image of the $y$-axis}
+
+The $y$-axis in the $z$-plane is the imaginary axis, which consists of all points where $\text{Re}(z) = 0$, or $z = iy$ for $y \in \mathbb{R}$.
+
+\textit{Method 1: Using properties of bilinear transformations}\\
+A bilinear transformation maps circles and lines in the $z$-plane to circles and lines in the $w$-plane. The $y$-axis is a line passing through $z_1 = -i$, $z_2 = 0$, and $z_3 = i$. Their respective images are $w_1 = -1$, $w_2 = i$, and $w_3 = 1$. The unique circle passing through $-1, i$, and $1$ in the $w$-plane is the unit circle, $|w| = 1$. Therefore, the image of the $y$-axis is the unit circle.
+
+\textit{Method 2: Analytical verification}\\
+Let $z = iy$. Substitute this into the transformation:
+\begin{equation*}
+    w = -i \left( \frac{iy - 1}{iy + 1} \right)
+\end{equation*}
+Calculate the magnitude of $w$:
+\begin{equation*}
+    |w| = |-i| \cdot \left| \frac{-1 + iy}{1 + iy} \right| = 1 \cdot \frac{\sqrt{(-1)^2 + y^2}}{\sqrt{1^2 + y^2}} = \frac{\sqrt{1 + y^2}}{\sqrt{1 + y^2}} = 1
+\end{equation*}
+Thus, for any point on the $y$-axis, its image satisfies $|w| = 1$.
+
+\begin{equation*}
+    \boxed{\text{The image of the } y\text{-axis is the unit circle } |w| = 1 \text{ in the } w\text{-plane.}}
+\end{equation*}
+
+\vspace{0.5cm}
+\begin{center}
+\begin{tikzpicture}[scale=1.3, every node/.style={scale=0.9}]
+    % Z-plane
+    \draw[->, thick] (-1.5,0) -- (1.5,0) node[right] {$\text{Re}(z)$};
+    \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}(z)$};
+    \draw[very thick, blue, <->] (0,-1.5) -- (0,1.5) node[pos=0.15, right] {$y$-axis};
+    
+    \filldraw[red] (0,-1) circle (1.5pt) node[right] {$z_1 = -i$};
+    \filldraw[red] (0,0) circle (1.5pt) node[anchor=north west] {$z_2 = 0$};
+    \filldraw[red] (0,1) circle (1.5pt) node[right] {$z_3 = i$};
+    \node at (0,-2.3) {\textbf{(a) $z$-plane}};
+
+    % Mapping arrow
+    \draw[->, thick, shorten >= 5pt, shorten <= 5pt] (1.8,0) -- (3.5,0) node[midway, above] {$w = \frac{-iz+i}{z+1}$};
+
+    % W-plane
+    \begin{scope}[xshift=5.3cm]
+        \draw[->, thick] (-1.8,0) -- (1.8,0) node[right] {$\text{Re}(w)$};
+        \draw[->, thick] (0,-1.8) -- (0,1.8) node[above] {$\text{Im}(w)$};
+        
+        \draw[very thick, blue] (0,0) circle (1);
+        \node[blue] at (1.1,1.1) {$|w|=1$};
+        
+        \filldraw[red] (-1,0) circle (1.5pt) node[above left] {$w_1 = -1$};
+        \filldraw[red] (0,1) circle (1.5pt) node[above right] {$w_2 = i$};
+        \filldraw[red] (1,0) circle (1.5pt) node[above right] {$w_3 = 1$};
+        \node at (0,-2.3) {\textbf{(b) $w$-plane}};
+    \end{scope}
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
 \item Find the bilinear transformation which maps the points $z_{1}=-i,\,z_{2}=0,\,z_{3}=i$ to $w_{1}=-1,\,w_{2}=i,\,w_{3}=1$ respectively.
 \mk{12} \yr{MATH 245 | L-2/T-1 | 2016--17}
 
@@ -17772,7 +17664,7 @@ This represents a non-linear partial differential equation of the first order (s
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{First Order Linear \& Non-linear PDE}
+\subtopic{cF}{First Order PDE}
 \label{sub:s6-first}
 
 \begin{enumerate}
@@ -17981,105 +17873,7 @@ The obtained surface $x = 3 - y^2 - z^2 - z$ is an elliptic paraboloid. The give
 
 \end{tcolorbox}
 
-\item Find a complete integral of $px+qy=pq$ using Charpit's method.
-\mk{12} \yr{MATH 143 | L-1/T-2 | 2012--13} \yr{MATH 241 | L-2/T-1 | 2024--25}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given partial differential equation can be written as:
-\begin{equation}
-f(x, y, z, p, q) = px + qy - pq = 0 \label{eq:pde_mainn}
-\end{equation}
-
-\subsubsection*{Step 1: Write Charpit's auxiliary equations}
-Charpit's auxiliary equations for a first-order non-linear PDE $f(x,y,z,p,q)=0$ are given by:
-\[ \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-pf_p - qf_q} = \frac{dp}{f_x + pf_z} = \frac{dq}{f_y + qf_z} \]
-First, we find the partial derivatives of $f$:
-\begin{align*}
-    f_x &= p, & f_y &= q, & f_z &= 0 \\
-    f_p &= x - q, & f_q &= y - p
-\end{align*}
-Substituting these into the auxiliary equations yields:
-\begin{equation}
-\frac{dx}{q - x} = \frac{dy}{p - y} = \frac{dz}{p(q-x) + q(p-y)} = \frac{dp}{p} = \frac{dq}{q} \label{eq:charpit_aux}
-\end{equation}
-
-\subsubsection*{Step 2: Solve for $p$ and $q$}
-Taking the last two fractions from equation \eqref{eq:charpit_aux}:
-\[ \frac{dp}{p} = \frac{dq}{q} \]
-Integrating both sides, we get:
-\[ \ln p = \ln q + \ln a \implies p = aq \]
-where $a$ is an arbitrary constant.
-
-Substitute $p = aq$ into the original PDE \eqref{eq:pde_mainn}:
-\begin{align*}
-    (aq)x + qy - (aq)q &= 0 \\
-    q(ax + y - aq) &= 0
-\end{align*}
-Assuming $q \neq 0$ for a non-trivial solution, we divide by $q$:
-\[ ax + y - aq = 0 \implies aq = ax + y \implies q = x + \frac{y}{a} \]
-Now, substitute the expression for $q$ back into $p = aq$:
-\[ p = a \left( x + \frac{y}{a} \right) = ax + y \]
-
-\subsubsection*{Step 3: Find the complete integral}
-The complete integral is obtained by integrating the total differential relation:
-\[ dz = p \, dx + q \, dy \]
-Substitute the values of $p$ and $q$ we just found:
-\[ dz = (ax + y) \, dx + \left(x + \frac{y}{a}\right) \, dy \]
-Expanding and rearranging the terms to group exact differentials:
-\begin{align*}
-    dz &= ax \, dx + y \, dx + x \, dy + \frac{y}{a} \, dy \\
-    dz &= ax \, dx + (y \, dx + x \, dy) + \frac{1}{a} y \, dy \\
-    dz &= ax \, dx + d(xy) + \frac{1}{a} y \, dy
-\end{align*}
-Integrating both sides yields:
-\[ z = \frac{ax^2}{2} + xy + \frac{y^2}{2a} + b \]
-where $b$ is the second arbitrary integration constant. We can factor the right hand side for a more compact representation:
-\[ z = \frac{1}{2a} \left( a^2x^2 + 2axy + y^2 \right) + b = \frac{1}{2a} (ax+y)^2 + b \]
-
-\vspace{0.5em}
-\begin{center}
-\boxed{ z = \frac{1}{2a} (ax+y)^2 + b }
-\end{center}
-\vspace{1em}
-
-\subsubsection*{Visualization of a Specific Solution}
-The complete integral represents a two-parameter family of surfaces. For $a=1$ and $b=0$, the solution becomes $z = \frac{1}{2}(x+y)^2$, which forms a parabolic cylinder as shown below.
-
-\begin{center}
-\begin{tikzpicture}
-\begin{axis}[
-    width=10cm,
-    height=8cm,
-    view={45}{35},
-    xlabel={$x$},
-    ylabel={$y$},
-    zlabel={$z$},
-    grid=major,
-    colormap/viridis,
-    z buffer=sort,
-    axis lines=center,
-    ticklabel style={font=\footnotesize},
-    xlabel style={anchor=west},
-    ylabel style={anchor=west},
-    zlabel style={anchor=south}
-]
-
-\addplot3[
-    surf,
-    domain=-2:2,
-    y domain=-2:2,
-    samples=25,
-    opacity=0.8,
-    faceted color=black!60,
-    line width=0.1pt
-] {0.5 * (x + y)^2};
-
-\end{axis}
-\end{tikzpicture}
-\end{center}
-
-\end{tcolorbox}
 
 \item Apply Lagrange's method to solve $(xy^{3}-2x^{4})p+(2y^{4}-x^{3}y)q=9z(x^{3}-y^{3})$.
 \mk{11} \yr{MATH 143 | L-1/T-2 | 2013--14} \yr{MATH 241 | L-2/T-1 | 2023--24}
@@ -18250,121 +18044,7 @@ Recognizing that $(z+1)(z-1) = z^2-1$, we arrive at the final simplified form of
 
 \end{tcolorbox}
 
-\item Use Charpit's method to find a complete integral and singular integral (if exists) of $2(z+px+qy)=yp^{2}$.
-\mk{12} \yr{MATH 143 | L-1/T-2 | 2010--11} \yr{MATH 241 | L-2/T-1 | 2023--24}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-Let the given partial differential equation be denoted by $F(x,y,z,p,q) = 0$:
-\begin{equation}
-F(x,y,z,p,q) = 2z + 2px + 2qy - yp^2 = 0 \label{eq:s6_q7_pde_main}
-\end{equation}
-
-\subsubsection*{Step 1: Write Charpit's auxiliary equations}
-Charpit's auxiliary equations are given by:
-\[ \frac{dx}{F_p} = \frac{dy}{F_q} = \frac{dz}{pF_p + qF_q} = \frac{dp}{-(F_x + pF_z)} = \frac{dq}{-(F_y + qF_z)} \]
-First, we compute the required partial derivatives of $F$:
-\begin{align*}
-    F_x &= 2p & F_y &= 2q - p^2 & F_z &= 2 \\
-    F_p &= 2x - 2yp & F_q &= 2y & &
-\end{align*}
-Substituting these into the auxiliary equations yields:
-\begin{align}
-\frac{dx}{2x - 2yp} &= \frac{dy}{2y} = \frac{dz}{p(2x - 2yp) + q(2y)} \nonumber \\
-&= \frac{dp}{-(2p + 2p)} = \frac{dq}{-(2q - p^2 + 2q)} \nonumber \\
-\frac{dx}{2x - 2yp} &= \frac{dy}{2y} = \frac{dz}{2px - 2yp^2 + 2qy} = \frac{dp}{-4p} = \frac{dq}{p^2 - 4q} \label{eq:aux}
-\end{align}
-
-\subsubsection*{Step 2: Solve for $p$ and $q$}
-Taking the second and fourth fractions from equation \eqref{eq:aux}, we get a simple relation between $y$ and $p$:
-\[ \frac{dy}{2y} = \frac{dp}{-4p} \]
-Multiplying by 4 and rearranging terms gives:
-\[ 2 \frac{dy}{y} + \frac{dp}{p} = 0 \]
-Integrating both sides:
-\[ 2 \ln y + \ln p = \ln a \implies \ln(py^2) = \ln a \]
-where $a$ is an arbitrary constant. This yields our expression for $p$:
-\begin{equation}
-p = \frac{a}{y^2} \label{eq:s6_q7_p_val}
-\end{equation}
-
-Now, substitute $p = \frac{a}{y^2}$ into the original PDE \eqref{eq:s6_q7_pde_main} to find $q$:
-\begin{align*}
-    2z + 2\left(\frac{a}{y^2}\right)x + 2qy - y\left(\frac{a}{y^2}\right)^2 &= 0 \\
-    2z + \frac{2ax}{y^2} + 2qy - \frac{a^2}{y^3} &= 0
-\end{align*}
-Solving for $2qy$ and dividing by $2y$, we find:
-\begin{align}
-    2qy &= \frac{a^2}{y^3} - \frac{2ax}{y^2} - 2z \nonumber \\
-    q &= \frac{a^2}{2y^4} - \frac{ax}{y^3} - \frac{z}{y} \label{eq:s6_q7_q_val}
-\end{align}
-
-\subsubsection*{Step 3: Find the complete integral}
-The complete integral is obtained by substituting $p$ and $q$ into the total differential relation:
-\[ dz = p \, dx + q \, dy \]
-\[ dz = \left( \frac{a}{y^2} \right) dx + \left( \frac{a^2}{2y^4} - \frac{ax}{y^3} - \frac{z}{y} \right) dy \]
-To solve this, we move the term containing $z$ to the left side:
-\[ dz + \frac{z}{y} dy = \frac{a}{y^2} dx - \frac{ax}{y^3} dy + \frac{a^2}{2y^4} dy \]
-Multiply the entire equation by $y$ to identify exact differentials:
-\begin{align*}
-    y \, dz + z \, dy &= a \left( \frac{y \, dx - x \, dy}{y^2} \right) + \frac{a^2}{2y^3} dy \\
-    d(yz) &= a \, d\left(\frac{x}{y}\right) + \frac{a^2}{2y^3} dy
-\end{align*}
-Integrating both sides gives the complete integral:
-\[ yz = a\left(\frac{x}{y}\right) + \frac{a^2}{2} \left(\frac{y^{-2}}{-2}\right) + b \]
-\[ yz = \frac{ax}{y} - \frac{a^2}{4y^2} + b \]
-Dividing by $y$, we arrive at the final form of the complete integral.
-
-\vspace{0.5em}
-\begin{center}
-\boxed{ z = \frac{ax}{y^2} - \frac{a^2}{4y^3} + \frac{b}{y} }
-\end{center}
-\vspace{0.5em}
-
-\subsubsection*{Step 4: Check for a singular integral}
-To find the singular integral, we differentiate the complete integral with respect to the arbitrary constants $a$ and $b$ and set the derivatives to zero.
-Let $f(x,y,z,a,b) = yz - \frac{ax}{y} + \frac{a^2}{4y^2} - b = 0$.
-Differentiating partially with respect to $b$:
-\[ \frac{\partial f}{\partial b} = -1 = 0 \]
-Since this leads to an impossible/absurd statement, it is impossible to eliminate $a$ and $b$. Therefore, \textbf{no singular integral exists} for this PDE.
-
-\vspace{1em}
-\subsubsection*{Visualization of the Complete Integral}
-The complete integral describes a two-parameter family of surfaces with a singularity along $y=0$. Below is a plot for the specific surface where $a=2$ and $b=1$, restricted to $y > 0$ to observe its geometry clearly.
-
-\begin{center}
-\begin{tikzpicture}
-\begin{axis}[
-    width=10cm,
-    height=8cm,
-    view={35}{30},
-    xlabel={$x$},
-    ylabel={$y$},
-    zlabel={$z$},
-    domain=-3:3,
-    y domain=0.6:2.5,
-    samples=35,
-    grid=major,
-    colormap/viridis,
-    z buffer=sort,
-    axis lines=center,
-    ticklabel style={font=\footnotesize},
-    xlabel style={anchor=west},
-    ylabel style={anchor=west},
-    zlabel style={anchor=south}
-]
-
-\addplot3[
-    surf,
-    opacity=0.85,
-    faceted color=black!50,
-    line width=0.1pt
-] { (2*x)/(y^2) - 1/(y^3) + 1/y };
-
-\end{axis}
-\end{tikzpicture}
-\end{center}
-
-\end{tcolorbox}
 
 \item Find the integral surface satisfying $(2xy-1)p+(z-2x^{2})q=2(x-yz)$ and passing through $x=1$, $y=0$.
 \mk{12} \yr{MATH 241 | L-2/T-1 | 2022--23}
@@ -18454,77 +18134,7 @@ Factoring $z$ to express the surface explicitly gives $z(1-x) = 1 + y - x^2 - y^
 
 \end{tcolorbox}
 
-\item Find the complete integral of $2x(z^{2}q^{2}+1)=pz$.
-\mk{13} \yr{MATH 241 | L-2/T-1 | 2022--23}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given partial differential equation is non-linear:
-\begin{equation}
-    2x(z^2q^2 + 1) = pz
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Apply a Variable Transformation} \\
-To simplify the equation, let us introduce a new dependent variable $Z = z^2$. The partial derivatives $P = \frac{\partial Z}{\partial x}$ and $Q = \frac{\partial Z}{\partial y}$ are obtained using the chain rule:
-\begin{align*}
-    P &= \frac{\partial}{\partial x}(z^2) = 2zp \implies p = \frac{P}{2z} \\
-    Q &= \frac{\partial}{\partial y}(z^2) = 2zq \implies q = \frac{Q}{2z}
-\end{align*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Substitute into the Original PDE} \\
-Substituting the expressions for $p$ and $q$ into equation (1) yields:
-\begin{align*}
-    2x \left[ z^2 \left( \frac{Q}{2z} \right)^2 + 1 \right] &= z \left( \frac{P}{2z} \right) \\
-    2x \left( \frac{Q^2}{4} + 1 \right) &= \frac{P}{2}
-\end{align*}
-Multiplying both sides by 2 provides a simplified equation in terms of $P$, $Q$, and $x$:
-\begin{align}
-    P &= 4x \left( \frac{Q^2 + 4}{4} \right) \nonumber \\
-    P &= x(Q^2 + 4)
-\end{align}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Solve the Transformed PDE} \\
-Equation (2) does not contain the variables $y$ or $Z$ explicitly. From Charpit's auxiliary equations, the absence of $y$ and $Z$ implies that $Q$ is equal to an arbitrary constant. 
-Let $Q = a$, where $a$ is an arbitrary constant. Substituting this into equation (2) gives:
-\begin{equation*}
-    P = x(a^2 + 4)
-\end{equation*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 4: Integrate the Total Differential} \\
-We know that the total differential for $Z(x, y)$ is:
-\begin{equation*}
-    dZ = P \, dx + Q \, dy
-\end{equation*}
-Substitute the expressions for $P$ and $Q$:
-\begin{equation*}
-    dZ = x(a^2 + 4) \, dx + a \, dy
-\end{equation*}
-Now, integrate both sides to find the solution for $Z$:
-\begin{align*}
-    \int dZ &= \int x(a^2 + 4) \, dx + \int a \, dy \\
-    Z &= (a^2 + 4) \frac{x^2}{2} + ay + b
-\end{align*}
-where $b$ is the constant of integration.
-
-\vspace{0.5em}
-\noindent\textbf{Step 5: Write the Final Complete Integral} \\
-Substitute $Z = z^2$ back into the integrated equation to obtain the complete integral of the original PDE:
-\begin{equation*}
-    z^2 = \frac{a^2 + 4}{2} x^2 + ay + b
-\end{equation*}
-
-\vspace{1em}
-\begin{center}
-    \boxed{ \mathbf{z^2 = \left(\frac{a^2 + 4}{2}\right) x^2 + ay + b} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $a$ and $b$ are arbitrary constants.}
-
-\end{tcolorbox}
 
 \item Solve: $(y-zx)p+(x+yz)q=x^{2}+y^{2}$.
 \mk{15} \yr{MATH 147 | L-1/T-2 | 2016--17, 2020--21}
@@ -18607,110 +18217,7 @@ Substituting the expressions for $c_1$ and $c_2$, we obtain the complete general
 
 \end{tcolorbox}
 
-\item Find the complete, singular, and general integrals of $(p^{2}+q^{2})y=qz$.
-\mk{16} \yr{MATH 143 | L-1/T-2 | 2011--12} \yr{MATH 147 | L-1/T-2 | 2016--17, 2020--21}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given non-linear partial differential equation is:
-\begin{equation}
-    (p^2 + q^2)y = qz
-\end{equation}
-Let $f(x, y, z, p, q) = y p^2 + y q^2 - z q = 0$.
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Apply Charpit's Method} \\
-Charpit's auxiliary equations for finding a solution are given by:
-\begin{equation*}
-    \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-p f_p - q f_q} = \frac{dp}{f_x + p f_z} = \frac{dq}{f_y + q f_z}
-\end{equation*}
-First, we compute the necessary partial derivatives of $f$:
-\begin{align*}
-    f_x &= 0 \\
-    f_y &= p^2 + q^2 \\
-    f_z &= -q \\
-    f_p &= 2yp \\
-    f_q &= 2yq - z
-\end{align*}
-Substituting these into Charpit's equations yields:
-\begin{equation*}
-    \frac{dp}{0 + p(-q)} = \frac{dq}{(p^2 + q^2) + q(-q)}
-\end{equation*}
-\begin{equation*}
-    \frac{dp}{-pq} = \frac{dq}{p^2}
-\end{equation*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Find expressions for $p$ and $q$} \\
-From the fractions for $dp$ and $dq$, we can cross-multiply and integrate:
-\begin{align*}
-    p^2 \, dp &= -pq \, dq \\
-    p \, dp + q \, dq &= 0 \quad (\text{assuming } p \neq 0)
-\end{align*}
-Integrating this yields:
-\begin{equation}
-    p^2 + q^2 = a^2
-\end{equation}
-where $a$ is an arbitrary constant. Substitute equation (2) into the original PDE (1):
-\begin{align*}
-    a^2 y &= qz \implies q = \frac{a^2 y}{z}
-\end{align*}
-Now, solve for $p$ using equation (2):
-\begin{align*}
-    p^2 &= a^2 - q^2 = a^2 - \frac{a^4 y^2}{z^2} = \frac{a^2(z^2 - a^2 y^2)}{z^2} \\
-    p &= \frac{a}{z}\sqrt{z^2 - a^2 y^2}
-\end{align*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Determine the Complete Integral} \\
-Using the total differential $dz = p \, dx + q \, dy$, we substitute $p$ and $q$:
-\begin{align*}
-    dz &= \frac{a}{z}\sqrt{z^2 - a^2 y^2} \, dx + \frac{a^2 y}{z} \, dy \\
-    z \, dz - a^2 y \, dy &= a\sqrt{z^2 - a^2 y^2} \, dx
-\end{align*}
-Let $u = z^2 - a^2 y^2$. Then $du = 2z \, dz - 2a^2 y \, dy$, which implies $\frac{1}{2}du = z \, dz - a^2 y \, dy$. The equation becomes:
-\begin{align*}
-    \frac{du}{2\sqrt{u}} &= a \, dx
-\end{align*}
-Integrating both sides, we get:
-\begin{equation*}
-    \sqrt{u} = ax + b
-\end{equation*}
-Substituting $u$ back yields the complete integral:
-\begin{equation*}
-    \sqrt{z^2 - a^2 y^2} = ax + b
-\end{equation*}
-\begin{center}
-    \boxed{ \mathbf{z^2 = (ax + b)^2 + a^2 y^2} }
-\end{center}
-
-\vspace{0.5em}
-\noindent\textbf{Step 4: Determine the Singular Integral} \\
-To find the singular integral, we differentiate the complete integral with respect to the constants $a$ and $b$, and equate to zero:
-\begin{align}
-    \frac{\partial}{\partial b} \left[ z^2 - (ax+b)^2 - a^2 y^2 \right] &= 0 \implies -2(ax+b) = 0 \implies ax+b = 0 \\
-    \frac{\partial}{\partial a} \left[ z^2 - (ax+b)^2 - a^2 y^2 \right] &= 0 \implies -2x(ax+b) - 2ay^2 = 0 
-\end{align}
-Substituting $ax+b=0$ into equation (4) gives $-2ay^2 = 0 \implies a = 0$ (assuming $y \neq 0$). If $a=0$ and $ax+b=0$, then $b=0$. 
-Substituting $a=0$ and $b=0$ back into the complete integral yields:
-\begin{center}
-    \boxed{ \mathbf{z = 0} }
-\end{center}
-\textit{Note: $z=0$ satisfies the original equation since $p=0$ and $q=0$ make both sides $0$.}
-
-\vspace{0.5em}
-\noindent\textbf{Step 5: Determine the General Integral} \\
-Let $b = \phi(a)$, where $\phi$ is an arbitrary function. The complete integral becomes:
-\begin{equation}
-    z^2 = (ax + \phi(a))^2 + a^2 y^2
-\end{equation}
-Differentiate this with respect to $a$:
-\begin{equation}
-    0 = 2(ax + \phi(a))(x + \phi'(a)) + 2a y^2
-\end{equation}
-The general integral is the envelope surface obtained by \textbf{eliminating the parameter $\mathbf{a}$} between equations (5) and (6).
-
-\end{tcolorbox}
 
 \item Find the integral surface of $2y(z-3)p+(2x-z)q=y(2x-3)$ which passes through the circle $z=0$, $x^{2}+y^{2}=2x$.
 \mk{20} \yr{MATH 143 | L-1/T-2 | 2010--11} \yr{MATH 147 | L-1/T-2 | 2016--17, 2019--20, 2020--21}
@@ -18809,107 +18316,7 @@ Substitute the expressions for $c_1$ and $c_2$ from equations (2) and (3) back i
 
 \end{tcolorbox}
 
-\item Find the complete integral and singular integral (if it exists) of $2xz-px^{2}-2qxy+pq=0$.
-\mk{26} \yr{MATH 147 | L-1/T-2 | 2019--20}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given non-linear partial differential equation is:
-\begin{equation}
-    2xz - px^2 - 2qxy + pq = 0
-\end{equation}
-Let $f(x, y, z, p, q) = 2xz - px^2 - 2qxy + pq = 0$.
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Apply Charpit's Method} \\
-Charpit's auxiliary equations are given by:
-\begin{equation*}
-    \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-pf_p - qf_q} = \frac{dp}{f_x + pf_z} = \frac{dq}{f_y + qf_z}
-\end{equation*}
-First, we compute the partial derivatives of $f$:
-\begin{align*}
-    f_x &= 2z - 2px - 2qy, & f_p &= -x^2 + q \\
-    f_y &= -2qx,           & f_q &= -2xy + p \\
-    f_z &= 2x
-\end{align*}
-Substituting these into the equations for $dp$ and $dq$:
-\begin{align*}
-    f_x + pf_z &= (2z - 2px - 2qy) + p(2x) = 2z - 2qy \\
-    f_y + qf_z &= -2qx + q(2x) = 0
-\end{align*}
-The auxiliary equation for $dq$ becomes:
-\begin{align*}
-    \frac{dq}{0} = \implies dq = 0
-\end{align*}
-Integrating this gives:
-\begin{equation}
-    q = a
-\end{equation}
-where $a$ is an arbitrary constant.
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Find the Expression for $p$} \\
-Substitute $q = a$ into the original differential equation (1):
-\begin{align*}
-    2xz - px^2 - 2axy + pa &= 0 \\
-    p(a - x^2) &= 2axy - 2xz \\
-    p &= \frac{2xz - 2axy}{x^2 - a}
-\end{align*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Determine the Complete Integral} \\
-Using the total differential formula $dz = p \, dx + q \, dy$, we substitute $p$ and $q$:
-\begin{align*}
-    dz &= \left( \frac{2xz - 2axy}{x^2 - a} \right) dx + a \, dy \\
-    dz - a \, dy &= \frac{2x(z - ay)}{x^2 - a} \, dx \\
-    \frac{d(z - ay)}{z - ay} &= \frac{2x}{x^2 - a} \, dx
-\end{align*}
-Integrating both sides yields:
-\begin{align*}
-    \ln(z - ay) &= \ln(x^2 - a) + \ln b \\
-    \ln(z - ay) &= \ln [b(x^2 - a)]
-\end{align*}
-Exponentiating both sides gives the complete integral:
-\begin{equation*}
-    z - ay = b(x^2 - a)
-\end{equation*}
-\begin{center}
-    \boxed{ \mathbf{z = ay + b(x^2 - a)} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $a$ and $b$ are arbitrary constants.}
-
-\vspace{0.5em}
-\noindent\textbf{Step 4: Check for the Singular Integral} \\
-To determine if a singular integral exists, we differentiate the complete integral with respect to parameters $a$ and $b$, and set the derivatives to zero:
-\begin{align}
-    \frac{\partial}{\partial b} \left[ z - ay - b(x^2 - a) \right] = 0 &\implies -(x^2 - a) = 0 \implies a = x^2 \\
-    \frac{\partial}{\partial a} \left[ z - ay - b(x^2 - a) \right] = 0 &\implies -y + b = 0 \implies b = y
-\end{align}
-Substituting the expressions $a = x^2$ and $b = y$ back into the complete integral:
-\begin{align*}
-    z &= (x^2)y + (y)(x^2 - x^2) \\
-    z &= x^2y
-\end{align*}
-Let us verify if $z = x^2y$ satisfies the original PDE (1). Finding its partial derivatives:
-\begin{align*}
-    p &= \frac{\partial z}{\partial x} = 2xy \\
-    q &= \frac{\partial z}{\partial y} = x^2
-\end{align*}
-Substitute $z, p,$ and $q$ back into the LHS of equation (1):
-\begin{align*}
-    \text{LHS} &= 2x(x^2y) - (2xy)x^2 - 2(x^2)xy + (2xy)(x^2) \\
-    &= 2x^3y - 2x^3y - 2x^3y + 2x^3y \\
-    &= 0 = \text{RHS}
-\end{align*}
-Since the relation satisfies the PDE, a singular integral exists.
-
-\vspace{1em}
-\begin{center}
-    \boxed{ \mathbf{z = x^2y} }
-\end{center}
-
-\end{tcolorbox}
 
 \item Find the integral surface of $(2xy+1)p-(z+2x^{2})q=2(x-yz)$ which passes through the line $x=1$, $y=0$.
 \mk{20} \yr{MATH 147 | L-1/T-2 | 2018--19}
@@ -18936,18 +18343,8 @@ The characteristic system of ordinary differential equations is given by:
 
 \vspace{0.5em}
 \noindent\textbf{Step 2: Find the First Independent Integral} \\
-We look for a set of multipliers $(l_1, m_1, n_1)$ such that $l_1P + m_1Q + n_1R = 0$. Let us choose the multipliers as $(2x, 2y, 1)$. Evaluating the linear combination of the denominators gives:
-\begin{align*}
-    2x(2xy+1) + 2y\left[-(z+2x^2)\right] + 1\left[2(x-yz)\right] &= 4x^2y + 2x - 2yz - 4x^2y + 2x - 2yz \\
-    &= 4x - 4yz \\
-    &\neq 0
-\end{align*}
-Since this combination does not yield zero, let us try a different set of multipliers. Let us choose $(2x, -2y, -1)$:
-\begin{align*}
-    2x(2xy+1) - 2y\left[-(z+2x^2)\right] - 1\left[2(x-yz)\right] &= 4x^2y + 2x + 2yz + 4x^2y - 2x + 2yz \\
-    &= 8x^2y + 4yz
-\end{align*}
-Let us check the alternative multipliers $(z, 0, x)$. Multiplying the $dx$ and $dz$ fractions yields:
+We look for a set of multipliers $(l_1, m_1, n_1)$ such that $l_1P + m_1Q + n_1R = 0$. Let us choose the multipliers as $(z, 0, x)$. Multiplying the $dx$ and $dz$ fractions yields:
+
 \begin{equation*}
     \frac{z \, dx + x \, dz}{z(2xy+1) + x(2x-2yz)} = \frac{z \, dx + x \, dz}{2xyz + z + 2x^2 - 2xyz} = \frac{d(xz)}{2x^2 + z}
 \end{equation*}
@@ -19007,60 +18404,6 @@ Substitute the original expressions for $c_1$ and $c_2$ from equations (2) and (
 
 \end{tcolorbox}
 
-\item Find the complete integral and singular integral (if exist) of $p-3x^{2}=q^{2}-y$.
-\mk{20} \yr{MATH 147 | L-1/T-2 | 2018--19}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given non-linear partial differential equation is:
-\begin{equation}
-    p - 3x^2 = q^2 - y
-\end{equation}
-This equation is of the standard form $f(x, p) = g(y, q)$, where the variables are explicitly separable.
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Separate the Variables} \\
-We equate both sides of equation (1) to an arbitrary separation constant $a$:
-\begin{equation*}
-    p - 3x^2 = a \quad \text{and} \quad q^2 - y = a
-\end{equation*}
-Now, solve for $p$ and $q$ explicitly in terms of $x$, $y$, and $a$:
-\begin{align}
-    p &= 3x^2 + a \\
-    q^2 &= y + a \implies q = \pm\sqrt{y + a}
-\end{align}
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Determine the Complete Integral} \\
-Using the total differential relation $dz = p \, dx + q \, dy$, we substitute the expressions for $p$ and $q$:
-\begin{equation*}
-    dz = (3x^2 + a) \, dx \pm \sqrt{y + a} \, dy
-\end{equation*}
-Integrating both sides yields:
-\begin{align*}
-    \int dz &= \int (3x^2 + a) \, dx \pm \int (y + a)^{1/2} \, dy \\
-    z &= x^3 + ax \pm \frac{2}{3}(y + a)^{3/2} + b
-\end{align*}
-where $b$ is a second arbitrary constant of integration. 
-
-\vspace{1em}
-\begin{center}
-    \boxed{ \mathbf{z = x^3 + ax \pm \frac{2}{3}(y + a)^{3/2} + b} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $a$ and $b$ are arbitrary constants.}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Check for the Singular Integral} \\
-To find the singular integral, we differentiate the complete integral with respect to the constants $a$ and $b$, and set the derivatives to zero:
-\begin{align}
-    \frac{\partial z}{\partial b} &= 1 \implies 1 = 0 
-\end{align}
-Equation (4) yields a clear contradiction ($1 = 0$), which indicates that the envelope with respect to $b$ does not exist. 
-
-Therefore, a singular integral \textbf{does not exist}.
-
-\end{tcolorbox}
 
 \item Find the integral surface of $(x-y)p+(y-x-z)q=z$ which passes through $x^{2}+y^{2}=1$, $z=1$.
 \mk{17} \yr{MATH 147 | L-1/T-2 | 2017--18}
@@ -19159,103 +18502,7 @@ Substituting the full expressions for $c_1$ and $c_2$ from equations (2) and (3)
 
 \end{tcolorbox}
 
-\item Find the complete, singular (if exists) and general integral of $z^{2}(p^{2}z^{2}+q^{2})=1$.
-\mk{17} \yr{MATH 147 | L-1/T-2 | 2017--18}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given non-linear first-order partial differential equation is:
-\begin{equation}
-    z^2(p^2z^2 + q^2) = 1 \implies z^4p^2 + z^2q^2 = 1
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Apply a Variable Transformation} \\
-To simplify the equation, we can introduce a substitution for $z$. Let $Z = z^2$. Using the chain rule, we find the new partial derivatives $P = \frac{\partial Z}{\partial x}$ and $Q = \frac{\partial Z}{\partial y}$:
-\begin{align*}
-    P &= 2z \frac{\partial z}{\partial x} = 2zp \implies zp = \frac{P}{2} \\
-    Q &= 2z \frac{\partial z}{\partial y} = 2zq \implies zq = \frac{Q}{2}
-\end{align*}
-Substituting these into equation (1) gives:
-\begin{align*}
-    (zp)^2 z^2 + (zq)^2 &= 1 \\
-    \left(\frac{P}{2}\right)^2 Z + \left(\frac{Q}{2}\right)^2 &= 1 \\
-    \frac{Z P^2}{4} + \frac{Q^2}{4} &= 1
-\end{align*}
-Multiplying by 4 yields the transformed non-linear PDE:
-\begin{equation}
-    Z P^2 + Q^2 = 4
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Solve via Charpit's Method} \\
-Let $F(x, y, Z, P, Q) = Z P^2 + Q^2 - 4 = 0$. Charpit's auxiliary equations are:
-\begin{equation*}
-    \frac{dP}{F_x + P F_Z} = \frac{dQ}{F_y + Q F_Z}
-\end{equation*}
-We compute the required partial derivatives of $F$:
-\begin{equation*}
-    F_x = 0, \quad F_y = 0, \quad F_Z = P^2
-\end{equation*}
-Substituting these back into Charpit's fractions gives:
-\begin{align*}
-    \frac{dP}{0 + P(P^2)} &= \frac{dQ}{0 + Q(P^2)} \\
-    \frac{dP}{P^3} &= \frac{dQ}{Q P^2} \implies \frac{dP}{P} = \frac{dQ}{Q}
-\end{align*}
-Integrating this simple differential equation gives a linear relation between $P$ and $Q$:
-\begin{equation}
-    P = aQ
-\end{equation}
-where $a$ is an arbitrary constant. Substitute $P = aQ$ back into the transformed equation (2):
-\begin{align*}
-    Z(aQ)^2 + Q^2 = 4 &\implies Q^2(a^2 Z + 1) = 4 \\
-    Q = \frac{2}{\sqrt{a^2 Z + 1}}, \quad &\text{and} \quad P = \frac{2a}{\sqrt{a^2 Z + 1}}
-\end{align*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Determine the Complete Integral} \\
-Using the total differential formula $dZ = P \, dx + Q \, dy$, we substitute our expressions for $P$ and $Q$:
-\begin{align*}
-    dZ &= \frac{2a}{\sqrt{a^2 Z + 1}} \, dx + \frac{2}{\sqrt{a^2 Z + 1}} \, dy \\
-    \sqrt{a^2 Z + 1} \, dZ &= 2(a \, dx + dy)
-\end{align*}
-Integrating both sides yields:
-\begin{align*}
-    \frac{2}{3a^2}(a^2 Z + 1)^{3/2} &= 2(ax + y) + C \\
-    (a^2 Z + 1)^{3/2} &= 3a^2(ax + y + b)
-\end{align*}
-where $b = C / 2$ is another arbitrary constant. Squaring both sides and substituting $Z = z^2$ back into the equation yields the complete integral:
-\begin{center}
-    \boxed{ \mathbf{(a^2 z^2 + 1)^3 = 9a^4(ax + y + b)^2} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $a$ and $b$ are arbitrary constants.}
-
-\vspace{0.5em}
-\noindent\textbf{Step 4: Check for a Singular Integral} \\
-To find the singular integral, we differentiate the complete integral with respect to the constant $b$ and set it to zero:
-\begin{equation*}
-    \frac{\partial}{\partial b}\left[ (a^2 z^2 + 1)^3 - 9a^4(ax + y + b)^2 \right] = 0 \implies -18a^4(ax + y + b) = 0
-\end{equation*}
-This implies $ax + y + b = 0$. Substituting this back into the complete integral gives:
-\begin{equation*}
-    (a^2 z^2 + 1)^3 = 0 \implies a^2 z^2 + 1 = 0 \implies z^2 = -\frac{1}{a^2}
-\end{equation*}
-Since $a$ must be a real parameter, this equation yields no real geometric surface. Thus, a real \textbf{singular integral does not exist}.
-
-\vspace{0.5em}
-\noindent\textbf{Step 5: Determine the General Integral} \\
-To construct the general integral, we set $b = \phi(a)$, where $\phi$ is an arbitrary differentiable function. The complete integral becomes:
-\begin{equation}
-    (a^2 z^2 + 1)^3 - 9a^4\big(ax + y + \phi(a)\big)^2 = 0
-\end{equation}
-Differentiating equation (4) with respect to $a$ gives:
-\begin{equation}
-    6a z^2(a^2 z^2 + 1)^2 - 36a^3\big(ax + y + \phi(a)\big)^2 - 18a^4\big(ax + y + \phi(a)\big)\big(x + \phi'(a)\big) = 0
-\end{equation}
-The general integral is defined implicitly as the family of functional envelopes obtained by \textbf{eliminating the parameter $\mathbf{a}$} between equations (4) and (5).
-
-\end{tcolorbox}
 
 \item Solve: $(x^{2}-y^{2}-yz)p+(x^{2}-y^{2}-zx)q=z(x-y)$.
 \mk{15} \yr{MATH 147 | L-1/T-2 | 2015--16}
@@ -19349,75 +18596,7 @@ Substituting the values of $c_1$ and $c_2$ from equations (2) and (3), we get th
 
 \end{tcolorbox}
 
-\item Find the complete and singular integral (if exists) of $z=px+qy+c\sqrt{1+p^{2}+q^{2}}$.
-\mk{15} \yr{MATH 147 | L-1/T-2 | 2015--16}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given partial differential equation is:
-\begin{equation}
-    z = px + qy + c\sqrt{1+p^{2}+q^{2}}
-\end{equation}
-This equation is a non-linear first-order PDE in **Clairaut's form**, which has the general structure $z = px + qy + f(p, q)$.
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Determine the Complete Integral} \\
-For any partial differential equation in Clairaut's form, the complete integral can be directly obtained by replacing the partial derivatives $p$ and $q$ with arbitrary independent constants $a$ and $b$ respectively:
-\begin{equation*}
-    p = a \quad \text{and} \quad q = b
-\end{equation*}
-Substituting these into equation (1) yields the complete integral:
-\begin{center}
-    \boxed{ \mathbf{z = ax + by + c\sqrt{1+a^{2}+b^{2}}} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $a$ and $b$ are arbitrary constants.}
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Determine the Singular Integral} \\
-To find the singular integral, we eliminate the parameters $a$ and $b$ by differentiating the complete integral with respect to $a$ and $b$ and setting the results to zero.
-
-\vspace{0.5em}
-\noindent Differentiating with respect to $a$:
-\begin{align}
-    0 = x + c \cdot \frac{1}{2\sqrt{1+a^2+b^2}} \cdot 2a \implies x = -\frac{ac}{\sqrt{1+a^2+b^2}}
-\end{align}
-
-\noindent Differentiating with respect to $b$:
-\begin{align}
-    0 = y + c \cdot \frac{1}{2\sqrt{1+a^2+b^2}} \cdot 2b \implies y = -\frac{bc}{\sqrt{1+a^2+b^2}}
-\end{align}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Eliminate the Parameters $a$ and $b$} \\
-To solve for $\sqrt{1+a^2+b^2}$, we substitute the expressions for $x$ and $y$ from equations (2) and (3) back into the complete integral:
-\begin{align*}
-    z &= a\left(-\frac{ac}{\sqrt{1+a^2+b^2}}\right) + b\left(-\frac{bc}{\sqrt{1+a^2+b^2}}\right) + c\sqrt{1+a^2+b^2} \\
-    z &= \frac{-a^2c - b^2c + c(1+a^2+b^2)}{\sqrt{1+a^2+b^2}} \\
-    z &= \frac{c}{\sqrt{1+a^2+b^2}}
-\end{align*}
-
-\noindent Now, square equations (2), (3), and the simplified expression for $z$:
-\begin{equation*}
-    x^2 = \frac{a^2c^2}{1+a^2+b^2}, \quad y^2 = \frac{b^2c^2}{1+a^2+b^2}, \quad z^2 = \frac{c^2}{1+a^2+b^2}
-\end{equation*}
-
-\noindent Adding these three squared equations together yields:
-\begin{align*}
-    x^2 + y^2 + z^2 &= \frac{a^2c^2 + b^2c^2 + c^2}{1+a^2+b^2} \\
-    &= \frac{c^2(a^2 + b^2 + 1)}{1+a^2+b^2} \\
-    &= c^2
-\end{align*}
-
-\vspace{0.5em}
-\noindent This gives the equation of the singular integral surface, which geometrically represents a sphere centered at the origin with a radius of $c$.
-
-\vspace{1em}
-\begin{center}
-    \boxed{ \mathbf{x^2 + y^2 + z^2 = c^2} }
-\end{center}
-
-\end{tcolorbox}
 
 \item Find the integral surface of $(x-y)p+(y-z-x)q=z$ through the circle $z=1$, $x^{2}+y^{2}=1$.
 \mk{16} \yr{MATH 147 | L-1/T-2 | 2015--16}
@@ -19612,116 +18791,7 @@ Substituting the values from equations (2) and (3) gives the final solution.
 
 \end{tcolorbox}
 
-\item Solve: $(p^{2}+q^{2})x=pz$.
-\mk{15} \yr{MATH 143 | L-1/T-2 | 2014--15}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given non-linear first-order partial differential equation is:
-\begin{equation}
-    (p^2 + q^2)x = pz \implies p^2x + q^2x - pz = 0
-\end{equation}
-Let $f(x, y, z, p, q) = p^2x + q^2x - pz = 0$.
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Apply Charpit's Method} \\
-Charpit's auxiliary equations are given by:
-\begin{equation*}
-    \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-pf_p - qf_q} = \frac{dp}{f_x + pf_z} = \frac{dq}{f_y + qf_z}
-\end{equation*}
-First, let us find the partial derivatives of $f$:
-\begin{align*}
-    f_x &= p^2 + q^2, & f_p &= 2px - z \\
-    f_y &= 0,         & f_q &= 2qx \\
-    f_z &= -p
-\end{align*}
-Now, evaluate the denominators for $dp$ and $dq$:
-\begin{align*}
-    f_x + pf_z &= (p^2 + q^2) + p(-p) = q^2 \\
-    f_y + qf_z &= 0 + q(-p) = -pq
-\end{align*}
-Substituting these into the fractions for $dp$ and $dq$ gives:
-\begin{align*}
-    \frac{dp}{q^2} &= \frac{dq}{-pq}
-\end{align*}
-Assuming $q \neq 0$, we can cancel $q$ from both denominators:
-\begin{align*}
-    \frac{dp}{q} &= -\frac{dq}{p} \\
-    p \, dp + q \, dq &= 0
-\end{align*}
-Integrating this equation yields:
-\begin{equation}
-    p^2 + q^2 = a^2
-\end{equation}
-where $a^2$ is an arbitrary positive separation constant.
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Find Expressions for $p$ and $q$} \\
-From the original PDE (1), we know that $(p^2 + q^2)x = pz$. Substituting $p^2 + q^2 = a^2$ into this equation gives:
-\begin{align*}
-    a^2 x &= pz \\
-    p &= \frac{a^2 x}{z}
-\end{align*}
-Now, substitute this expression for $p$ back into equation (2) to solve for $q$:
-\begin{align*}
-    \left(\frac{a^2 x}{z}\right)^2 + q^2 &= a^2 \\
-    q^2 &= a^2 - \frac{a^4 x^2}{z^2} \\
-    q^2 &= \frac{a^2 z^2 - a^4 x^2}{z^2} \\
-    q &= \frac{a \sqrt{z^2 - a^2 x^2}}{z}
-\end{align*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Determine the Complete Integral} \\
-Using the total differential relation $dz = p \, dx + q \, dy$, we substitute our expressions for $p$ and $q$:
-\begin{align*}
-    dz &= \left(\frac{a^2 x}{z}\right) dx + \left(\frac{a \sqrt{z^2 - a^2 x^2}}{z}\right) dy \\
-    z \, dz &= a^2 x \, dx + a \sqrt{z^2 - a^2 x^2} \, dy \\
-    z \, dz - a^2 x \, dx &= a \sqrt{z^2 - a^2 x^2} \, dy \\
-    \frac{z \, dz - a^2 x \, dx}{\sqrt{z^2 - a^2 x^2}} &= a \, dy
-\end{align*}
-Notice that the numerator on the left side is exactly half the derivative of the expression inside the square root, since $d(z^2 - a^2 x^2) = 2z \, dz - 2a^2 x \, dx$. Thus, we can rewrite the equation as:
-\begin{equation*}
-    \frac{1}{2} (z^2 - a^2 x^2)^{-1/2} \, d(z^2 - a^2 x^2) = a \, dy
-\end{equation*}
-Integrating both sides yields:
-\begin{align*}
-    \sqrt{z^2 - a^2 x^2} &= ay + b
-\end{align*}
-Squaring both sides gives the complete integral:
-\begin{center}
-    \boxed{ \mathbf{z^2 = a^2 x^2 + (ay + b)^2} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $a$ and $b$ are arbitrary constants.}
-
-\vspace{0.5em}
-\noindent\textbf{Step 4: Check for a Singular Integral} \\
-Differentiating the complete integral with respect to the parameter $b$:
-\begin{equation*}
-    0 = 2(ay + b) \implies ay + b = 0
-\end{equation*}
-Substituting $ay + b = 0$ back into the complete integral yields:
-\begin{equation*}
-    z^2 = a^2 x^2 \implies z = \pm ax
-\end{equation*}
-Let us check if $z = \pm ax$ satisfies the original PDE (1). Finding the partial derivatives:
-\begin{equation*}
-    p = \frac{\partial z}{\partial x} = \pm a, \quad \text{and} \quad q = \frac{\partial z}{\partial y} = 0
-\end{equation*}
-Substituting $z, p,$ and $q$ back into the left side of equation (1):
-\begin{align*}
-    \text{LHS} &= (p^2 + q^2)x = (a^2 + 0)x = a^2 x \\
-    \text{RHS} &= pz = (\pm a)(\pm ax) = a^2 x
-\end{align*}
-Since $\text{LHS} = \text{RHS}$, the boundary envelope relation satisfies the differential equation. 
-
-Therefore, the singular integral is:
-\begin{center}
-    \boxed{ \mathbf{z^2 = a^2 x^2} }
-\end{center}
-However, since this still retains the arbitrary constant $a$, a unique envelope completely free of parameters does not exist for this structural form.
-
-\end{tcolorbox}
 
 \item Find the integral surface of $px^{2}+qy^{2}+z^{2}=0$ which passes through the hyperbola $xy=x+y$, $z=1$.
 \mk{16.5} \yr{MATH 143 | L-1/T-2 | 2014--15}
@@ -19916,6 +18986,1026 @@ Substitute the original coordinate functions for $c_1$ and $c_2$ from equations 
 
 \end{tcolorbox}
 
+
+\item Solve: $pz-qz=z^{2}+(x+y)^{2}$.
+\mk{15} \yr{MATH 143 | L-1/T-2 | 2012--13}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given partial differential equation can be rewritten in standard Lagrange form as:
+\begin{equation*}
+    zp - zq = z^{2} + (x+y)^{2}
+\end{equation*}
+This equation matches the standard linear form $Pp + Qq = R$, where:
+\begin{align*}
+    P &= z \\
+    Q &= -z \\
+    R &= z^{2} + (x+y)^{2}
+\end{align*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Write Lagrange's Subsidiary Equations} \\
+The characteristic system of ordinary differential equations is given by:
+\begin{equation}
+    \frac{dx}{z} = \frac{dy}{-z} = \frac{dz}{z^{2} + (x+y)^{2}}
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Find the First Independent Integral} \\
+Taking the first two fractions from equation (1):
+\begin{equation*}
+    \frac{dx}{z} = \frac{dy}{-z}
+\end{equation*}
+Assuming $z \neq 0$, we cancel $z$ from the denominators:
+\begin{align*}
+    dx &= -dy \\
+    dx + dy &= 0
+\end{align*}
+Integrating this exact differential yields our first independent integral:
+\begin{equation}
+    x + y = c_1
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Find the Second Independent Integral} \\
+To find a second relationship, we substitute $x+y = c_1$ from equation (2) into the third fraction of equation (1) and equate it with the first fraction:
+\begin{align*}
+    \frac{dx}{z} &= \frac{dz}{z^2 + c_1^2} \\
+    (z^2 + c_1^2) \, dx &= z \, dz \\
+    dx &= \frac{z \, dz}{z^2 + c_1^2}
+\end{align*}
+To integrate the right side, we can use a substitution or multiply both sides by 2 to construct an exact derivative:
+\begin{align*}
+    2 \, dx &= \frac{2z \, dz}{z^2 + c_1^2}
+\end{align*}
+Integrating both sides gives:
+\begin{align*}
+    2x &= \ln(z^2 + c_1^2) + \ln c_2' \\
+    2x &= \ln\big(c_2' (z^2 + c_1^2)\big)
+\end{align*}
+Taking the exponential of both sides:
+\begin{align*}
+    e^{2x} &= c_2' (z^2 + c_1^2) \\
+    \frac{e^{2x}}{z^2 + c_1^2} &= c_2'
+\end{align*}
+Substituting $c_1 = x+y$ back into the equation gives our second independent integral:
+\begin{equation}
+    (z^2 + (x+y)^2)e^{-2x} = c_2
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 4: Formulate the General Solution} \\
+The general solution is expressed via an arbitrary differentiable function $\phi$ connecting the two constants $c_1$ and $c_2$:
+\begin{equation*}
+    \phi(c_1, c_2) = 0
+\end{equation*}
+Substituting the values from equations (2) and (3) gives the final general solution.
+
+\vspace{1em}
+\begin{center}
+    \boxed{ \mathbf{\phi\Big(x+y, \ \big(z^2 + (x+y)^2\big)e^{-2x}\Big) = 0} } \quad \text{or} \quad \boxed{ \mathbf{z^2 + (x+y)^2 = e^{2x} \cdot f(x+y)} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $\phi$ and $f$ are arbitrary differentiable functions.}
+
+\end{tcolorbox}
+
+
+
+\item Solve: $p\cos(x+y)+q\sin(x+y)=z$.
+\mk{15} \yr{MATH 143 | L-1/T-2 | 2011--12}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given partial differential equation is a first-order linear PDE:
+\begin{equation*}
+    p\cos(x+y) + q\sin(x+y) = z
+\end{equation*}
+This equation matches the standard Lagrange form $Pp + Qq = R$, where:
+\begin{align*}
+    P &= \cos(x+y) \\
+    Q &= \sin(x+y) \\
+    R &= z
+\end{align*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Write Lagrange's Subsidiary Equations} \\
+The characteristic system of ordinary differential equations is given by:
+\begin{equation}
+    \frac{dx}{\cos(x+y)} = \frac{dy}{\sin(x+y)} = \frac{dz}{z}
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Find the First Independent Integral} \\
+Let us use the properties of fractions to create useful combinations of the first two ratios. We can form the sum and difference of the numerators and denominators:
+\begin{equation*}
+    \frac{dx + dy}{\cos(x+y) + \sin(x+y)} = \frac{dx - dy}{\cos(x+y) - \sin(x+y)}
+\end{equation*}
+Let $t = x+y$, which means $dt = dx + dy$, and $d(x-y) = dx - dy$. Substituting this into the combined ratio yields:
+\begin{align*}
+    \frac{dt}{\cos t + \sin t} &= \frac{d(x-y)}{\cos t - \sin t} \\
+    d(x-y) &= \frac{\cos t - \sin t}{\cos t + \sin t} \, dt
+\end{align*}
+Notice that the numerator is the exact derivative of the denominator, since $\frac{d}{dt}(\cos t + \sin t) = -\sin t + \cos t$. Thus, integrating both sides gives:
+\begin{align*}
+    \int d(x-y) &= \int \frac{d(\cos t + \sin t)}{\cos t + \sin t} \\
+    x - y &= \ln|\cos t + \sin t| + c_1
+\end{align*}
+Substituting $t = x+y$ back into the equation gives our first independent integral:
+\begin{equation}
+    x - y - \ln|\cos(x+y) + \sin(x+y)| = c_1
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Find the Second Independent Integral} \\
+Now, let us equate the sum combination we found earlier to the third fraction from equation (1):
+\begin{equation*}
+    \frac{dx + dy}{\cos(x+y) + \sin(x+y)} = \frac{dz}{z}
+\end{equation*}
+Again, substituting $t = x+y$:
+\begin{equation*}
+    \frac{dt}{\cos t + \sin t} = \frac{dz}{z}
+\end{equation*}
+To integrate the left side, we rewrite the denominator using the harmonic addition identity: $\cos t + \sin t = \sqrt{2}\sin\left(t + \frac{\pi}{4}\right)$.
+\begin{align*}
+    \frac{dz}{z} &= \frac{dt}{\sqrt{2}\sin\left(t + \frac{\pi}{4}\right)} \\
+    \frac{dz}{z} &= \frac{1}{\sqrt{2}} \csc\left(t + \frac{\pi}{4}\right) \, dt
+\end{align*}
+Integrating both sides using the standard integral $\int \csc u \, du = \ln|\tan(\frac{u}{2})|$:
+\begin{align*}
+    \ln z &= \frac{1}{\sqrt{2}} \ln \left| \tan \left( \frac{t}{2} + \frac{\pi}{8} \right) \right| + \ln c_2 \\
+    \ln z &= \ln \left( c_2 \left[ \tan \left( \frac{t}{2} + \frac{\pi}{8} \right) \right]^{1/\sqrt{2}} \right)
+\end{align*}
+Taking the exponential of both sides and substituting $t = x+y$ gives our second independent integral:
+\begin{equation}
+    z \left[ \cot \left( \frac{x+y}{2} + \frac{\pi}{8} \right) \right]^{1/\sqrt{2}} = c_2
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 4: Formulate the General Solution} \\
+The general solution is expressed as an arbitrary differentiable function $\phi$ connecting the two independent constants $c_1$ and $c_2$:
+\begin{equation*}
+    \phi(c_1, c_2) = 0
+\end{equation*}
+Substituting the values from equations (2) and (3) yields the final general solution.
+
+\vspace{1em}
+\begin{center}
+    \boxed{ \mathbf{\phi\left( x - y - \ln|\cos(x+y) + \sin(x+y)|, \ z \left[ \cot \left( \frac{x+y}{2} + \frac{\pi}{8} \right) \right]^{1/\sqrt{2}} \right) = 0} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $\phi$ is an arbitrary differentiable function.}
+
+\end{tcolorbox}
+
+
+
+\end{enumerate}
+
+
+\subtopic{cF}{First Order Non-linear PDE}
+\label{sub:s6-firstNon}
+
+\begin{enumerate}
+
+\item Find a complete integral of $px+qy=pq$ using Charpit's method.
+\mk{12} \yr{MATH 143 | L-1/T-2 | 2012--13} \yr{MATH 241 | L-2/T-1 | 2024--25}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given partial differential equation can be written as:
+\begin{equation}
+f(x, y, z, p, q) = px + qy - pq = 0 \label{eq:pde_mainn}
+\end{equation}
+
+\subsubsection*{Step 1: Write Charpit's auxiliary equations}
+Charpit's auxiliary equations for a first-order non-linear PDE $f(x,y,z,p,q)=0$ are given by:
+\[ \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-pf_p - qf_q} = \frac{dp}{f_x + pf_z} = \frac{dq}{f_y + qf_z} \]
+First, we find the partial derivatives of $f$:
+\begin{align*}
+    f_x &= p, & f_y &= q, & f_z &= 0 \\
+    f_p &= x - q, & f_q &= y - p
+\end{align*}
+Substituting these into the auxiliary equations yields:
+\begin{equation}
+\frac{dx}{q - x} = \frac{dy}{p - y} = \frac{dz}{p(q-x) + q(p-y)} = \frac{dp}{p} = \frac{dq}{q} \label{eq:charpit_aux}
+\end{equation}
+
+\subsubsection*{Step 2: Solve for $p$ and $q$}
+Taking the last two fractions from equation \eqref{eq:charpit_aux}:
+\[ \frac{dp}{p} = \frac{dq}{q} \]
+Integrating both sides, we get:
+\[ \ln p = \ln q + \ln a \implies p = aq \]
+where $a$ is an arbitrary constant.
+
+Substitute $p = aq$ into the original PDE \eqref{eq:pde_mainn}:
+\begin{align*}
+    (aq)x + qy - (aq)q &= 0 \\
+    q(ax + y - aq) &= 0
+\end{align*}
+Assuming $q \neq 0$ for a non-trivial solution, we divide by $q$:
+\[ ax + y - aq = 0 \implies aq = ax + y \implies q = x + \frac{y}{a} \]
+Now, substitute the expression for $q$ back into $p = aq$:
+\[ p = a \left( x + \frac{y}{a} \right) = ax + y \]
+
+\subsubsection*{Step 3: Find the complete integral}
+The complete integral is obtained by integrating the total differential relation:
+\[ dz = p \, dx + q \, dy \]
+Substitute the values of $p$ and $q$ we just found:
+\[ dz = (ax + y) \, dx + \left(x + \frac{y}{a}\right) \, dy \]
+Expanding and rearranging the terms to group exact differentials:
+\begin{align*}
+    dz &= ax \, dx + y \, dx + x \, dy + \frac{y}{a} \, dy \\
+    dz &= ax \, dx + (y \, dx + x \, dy) + \frac{1}{a} y \, dy \\
+    dz &= ax \, dx + d(xy) + \frac{1}{a} y \, dy
+\end{align*}
+Integrating both sides yields:
+\[ z = \frac{ax^2}{2} + xy + \frac{y^2}{2a} + b \]
+where $b$ is the second arbitrary integration constant. We can factor the right hand side for a more compact representation:
+\[ z = \frac{1}{2a} \left( a^2x^2 + 2axy + y^2 \right) + b = \frac{1}{2a} (ax+y)^2 + b \]
+
+\vspace{0.5em}
+\begin{center}
+\boxed{ z = \frac{1}{2a} (ax+y)^2 + b }
+\end{center}
+\vspace{1em}
+
+\subsubsection*{Visualization of a Specific Solution}
+The complete integral represents a two-parameter family of surfaces. For $a=1$ and $b=0$, the solution becomes $z = \frac{1}{2}(x+y)^2$, which forms a parabolic cylinder as shown below.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    height=8cm,
+    view={45}{35},
+    xlabel={$x$},
+    ylabel={$y$},
+    zlabel={$z$},
+    grid=major,
+    colormap/viridis,
+    z buffer=sort,
+    axis lines=center,
+    ticklabel style={font=\footnotesize},
+    xlabel style={anchor=west},
+    ylabel style={anchor=west},
+    zlabel style={anchor=south}
+]
+
+\addplot3[
+    surf,
+    domain=-2:2,
+    y domain=-2:2,
+    samples=25,
+    opacity=0.8,
+    faceted color=black!60,
+    line width=0.1pt
+] {0.5 * (x + y)^2};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
+
+\item Use Charpit's method to find a complete integral and singular integral (if exists) of $2(z+px+qy)=yp^{2}$.
+\mk{12} \yr{MATH 143 | L-1/T-2 | 2010--11} \yr{MATH 241 | L-2/T-1 | 2023--24}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+Let the given partial differential equation be denoted by $F(x,y,z,p,q) = 0$:
+\begin{equation}
+F(x,y,z,p,q) = 2z + 2px + 2qy - yp^2 = 0 \label{eq:s6_q7_pde_main}
+\end{equation}
+
+\subsubsection*{Step 1: Write Charpit's auxiliary equations}
+Charpit's auxiliary equations are given by:
+\[ \frac{dx}{F_p} = \frac{dy}{F_q} = \frac{dz}{pF_p + qF_q} = \frac{dp}{-(F_x + pF_z)} = \frac{dq}{-(F_y + qF_z)} \]
+First, we compute the required partial derivatives of $F$:
+\begin{align*}
+    F_x &= 2p & F_y &= 2q - p^2 & F_z &= 2 \\
+    F_p &= 2x - 2yp & F_q &= 2y & &
+\end{align*}
+Substituting these into the auxiliary equations yields:
+\begin{align}
+\frac{dx}{2x - 2yp} &= \frac{dy}{2y} = \frac{dz}{p(2x - 2yp) + q(2y)} \nonumber \\
+&= \frac{dp}{-(2p + 2p)} = \frac{dq}{-(2q - p^2 + 2q)} \nonumber \\
+\frac{dx}{2x - 2yp} &= \frac{dy}{2y} = \frac{dz}{2px - 2yp^2 + 2qy} = \frac{dp}{-4p} = \frac{dq}{p^2 - 4q} \label{eq:aux}
+\end{align}
+
+\subsubsection*{Step 2: Solve for $p$ and $q$}
+Taking the second and fourth fractions from equation \eqref{eq:aux}, we get a simple relation between $y$ and $p$:
+\[ \frac{dy}{2y} = \frac{dp}{-4p} \]
+Multiplying by 4 and rearranging terms gives:
+\[ 2 \frac{dy}{y} + \frac{dp}{p} = 0 \]
+Integrating both sides:
+\[ 2 \ln y + \ln p = \ln a \implies \ln(py^2) = \ln a \]
+where $a$ is an arbitrary constant. This yields our expression for $p$:
+\begin{equation}
+p = \frac{a}{y^2} \label{eq:s6_q7_p_val}
+\end{equation}
+
+Now, substitute $p = \frac{a}{y^2}$ into the original PDE \eqref{eq:s6_q7_pde_main} to find $q$:
+\begin{align*}
+    2z + 2\left(\frac{a}{y^2}\right)x + 2qy - y\left(\frac{a}{y^2}\right)^2 &= 0 \\
+    2z + \frac{2ax}{y^2} + 2qy - \frac{a^2}{y^3} &= 0
+\end{align*}
+Solving for $2qy$ and dividing by $2y$, we find:
+\begin{align}
+    2qy &= \frac{a^2}{y^3} - \frac{2ax}{y^2} - 2z \nonumber \\
+    q &= \frac{a^2}{2y^4} - \frac{ax}{y^3} - \frac{z}{y} \label{eq:s6_q7_q_val}
+\end{align}
+
+\subsubsection*{Step 3: Find the complete integral}
+The complete integral is obtained by substituting $p$ and $q$ into the total differential relation:
+\[ dz = p \, dx + q \, dy \]
+\[ dz = \left( \frac{a}{y^2} \right) dx + \left( \frac{a^2}{2y^4} - \frac{ax}{y^3} - \frac{z}{y} \right) dy \]
+To solve this, we move the term containing $z$ to the left side:
+\[ dz + \frac{z}{y} dy = \frac{a}{y^2} dx - \frac{ax}{y^3} dy + \frac{a^2}{2y^4} dy \]
+Multiply the entire equation by $y$ to identify exact differentials:
+\begin{align*}
+    y \, dz + z \, dy &= a \left( \frac{y \, dx - x \, dy}{y^2} \right) + \frac{a^2}{2y^3} dy \\
+    d(yz) &= a \, d\left(\frac{x}{y}\right) + \frac{a^2}{2y^3} dy
+\end{align*}
+Integrating both sides gives the complete integral:
+\[ yz = a\left(\frac{x}{y}\right) + \frac{a^2}{2} \left(\frac{y^{-2}}{-2}\right) + b \]
+\[ yz = \frac{ax}{y} - \frac{a^2}{4y^2} + b \]
+Dividing by $y$, we arrive at the final form of the complete integral.
+
+\vspace{0.5em}
+\begin{center}
+\boxed{ z = \frac{ax}{y^2} - \frac{a^2}{4y^3} + \frac{b}{y} }
+\end{center}
+\vspace{0.5em}
+
+\subsubsection*{Step 4: Check for a singular integral}
+To find the singular integral, we differentiate the complete integral with respect to the arbitrary constants $a$ and $b$ and set the derivatives to zero.
+Let $f(x,y,z,a,b) = yz - \frac{ax}{y} + \frac{a^2}{4y^2} - b = 0$.
+Differentiating partially with respect to $b$:
+\[ \frac{\partial f}{\partial b} = -1 = 0 \]
+Since this leads to an impossible/absurd statement, it is impossible to eliminate $a$ and $b$. Therefore, \textbf{no singular integral exists} for this PDE.
+
+\vspace{1em}
+\subsubsection*{Visualization of the Complete Integral}
+The complete integral describes a two-parameter family of surfaces with a singularity along $y=0$. Below is a plot for the specific surface where $a=2$ and $b=1$, restricted to $y > 0$ to observe its geometry clearly.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    height=8cm,
+    view={35}{30},
+    xlabel={$x$},
+    ylabel={$y$},
+    zlabel={$z$},
+    domain=-3:3,
+    y domain=0.6:2.5,
+    samples=35,
+    grid=major,
+    colormap/viridis,
+    z buffer=sort,
+    axis lines=center,
+    ticklabel style={font=\footnotesize},
+    xlabel style={anchor=west},
+    ylabel style={anchor=west},
+    zlabel style={anchor=south}
+]
+
+\addplot3[
+    surf,
+    opacity=0.85,
+    faceted color=black!50,
+    line width=0.1pt
+] { (2*x)/(y^2) - 1/(y^3) + 1/y };
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\end{tcolorbox}
+
+
+\item Find the complete integral of $2x(z^{2}q^{2}+1)=pz$.
+\mk{13} \yr{MATH 241 | L-2/T-1 | 2022--23}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given partial differential equation is non-linear:
+\begin{equation}
+    2x(z^2q^2 + 1) = pz
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Apply a Variable Transformation} \\
+To simplify the equation, let us introduce a new dependent variable $Z = z^2$. The partial derivatives $P = \frac{\partial Z}{\partial x}$ and $Q = \frac{\partial Z}{\partial y}$ are obtained using the chain rule:
+\begin{align*}
+    P &= \frac{\partial}{\partial x}(z^2) = 2zp \implies p = \frac{P}{2z} \\
+    Q &= \frac{\partial}{\partial y}(z^2) = 2zq \implies q = \frac{Q}{2z}
+\end{align*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Substitute into the Original PDE} \\
+Substituting the expressions for $p$ and $q$ into equation (1) yields:
+\begin{align*}
+    2x \left[ z^2 \left( \frac{Q}{2z} \right)^2 + 1 \right] &= z \left( \frac{P}{2z} \right) \\
+    2x \left( \frac{Q^2}{4} + 1 \right) &= \frac{P}{2}
+\end{align*}
+Multiplying both sides by 2 provides a simplified equation in terms of $P$, $Q$, and $x$:
+\begin{align}
+    P &= 4x \left( \frac{Q^2 + 4}{4} \right) \nonumber \\
+    P &= x(Q^2 + 4)
+\end{align}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Solve the Transformed PDE} \\
+Equation (2) does not contain the variables $y$ or $Z$ explicitly. From Charpit's auxiliary equations, the absence of $y$ and $Z$ implies that $Q$ is equal to an arbitrary constant. 
+Let $Q = a$, where $a$ is an arbitrary constant. Substituting this into equation (2) gives:
+\begin{equation*}
+    P = x(a^2 + 4)
+\end{equation*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 4: Integrate the Total Differential} \\
+We know that the total differential for $Z(x, y)$ is:
+\begin{equation*}
+    dZ = P \, dx + Q \, dy
+\end{equation*}
+Substitute the expressions for $P$ and $Q$:
+\begin{equation*}
+    dZ = x(a^2 + 4) \, dx + a \, dy
+\end{equation*}
+Now, integrate both sides to find the solution for $Z$:
+\begin{align*}
+    \int dZ &= \int x(a^2 + 4) \, dx + \int a \, dy \\
+    Z &= (a^2 + 4) \frac{x^2}{2} + ay + b
+\end{align*}
+where $b$ is the constant of integration.
+
+\vspace{0.5em}
+\noindent\textbf{Step 5: Write the Final Complete Integral} \\
+Substitute $Z = z^2$ back into the integrated equation to obtain the complete integral of the original PDE:
+\begin{equation*}
+    z^2 = \frac{a^2 + 4}{2} x^2 + ay + b
+\end{equation*}
+
+\vspace{1em}
+\begin{center}
+    \boxed{ \mathbf{z^2 = \left(\frac{a^2 + 4}{2}\right) x^2 + ay + b} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $a$ and $b$ are arbitrary constants.}
+
+\end{tcolorbox}
+
+
+\item Find the complete, singular, and general integrals of $(p^{2}+q^{2})y=qz$.
+\mk{16} \yr{MATH 143 | L-1/T-2 | 2011--12} \yr{MATH 147 | L-1/T-2 | 2016--17, 2020--21}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given non-linear partial differential equation is:
+\begin{equation}
+    (p^2 + q^2)y = qz
+\end{equation}
+Let $f(x, y, z, p, q) = y p^2 + y q^2 - z q = 0$.
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Apply Charpit's Method} \\
+Charpit's auxiliary equations for finding a solution are given by:
+\begin{equation*}
+    \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-p f_p - q f_q} = \frac{dp}{f_x + p f_z} = \frac{dq}{f_y + q f_z}
+\end{equation*}
+First, we compute the necessary partial derivatives of $f$:
+\begin{align*}
+    f_x &= 0 \\
+    f_y &= p^2 + q^2 \\
+    f_z &= -q \\
+    f_p &= 2yp \\
+    f_q &= 2yq - z
+\end{align*}
+Substituting these into Charpit's equations yields:
+\begin{equation*}
+    \frac{dp}{0 + p(-q)} = \frac{dq}{(p^2 + q^2) + q(-q)}
+\end{equation*}
+\begin{equation*}
+    \frac{dp}{-pq} = \frac{dq}{p^2}
+\end{equation*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Find expressions for $p$ and $q$} \\
+From the fractions for $dp$ and $dq$, we can cross-multiply and integrate:
+\begin{align*}
+    p^2 \, dp &= -pq \, dq \\
+    p \, dp + q \, dq &= 0 \quad (\text{assuming } p \neq 0)
+\end{align*}
+Integrating this yields:
+\begin{equation}
+    p^2 + q^2 = a^2
+\end{equation}
+where $a$ is an arbitrary constant. Substitute equation (2) into the original PDE (1):
+\begin{align*}
+    a^2 y &= qz \implies q = \frac{a^2 y}{z}
+\end{align*}
+Now, solve for $p$ using equation (2):
+\begin{align*}
+    p^2 &= a^2 - q^2 = a^2 - \frac{a^4 y^2}{z^2} = \frac{a^2(z^2 - a^2 y^2)}{z^2} \\
+    p &= \frac{a}{z}\sqrt{z^2 - a^2 y^2}
+\end{align*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Determine the Complete Integral} \\
+Using the total differential $dz = p \, dx + q \, dy$, we substitute $p$ and $q$:
+\begin{align*}
+    dz &= \frac{a}{z}\sqrt{z^2 - a^2 y^2} \, dx + \frac{a^2 y}{z} \, dy \\
+    z \, dz - a^2 y \, dy &= a\sqrt{z^2 - a^2 y^2} \, dx
+\end{align*}
+Let $u = z^2 - a^2 y^2$. Then $du = 2z \, dz - 2a^2 y \, dy$, which implies $\frac{1}{2}du = z \, dz - a^2 y \, dy$. The equation becomes:
+\begin{align*}
+    \frac{du}{2\sqrt{u}} &= a \, dx
+\end{align*}
+Integrating both sides, we get:
+\begin{equation*}
+    \sqrt{u} = ax + b
+\end{equation*}
+Substituting $u$ back yields the complete integral:
+\begin{equation*}
+    \sqrt{z^2 - a^2 y^2} = ax + b
+\end{equation*}
+\begin{center}
+    \boxed{ \mathbf{z^2 = (ax + b)^2 + a^2 y^2} }
+\end{center}
+
+\vspace{0.5em}
+\noindent\textbf{Step 4: Determine the Singular Integral} \\
+To find the singular integral, we differentiate the complete integral with respect to the constants $a$ and $b$, and equate to zero:
+\begin{align}
+    \frac{\partial}{\partial b} \left[ z^2 - (ax+b)^2 - a^2 y^2 \right] &= 0 \implies -2(ax+b) = 0 \implies ax+b = 0 \\
+    \frac{\partial}{\partial a} \left[ z^2 - (ax+b)^2 - a^2 y^2 \right] &= 0 \implies -2x(ax+b) - 2ay^2 = 0 
+\end{align}
+Substituting $ax+b=0$ into equation (4) gives $-2ay^2 = 0 \implies a = 0$ (assuming $y \neq 0$). If $a=0$ and $ax+b=0$, then $b=0$. 
+Substituting $a=0$ and $b=0$ back into the complete integral yields:
+\begin{center}
+    \boxed{ \mathbf{z = 0} }
+\end{center}
+\textit{Note: $z=0$ satisfies the original equation since $p=0$ and $q=0$ make both sides $0$.}
+
+\vspace{0.5em}
+\noindent\textbf{Step 5: Determine the General Integral} \\
+Let $b = \phi(a)$, where $\phi$ is an arbitrary function. The complete integral becomes:
+\begin{equation}
+    z^2 = (ax + \phi(a))^2 + a^2 y^2
+\end{equation}
+Differentiate this with respect to $a$:
+\begin{equation}
+    0 = 2(ax + \phi(a))(x + \phi'(a)) + 2a y^2
+\end{equation}
+The general integral is the envelope surface obtained by \textbf{eliminating the parameter $\mathbf{a}$} between equations (5) and (6).
+
+\end{tcolorbox}
+
+
+\item Find the complete integral and singular integral (if it exists) of $2xz-px^{2}-2qxy+pq=0$.
+\mk{26} \yr{MATH 147 | L-1/T-2 | 2019--20}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given non-linear partial differential equation is:
+\begin{equation}
+    2xz - px^2 - 2qxy + pq = 0
+\end{equation}
+Let $f(x, y, z, p, q) = 2xz - px^2 - 2qxy + pq = 0$.
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Apply Charpit's Method} \\
+Charpit's auxiliary equations are given by:
+\begin{equation*}
+    \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-pf_p - qf_q} = \frac{dp}{f_x + pf_z} = \frac{dq}{f_y + qf_z}
+\end{equation*}
+First, we compute the partial derivatives of $f$:
+\begin{align*}
+    f_x &= 2z - 2px - 2qy, & f_p &= -x^2 + q \\
+    f_y &= -2qx,           & f_q &= -2xy + p \\
+    f_z &= 2x
+\end{align*}
+Substituting these into the equations for $dp$ and $dq$:
+\begin{align*}
+    f_x + pf_z &= (2z - 2px - 2qy) + p(2x) = 2z - 2qy \\
+    f_y + qf_z &= -2qx + q(2x) = 0
+\end{align*}
+The auxiliary equation for $dq$ becomes:
+\begin{align*}
+    \frac{dq}{0} = \implies dq = 0
+\end{align*}
+Integrating this gives:
+\begin{equation}
+    q = a
+\end{equation}
+where $a$ is an arbitrary constant.
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Find the Expression for $p$} \\
+Substitute $q = a$ into the original differential equation (1):
+\begin{align*}
+    2xz - px^2 - 2axy + pa &= 0 \\
+    p(a - x^2) &= 2axy - 2xz \\
+    p &= \frac{2xz - 2axy}{x^2 - a}
+\end{align*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Determine the Complete Integral} \\
+Using the total differential formula $dz = p \, dx + q \, dy$, we substitute $p$ and $q$:
+\begin{align*}
+    dz &= \left( \frac{2xz - 2axy}{x^2 - a} \right) dx + a \, dy \\
+    dz - a \, dy &= \frac{2x(z - ay)}{x^2 - a} \, dx \\
+    \frac{d(z - ay)}{z - ay} &= \frac{2x}{x^2 - a} \, dx
+\end{align*}
+Integrating both sides yields:
+\begin{align*}
+    \ln(z - ay) &= \ln(x^2 - a) + \ln b \\
+    \ln(z - ay) &= \ln [b(x^2 - a)]
+\end{align*}
+Exponentiating both sides gives the complete integral:
+\begin{equation*}
+    z - ay = b(x^2 - a)
+\end{equation*}
+\begin{center}
+    \boxed{ \mathbf{z = ay + b(x^2 - a)} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $a$ and $b$ are arbitrary constants.}
+
+\vspace{0.5em}
+\noindent\textbf{Step 4: Check for the Singular Integral} \\
+To determine if a singular integral exists, we differentiate the complete integral with respect to parameters $a$ and $b$, and set the derivatives to zero:
+\begin{align}
+    \frac{\partial}{\partial b} \left[ z - ay - b(x^2 - a) \right] = 0 &\implies -(x^2 - a) = 0 \implies a = x^2 \\
+    \frac{\partial}{\partial a} \left[ z - ay - b(x^2 - a) \right] = 0 &\implies -y + b = 0 \implies b = y
+\end{align}
+Substituting the expressions $a = x^2$ and $b = y$ back into the complete integral:
+\begin{align*}
+    z &= (x^2)y + (y)(x^2 - x^2) \\
+    z &= x^2y
+\end{align*}
+Let us verify if $z = x^2y$ satisfies the original PDE (1). Finding its partial derivatives:
+\begin{align*}
+    p &= \frac{\partial z}{\partial x} = 2xy \\
+    q &= \frac{\partial z}{\partial y} = x^2
+\end{align*}
+Substitute $z, p,$ and $q$ back into the LHS of equation (1):
+\begin{align*}
+    \text{LHS} &= 2x(x^2y) - (2xy)x^2 - 2(x^2)xy + (2xy)(x^2) \\
+    &= 2x^3y - 2x^3y - 2x^3y + 2x^3y \\
+    &= 0 = \text{RHS}
+\end{align*}
+Since the relation satisfies the PDE, a singular integral exists.
+
+\vspace{1em}
+\begin{center}
+    \boxed{ \mathbf{z = x^2y} }
+\end{center}
+
+\end{tcolorbox}
+
+
+\item Find the complete integral and singular integral (if exist) of $p-3x^{2}=q^{2}-y$.
+\mk{20} \yr{MATH 147 | L-1/T-2 | 2018--19}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given non-linear partial differential equation is:
+\begin{equation}
+    p - 3x^2 = q^2 - y
+\end{equation}
+This equation is of the standard form $f(x, p) = g(y, q)$, where the variables are explicitly separable.
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Separate the Variables} \\
+We equate both sides of equation (1) to an arbitrary separation constant $a$:
+\begin{equation*}
+    p - 3x^2 = a \quad \text{and} \quad q^2 - y = a
+\end{equation*}
+Now, solve for $p$ and $q$ explicitly in terms of $x$, $y$, and $a$:
+\begin{align}
+    p &= 3x^2 + a \\
+    q^2 &= y + a \implies q = \pm\sqrt{y + a}
+\end{align}
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Determine the Complete Integral} \\
+Using the total differential relation $dz = p \, dx + q \, dy$, we substitute the expressions for $p$ and $q$:
+\begin{equation*}
+    dz = (3x^2 + a) \, dx \pm \sqrt{y + a} \, dy
+\end{equation*}
+Integrating both sides yields:
+\begin{align*}
+    \int dz &= \int (3x^2 + a) \, dx \pm \int (y + a)^{1/2} \, dy \\
+    z &= x^3 + ax \pm \frac{2}{3}(y + a)^{3/2} + b
+\end{align*}
+where $b$ is a second arbitrary constant of integration. 
+
+\vspace{1em}
+\begin{center}
+    \boxed{ \mathbf{z = x^3 + ax \pm \frac{2}{3}(y + a)^{3/2} + b} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $a$ and $b$ are arbitrary constants.}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Check for the Singular Integral} \\
+To find the singular integral, we differentiate the complete integral with respect to the constants $a$ and $b$, and set the derivatives to zero:
+\begin{align}
+    \frac{\partial z}{\partial b} &= 1 \implies 1 = 0 
+\end{align}
+Equation (4) yields a clear contradiction ($1 = 0$), which indicates that the envelope with respect to $b$ does not exist. 
+
+Therefore, a singular integral \textbf{does not exist}.
+
+\end{tcolorbox}
+
+
+\item Find the complete, singular (if exists) and general integral of $z^{2}(p^{2}z^{2}+q^{2})=1$.
+\mk{17} \yr{MATH 147 | L-1/T-2 | 2017--18}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given non-linear first-order partial differential equation is:
+\begin{equation}
+    z^2(p^2z^2 + q^2) = 1 \implies z^4p^2 + z^2q^2 = 1
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Apply a Variable Transformation} \\
+To simplify the equation, we can introduce a substitution for $z$. Let $Z = z^2$. Using the chain rule, we find the new partial derivatives $P = \frac{\partial Z}{\partial x}$ and $Q = \frac{\partial Z}{\partial y}$:
+\begin{align*}
+    P &= 2z \frac{\partial z}{\partial x} = 2zp \implies zp = \frac{P}{2} \\
+    Q &= 2z \frac{\partial z}{\partial y} = 2zq \implies zq = \frac{Q}{2}
+\end{align*}
+Substituting these into equation (1) gives:
+\begin{align*}
+    (zp)^2 z^2 + (zq)^2 &= 1 \\
+    \left(\frac{P}{2}\right)^2 Z + \left(\frac{Q}{2}\right)^2 &= 1 \\
+    \frac{Z P^2}{4} + \frac{Q^2}{4} &= 1
+\end{align*}
+Multiplying by 4 yields the transformed non-linear PDE:
+\begin{equation}
+    Z P^2 + Q^2 = 4
+\end{equation}
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Solve via Charpit's Method} \\
+Let $F(x, y, Z, P, Q) = Z P^2 + Q^2 - 4 = 0$. Charpit's auxiliary equations are:
+\begin{equation*}
+    \frac{dP}{F_x + P F_Z} = \frac{dQ}{F_y + Q F_Z}
+\end{equation*}
+We compute the required partial derivatives of $F$:
+\begin{equation*}
+    F_x = 0, \quad F_y = 0, \quad F_Z = P^2
+\end{equation*}
+Substituting these back into Charpit's fractions gives:
+\begin{align*}
+    \frac{dP}{0 + P(P^2)} &= \frac{dQ}{0 + Q(P^2)} \\
+    \frac{dP}{P^3} &= \frac{dQ}{Q P^2} \implies \frac{dP}{P} = \frac{dQ}{Q}
+\end{align*}
+Integrating this simple differential equation gives a linear relation between $P$ and $Q$:
+\begin{equation}
+    P = aQ
+\end{equation}
+where $a$ is an arbitrary constant. Substitute $P = aQ$ back into the transformed equation (2):
+\begin{align*}
+    Z(aQ)^2 + Q^2 = 4 &\implies Q^2(a^2 Z + 1) = 4 \\
+    Q = \frac{2}{\sqrt{a^2 Z + 1}}, \quad &\text{and} \quad P = \frac{2a}{\sqrt{a^2 Z + 1}}
+\end{align*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Determine the Complete Integral} \\
+Using the total differential formula $dZ = P \, dx + Q \, dy$, we substitute our expressions for $P$ and $Q$:
+\begin{align*}
+    dZ &= \frac{2a}{\sqrt{a^2 Z + 1}} \, dx + \frac{2}{\sqrt{a^2 Z + 1}} \, dy \\
+    \sqrt{a^2 Z + 1} \, dZ &= 2(a \, dx + dy)
+\end{align*}
+Integrating both sides yields:
+\begin{align*}
+    \frac{2}{3a^2}(a^2 Z + 1)^{3/2} &= 2(ax + y) + C \\
+    (a^2 Z + 1)^{3/2} &= 3a^2(ax + y + b)
+\end{align*}
+where $b = C / 2$ is another arbitrary constant. Squaring both sides and substituting $Z = z^2$ back into the equation yields the complete integral:
+\begin{center}
+    \boxed{ \mathbf{(a^2 z^2 + 1)^3 = 9a^4(ax + y + b)^2} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $a$ and $b$ are arbitrary constants.}
+
+\vspace{0.5em}
+\noindent\textbf{Step 4: Check for a Singular Integral} \\
+To find the singular integral, we differentiate the complete integral with respect to the constant $b$ and set it to zero:
+\begin{equation*}
+    \frac{\partial}{\partial b}\left[ (a^2 z^2 + 1)^3 - 9a^4(ax + y + b)^2 \right] = 0 \implies -18a^4(ax + y + b) = 0
+\end{equation*}
+This implies $ax + y + b = 0$. Substituting this back into the complete integral gives:
+\begin{equation*}
+    (a^2 z^2 + 1)^3 = 0 \implies a^2 z^2 + 1 = 0 \implies z^2 = -\frac{1}{a^2}
+\end{equation*}
+Since $a$ must be a real parameter, this equation yields no real geometric surface. Thus, a real \textbf{singular integral does not exist}.
+
+\vspace{0.5em}
+\noindent\textbf{Step 5: Determine the General Integral} \\
+To construct the general integral, we set $b = \phi(a)$, where $\phi$ is an arbitrary differentiable function. The complete integral becomes:
+\begin{equation}
+    (a^2 z^2 + 1)^3 - 9a^4\big(ax + y + \phi(a)\big)^2 = 0
+\end{equation}
+Differentiating equation (4) with respect to $a$ gives:
+\begin{equation}
+    6a z^2(a^2 z^2 + 1)^2 - 36a^3\big(ax + y + \phi(a)\big)^2 - 18a^4\big(ax + y + \phi(a)\big)\big(x + \phi'(a)\big) = 0
+\end{equation}
+The general integral is defined implicitly as the family of functional envelopes obtained by \textbf{eliminating the parameter $\mathbf{a}$} between equations (4) and (5).
+
+\end{tcolorbox}
+
+
+\item Find the complete and singular integral (if exists) of $z=px+qy+c\sqrt{1+p^{2}+q^{2}}$.
+\mk{15} \yr{MATH 147 | L-1/T-2 | 2015--16}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given partial differential equation is:
+\begin{equation}
+    z = px + qy + c\sqrt{1+p^{2}+q^{2}}
+\end{equation}
+This equation is a non-linear first-order PDE in **Clairaut's form**, which has the general structure $z = px + qy + f(p, q)$.
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Determine the Complete Integral} \\
+For any partial differential equation in Clairaut's form, the complete integral can be directly obtained by replacing the partial derivatives $p$ and $q$ with arbitrary independent constants $a$ and $b$ respectively:
+\begin{equation*}
+    p = a \quad \text{and} \quad q = b
+\end{equation*}
+Substituting these into equation (1) yields the complete integral:
+\begin{center}
+    \boxed{ \mathbf{z = ax + by + c\sqrt{1+a^{2}+b^{2}}} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $a$ and $b$ are arbitrary constants.}
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Determine the Singular Integral} \\
+To find the singular integral, we eliminate the parameters $a$ and $b$ by differentiating the complete integral with respect to $a$ and $b$ and setting the results to zero.
+
+\vspace{0.5em}
+\noindent Differentiating with respect to $a$:
+\begin{align}
+    0 = x + c \cdot \frac{1}{2\sqrt{1+a^2+b^2}} \cdot 2a \implies x = -\frac{ac}{\sqrt{1+a^2+b^2}}
+\end{align}
+
+\noindent Differentiating with respect to $b$:
+\begin{align}
+    0 = y + c \cdot \frac{1}{2\sqrt{1+a^2+b^2}} \cdot 2b \implies y = -\frac{bc}{\sqrt{1+a^2+b^2}}
+\end{align}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Eliminate the Parameters $a$ and $b$} \\
+To solve for $\sqrt{1+a^2+b^2}$, we substitute the expressions for $x$ and $y$ from equations (2) and (3) back into the complete integral:
+\begin{align*}
+    z &= a\left(-\frac{ac}{\sqrt{1+a^2+b^2}}\right) + b\left(-\frac{bc}{\sqrt{1+a^2+b^2}}\right) + c\sqrt{1+a^2+b^2} \\
+    z &= \frac{-a^2c - b^2c + c(1+a^2+b^2)}{\sqrt{1+a^2+b^2}} \\
+    z &= \frac{c}{\sqrt{1+a^2+b^2}}
+\end{align*}
+
+\noindent Now, square equations (2), (3), and the simplified expression for $z$:
+\begin{equation*}
+    x^2 = \frac{a^2c^2}{1+a^2+b^2}, \quad y^2 = \frac{b^2c^2}{1+a^2+b^2}, \quad z^2 = \frac{c^2}{1+a^2+b^2}
+\end{equation*}
+
+\noindent Adding these three squared equations together yields:
+\begin{align*}
+    x^2 + y^2 + z^2 &= \frac{a^2c^2 + b^2c^2 + c^2}{1+a^2+b^2} \\
+    &= \frac{c^2(a^2 + b^2 + 1)}{1+a^2+b^2} \\
+    &= c^2
+\end{align*}
+
+\vspace{0.5em}
+\noindent This gives the equation of the singular integral surface, which geometrically represents a sphere centered at the origin with a radius of $c$.
+
+\vspace{1em}
+\begin{center}
+    \boxed{ \mathbf{x^2 + y^2 + z^2 = c^2} }
+\end{center}
+
+\end{tcolorbox}
+
+
+\item Solve: $(p^{2}+q^{2})x=pz$.
+\mk{15} \yr{MATH 143 | L-1/T-2 | 2014--15}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
+
+The given non-linear first-order partial differential equation is:
+\begin{equation}
+    (p^2 + q^2)x = pz \implies p^2x + q^2x - pz = 0
+\end{equation}
+Let $f(x, y, z, p, q) = p^2x + q^2x - pz = 0$.
+
+\vspace{0.5em}
+\noindent\textbf{Step 1: Apply Charpit's Method} \\
+Charpit's auxiliary equations are given by:
+\begin{equation*}
+    \frac{dx}{-f_p} = \frac{dy}{-f_q} = \frac{dz}{-pf_p - qf_q} = \frac{dp}{f_x + pf_z} = \frac{dq}{f_y + qf_z}
+\end{equation*}
+First, let us find the partial derivatives of $f$:
+\begin{align*}
+    f_x &= p^2 + q^2, & f_p &= 2px - z \\
+    f_y &= 0,         & f_q &= 2qx \\
+    f_z &= -p
+\end{align*}
+Now, evaluate the denominators for $dp$ and $dq$:
+\begin{align*}
+    f_x + pf_z &= (p^2 + q^2) + p(-p) = q^2 \\
+    f_y + qf_z &= 0 + q(-p) = -pq
+\end{align*}
+Substituting these into the fractions for $dp$ and $dq$ gives:
+\begin{align*}
+    \frac{dp}{q^2} &= \frac{dq}{-pq}
+\end{align*}
+Assuming $q \neq 0$, we can cancel $q$ from both denominators:
+\begin{align*}
+    \frac{dp}{q} &= -\frac{dq}{p} \\
+    p \, dp + q \, dq &= 0
+\end{align*}
+Integrating this equation yields:
+\begin{equation}
+    p^2 + q^2 = a^2
+\end{equation}
+where $a^2$ is an arbitrary positive separation constant.
+
+\vspace{0.5em}
+\noindent\textbf{Step 2: Find Expressions for $p$ and $q$} \\
+From the original PDE (1), we know that $(p^2 + q^2)x = pz$. Substituting $p^2 + q^2 = a^2$ into this equation gives:
+\begin{align*}
+    a^2 x &= pz \\
+    p &= \frac{a^2 x}{z}
+\end{align*}
+Now, substitute this expression for $p$ back into equation (2) to solve for $q$:
+\begin{align*}
+    \left(\frac{a^2 x}{z}\right)^2 + q^2 &= a^2 \\
+    q^2 &= a^2 - \frac{a^4 x^2}{z^2} \\
+    q^2 &= \frac{a^2 z^2 - a^4 x^2}{z^2} \\
+    q &= \frac{a \sqrt{z^2 - a^2 x^2}}{z}
+\end{align*}
+
+\vspace{0.5em}
+\noindent\textbf{Step 3: Determine the Complete Integral} \\
+Using the total differential relation $dz = p \, dx + q \, dy$, we substitute our expressions for $p$ and $q$:
+\begin{align*}
+    dz &= \left(\frac{a^2 x}{z}\right) dx + \left(\frac{a \sqrt{z^2 - a^2 x^2}}{z}\right) dy \\
+    z \, dz &= a^2 x \, dx + a \sqrt{z^2 - a^2 x^2} \, dy \\
+    z \, dz - a^2 x \, dx &= a \sqrt{z^2 - a^2 x^2} \, dy \\
+    \frac{z \, dz - a^2 x \, dx}{\sqrt{z^2 - a^2 x^2}} &= a \, dy
+\end{align*}
+Notice that the numerator on the left side is exactly half the derivative of the expression inside the square root, since $d(z^2 - a^2 x^2) = 2z \, dz - 2a^2 x \, dx$. Thus, we can rewrite the equation as:
+\begin{equation*}
+    \frac{1}{2} (z^2 - a^2 x^2)^{-1/2} \, d(z^2 - a^2 x^2) = a \, dy
+\end{equation*}
+Integrating both sides yields:
+\begin{align*}
+    \sqrt{z^2 - a^2 x^2} &= ay + b
+\end{align*}
+Squaring both sides gives the complete integral:
+\begin{center}
+    \boxed{ \mathbf{z^2 = a^2 x^2 + (ay + b)^2} }
+\end{center}
+\vspace{0.5em}
+\noindent \textit{where $a$ and $b$ are arbitrary constants.}
+
+\vspace{0.5em}
+\noindent\textbf{Step 4: Check for a Singular Integral} \\
+Differentiating the complete integral with respect to the parameter $b$:
+\begin{equation*}
+    0 = 2(ay + b) \implies ay + b = 0
+\end{equation*}
+Substituting $ay + b = 0$ back into the complete integral yields:
+\begin{equation*}
+    z^2 = a^2 x^2 \implies z = \pm ax
+\end{equation*}
+Let us check if $z = \pm ax$ satisfies the original PDE (1). Finding the partial derivatives:
+\begin{equation*}
+    p = \frac{\partial z}{\partial x} = \pm a, \quad \text{and} \quad q = \frac{\partial z}{\partial y} = 0
+\end{equation*}
+Substituting $z, p,$ and $q$ back into the left side of equation (1):
+\begin{align*}
+    \text{LHS} &= (p^2 + q^2)x = (a^2 + 0)x = a^2 x \\
+    \text{RHS} &= pz = (\pm a)(\pm ax) = a^2 x
+\end{align*}
+Since $\text{LHS} = \text{RHS}$, the boundary envelope relation satisfies the differential equation. 
+
+Therefore, the singular integral is:
+\begin{center}
+    \boxed{ \mathbf{z^2 = a^2 x^2} }
+\end{center}
+However, since this still retains the arbitrary constant $a$, a unique envelope completely free of parameters does not exist for this structural form.
+
+\end{tcolorbox}
+
+
 \item Find the complete integral and singular integral (if it exists) of $z^{2}(p^{2}+q^{2}+1)=4$.
 \mk{15} \yr{MATH 143 | L-1/T-2 | 2013--14}
 
@@ -20026,88 +20116,6 @@ Since $\text{LHS} = \text{RHS}$, the boundary envelope relation satisfies the di
 
 \end{tcolorbox}
 
-\item Solve: $pz-qz=z^{2}+(x+y)^{2}$.
-\mk{15} \yr{MATH 143 | L-1/T-2 | 2012--13}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given partial differential equation can be rewritten in standard Lagrange form as:
-\begin{equation*}
-    zp - zq = z^{2} + (x+y)^{2}
-\end{equation*}
-This equation matches the standard linear form $Pp + Qq = R$, where:
-\begin{align*}
-    P &= z \\
-    Q &= -z \\
-    R &= z^{2} + (x+y)^{2}
-\end{align*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Write Lagrange's Subsidiary Equations} \\
-The characteristic system of ordinary differential equations is given by:
-\begin{equation}
-    \frac{dx}{z} = \frac{dy}{-z} = \frac{dz}{z^{2} + (x+y)^{2}}
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Find the First Independent Integral} \\
-Taking the first two fractions from equation (1):
-\begin{equation*}
-    \frac{dx}{z} = \frac{dy}{-z}
-\end{equation*}
-Assuming $z \neq 0$, we cancel $z$ from the denominators:
-\begin{align*}
-    dx &= -dy \\
-    dx + dy &= 0
-\end{align*}
-Integrating this exact differential yields our first independent integral:
-\begin{equation}
-    x + y = c_1
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Find the Second Independent Integral} \\
-To find a second relationship, we substitute $x+y = c_1$ from equation (2) into the third fraction of equation (1) and equate it with the first fraction:
-\begin{align*}
-    \frac{dx}{z} &= \frac{dz}{z^2 + c_1^2} \\
-    (z^2 + c_1^2) \, dx &= z \, dz \\
-    dx &= \frac{z \, dz}{z^2 + c_1^2}
-\end{align*}
-To integrate the right side, we can use a substitution or multiply both sides by 2 to construct an exact derivative:
-\begin{align*}
-    2 \, dx &= \frac{2z \, dz}{z^2 + c_1^2}
-\end{align*}
-Integrating both sides gives:
-\begin{align*}
-    2x &= \ln(z^2 + c_1^2) + \ln c_2' \\
-    2x &= \ln\big(c_2' (z^2 + c_1^2)\big)
-\end{align*}
-Taking the exponential of both sides:
-\begin{align*}
-    e^{2x} &= c_2' (z^2 + c_1^2) \\
-    \frac{e^{2x}}{z^2 + c_1^2} &= c_2'
-\end{align*}
-Substituting $c_1 = x+y$ back into the equation gives our second independent integral:
-\begin{equation}
-    (z^2 + (x+y)^2)e^{-2x} = c_2
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 4: Formulate the General Solution} \\
-The general solution is expressed via an arbitrary differentiable function $\phi$ connecting the two constants $c_1$ and $c_2$:
-\begin{equation*}
-    \phi(c_1, c_2) = 0
-\end{equation*}
-Substituting the values from equations (2) and (3) gives the final general solution.
-
-\vspace{1em}
-\begin{center}
-    \boxed{ \mathbf{\phi\Big(x+y, \ \big(z^2 + (x+y)^2\big)e^{-2x}\Big) = 0} } \quad \text{or} \quad \boxed{ \mathbf{z^2 + (x+y)^2 = e^{2x} \cdot f(x+y)} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $\phi$ and $f$ are arbitrary differentiable functions.}
-
-\end{tcolorbox}
 
 \item Solve: $p(q^{2}+1)+(3-z)q=0$.
 \mk{16.5} \yr{MATH 143 | L-1/T-2 | 2012--13}
@@ -20188,91 +20196,6 @@ Since this result still explicitly retains the arbitrary parameter $a$, it repre
 
 \end{tcolorbox}
 
-\item Solve: $p\cos(x+y)+q\sin(x+y)=z$.
-\mk{15} \yr{MATH 143 | L-1/T-2 | 2011--12}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-The given partial differential equation is a first-order linear PDE:
-\begin{equation*}
-    p\cos(x+y) + q\sin(x+y) = z
-\end{equation*}
-This equation matches the standard Lagrange form $Pp + Qq = R$, where:
-\begin{align*}
-    P &= \cos(x+y) \\
-    Q &= \sin(x+y) \\
-    R &= z
-\end{align*}
-
-\vspace{0.5em}
-\noindent\textbf{Step 1: Write Lagrange's Subsidiary Equations} \\
-The characteristic system of ordinary differential equations is given by:
-\begin{equation}
-    \frac{dx}{\cos(x+y)} = \frac{dy}{\sin(x+y)} = \frac{dz}{z}
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 2: Find the First Independent Integral} \\
-Let us use the properties of fractions to create useful combinations of the first two ratios. We can form the sum and difference of the numerators and denominators:
-\begin{equation*}
-    \frac{dx + dy}{\cos(x+y) + \sin(x+y)} = \frac{dx - dy}{\cos(x+y) - \sin(x+y)}
-\end{equation*}
-Let $t = x+y$, which means $dt = dx + dy$, and $d(x-y) = dx - dy$. Substituting this into the combined ratio yields:
-\begin{align*}
-    \frac{dt}{\cos t + \sin t} &= \frac{d(x-y)}{\cos t - \sin t} \\
-    d(x-y) &= \frac{\cos t - \sin t}{\cos t + \sin t} \, dt
-\end{align*}
-Notice that the numerator is the exact derivative of the denominator, since $\frac{d}{dt}(\cos t + \sin t) = -\sin t + \cos t$. Thus, integrating both sides gives:
-\begin{align*}
-    \int d(x-y) &= \int \frac{d(\cos t + \sin t)}{\cos t + \sin t} \\
-    x - y &= \ln|\cos t + \sin t| + c_1
-\end{align*}
-Substituting $t = x+y$ back into the equation gives our first independent integral:
-\begin{equation}
-    x - y - \ln|\cos(x+y) + \sin(x+y)| = c_1
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 3: Find the Second Independent Integral} \\
-Now, let us equate the sum combination we found earlier to the third fraction from equation (1):
-\begin{equation*}
-    \frac{dx + dy}{\cos(x+y) + \sin(x+y)} = \frac{dz}{z}
-\end{equation*}
-Again, substituting $t = x+y$:
-\begin{equation*}
-    \frac{dt}{\cos t + \sin t} = \frac{dz}{z}
-\end{equation*}
-To integrate the left side, we rewrite the denominator using the harmonic addition identity: $\cos t + \sin t = \sqrt{2}\sin\left(t + \frac{\pi}{4}\right)$.
-\begin{align*}
-    \frac{dz}{z} &= \frac{dt}{\sqrt{2}\sin\left(t + \frac{\pi}{4}\right)} \\
-    \frac{dz}{z} &= \frac{1}{\sqrt{2}} \csc\left(t + \frac{\pi}{4}\right) \, dt
-\end{align*}
-Integrating both sides using the standard integral $\int \csc u \, du = \ln|\tan(\frac{u}{2})|$:
-\begin{align*}
-    \ln z &= \frac{1}{\sqrt{2}} \ln \left| \tan \left( \frac{t}{2} + \frac{\pi}{8} \right) \right| + \ln c_2 \\
-    \ln z &= \ln \left( c_2 \left[ \tan \left( \frac{t}{2} + \frac{\pi}{8} \right) \right]^{1/\sqrt{2}} \right)
-\end{align*}
-Taking the exponential of both sides and substituting $t = x+y$ gives our second independent integral:
-\begin{equation}
-    z \left[ \cot \left( \frac{x+y}{2} + \frac{\pi}{8} \right) \right]^{1/\sqrt{2}} = c_2
-\end{equation}
-
-\vspace{0.5em}
-\noindent\textbf{Step 4: Formulate the General Solution} \\
-The general solution is expressed as an arbitrary differentiable function $\phi$ connecting the two independent constants $c_1$ and $c_2$:
-\begin{equation*}
-    \phi(c_1, c_2) = 0
-\end{equation*}
-Substituting the values from equations (2) and (3) yields the final general solution.
-
-\vspace{1em}
-\begin{center}
-    \boxed{ \mathbf{\phi\left( x - y - \ln|\cos(x+y) + \sin(x+y)|, \ z \left[ \cot \left( \frac{x+y}{2} + \frac{\pi}{8} \right) \right]^{1/\sqrt{2}} \right) = 0} }
-\end{center}
-\vspace{0.5em}
-\noindent \textit{where $\phi$ is an arbitrary differentiable function.}
-
-\end{tcolorbox}
 
 \item Solve: $p^{2}+q^{2}-2px-2qy+1=0$.
 \mk{17.5} \yr{MATH 143 | L-1/T-2 | 2011--12}
@@ -20354,6 +20277,8 @@ Using the standard integration formula $\int \sqrt{u^2 - c} \, du = \frac{u}{2}\
 \noindent \textit{where $a$ and $c_1$ are arbitrary constants, and $b = 1 - a$.}
 
 \end{tcolorbox}
+
+
 
 \end{enumerate}
 

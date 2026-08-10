@@ -3305,7 +3305,7 @@
         % Upper Transistor Q2
         \draw (5, 4.8) node[npn] (Q2) {};
         \node[right=0.5cm] at (Q2.B) {$Q_2$};
-        \draw (B2) -- (Q2.B);
+        \draw (B2) -| (Q2.B);
         
         % Connection between Q1 and Q2
         \draw (Q1.C) -- (Q2.E);
@@ -5154,7 +5154,7 @@
         % M2 Gate, Drain, and Source Branches
         % ==========================================
         % Gate connection to M1 Drain
-        \draw (D1) -- (M2.G);
+        \draw (D1) -| (M2.G);
 
         % Drain connection (Direct to +5V)
         \draw (M2.D) -- (M2.D |- 0, 3);
@@ -5166,6 +5166,7 @@
 
     \end{circuitikz}
 \end{center}
+
 \mk{20} \yr{EEE 263 | L-2/T-1 | 2016--17}
 
 
