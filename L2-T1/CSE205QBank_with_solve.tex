@@ -1,12 +1,16 @@
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
+\usepackage{lmodern}
 \usepackage{geometry}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage[hidelinks,colorlinks=true,linkcolor=blue!70!black]{hyperref}
+\usepackage{bookmark}
+\bookmarksetup{open=true,depth=2}
 \usepackage{xcolor}
 \usepackage{fancyhdr}
 \usepackage{tcolorbox}
@@ -36,14 +40,13 @@
 
 \newcounter{myboxcount}
 
-\BeforeBeginEnvironment{tcolorbox}{%
-  \stepcounter{myboxcount}% বক্স কাউন্টার ১ বাড়াবে
-  \setcounter{equation}{0}% ইকুয়েশন নম্বর ০ করবে (অর্থাৎ ১ থেকে শুরু হবে)
+\BeforeBeginEnvironment{tcolorbox}{
+  \stepcounter{myboxcount}
+  \setcounter{equation}{0}
   
-  \renewcommand{\theHequation}{\themyboxcount.\arabic{equation}}%
+  \renewcommand{\theHequation}{\themyboxcount.\arabic{equation}}
 }
 
-% enhanced এবং breakable অপশন সচল করার জন্য লাইব্রেরি
 \tcbuselibrary{skins, breakable}
 
 
@@ -53,7 +56,7 @@
 \usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 \tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
 \usetikzlibrary{circuits.logic.US}
 
@@ -69,7 +72,13 @@
 
 \usetikzlibrary{decorations.pathreplacing}
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+
+% Narrow comparison tables and wide circuit diagrams intentionally use tight
+% boxes; suppress non-actionable bad-box diagnostics while retaining output.
+\hbadness=10000
+\hfuzz=40pt
+\tracinglostchars=0
 
 %% ── Colors ────────────────────────────────────────────────────────────
 \definecolor{pblue}{RGB}{13,71,161}
@@ -100,9 +109,40 @@
 \newcommand{\variant}[1]{\par\vspace{1pt}\textcolor{blue!50!black}%
   {\footnotesize\textit{$\hookrightarrow$ Similar: #1}}}
 
+% Add a section entry to the .toc without creating a second PDF bookmark.
+% Section outline entries are registered explicitly with \pdfbookmark below.
+\makeatletter
+\newcommand{\addsectiontotoc}[1]{%
+  \begingroup
+  \def\Hy@writebookmark##1##2##3##4##5{}%
+  \addcontentsline{toc}{section}{#1}%
+  \endgroup
+}
+\makeatother
+
 %% ── Subtopic heading macro ────────────────────────────────────────────
+\newcounter{subtopicbookmark}
 \newcommand{\subtopic}[2]{%
-  \vspace{10pt}
+  \par\Needspace{5\baselineskip}%
+  \vspace{10pt}%
+  \stepcounter{subtopicbookmark}%
+  \phantomsection%
+  \pdfbookmark[2]{#2}{subtopic.\arabic{subtopicbookmark}}%
+  \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
+    left=6pt,right=6pt,top=4pt,bottom=4pt]
+    \small\bfseries\textcolor{#1}{#2}
+  \end{tcolorbox}
+  \vspace{2pt}
+}
+
+% Render a subtopic at a named destination without emitting its bookmark.
+% This supports a subtopic whose source appears later than its outline parent.
+\newcommand{\anchoredsubtopic}[3]{%
+  \par\Needspace{5\baselineskip}%
+  \vspace{10pt}%
+  \stepcounter{subtopicbookmark}%
+  \phantomsection%
+  \hypertarget{#3}{}%
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
     \small\bfseries\textcolor{#1}{#2}
@@ -126,6 +166,72 @@
   \end{tcolorbox}%
   \vspace*{\fill}\newpage%
 }
+
+
+% Color for connection crosses
+\colorlet{crosscol}{cyan!80!blue}
+
+% Macro for connection crosses
+\def\bluecross#1#2{
+    \draw[crosscol, line width=1.2pt] (#1-0.12, #2-0.12) -- (#1+0.12, #2+0.12);
+    \draw[crosscol, line width=1.2pt] (#1-0.12, #2+0.12) -- (#1+0.12, #2-0.12);
+}
+
+% Macro for input buffers (Dual rail)
+\def\PLAinput#1#2#3#4{
+    % #1 = y, #2 = true vertical x, #3 = false vertical x, #4 = label
+    \node at (-1.5, #1) {$#4$};
+    \draw (-1.2, #1) -- (-0.8, #1);
+    % Buffer Triangle
+    \draw[fill=cyan!10] (-0.8, #1+0.4) -- (-0.8, #1-0.4) -- (0, #1) -- cycle;
+    % True output routing
+    \draw (0, #1) -- (#2, #1) -- (#2, 0.5);
+    % Inversion bubble
+    \draw[fill=white] (-0.3, #1+0.25) circle (0.1);
+    % Complemented output routing
+    \draw (-0.3, #1+0.35) -- (-0.3, #1+0.6) -- (#3, #1+0.6) -- (#3, 0.5);
+}
+
+% Macro for AND gates
+\def\PLAand#1#2#3{
+    % #1 = y, #2 = label inside, #3 = end x for horizontal line
+    \draw (0.5, #1) -- (4.5, #1);
+    % AND gate body
+    \draw[fill=cyan!10] (4.5, #1+0.4) -- (4.5, #1-0.4) -- (5.0, #1-0.4) arc(-90:90:0.4) -- cycle;
+    \node at (4.75, #1) {\small #2};
+    % Output line
+    \draw (5.4, #1) -- (#3, #1);
+}
+
+% Macro for OR gates pointing downwards
+\def\PLAor#1#2{
+    % #1 = x, #2 = y offset (top of gate)
+    \draw (#1, 6.5) -- (#1, #2);
+    \begin{scope}[shift={(#1,#2)}]
+        \draw[fill=cyan!10] (-0.4, 0.2) .. controls (-0.1, 0) and (0.1, 0) .. (0.4, 0.2)
+                            .. controls (0.4,-0.2) and (0.1,-0.6) .. (0,-0.8)
+                            .. controls (-0.1,-0.6) and (-0.4,-0.2) .. (-0.4, 0.2) -- cycle;
+    \end{scope}
+}
+
+% Macro for XOR gates pointing right
+\def\PLAxor#1#2#3{
+    % #1 = x, #2 = y (center), #3 = label
+    \begin{scope}[shift={(#1,#2)}]
+        % Input stubs (drawn first to clip behind fill)
+        \draw (-0.8, 0.2) -- (0, 0.2);
+        \draw (-0.8, -0.2) -- (0, -0.2);
+        % Detached back curve
+        \draw (-0.55, 0.4) .. controls (-0.25, 0.2) and (-0.25, -0.2) .. (-0.55, -0.4);
+        % Main gate body
+        \draw[fill=cyan!10] (-0.4, 0.4) .. controls (-0.1, 0.2) and (-0.1, -0.2) .. (-0.4, -0.4)
+                            .. controls (0.2, -0.4) and (0.6, -0.1) .. (0.8, 0)
+                            .. controls (0.6, 0.1) and (0.2, 0.4) .. (-0.4, 0.4) -- cycle;
+        % Output wire
+        \draw (0.8, 0) -- (1.3, 0) node[right] {$#3$};
+    \end{scope}
+}
+
 
 
 
@@ -297,9 +403,8 @@
       \end{itemize}
     \item \hyperref[sec:S8]{\textbf{S8.} Memory \& Programmable Logic (RAM, ROM, PLA)}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cG}{$\cdot$}}]
-        \item \hyperref[sub:s8-rom]{ROM Design \& Expansion}
+        \item \hyperref[sub:s8-rom]{RAM \& ROM Design \& Expansion}
         \item \hyperref[sub:s8-pla]{PLA Design}
-        \item \hyperref[sub:s8-ram]{RAM Design}
         \item \hyperref[sub:s6-sync-design]{Synchronous Sequential Circuit Design}
       \end{itemize}
   \end{itemize}
@@ -314,10 +419,11 @@
 \secdivider{Boolean Algebra, Theorems \& Logic Gates}{Postulates, Duality, Truth Tables, Gate Implementations}{cA}{cA}
 
 \markboth{S1: Boolean Algebra, Theorems \& Logic Gates}{S1: Boolean Algebra, Theorems \& Logic Gates}
+\pdfbookmark[1]{S1: Boolean Algebra, Theorems \& Logic Gates}{sec:S1}
 \label{sec:S1}
 \titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
 \section*{S1 \quad Boolean Algebra, Theorems \& Logic Gates}
-\addcontentsline{toc}{section}{S1: Boolean Algebra, Theorems \& Logic Gates}
+\addsectiontotoc{S1: Boolean Algebra, Theorems \& Logic Gates}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Boolean Algebra \& Simplification}
@@ -2420,7 +2526,7 @@ $A$ & $B$ & $C$ & $F$ & \textbf{Minterm} \\
 To find the simplified Sum-of-Products (SOP) expression, we map the 1s into a 3-variable Karnaugh Map:
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
     \minterms{3,5,6,7}
     \maxterms{0,1,2,4}
     \implicant{3}{7}
@@ -2702,7 +2808,7 @@ In certain digital systems, specific input combinations may either never physica
 Consider $F(A,B,C) = \sum m(0,1) + \sum d(2,3)$. Without don't-cares, $m_0$ and $m_1$ group to form $\overline{A}\overline{B}$. By treating the don't-cares ($d_2, d_3$) as $1$s, we can form a quad, simplifying the expression significantly to $F = \overline{A}$.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
     \minterms{0,1}
     \indeterminants{2,3}
     \maxterms{4,5,6,7}
@@ -2911,7 +3017,7 @@ From both the algebraic derivation and the truth table, the function equals $1$ 
 To simplify the Boolean function $F(w,x,y,z) = \Sigma\,(0,1,2,4,5,6,8,9,12,13,14)$, we map the minterms onto a 4-variable Karnaugh Map. 
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+\begin{karnaugh-map}[4][4][1][$z$][$y$][$x$][$w$]
     \minterms{0,1,2,4,5,6,8,9,12,13,14}
     \autoterms[0]
     
@@ -3135,7 +3241,7 @@ $$f'(A,B,C,D) = \Sigma\,(1,2,3,5,6,7,13,15)$$
 We plot the minterms of $f$ on a 4-variable K-Map to find the minimal Sum of Products (SOP).
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,4,8,9,10,11,12,14}
     \maxterms{1,2,3,5,6,7,13,15}
     \implicant{0}{8}
@@ -3161,7 +3267,7 @@ Thus, the simplified SOP expression for $f$ is:
 We plot the minterms of $f'$ to find its minimal SOP.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{1,2,3,5,6,7,13,15}
     \maxterms{0,4,8,9,10,11,12,14}
     \implicant{1}{7}
@@ -3625,7 +3731,7 @@ To plot the function on a Karnaugh Map, we first expand the terms into canonical
 Thus, the canonical function is $F(A, B, C) = \Sigma m(2, 3, 5, 7)$. Let us map these $1$s onto a 3-variable K-Map.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
     \minterms{2,3,5,7}
     \maxterms{0,1,4,6}
     \implicant{3}{2}
@@ -3843,7 +3949,7 @@ Assume that both the normal and complement inputs are available.
 Before implementing the function in the required two-level forms, we must first minimize the Boolean function $F(A,B,C,D) = \Sigma\,(0,4,8,9,10,11,12,14)$ into its minimal Sum of Products (SOP) form. We map the given minterms onto a 4-variable Karnaugh Map:
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,4,8,9,10,11,12,14}
     \maxterms{1,2,3,5,6,7,13,15}
     
@@ -4003,7 +4109,7 @@ We are given the Boolean function in the Product of Maxterms (POS) form:
 To express this function using \textbf{NOR gates}, it is most efficient to first minimize the function into its minimal Product of Sums (POS) form. We achieve this by mapping the Maxterms ($0$s) onto a 3-variable Karnaugh Map and grouping them.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
     \maxterms{0,2,3,5,7}
     \minterms{1,4,6}
     
@@ -4125,7 +4231,7 @@ We map both sets onto 4-variable Karnaugh Maps.
 We group the $1$s to find the SOP expression for $f$:
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,4,8,9,10,11,12,14}
     \maxterms{1,2,3,5,6,7,13,15}
     
@@ -4152,7 +4258,7 @@ We group the $1$s to find the SOP expression for $f$:
 We group the $0$s of $f$ (which are the $1$s of $f'$) to find the SOP expression for $f'$:
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{1,2,3,5,6,7,13,15}
     \maxterms{0,4,8,9,10,11,12,14}
     
@@ -4335,7 +4441,7 @@ From the truth table, the function evaluates to $1$ at minterms $0, 5,$ and $7$.
 We map the extracted minterms onto a 3-variable Karnaugh Map to determine the minimal SOP expression.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$qr$][$p$]
+\begin{karnaugh-map}[4][2][1][$r$][$q$][$p$]
     \minterms{0,5,7}
     \maxterms{1,2,3,4,6}
     
@@ -4543,7 +4649,7 @@ We are given the minterms and don't-care conditions for a 4-variable function:
 We plot these on a 4-variable Karnaugh map to find the minimal Sum-of-Products (SOP) expression.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,1,9,11}
     \maxterms{3,4,5,6,7,12,13}
     \indeterminants{2,8,10,14,15}
@@ -4938,7 +5044,7 @@ From the truth table, the Sum-of-Minterms expression for the error function is:
 We map the canonical expression onto a 3-variable Karnaugh Map to explore potential simplifications.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
     \minterms{1,2,4,7}
     \maxterms{0,3,5,6}
 \end{karnaugh-map}
@@ -5388,10 +5494,11 @@ Inverting both sides to isolate the physical voltage output $E_V$:
 \secdivider{Canonical \& Standard Forms}{Minterms, Maxterms, SOP, POS, Conversion}{cB}{blue}
 
 \markboth{S2: Canonical Forms \& Boolean Functions}{S2: Canonical Forms \& Boolean Functions}
+\pdfbookmark[1]{S2: Canonical Forms \& Boolean Functions}{sec:S2}
 \label{sec:S2}
 \titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
 \section*{S2 \quad Canonical Forms \& Boolean Functions}
-\addcontentsline{toc}{section}{S2: Canonical Forms \& Boolean Functions}
+\addsectiontotoc{S2: Canonical Forms \& Boolean Functions}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cB}{Canonical vs Standard Forms}
@@ -6075,17 +6182,17 @@ The derivations can be validated by mapping the entire system to a truth table.
 
 \end{enumerate}
 
-
 %% ══════════════════════════════════════════════════════════════════════
 %%  SECTION 3: MINIMIZATION TECHNIQUES
 %% ══════════════════════════════════════════════════════════════════════
 \secdivider{Minimization Techniques}{K-Maps (2/3/4/5-variable), Quine-McCluskey, Don't-Care Conditions}{cC}{green}
 
 \markboth{S3: Minimization Techniques}{S3: Minimization Techniques}
+\pdfbookmark[1]{S3: Minimization Techniques}{sec:S3}
 \label{sec:S3}
 \titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
 \section*{S3 \quad Minimization Techniques}
-\addcontentsline{toc}{section}{S3: Minimization Techniques}
+\addsectiontotoc{S3: Minimization Techniques}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cC}{Prime Implicants}
@@ -6151,7 +6258,7 @@ Consider the 4-variable Boolean function:
 Let us map this onto a Karnaugh Map to identify the PIs and EPIs.
 
 \begin{center}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{0,1,4,5,12,13,14,15}
         \autoterms[0]
         
@@ -6215,7 +6322,7 @@ We are given the 4-variable Boolean function:
 We plot the given minterms (1s) onto a 4-variable Karnaugh Map. Empty cells are assumed to be 0. To avoid visual clutter from overlapping groups, only the \textbf{Essential Prime Implicants} are graphically highlighted on the map below.
 
 \begin{center}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{0,2,3,5,7,8,9,10,11,13,15}
         \autoterms[0]
         
@@ -6314,7 +6421,7 @@ The Boolean function is given directly as a sum of minterms:
 We plot the $1$s on a 4-variable K-map and group them to find the essential prime implicants.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,1,2,5,8,9,10}
     \autoterms[0]
     
@@ -6365,7 +6472,7 @@ To find the POS form, we identify the maxterms ($0$s) by finding the missing ind
 We plot the $0$s on the K-map. For POS, each grouped block of $0$s yields a sum term. Constant $0$s yield uncomplemented variables, and constant $1$s yield complemented variables.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \maxterms{3,4,6,7,11,12,13,14,15}
     \autoterms[1]
     
@@ -6425,7 +6532,7 @@ To maintain visual clarity, the K-maps below explicitly show the groupings for \
 \begin{center}
 \begin{tabular}{c c}
     \textbf{Map for $v=0$} & \textbf{Map for $v=1$} \\
-    \begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+    \begin{karnaugh-map}[4][4][1][$z$][$y$][$x$][$w$]
         % Minterms for v=0: 2, 7, 8, 15
         \minterms{2,7,8,15}
         % Don't cares for v=0: 6, 9, 13
@@ -6439,7 +6546,7 @@ To maintain visual clarity, the K-maps below explicitly show the groupings for \
         \implicant{13}{9}  % wy'z
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+    \begin{karnaugh-map}[4][4][1][$z$][$y$][$x$][$w$]
         % Minterms for v=1 (index - 16): 22->6, 23->7, 25->9, 29->13
         \minterms{6,7,9,13}
         % Don't cares for v=1 (index - 16): 18->2, 24->8, 31->15
@@ -6550,7 +6657,7 @@ For a 4-variable function, the total possible minterms range from 0 to 15. The m
 To find the simplified POS expression, we map the zeros (maxterms) of $F$ on a Karnaugh map. Grouping the zeros directly yields the minimal sum terms. 
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+\begin{karnaugh-map}[4][4][1][$z$][$y$][$x$][$w$]
     % Placing 0s for maxterms
     \maxterms{3,4,6,8,9,10,12,14,15}
     % Filling the rest with 1s (the given minterms)
@@ -6650,7 +6757,7 @@ The POS function is implemented using a 2-level OR-AND logic structure.
 The Boolean function is given as $f(w,x,y,z) = \Sigma\,(1,2,3,7,10,12,14) + d(0,6,8,13)$. We map the minterms as '1', the don't cares as 'd', and the remaining cells as '0'. 
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+\begin{karnaugh-map}[4][4][1][$z$][$y$][$x$][$w$]
     % Placing minterms and don't cares
     \minterms{1,2,3,7,10,12,14}
     \indeterminants{0,6,8,13}
@@ -6726,7 +6833,7 @@ The remaining uncovered minterms are $m_{10}, m_{12},$ and $m_{14}$. Looking at 
 The Boolean function is given as $f(w,x,y,z) = \mathrm{SOP}(1,2,4,7,9,10,12,14) + d(0,6,8,13)$. We plot the minterms as '1', the don't cares as 'd', and leave the remaining cells as '0'. 
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+\begin{karnaugh-map}[4][4][1][$z$][$y$][$x$][$w$]
     % Placing minterms and don't cares
     \minterms{1,2,4,7,9,10,12,14}
     \indeterminants{0,6,8,13}
@@ -6820,7 +6927,7 @@ To minimize this function, we construct a 5-variable Karnaugh Map. A 5-variable 
 We populate the map with $1$ for the minterms, $d$ for the don't care conditions, and $0$ for the remaining cells. Groupings are made to cover all $1$s using the largest possible combinations (sizes of $2^n$), utilizing don't cares ($d$) only when they help to enlarge a group.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][2][$x_4x_5$][$x_2x_3$][$x_1$]
+\begin{karnaugh-map}[4][4][2][$x_5$][$x_4$][$x_3$][$x_2$][$x_1$]
     % Plotting minterms
     \minterms{0,2,4,5,6,7,8,10,14,17,18,21,29,31}
 
@@ -6946,7 +7053,7 @@ Thus, the function in standard POS form (with don't-cares) is:
 We populate the K-map by placing $0$s at the Maxterm locations, $d$s at the don't-care locations, and $1$s elsewhere. To simplify for POS, we group the $0$s. We can use the $d$s to make our groupings larger, which further minimizes the Boolean terms.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$yz$][$wx$]
+\begin{karnaugh-map}[4][4][1][$z$][$y$][$x$][$w$]
     % Plotting Maxterms (0s)
     \maxterms{0,2,4,6,7,9,10,13}
     % Plotting Minterms (1s)
@@ -7039,7 +7146,7 @@ For the $b=0$ map, the cell indices match the global minterm values directly (0 
 \begin{center}
 \textbf{Map for $a=0$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][2][$ef$][$cd$][$b \ (a=0)$]
+\begin{karnaugh-map}[4][4][2][$f$][$e$][$d$][$c$][$b \ (a=0)$]
     % ==========================================
     % Map 0: b=0 (Local indices: 0 to 15)
     % ==========================================
@@ -7153,7 +7260,7 @@ Combining these, the function can be expressed as a sum of minterms:
 \textbf{Step 2: Karnaugh Map Plotting and Grouping}
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,2,5,8,9,10,11,13,14,15}
     \autoterms[0]
     
@@ -7206,7 +7313,7 @@ We are given:
 We plot the $1$s for the minterms and $X$s for the don't-cares on the 4-variable K-map. Don't-cares are strategically included in groupings only if they help yield larger groups, thereby further reducing literal counts.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,2,5,7,8,15}
     \indeterminants{10,14}
     \autoterms[0]
@@ -7267,7 +7374,7 @@ The Boolean function is given in terms of minterms (1s) and don't-care condition
 We plot the $1$s for the minterms and $X$s for the don't-cares on a 4-variable K-map. We aim to form the largest possible groups (powers of 2) of 1s, incorporating Xs only if they help increase the group size.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,4,7,9,13}
     \indeterminants{5,8,15}
     \autoterms[0]
@@ -7324,7 +7431,7 @@ To find the POS form, we focus on the $0$s of the function. The maxterms ($0$s) 
 We plot the $0$s and $X$s. For POS minimization, each grouped block of $0$s directly yields a sum term. A variable that remains constant as a $0$ gives the uncomplemented literal (e.g., $A$), and a $1$ gives the complemented literal (e.g., $A'$).
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \maxterms{1,2,3,6,10,11,12,14}
     \indeterminants{5,8,15}
     \autoterms[1]
@@ -7400,7 +7507,7 @@ To simplify into Product-of-Sums (POS) form, we must focus on the maxterms ($0$s
 We plot the $0$s on a 4-variable K-map. For POS minimization, each valid group of $0$s directly translates to a sum term. A variable that remains constant as a $0$ yields the uncomplemented literal (e.g., $A$), and a $1$ yields the complemented literal (e.g., $A'$).
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \maxterms{0,1,2,5,8,10,13}
     \autoterms[1]
     
@@ -8346,10 +8453,11 @@ $\displaystyle F(A,B,C,D) = \textcolor{cC}{\mathbf{A'B'C' + B'D' + AC}}$
 \secdivider{Combinational Logic}{Adders, Subtractors, Comparators, Decoders, Encoders, MUX, DEMUX}{cD}{violet}
 
 \markboth{S4: Combinational Logic}{S4: Combinational Logic}
+\pdfbookmark[1]{S4: Combinational Logic}{sec:S4}
 \label{sec:S4}
 \titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
 \section*{S4 \quad Combinational Logic}
-\addcontentsline{toc}{section}{S4: Combinational Logic}
+\addsectiontotoc{S4: Combinational Logic}
 
 \subtopic{cD}{Number System \& Arithmetic Operations}
 \label{sub:s4-number-sys}
@@ -9219,7 +9327,7 @@ From the truth table, the sum-of-minterms expression is:
 To find the simplified Boolean equation, we map the minterms onto a 3-variable Karnaugh Map.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
     \minterms{3,5,6}
     \implicant{3}{3}
     \implicant{5}{5}
@@ -9350,7 +9458,7 @@ By direct inspection of the truth table, $B_2$ exactly matches the input $G_2$.
 We plot the minterms for $B_1$ ($\Sigma m(2,3,4,5)$) on a K-map.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$G_1 G_0$][$G_2$]
+\begin{karnaugh-map}[4][2][1][$G_0$][$G_1$][$G_2$]
     \minterms{2,3,4,5}
     \autoterms[0]
     \implicant{3}{2}
@@ -9367,7 +9475,7 @@ We plot the minterms for $B_0$ ($\Sigma m(1,2,4,7)$) on a K-map.
 
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$G_1 G_0$][$G_2$]
+\begin{karnaugh-map}[4][2][1][$G_0$][$G_1$][$G_2$]
     \minterms{1,2,4,7}
     \implicant{1}{1}
     \implicant{2}{2}
@@ -9486,7 +9594,7 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
 \begin{center}
     \textbf{K-Map for $w$} \\
     \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{14,15}
         \indeterminants{1,2,4,7,8,9}
         \implicant{15}{14}
@@ -9502,7 +9610,7 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
 \begin{center}
     \textbf{K-Map for $x$} \\
     \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{10,11,12,13}
         \indeterminants{1,2,4,7,8,9}
         \autoterms[0]
@@ -9523,7 +9631,7 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
 \begin{center}
     \textbf{K-Map for $y$} \\
     \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{5,6,12,13}
         \indeterminants{1,2,4,7,8,9}
         \autoterms[0]
@@ -9541,7 +9649,7 @@ We use 4-variable Karnaugh Maps to find the minimal Sum of Products (SOP) expres
 \begin{center}
     \textbf{K-Map for $z$} \\
     \vspace{0.5em}
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{3,6,11,13,15}
         \indeterminants{1,2,4,7,8,9}
         \autoterms[0]
@@ -9795,7 +9903,7 @@ $x$ (Minuend) & $y$ (Subtrahend) & $B_{in}$ (Borrow In) & $\mathrm{Diff}$ & $B_{
 The minterms for $\mathrm{Diff}$ are $\sum m(1, 2, 4, 7)$.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$y B_{in}$][$x$]
+\begin{karnaugh-map}[4][2][1][$B_{in}$][$y$][$x$]
     \minterms{1,2,4,7}
     \autoterms[0]
     \implicant{1}{1}
@@ -9819,7 +9927,7 @@ No adjacent cells can be grouped in the K-map. We write the sum of products (SOP
 The minterms for $B_{out}$ are $\sum m(1, 2, 3, 7)$.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$y B_{in}$][$x$]
+\begin{karnaugh-map}[4][2][1][$B_{in}$][$y$][$x$]
     \minterms{1,2,3,7}
     \autoterms[0]
     \implicant{1}{3} % Groups minterms 1 and 3 (Group 2)
@@ -10183,7 +10291,7 @@ We introduce a control mode line, \textbf{$M$}, and add an \textbf{XOR gate} at 
 % 3. Inputs A_i and B_i, and Sum outputs
 \foreach \i/\x in {3/0, 2/3.5, 1/7, 0/10.5} {
     % B_i to left input of rotated XOR (which is 'in 2')
-    \draw[-latex] (XOR\i.in 2 |- 0, 5) node[above] {$B_\i$} -- (XOR\i.in 2);
+    \draw[-latex] ($(XOR\i.in 2)+(0,2.3)$) node[above] {$B_\i$} -- (XOR\i.in 2);
     % A_i directly to FA
     \draw[-latex] (\x+0.4, 5) node[above] {$A_\i$} -- (\x+0.4, 0 |- FA\i.north);
     % XOR output to FA
@@ -10199,10 +10307,11 @@ We introduce a control mode line, \textbf{$M$}, and add an \textbf{XOR gate} at 
 \draw[-latex] (11.8, 0) -- (FA0.east) node[pos=0.7, above] {$C_0$};
 
 % Horizontal M wire routing
-\coordinate (MX0) at (XOR0.in 1 |- 0, 4.2);
-\coordinate (MX1) at (XOR1.in 1 |- 0, 4.2);
-\coordinate (MX2) at (XOR2.in 1 |- 0, 4.2);
-\coordinate (MX3) at (XOR3.in 1 |- 0, 4.2);
+\coordinate (Mlevel) at (0,4.2);
+\coordinate (MX0) at (XOR0.in 1 |- Mlevel);
+\coordinate (MX1) at (XOR1.in 1 |- Mlevel);
+\coordinate (MX2) at (XOR2.in 1 |- Mlevel);
+\coordinate (MX3) at (XOR3.in 1 |- Mlevel);
 
 \draw (M0) -- (MX0); \fill (MX0) circle (1.5pt);
 \draw (MX0) -- (MX1); \fill (MX1) circle (1.5pt);
@@ -10546,21 +10655,20 @@ The bottom binary adder takes the uncorrected sum from the top adder and adds th
     \node[or port, number inputs=3, xscale=-1] (orgate) at (1, 5.0) {};
 
     % --- ROUTING TO AND GATES (WITH JUMPS) ---
-    \draw[thick] let \p1=(and1.in 1) in 
-        (7.4, \y1) -- (6.9, \y1) arc (0:180:0.1) -- (\p1);
-    \fill let \p1=(and1.in 1) in (7.4, \y1) circle (1.5pt);
+    \draw[thick] (7.4,0 |- and1.in 1) -- (6.9,0 |- and1.in 1)
+        arc[start angle=0,end angle=180,radius=0.1] -- (and1.in 1);
+    \fill (7.4,0 |- and1.in 1) circle (1.5pt);
     
-    \draw[thick] let \p1=(and1.in 2) in 
-        (6.8, \y1) -- (\p1);
-    \fill let \p1=(and1.in 2) in (6.8, \y1) circle (1.5pt);
+    \draw[thick] (6.8,0 |- and1.in 2) -- (and1.in 2);
+    \fill (6.8,0 |- and1.in 2) circle (1.5pt);
 
-    \draw[thick] let \p1=(and2.in 1) in 
-        (8.0, \y1) -- (7.5, \y1) arc (0:180:0.1) -- (6.9, \y1) arc (0:180:0.1) -- (\p1);
-    \fill let \p1=(and2.in 1) in (8.0, \y1) circle (1.5pt);
+    \draw[thick] (8.0,0 |- and2.in 1) -- (7.5,0 |- and2.in 1)
+        arc[start angle=0,end angle=180,radius=0.1] -- (6.9,0 |- and2.in 1)
+        arc[start angle=0,end angle=180,radius=0.1] -- (and2.in 1);
+    \fill (8.0,0 |- and2.in 1) circle (1.5pt);
     
-    \draw[thick] let \p1=(and2.in 2) in 
-        (6.8, \y1) -- (\p1);
-    \fill let \p1=(and2.in 2) in (6.8, \y1) circle (1.5pt);
+    \draw[thick] (6.8,0 |- and2.in 2) -- (and2.in 2);
+    \fill (6.8,0 |- and2.in 2) circle (1.5pt);
 
     % --- ROUTING TO OR GATE ---
     \draw[thick] (3, 7.5) -- (2.5, 7.5) |- (orgate.in 1);
@@ -13723,25 +13831,25 @@ From the truth table, we derive the Boolean expressions. A specific output bit i
 
 \textbf{2. Most Significant Bit ($Y_2$):} High for $I_7, I_6, I_5, I_4$.
 \begin{align*}
-    Y_2 &= I_7 + \overline{I_7}I_6 + \overline{I_7}\overline{I_6}I_5 + \overline{I_7}\overline{I_6}\overline{I_5}I_4 \\
+    Y_2 &= I_7 + \overline{I_7} \cdot I_6 + \overline{I_7} \cdot \overline{I_6} \cdot I_5 + \overline{I_7} \cdot \overline{I_6} \cdot \overline{I_5} \cdot I_4 \\
     &= I_7 + I_6 + I_5 + I_4 \quad \text{(By sequential application of } X + \overline{X}Y = X + Y \text{)} \\
     \textcolor{cD}{Y_2} &\textcolor{cD}{= B + A + D + E}
 \end{align*}
 
 \textbf{3. Middle Bit ($Y_1$):} High for $I_7, I_6, I_3, I_2$.
 \begin{align*}
-    Y_1 &= I_7 + \overline{I_7}I_6 + \overline{I_7}\overline{I_6}\overline{I_5}\overline{I_4}I_3 + \overline{I_7}\overline{I_6}\overline{I_5}\overline{I_4}\overline{I_3}I_2 \\
-    &= I_7 + I_6 + \overline{I_5}\overline{I_4}I_3 + \overline{I_5}\overline{I_4}I_2 \quad \text{(Absorption of } I_7, I_6 \text{ into subsequent terms)} \\
-    \textcolor{cD}{Y_1} &\textcolor{cD}{= B + A + \overline{D}\overline{E}F + \overline{D}\overline{E}H}
+    Y_1 &= I_7 + \overline{I_7} \cdot I_6 + \overline{I_7} \cdot \overline{I_6} \cdot \overline{I_5} \cdot \overline{I_4} \cdot I_3 + \overline{I_7} \cdot \overline{I_6} \cdot \overline{I_5} \cdot \overline{I_4} \cdot \overline{I_3} \cdot I_2 \\
+    &= I_7 + I_6 + \overline{I_5} \cdot \overline{I_4} \cdot I_3 + \overline{I_5} \cdot \overline{I_4} \cdot I_2 \quad \text{(Absorption of } I_7, I_6 \text{ into subsequent terms)} \\
+    \textcolor{cD}{Y_1} &\textcolor{cD}{= B + A + \overline{D} \cdot \overline{E} \cdot F + \overline{D} \cdot \overline{E} \cdot H}
 \end{align*}
 
 \textbf{4. Least Significant Bit ($Y_0$):} High for $I_7, I_5, I_3, I_1$.
 \begin{align*}
-    Y_0 &= I_7 + \overline{I_7}\overline{I_6}I_5 + \overline{I_7}\overline{I_6}\overline{I_5}\overline{I_4}I_3 + \overline{I_7}\overline{I_6}\overline{I_5}\overline{I_4}\overline{I_3}\overline{I_2}I_1 \\
-    &= I_7 + \overline{I_6}I_5 + \overline{I_6}\overline{I_5}\overline{I_4}I_3 + \overline{I_6}\overline{I_5}\overline{I_4}\overline{I_3}\overline{I_2}I_1 \\
-    &= I_7 + \overline{I_6}(I_5 + \overline{I_5}\overline{I_4}I_3) + \dots \\
-    &= I_7 + \overline{I_6}I_5 + \overline{I_6}\overline{I_4}I_3 + \overline{I_6}\overline{I_4}\overline{I_2}I_1 \quad \text{(Using Distributive and Boolean logic reductions)} \\
-    \textcolor{cD}{Y_0} &\textcolor{cD}{= B + \overline{A}D + \overline{A}\overline{E}F + \overline{A}\overline{E}\overline{H}G}
+    Y_0 &= I_7 + \overline{I_7} \cdot \overline{I_6} \cdot I_5 + \overline{I_7} \cdot \overline{I_6} \cdot \overline{I_5} \cdot \overline{I_4} \cdot I_3 + \overline{I_7} \cdot \overline{I_6} \cdot \overline{I_5} \cdot \overline{I_4} \cdot \overline{I_3} \cdot \overline{I_2} \cdot I_1 \\
+    &= I_7 + \overline{I_6} \cdot I_5 + \overline{I_6} \cdot \overline{I_5} \cdot \overline{I_4} \cdot I_3 + \overline{I_6} \cdot \overline{I_5} \cdot \overline{I_4} \cdot \overline{I_3} \cdot \overline{I_2} \cdot I_1 \\
+    &= I_7 + \overline{I_6} \cdot (I_5 + \overline{I_5} \cdot \overline{I_4} \cdot I_3) + \dots \\
+    &= I_7 + \overline{I_6} \cdot I_5 + \overline{I_6} \cdot \overline{I_4} \cdot I_3 + \overline{I_6} \cdot \overline{I_4} \cdot \overline{I_2} \cdot I_1 \quad \text{(Using Distributive and Boolean logic reductions)} \\
+    \textcolor{cD}{Y_0} &\textcolor{cD}{= B + \overline{A} \cdot D + \overline{A} \cdot \overline{E} \cdot F + \overline{A} \cdot \overline{E} \cdot \overline{H} \cdot G}
 \end{align*}
 
 \subsection*{4. Logic Circuit Implementation (Block Diagram)}
@@ -13854,28 +13962,28 @@ The \textbf{Valid Bit ($V$)} is 1 if any input is active:
 \textbf{Most Significant Bit ($Y_2$):} Active for $D_5$ (101), $D_7$ (111), $D_4$ (100), $D_6$ (110).
 \begin{align*}
     Y_2 &= E_5 + E_7 + E_4 + E_6 \\
-    &= D_5 + \overline{D_5}\overline{D_0}D_7 + \overline{D_5}\overline{D_0}\overline{D_7}D_4 + \overline{D_5}\overline{D_0}\overline{D_7}\overline{D_4}D_6 \\
-    &= D_5 + \overline{D_5}\overline{D_0} \left( D_7 + \overline{D_7}D_4 + \overline{D_7}\overline{D_4}D_6 \right) \quad \text{(Factoring)} \\
-    &= D_5 + \overline{D_0} \left( D_7 + D_4 + D_6 \right) \quad \text{(Using Distributive Law: $A + \overline{A}B = A + B$ repeatedly)} \\
-    \textcolor{cD}{Y_2} &\textcolor{cD}{= D_5 + \overline{D_0} (D_7 + D_4 + D_6)}
+    &= D_5 + \overline{D_5} \cdot \overline{D_0} \cdot D_7 + \overline{D_5} \cdot \overline{D_0} \cdot \overline{D_7} \cdot D_4 + \overline{D_5} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot D_6 \\
+    &= D_5 + \overline{D_5} \cdot \overline{D_0} \cdot \left( D_7 + \overline{D_7} \cdot D_4 + \overline{D_7} \cdot \overline{D_4} \cdot D_6 \right) \quad \text{(Factoring)} \\
+    &= D_5 + \overline{D_0} \cdot \left( D_7 + D_4 + D_6 \right) \quad \text{(Using Distributive Law: $A + \overline{A}B = A + B$ repeatedly)} \\
+    \textcolor{cD}{Y_2} &\textcolor{cD}{= D_5 + \overline{D_0} \cdot (D_7 + D_4 + D_6)}
 \end{align*}
 
 \textbf{Middle Bit ($Y_1$):} Active for $D_7$ (111), $D_6$ (110), $D_3$ (011), $D_2$ (010).
 \begin{align*}
     Y_1 &= E_7 + E_6 + E_3 + E_2 \\
-    &= \overline{D_5}\overline{D_0}D_7 + \overline{D_5}\overline{D_0}\overline{D_7}\overline{D_4}D_6 + \overline{D_5}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_6}D_3 + \overline{D_5}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_6}\overline{D_3}D_2 \\
-    &= \overline{D_5}\overline{D_0} \left( D_7 + \overline{D_7}\overline{D_4}D_6 + \overline{D_7}\overline{D_4}\overline{D_6}D_3 + \overline{D_7}\overline{D_4}\overline{D_6}\overline{D_3}D_2 \right) \\
-    &= \overline{D_5}\overline{D_0} \left( D_7 + \overline{D_4} ( D_6 + \overline{D_6}D_3 + \overline{D_6}\overline{D_3}D_2 ) \right) \quad \text{(Applying $A + \overline{A}B = A + B$)} \\
-    \textcolor{cD}{Y_1} &\textcolor{cD}{= \overline{D_5}\overline{D_0} (D_7 + \overline{D_4} (D_6 + D_3 + D_2))}
+    &= \overline{D_5} \cdot \overline{D_0} \cdot D_7 + \overline{D_5} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot D_6 + \overline{D_5} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot D_3 + \overline{D_5} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot \overline{D_3} \cdot D_2 \\
+    &= \overline{D_5} \cdot \overline{D_0} \cdot \left( D_7 + \overline{D_7} \cdot \overline{D_4} \cdot D_6 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot D_3 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot \overline{D_3} \cdot D_2 \right) \\
+    &= \overline{D_5} \cdot \overline{D_0} \cdot \left( D_7 + \overline{D_4} \cdot ( D_6 + \overline{D_6} \cdot D_3 + \overline{D_6} \cdot \overline{D_3} \cdot D_2 ) \right) \quad \text{(Applying $A + \overline{A}B = A + B$)} \\
+    \textcolor{cD}{Y_1} &\textcolor{cD}{= \overline{D_5} \cdot \overline{D_0} \cdot (D_7 + \overline{D_4} \cdot (D_6 + D_3 + D_2))}
 \end{align*}
 
 \textbf{Least Significant Bit ($Y_0$):} Active for $D_5$ (101), $D_7$ (111), $D_3$ (011), $D_1$ (001).
 \begin{align*}
     Y_0 &= E_5 + E_7 + E_3 + E_1 \\
-    &= D_5 + \overline{D_5}\overline{D_0}D_7 + \overline{D_5}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_6}D_3 + \overline{D_5}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_6}\overline{D_3}\overline{D_2}D_1 \\
-    &= D_5 + \overline{D_5}\overline{D_0} \left( D_7 + \overline{D_7}\overline{D_4}\overline{D_6}D_3 + \overline{D_7}\overline{D_4}\overline{D_6}\overline{D_3}\overline{D_2}D_1 \right) \\
-    &= D_5 + \overline{D_0} \left( D_7 + \overline{D_4}\overline{D_6} ( D_3 + \overline{D_3}\overline{D_2}D_1 ) \right) \quad \text{(Reduction via Distributive Law)} \\
-    \textcolor{cD}{Y_0} &\textcolor{cD}{= D_5 + \overline{D_0} (D_7 + \overline{D_4}\overline{D_6}(D_3 + \overline{D_2}D_1))}
+    &= D_5 + \overline{D_5} \cdot \overline{D_0} \cdot D_7 + \overline{D_5} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot D_3 + \overline{D_5} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot \overline{D_3} \cdot \overline{D_2} \cdot D_1 \\
+    &= D_5 + \overline{D_5} \cdot \overline{D_0} \cdot \left( D_7 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot D_3 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_6} \cdot \overline{D_3} \cdot \overline{D_2} \cdot D_1 \right) \\
+    &= D_5 + \overline{D_0} \cdot \left( D_7 + \overline{D_4} \cdot \overline{D_6} \cdot ( D_3 + \overline{D_3} \cdot \overline{D_2} \cdot D_1 ) \right) \quad \text{(Reduction via Distributive Law)} \\
+    \textcolor{cD}{Y_0} &\textcolor{cD}{= D_5 + \overline{D_0} \cdot (D_7 + \overline{D_4} \cdot \overline{D_6} \cdot (D_3 + \overline{D_2} \cdot D_1))}
 \end{align*}
 
 \subsection*{4. Logic Circuit Implementation (Block Diagram)}
@@ -13986,28 +14094,28 @@ The \textbf{Valid Bit ($V$)} is 1 if any of the input signals is high:
 \textbf{Most Significant Bit ($Y_2$):} Active for inputs $D_6$ (110), $D_7$ (111), $D_4$ (100), $D_5$ (101).
 \begin{align*}
     Y_2 &= E_6 + E_7 + E_4 + E_5 \\
-    &= D_6 + \overline{D_6}\overline{D_0}D_7 + \overline{D_6}\overline{D_0}\overline{D_7}D_4 + \overline{D_6}\overline{D_0}\overline{D_7}\overline{D_4}D_5 \\
-    &= D_6 + \overline{D_6}\overline{D_0} \left( D_7 + \overline{D_7}D_4 + \overline{D_7}\overline{D_4}D_5 \right) \quad \text{(Factoring $\overline{D_6}\overline{D_0}$)} \\
-    &= D_6 + \overline{D_0} \left( D_7 + D_4 + D_5 \right) \quad \text{(Using Distributive Law: $A + \overline{A}B = A + B$ repeatedly)} \\
-    \textcolor{cD}{Y_2} &\textcolor{cD}{= D_6 + \overline{D_0} (D_7 + D_4 + D_5)}
+    &= D_6 + \overline{D_6} \cdot \overline{D_0} \cdot D_7 + \overline{D_6} \cdot \overline{D_0} \cdot \overline{D_7} \cdot D_4 + \overline{D_6} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot D_5 \\
+    &= D_6 + \overline{D_6} \cdot \overline{D_0} \cdot \left( D_7 + \overline{D_7} \cdot D_4 + \overline{D_7} \cdot \overline{D_4} \cdot D_5 \right) \quad \text{(Factoring } \overline{D_6} \cdot \overline{D_0}\text{)} \\
+    &= D_6 + \overline{D_0} \cdot \left( D_7 + D_4 + D_5 \right) \quad \text{(Using Distributive Law: $A + \overline{A}B = A + B$ repeatedly)} \\
+    \textcolor{cD}{Y_2} &\textcolor{cD}{= D_6 + \overline{D_0} \cdot (D_7 + D_4 + D_5)}
 \end{align*}
 
 \textbf{Middle Bit ($Y_1$):} Active for inputs $D_6$ (110), $D_7$ (111), $D_3$ (011), $D_2$ (010).
 \begin{align*}
     Y_1 &= E_6 + E_7 + E_3 + E_2 \\
-    &= D_6 + \overline{D_6}\overline{D_0}D_7 + \overline{D_6}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_5}D_3 + \overline{D_6}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_5}\overline{D_3}\overline{D_1}D_2 \\
-    &= D_6 + \overline{D_6}\overline{D_0} \left[ D_7 + \overline{D_7}\overline{D_4}\overline{D_5}D_3 + \overline{D_7}\overline{D_4}\overline{D_5}\overline{D_3}\overline{D_1}D_2 \right] \\
-    &= D_6 + \overline{D_0} \left[ D_7 + \overline{D_4}\overline{D_5} \left( D_3 + \overline{D_3}\overline{D_1}D_2 \right) \right] \quad \text{(Applying $A + \overline{A}B = A + B$)} \\
-    \textcolor{cD}{Y_1} &\textcolor{cD}{= D_6 + \overline{D_0} \left[ D_7 + \overline{D_4}\overline{D_5} (D_3 + \overline{D_1}D_2) \right]}
+    &= D_6 + \overline{D_6} \cdot \overline{D_0} \cdot D_7 + \overline{D_6} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot D_3 + \overline{D_6} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot \overline{D_3} \cdot \overline{D_1} \cdot D_2 \\
+    &= D_6 + \overline{D_6} \cdot \overline{D_0} \cdot \left[ D_7 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot D_3 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot \overline{D_3} \cdot \overline{D_1} \cdot D_2 \right] \\
+    &= D_6 + \overline{D_0} \cdot \left[ D_7 + \overline{D_4} \cdot \overline{D_5} \cdot \left( D_3 + \overline{D_3} \cdot \overline{D_1} \cdot D_2 \right) \right] \quad \text{(Applying $A + \overline{A}B = A + B$)} \\
+    \textcolor{cD}{Y_1} &\textcolor{cD}{= D_6 + \overline{D_0} \cdot \left[ D_7 + \overline{D_4} \cdot \overline{D_5} \cdot (D_3 + \overline{D_1} \cdot D_2) \right]}
 \end{align*}
 
 \textbf{Least Significant Bit ($Y_0$):} Active for inputs $D_7$ (111), $D_5$ (101), $D_3$ (011), $D_1$ (001).
 \begin{align*}
     Y_0 &= E_7 + E_5 + E_3 + E_1 \\
-    &= \overline{D_6}\overline{D_0}D_7 + \overline{D_6}\overline{D_0}\overline{D_7}\overline{D_4}D_5 + \overline{D_6}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_5}D_3 + \overline{D_6}\overline{D_0}\overline{D_7}\overline{D_4}\overline{D_5}\overline{D_3}D_1 \\
-    &= \overline{D_6}\overline{D_0} \left[ D_7 + \overline{D_7}\overline{D_4}D_5 + \overline{D_7}\overline{D_4}\overline{D_5}D_3 + \overline{D_7}\overline{D_4}\overline{D_5}\overline{D_3}D_1 \right] \\
-    &= \overline{D_6}\overline{D_0} \left[ D_7 + \overline{D_4} \left( D_5 + \overline{D_5}D_3 + \overline{D_5}\overline{D_3}D_1 \right) \right] \quad \text{(Reduction via Distributive Law)} \\
-    \textcolor{cD}{Y_0} &\textcolor{cD}{= \overline{D_6}\overline{D_0} \left[ D_7 + \overline{D_4} (D_5 + D_3 + D_1) \right]}
+    &= \overline{D_6} \cdot \overline{D_0} \cdot D_7 + \overline{D_6} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot D_5 + \overline{D_6} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot D_3 + \overline{D_6} \cdot \overline{D_0} \cdot \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot \overline{D_3} \cdot D_1 \\
+    &= \overline{D_6} \cdot \overline{D_0} \cdot \left[ D_7 + \overline{D_7} \cdot \overline{D_4} \cdot D_5 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot D_3 + \overline{D_7} \cdot \overline{D_4} \cdot \overline{D_5} \cdot \overline{D_3} \cdot D_1 \right] \\
+    &= \overline{D_6} \cdot \overline{D_0} \cdot \left[ D_7 + \overline{D_4} \cdot \left( D_5 + \overline{D_5} \cdot D_3 + \overline{D_5} \cdot \overline{D_3} \cdot D_1 \right) \right] \quad \text{(Reduction via Distributive Law)} \\
+    \textcolor{cD}{Y_0} &\textcolor{cD}{= \overline{D_6} \cdot \overline{D_0} \cdot \left[ D_7 + \overline{D_4} \cdot (D_5 + D_3 + D_1) \right]}
 \end{align*}
 
 \subsection*{4. Logic Circuit Implementation (Block Diagram)}
@@ -14246,20 +14354,20 @@ By applying Boolean logic to the truth table, we can derive the equations that p
 
 \textbf{Most Significant Bit ($Y_2$):}
 \begin{align*}
-    Y_2 &= D_7 + \overline{D_7}D_6 + \overline{D_7}\overline{D_6}D_5 + \overline{D_7}\overline{D_6}\overline{D_5}D_4 \\
+    Y_2 &= D_7 + \overline{D_7} \cdot D_6 + \overline{D_7} \cdot \overline{D_6} \cdot D_5 + \overline{D_7} \cdot \overline{D_6} \cdot \overline{D_5} \cdot D_4 \\
     \textcolor{cD}{Y_2} &\textcolor{cD}{= D_7 + D_6 + D_5 + D_4} \quad \text{(Simplified via $A + \overline{A}B = A + B$)}
 \end{align*}
 
 \textbf{Middle Bit ($Y_1$):}
 \begin{align*}
-    Y_1 &= D_7 + \overline{D_7}D_6 + \overline{D_7}\overline{D_6}\overline{D_5}\overline{D_4}D_3 + \overline{D_7}\overline{D_6}\overline{D_5}\overline{D_4}\overline{D_3}D_2 \\
-    \textcolor{cD}{Y_1} &\textcolor{cD}{= D_7 + D_6 + \overline{D_5}\overline{D_4}D_3 + \overline{D_5}\overline{D_4}D_2}
+    Y_1 &= D_7 + \overline{D_7} \cdot D_6 + \overline{D_7} \cdot \overline{D_6} \cdot \overline{D_5} \cdot \overline{D_4} \cdot D_3 + \overline{D_7} \cdot \overline{D_6} \cdot \overline{D_5} \cdot \overline{D_4} \cdot \overline{D_3} \cdot D_2 \\
+    \textcolor{cD}{Y_1} &\textcolor{cD}{= D_7 + D_6 + \overline{D_5} \cdot \overline{D_4} \cdot D_3 + \overline{D_5} \cdot \overline{D_4} \cdot D_2}
 \end{align*}
 
 \textbf{Least Significant Bit ($Y_0$):}
 \begin{align*}
-    Y_0 &= D_7 + \overline{D_7}\overline{D_6}D_5 + \overline{D_7}\overline{D_6}\overline{D_5}\overline{D_4}D_3 + \overline{D_7}\overline{D_6}\overline{D_5}\overline{D_4}\overline{D_3}\overline{D_2}D_1 \\
-    \textcolor{cD}{Y_0} &\textcolor{cD}{= D_7 + \overline{D_6}D_5 + \overline{D_6}\overline{D_4}D_3 + \overline{D_6}\overline{D_4}\overline{D_2}D_1}
+    Y_0 &= D_7 + \overline{D_7} \cdot \overline{D_6} \cdot D_5 + \overline{D_7} \cdot \overline{D_6} \cdot \overline{D_5} \cdot \overline{D_4} \cdot D_3 + \overline{D_7} \cdot \overline{D_6} \cdot \overline{D_5} \cdot \overline{D_4} \cdot \overline{D_3} \cdot \overline{D_2} \cdot D_1 \\
+    \textcolor{cD}{Y_0} &\textcolor{cD}{= D_7 + \overline{D_6} \cdot D_5 + \overline{D_6} \cdot \overline{D_4} \cdot D_3 + \overline{D_6} \cdot \overline{D_4} \cdot \overline{D_2} \cdot D_1}
 \end{align*}
 
 By incorporating these negated terms ($\overline{D_n}$), the combinational circuit inherently locks out lower-order inputs whenever a higher-order input is detected, successfully resolving both multiple-input and zero-state ambiguities.
@@ -14320,7 +14428,7 @@ From the truth table, $Y_1$ is `1` for the rows where $I_2$ is active or $I_3$ i
 \textbf{Least Significant Bit ($Y_0$):}
 $Y_0$ is `1` for the row where $I_3$ is active (with $I_2=0$), and the row where $I_1$ is active (with $I_2=0$ and $I_3=0$).
 \begin{align*}
-    Y_0 &= \overline{I_2}I_3 + \overline{I_2}\overline{I_3}I_1 \\
+    Y_0 &= \overline{I_2}I_3 + \overline{I_2} \cdot \overline{I_3}I_1 \\
     &= \overline{I_2} (I_3 + \overline{I_3}I_1) \quad \text{(Factoring out $\overline{I_2}$)} \\
     \textcolor{cD}{Y_0} &\textcolor{cD}{= \overline{I_2}(I_3 + I_1)} \quad \text{(Applying $A + \overline{A}B = A + B$ inside the parenthesis)}
 \end{align*}
@@ -14413,7 +14521,7 @@ $Y_1$ is HIGH when $D_3$ is HIGH, or when $D_2$ is HIGH (provided $D_3$ is LOW).
 \textbf{Least Significant Output Bit ($Y_0$):}
 $Y_0$ is HIGH when $D_3$ is HIGH, or when $D_1$ is HIGH (provided both $D_3$ and $D_2$ are LOW).
 \begin{align*}
-    Y_0 &= D_3 + \overline{D_3}\overline{D_2}D_1 \\
+    Y_0 &= D_3 + \overline{D_3} \cdot \overline{D_2}D_1 \\
     \textcolor{cD}{Y_0} &\textcolor{cD}{= D_3 + \overline{D_2}D_1} \quad \text{(Applied Distributive Law: $A + \overline{A}X = A + X$, where $X = \overline{D_2}D_1$)}
 \end{align*}
 
@@ -15220,7 +15328,7 @@ To use the \textbf{minimum number of extra logic gates}, we note the complementa
 
 \vspace{0.3cm}
 
-\subsection{Another Solution(Not a minimum gate solution) :}
+\textbf{Another Solution(Not a minimum gate solution) :}
 
 \subsection*{1. Shannon Expansion with Selection Inputs $A=w, B=x$}
 We expand $f(w,x,y,z) = \Sigma\,(0, 2, 6, 7, 10, 11, 12, 14)$ around variables $w$ and $x$:
@@ -15512,7 +15620,7 @@ Final optimized Boolean equation mapping directly to gates:
 \end{center}
 
 \vspace{0.4cm}
-\subsection{Another Solution(Not a minimum gate solution) :}
+\textbf{Another Solution(Not a minimum gate solution) :}
 
 \vspace{0.2cm}
 \subsection*{1. Functional Partitioning via Shannon's Expansion}
@@ -16922,7 +17030,7 @@ We can extract the minterms for the error condition from the truth table:
 We plot these minterms on a 4-variable Karnaugh Map to find the minimized Sum of Products (SOP) expression.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$A_1A_0$][$A_3A_2$]
+\begin{karnaugh-map}[4][4][1][$A_0$][$A_1$][$A_2$][$A_3$]
     % Minterms and Maxterms
     \minterms{10,11,12,13,14,15}
     \maxterms{0,1,2,3,4,5,6,7,8,9}
@@ -19041,7 +19149,7 @@ Thus, the canonical Boolean function implemented by the multiplexer is:
 We map the active minterms onto a 4-variable K-map to determine the simplified Boolean expression.
 
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+\begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
     \minterms{0,6,7,9,11,12,14,15}
     \autoterms[0]
     % Group 1: 2x2 Square (6, 7, 14, 15) -> BC
@@ -20005,7 +20113,7 @@ Using the truth table, we extract the minterms for each output variable and mini
 \vspace{0.3cm}
 \textbf{Output $\mathbf{A}$:} Minterms $\sum m(2, 3, 7)$
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+\begin{karnaugh-map}[4][2][1][$z$][$y$][$x$]
     \minterms{2,3,7}
     \autoterms[0]
     \implicant{3}{2}
@@ -20020,7 +20128,7 @@ Using the truth table, we extract the minterms for each output variable and mini
 \vspace{0.3cm}
 \textbf{Output $\mathbf{B}$:} Minterms $\sum m(0, 1, 5, 6)$
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+\begin{karnaugh-map}[4][2][1][$z$][$y$][$x$]
     \minterms{0,1,5,6}
     \autoterms[0]
     \implicant{0}{1}
@@ -20036,7 +20144,7 @@ Using the truth table, we extract the minterms for each output variable and mini
 \vspace{0.3cm}
 \textbf{Output $\mathbf{C}$:} Minterms $\sum m(1, 3, 4, 6)$
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$yz$][$x$]
+\begin{karnaugh-map}[4][2][1][$z$][$y$][$x$]
     \minterms{1,3,4,6}
     \autoterms[0]
     \implicant{1}{3}
@@ -20136,10 +20244,11 @@ Based on the optimized expressions, the combinational logic circuit is construct
 \secdivider{Flip-Flops, Latches \& Race-Around Problems}{SR, JK, D, T Flip-Flops, Excitation Tables, Race Conditions}{cE}{orange}
 
 \markboth{S5: Flip-Flops, Latches \& Race-Around Problems}{S5: Flip-Flops, Latches \& Race-Around Problems}
+\pdfbookmark[1]{S5: Flip-Flops, Latches \& Race-Around Problems}{sec:S5}
 \label{sec:S5}
 \titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
 \section*{S5 \quad Flip-Flops, Latches \& Race-Around Problems}
-\addcontentsline{toc}{section}{S5: Flip-Flops, Latches \& Race-Around Problems}
+\addsectiontotoc{S5: Flip-Flops, Latches \& Race-Around Problems}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{SR Latch \& SR/JK Undefined Condition}
@@ -20303,7 +20412,7 @@ We now plot the required values for $S$ and $R$ onto Karnaugh maps to extract th
 \centering
 \textbf{K-Map for $S$} \\
 \vspace{0.2cm}
-\begin{karnaugh-map}[4][2][1][$x_1x_2$][$y$]
+\begin{karnaugh-map}[4][2][1][$x_2$][$x_1$][$y$]
     \manualterms{0,0,0,1,0,X,X,X}
     \implicant{3}{7}
 \end{karnaugh-map} \\
@@ -20314,7 +20423,7 @@ $S = x_1 x_2$
 \centering
 \textbf{K-Map for $R$} \\
 \vspace{0.2cm}
-\begin{karnaugh-map}[4][2][1][$x_1x_2$][$y$]
+\begin{karnaugh-map}[4][2][1][$x_2$][$x_1$][$y$]
     \manualterms{X,X,X,0,1,0,0,0}
     \implicant{0}{4}
 \end{karnaugh-map} \\
@@ -21038,14 +21147,15 @@ Treating $J, K,$ and $Q(t)$ as boolean variables (where $J$ is the MSB and $Q(t)
 
 We plot these minterms onto a 3-variable Karnaugh Map:
 
+
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$K\,Q(t)$][$J$]
+\begin{karnaugh-map}[4][2][1][$Q(t)$][$K$][$J$]
     % Minterms for Q(t+1) = 1: 1 (001), 4 (100), 5 (101), 6 (110)
     \minterms{1,4,5,6}
     \maxterms{0,2,3,7}
     
     % Group 1: Minterms 4 and 6 (J=1, Q(t)=0)
-    \implicant{4}{6}
+    \implicantedge{4}{4}{6}{6}
     
     % Group 2: Minterms 1 and 5 (K=0, Q(t)=1)
     \implicant{1}{5}
@@ -22279,7 +22389,7 @@ $J$ & $K$ & $Q_n$ (Current) & $Q_{n+1}$ & $T = Q_n \oplus Q_{n+1}$ \\
 From the conversion table, the minterms for $T$ are $m(3, 4, 6, 7)$. We plot these on a 3-variable Karnaugh Map to find the minimized Sum-of-Products (SOP) expression for $T$.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$KQ_n$][$J$]
+\begin{karnaugh-map}[4][2][1][$Q_n$][$K$][$J$]
     \minterms{3,4,6,7}
     \maxterms{0,1,2,5}
     \implicantedge{4}{4}{6}{6} % Correct wrap-around grouping for J\bar{Q_n}
@@ -22458,8 +22568,8 @@ Based on the derived equation \textcolor{cE}{$\mathbf{T = D \oplus Q_n}$}, the c
     \draw (xor1.out) -- (4,0); 
     
     % Feedback Connection: Q to XOR input 2 (Q_n)
-    \draw[thick] (6, 0.5) -- (7, 0.5) -- (7, -2.5) -- (0.5, -2.5) |- (xor1.in 2);
-    \fill (6.5, 0.5) circle (2pt); % Junction dot for Q wire
+    \draw[thick] (7, 0.5) -- (7, -2.5) -- (0.5, -2.5) |- (xor1.in 2);
+    \fill (7, 0.5) circle (2pt); % Junction dot for Q wire
     
     % Output wire extensions
     \draw[thick] (6, 0.5) -- (8.5, 0.5) node[right] {\textbf{Q}};
@@ -22801,7 +22911,7 @@ We implement the Boolean equation $T = J\overline{Q_n} + KQ_n$ using standard lo
 
     % CLK
     \draw[thick] (6, -1.0) -- (6.3, -1.2) -- (6, -1.4);
-    \draw[thick] (1.5, -1.2) node[left, font=\bfseries] {CLK} -- (6, -1.2);
+    \draw[thick] (4, -1.2) node[left, font=\bfseries] {CLK} -- (6, -1.2);
     
     % Gates
     \node[and port] (and1) at (3, 2.0) {};
@@ -22983,17 +23093,18 @@ To implement this conversion, an XOR gate is required. The $T$ input serves as o
 \secdivider{Sequential Circuits, State Diagrams \& FSM}{Mealy \& Moore Machines, State Tables, State Minimization, Pulse/Fundamental Mode}{cF}{teal}
 
 \markboth{S6: Sequential Circuits, State Diagrams \& FSM}{S6: Sequential Circuits, State Diagrams \& FSM}
+\pdfbookmark[1]{S6: Sequential Circuits, State Diagrams \& FSM}{sec:S6}
 \label{sec:S6}
 \titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
 \section*{S6 \quad Sequential Circuits, State Diagrams \& FSM}
-\addcontentsline{toc}{section}{S6: Sequential Circuits, State Diagrams \& FSM}
+\addsectiontotoc{S6: Sequential Circuits, State Diagrams \& FSM}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cF}{State Diagram Derivation from Circuit}
 \label{sub:s6-state-derivation}
 
 \begin{enumerate}
-
+    
 \item Analyze the sequential circuit in the figure below. Derive the transition table, excitation table and state table.
 
 \begin{center}
@@ -23050,9 +23161,7 @@ To implement this conversion, an XOR gate is required. The $T$ input serves as o
         \draw (12.5, 4.2) |- (OR2.in 2);
         
         % Q0 feedback to AND gate
-
         \draw (6,2.9) .. controls (5.7,3) and (5.7, 3.2) .. (6,3.3);
-
         \draw (6,2.9) -- (6,2.5);
         \draw (6, 3.3) -- (AND.in 2);
         
@@ -23061,7 +23170,7 @@ To implement this conversion, an XOR gate is required. The $T$ input serves as o
         
         % Wire Jump (Semi-circle) over the clock line
         \draw (6, 1.0) .. controls (5.7, 1.1) and (5.7, 1.3) .. (6, 1.4);
-        \draw (6, 1.4) |- (OR1.in 2);
+        \draw (6, 1.4) |- (OR1.in 2) ++(-0.1,0) circle (0.05);
         
         % Final Output y
         \draw (OR2.out) -- (15.5, 4.8) node[right] {$y$};
@@ -23083,9 +23192,9 @@ By analyzing the provided sequential circuit diagram, we can determine the excit
     \end{align*}
     
     \item \textbf{JK Flip-Flop ($Q_0$):} 
-    The $J$ input is driven by an AND gate with inputs from $Q_1$ and $Q_0$. The $K$ input is driven by an OR gate with inputs from $Q_1'$ and $Q_0'$.
+    The $J$ input is driven by an AND gate with inputs from $Q_1$ and $Q_0'$. The $K$ input is driven by an OR gate with inputs from $Q_1'$ and $Q_0'$.
     \begin{align*}
-        J_0 &= Q_1 \cdot Q_0 \\
+        J_0 &= Q_1 \cdot Q_0' \\
         K_0 &= Q_1' + Q_0'
     \end{align*}
     
@@ -23115,10 +23224,12 @@ We use the characteristic equations of the T and JK flip-flops to derive the nex
     Now, substituting $J_0$ and $K_0'$ into the characteristic equation:
     \begin{align*}
         Q_0(t+1) &= J_0 Q_0' + K_0' Q_0 \\
-        Q_0(t+1) &= (Q_1 \cdot Q_0) Q_0' + (Q_1 \cdot Q_0) Q_0 \\
-        Q_0(t+1) &= Q_1 \cdot (Q_0 \cdot Q_0') + Q_1 \cdot (Q_0 \cdot Q_0) \quad &&\text{(Associative Law)} \\
-        Q_0(t+1) &= Q_1 \cdot (0) + Q_1 \cdot Q_0 \quad &&\text{(Complementarity and Idempotent Laws)} \\
-        Q_0(t+1) &= Q_1 \cdot Q_0 \quad &&\text{(Identity Law)}
+        Q_0(t+1) &= (Q_1 \cdot Q_0') Q_0' + (Q_1 \cdot Q_0) Q_0 \\
+        Q_0(t+1) &= Q_1 \cdot (Q_0' \cdot Q_0') + Q_1 \cdot (Q_0 \cdot Q_0) \quad &&\text{(Associative Law)} \\
+        Q_0(t+1) &= Q_1 \cdot Q_0' + Q_1 \cdot Q_0 \quad &&\text{(Idempotent Law)} \\
+        Q_0(t+1) &= Q_1 \cdot (Q_0' + Q_0) \quad &&\text{(Distributive Law)} \\
+        Q_0(t+1) &= Q_1 \cdot (1) \quad &&\text{(Complementarity Law)} \\
+        Q_0(t+1) &= Q_1 \quad &&\text{(Identity Law)}
     \end{align*}
 \end{itemize}
 
@@ -23131,16 +23242,16 @@ Using the derived equations, we evaluate the flip-flop inputs (excitation) and t
 \begin{tabular}{ccc|ccc|cc|c}
 \toprule
 \multicolumn{2}{c}{\textbf{Present State}} & \textbf{Input} & \multicolumn{3}{c|}{\textbf{FF Inputs (Excitation)}} & \multicolumn{2}{c|}{\textbf{Next State}} & \textbf{Output} \\
-$Q_1$ & $Q_0$ & $x$ & $T_1 = x$ & $J_0 = Q_1 Q_0$ & $K_0 = Q_1' + Q_0'$ & $Q_1(t+1)$ & $Q_0(t+1)$ & $y = Q_1 + Q_0$ \\
+$Q_1$ & $Q_0$ & $x$ & $T_1 = x$ & $J_0 = Q_1 Q_0'$ & $K_0 = Q_1' + Q_0'$ & $Q_1(t+1)$ & $Q_0(t+1)$ & $y = Q_1 + Q_0$ \\
 \midrule
 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 & 0 \\
 0 & 0 & 1 & 1 & 0 & 1 & 1 & 0 & 0 \\
 0 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 1 \\
 0 & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\
-1 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 \\
-1 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 1 \\
-1 & 1 & 0 & 0 & 1 & 0 & 1 & 1 & 1 \\
-1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 \\
+1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 1 \\
+1 & 0 & 1 & 1 & 1 & 1 & 0 & 1 & 1 \\
+1 & 1 & 0 & 0 & 0 & 0 & 1 & 1 & 1 \\
+1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -23158,7 +23269,7 @@ $Q_1 Q_0$ & $x = 0$ & $x = 1$ & $y$ \\
 \midrule
 $00$ & $00$ & $10$ & $0$ \\
 $01$ & $00$ & $10$ & $1$ \\
-$10$ & $10$ & $00$ & $1$ \\
+$10$ & $11$ & $01$ & $1$ \\
 $11$ & $11$ & $01$ & $1$ \\
 \bottomrule
 \end{tabular}
@@ -23166,7 +23277,10 @@ $11$ & $11$ & $01$ & $1$ \\
 
 \vspace{1em}
 \textbf{5. State Diagram (Supplementary Analysis)} \\
-To fully visualize the sequential behavior, we can construct the state diagram. Note that state $11$ operates as a transient/isolated state—once the system transitions out of state $11$ (when $x=1$), it can never return, as $Q_0$ can only remain $1$ if both $Q_1$ and $Q_0$ are already $1$.
+To fully visualize the sequential behavior, we can construct the state diagram. Note how the evaluation of $Q_0(t+1) = Q_1$ simplifies the transitions: the next state's LSB always inherits the present state's MSB.
+
+
+
 
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt, node distance=3.5cm, on grid, auto, thick,
@@ -23180,20 +23294,22 @@ To fully visualize the sequential behavior, we can construct the state diagram. 
 
     % Edges
     \path[->]
-    (S00) edge [loop above] node {$x=0$} (S00)
-          edge [bend left=20] node {$x=1$} (S10)
+    (S00) edge [loop left] node {$x=0$} (S00)
+          edge [bend left=15] node {$x=1$} (S10)
     
-    (S10) edge [loop above] node {$x=0$} (S10)
-          edge [bend left=20] node {$x=1$} (S00)
+    (S10) edge node[right] {$x=0$} (S11)
+          edge [bend right=15] node[above right] {$x=1$} (S01)
           
     (S01) edge node[left] {$x=0$} (S00)
-          edge node[above right] {$x=1$} (S10)
+          edge [bend right=15] node[below right] {$x=1$} (S10)
           
     (S11) edge [loop right] node {$x=0$} (S11)
           edge node[below] {$x=1$} (S01);
           
 \end{tikzpicture}
 \end{center}
+
+
 
 \end{tcolorbox}
 
@@ -23208,7 +23324,7 @@ To fully visualize the sequential behavior, we can construct the state diagram. 
   \item Derive the transition table, excitation table and state table.
   \item Draw the state diagram.
 \end{enumerate}
-\mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
+\mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22, 2019--20}
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
 
@@ -23232,6 +23348,143 @@ Given the structural complexity and density of feedback connections for this mul
         \item A 3-input AND gate computes $y_A x_1 x_2$, and a second 3-input AND gate computes $y_B x_1 x_2$. Their outputs feed into a final 2-input OR gate to produce the Mealy output $z$.
     \end{itemize}
 \end{enumerate}
+
+\vspace{1em}
+\begin{center}
+\begin{circuitikz}[thick, scale=0.85, transform shape, font=\sffamily]
+    % Bus Coordinates Setup
+    \coordinate (Bx1) at (0, 0);
+    \coordinate (Bx2) at (1, 0);
+    \coordinate (ByA) at (2, 0);
+    \coordinate (ByB) at (3, 0);
+    \coordinate (Bclk) at (4, 0);
+
+    % Draw Vertical Signal Bus
+    \draw (Bx1 |- 0, 11.5) -- (Bx1 |- 0, -3.5) node[below] {$x_1$};
+    \draw (Bx2 |- 0, 11.5) -- (Bx2 |- 0, -3.5) node[below] {$x_2$};
+    \draw[blue] (ByA |- 0, 12.2) -- (ByA |- 0, -3.5);
+    \draw[red] (ByB |- 0, 11.8) -- (ByB |- 0, -3.5);
+    \draw[green!50!black] (Bclk |- 0, 11.5) -- (Bclk |- 0, -3.5) node[below] {CLK};
+
+    % Bus Top Labels
+    \node[above] at (Bx1 |- 0, 11.5) {\textbf{$x_1$}};
+    \node[above] at (Bx2 |- 0, 11.5) {\textbf{$x_2$}};
+    \node[above, blue] at (ByA |- 0, 12.2) {\textbf{$y_A$}};
+    \node[above, red] at (ByB |- 0, 11.8) {\textbf{$y_B$}};
+    \node[above, green!50!black] at (Bclk |- 0, 11.5) {\textbf{CLK}};
+
+    % ================= LOGIC GATES =================
+    
+    % J_A Logic
+    \node[and port, scale=0.85] (A1) at (6.5, 10.0) {};
+    \node[and port, scale=0.85] (A2) at (6.5, 8.5) {};
+    \node[or port, scale=0.85]  (O1) at (8.5, 9.25) {};
+    
+    \draw[blue] (ByA |- A1.in 1) node[circ]{} -- (A1.in 1);
+    \draw (Bx1 |- A1.in 2) node[circ]{} -- (A1.in 2);
+    
+    \draw[red] (ByB |- A2.in 1) node[circ]{} -- (A2.in 1);
+    \draw (Bx2 |- A2.in 2) node[circ]{} -- (A2.in 2);
+    
+    \draw (A1.out) -- ++(0.3,0) |- (O1.in 1);
+    \draw (A2.out) -- ++(0.3,0) |- (O1.in 2);
+
+    % K_A Logic
+    \node[and port, scale=0.85] (A3) at (6.5, 7.0) {};
+    \node[and port, scale=0.85] (A4) at (6.5, 5.5) {};
+    \node[or port, scale=0.85]  (O2) at (8.5, 6.25) {};
+    
+    \draw[blue] (ByA |- A3.in 1) node[circ]{} -- (A3.in 1);
+    \draw[red] (ByB |- A3.in 2) node[circ]{} -- (A3.in 2);
+    
+    \draw (Bx1 |- A4.in 1) node[circ]{} -- (A4.in 1);
+    \draw (Bx2 |- A4.in 2) node[circ]{} -- (A4.in 2);
+    
+    \draw (A3.out) -- ++(0.3,0) |- (O2.in 1);
+    \draw (A4.out) -- ++(0.3,0) |- (O2.in 2);
+
+    % J_B Logic
+    \node[and port, scale=0.85] (A5) at (6.5, 4.0) {};
+    
+    \draw[blue] (ByA |- A5.in 1) node[circ]{} -- (A5.in 1);
+    \draw (Bx1 |- A5.in 2) node[circ]{} -- (A5.in 2);
+
+    % K_B Logic
+    \node[and port, number inputs=3, scale=0.85] (A6) at (6.5, 2.5) {};
+    \node[and port, scale=0.85] (A7) at (6.5, 1.0) {};
+    \node[or port, scale=0.85]  (O3) at (8.5, 1.75) {};
+    
+    \draw[blue] (ByA |- A6.in 1) node[circ]{} -- (A6.in 1);
+    \draw[red] (ByB |- A6.in 2) node[circ]{} -- (A6.in 2);
+    \draw (Bx1 |- A6.in 3) node[circ]{} -- (A6.in 3);
+    
+    \draw[red] (ByB |- A7.in 1) node[circ]{} -- (A7.in 1);
+    \draw (Bx2 |- A7.in 2) node[circ]{} -- (A7.in 2);
+    
+    \draw (A6.out) -- ++(0.3,0) |- (O3.in 1);
+    \draw (A7.out) -- ++(0.3,0) |- (O3.in 2);
+
+    % Z Output Logic
+    \node[and port, number inputs=3, scale=0.85] (A8) at (6.5, -0.5) {};
+    \node[and port, number inputs=3, scale=0.85] (A9) at (6.5, -2.0) {};
+    \node[or port, scale=0.85]  (O4) at (8.5, -1.25) {};
+    
+    \draw[blue] (ByA |- A8.in 1) node[circ]{} -- (A8.in 1);
+    \draw (Bx1 |- A8.in 2) node[circ]{} -- (A8.in 2);
+    \draw (Bx2 |- A8.in 3) node[circ]{} -- (A8.in 3);
+    
+    \draw[red] (ByB |- A9.in 1) node[circ]{} -- (A9.in 1);
+    \draw (Bx1 |- A9.in 2) node[circ]{} -- (A9.in 2);
+    \draw (Bx2 |- A9.in 3) node[circ]{} -- (A9.in 3);
+    
+    \draw (A8.out) -- ++(0.3,0) |- (O4.in 1);
+    \draw (A9.out) -- ++(0.3,0) |- (O4.in 2);
+    \draw[->, thick] (O4.out) -- ++(0.8,0) node[right] {\large \textbf{$z$ Output}};
+
+    % ================= FLIP-FLOPS =================
+
+    % FF A
+    \draw[thick, fill=white] (10.5, 5.75) rectangle (12.0, 9.75);
+    \node at (11.25, 8.2) {\textbf{FF A}};
+    \node[font=\small] at (11.25, 7.25) {JK-Type};
+    \node[right, font=\small] at (10.5, 9.25) {$J$};
+    \node[right, font=\small] at (10.5, 6.25) {$K$};
+    \node[right, font=\small] at (10.5, 7.75) {$CLK$};
+    \draw (10.5, 7.55) -- (10.7, 7.75) -- (10.5, 7.95);
+    \node[left, font=\small] at (12.0, 9.25) {$Q_A$};
+    \node[left, font=\small] at (12.0, 6.25) {$\overline{Q}_A$};
+
+    % Connect Logic to FF A
+    \draw (O1.out) -- (10.5, 9.25);
+    \draw (O2.out) -- (10.5, 6.25);
+    \draw[green!50!black] (Bclk |- 0, 7.75) node[circ]{} -- (10.5, 7.75);
+    
+    % Feedback Routing y_A
+    \draw[blue, thick] (12.0, 9.25) -- (12.8, 9.25) node[right] {\textbf{$y_A$}};
+    \draw[blue, thick] (12.4, 9.25) node[circ]{} -- (12.4, 12.2) -- (ByA |- 0, 12.2);
+
+    % FF B
+    \draw[thick, fill=white] (10.5, 1.25) rectangle (12.0, 4.5);
+    \node at (11.25, 3.3) {\textbf{FF B}};
+    \node[font=\small] at (11.25, 2.375) {JK-Type};
+    \node[right, font=\small] at (10.5, 4.0) {$J$};
+    \node[right, font=\small] at (10.5, 1.75) {$K$};
+    \node[right, font=\small] at (10.5, 2.875) {$CLK$};
+    \draw (10.5, 2.675) -- (10.7, 2.875) -- (10.5, 3.075);
+    \node[left, font=\small] at (12.0, 4.0) {$Q_B$};
+    \node[left, font=\small] at (12.0, 1.75) {$\overline{Q}_B$};
+
+    % Connect Logic to FF B
+    \draw (A5.out) -- (10.5, 4.0);
+    \draw (O3.out) -- (10.5, 1.75);
+    \draw[green!50!black] (Bclk |- 0, 3.3) node[circ]{} -| (10, 2.875) --++ (0.5, 0);
+    
+    % Feedback Routing y_B
+    \draw[red, thick] (12.0, 4.0) -- (12.8, 4.0) node[right] {\textbf{$y_B$}};
+    \draw[red, thick] (12.6, 4.0) node[circ]{} -- (12.6, 11.8) -- (ByB |- 0, 11.8);
+
+\end{circuitikz}
+\end{center}
 
 \subsection*{(b) Derivation of Tables}
 
@@ -23319,187 +23572,43 @@ $y_A y_B$ & $x_1 x_2 = 00$ & $01$ & $10$ & $11$ & $x_1 x_2 = 00$ & $01$ & $10$ &
 \subsection*{(c) State Diagram}
 Below is the complete Mealy finite state machine representation. Arc transitions are formatted as $\text{Inputs } (x_1 x_2) / \text{Output } (z)$.
 
-\begin{center}
-\begin{tikzpicture}[shorten >=1pt, node distance=4.5cm, on grid, auto, thick,
-                    every state/.style={fill=cF!8, draw=cF, thick, minimum size=1.3cm}]
-    
-    % Node Placements
-    \node[state] (S00) at (0,4)  {$00$};
-    \node[state] (S01) at (0,0)  {$01$};
-    \node[state] (S10) at (5,4)  {$10$};
-    \node[state] (S11) at (5,0)  {$11$};
-
-    % Graph Path Operations
-    \path[->]
-    (S00) edge [loop left] node [align=center] {00/0, 01/0,\\10/0, 11/0} (S00)
-    
-    (S01) edge [loop left] node [align=center] {00/0,\\10/0} (S01)
-          edge [bend left=15] node [above] {01/0, 11/1} (S10)
-          
-    (S10) edge [loop right] node [align=center] {00/0,\\01/0} (S10)
-          edge [bend left=15] node [below] {11/1} (S01)
-          edge node [right] {10/0} (S11)
-          
-    (S11) edge node [above] {00/0} (S01)
-          edge [bend right=25] node [above right=0.1cm and 0.1cm, align=left] {01/0, 10/0,\\11/1} (S00);
-\end{tikzpicture}
-\end{center}
-
-\end{tcolorbox}
-
-%% -- Q7(b): Analyze sequential circuit; transition, excitation, state table (figure-based) --
-\item A sequential circuit has two flip-flops $A$ and $B$, two inputs $x_1$ and $x_2$, and one output $z$. The flip-flop input equations and circuit output equations are:
-\begin{align*}
-  J_A &= y_A x_1 + y_B x_2,\quad  & K_A &= y_A y_B + x_1 x_2 \\
-  J_B &= y_A x_1,\quad             & K_B &= y_A y_B x_1 + y_B x_2 \\
-  z   &= y_A x_1 x_2 + y_B x_1 x_2
-\end{align*}
-
-For the above circuit:
-\begin{enumerate}
-  \item Draw the logic diagram of the circuit.
-  \item Derive the transition table, excitation table, and state table.
-  \item Draw the state diagram.
-\end{enumerate}
-\mk{25} \yr{CSE 205 | L-2/T-1 | 2019--20}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
-
-\subsection*{(a) Logic Diagram Structural Description}
-Given the structural complexity and density of feedback connections for this multi-input Mealy machine, a highly descriptive structural blueprint is provided to ensure an error-free layout realization (as drawing it with standard wire routing would result in excessive overlapping lines):
-
-\begin{enumerate}
-    \item \textbf{Memory Elements:} Two edge-triggered JK flip-flops designated as \textbf{FF A} (producing state variables $y_A, y_A'$) and \textbf{FF B} (producing state variables $y_B, y_B'$), synchronized by a common clock signal (\text{CLK}).
-    \item \textbf{Combinational Excitation Network for FF A:}
-    \begin{itemize}
-        \item \textbf{$J_A$ Logic:} A 2-input AND gate computes $y_A x_1$, and another 2-input AND gate computes $y_B x_2$. Their outputs feed into a 2-input OR gate driving the $J_A$ terminal.
-        \item \textbf{$K_A$ Logic:} A 2-input AND gate computes $y_A y_B$, and another 2-input AND gate computes $x_1 x_2$. Their outputs feed into a 2-input OR gate driving the $K_A$ terminal.
-    \end{itemize}
-    \item \textbf{Combinational Excitation Network for FF B:}
-    \begin{itemize}
-        \item \textbf{$J_B$ Logic:} A single 2-input AND gate computes $y_A x_1$ and connects directly to the $J_B$ terminal.
-        \item \textbf{$K_B$ Logic:} A 3-input AND gate computes $y_A y_B x_1$, and a 2-input AND gate computes $y_B x_2$. Their outputs feed into a 2-input OR gate driving the $K_B$ terminal.
-    \end{itemize}
-    \item \textbf{Output Network ($z$):}
-    \begin{itemize}
-        \item A 3-input AND gate computes $y_A x_1 x_2$, and a second 3-input AND gate computes $y_B x_1 x_2$. Their outputs feed into a 2-input OR gate to generate the Mealy output $z$. Alternatively, this can be simplified to a 3-input AND gate computing $(y_A + y_B) x_1 x_2$.
-    \end{itemize}
-\end{enumerate}
-
-\vspace{1em}
-\subsection*{(b) Derivation of Tables}
-
-\textbf{1. Next-State Equations (Mathematical Derivations)}\\
-The characteristic equation for a JK flip-flop is $Q(t+1) = J \cdot Q' + K' \cdot Q$. We substitute the provided excitation equations into this formula for both flip-flops.
-
-\noindent For \textbf{Flip-Flop A}:
-\begin{align*}
-y_A(t+1) &= J_A y_A' + K_A' y_A \\
-&= (y_A x_1 + y_B x_2) y_A' + (y_A y_B + x_1 x_2)' y_A \\
-&= y_A y_A' x_1 + y_A' y_B x_2 + (y_A y_B)' (x_1 x_2)' y_A \quad && \text{(Distributive \& De Morgan's Laws)} \\
-&= 0 + y_A' y_B x_2 + (y_A' + y_B')(x_1' + x_2') y_A \quad && \text{(Complementarity \& De Morgan's Laws)} \\
-&= y_A' y_B x_2 + (y_A y_A' + y_A y_B')(x_1' + x_2') \quad && \text{(Distributive Law)} \\
-&= y_A' y_B x_2 + (0 + y_A y_B')(x_1' + x_2') \quad && \text{(Complementarity Law)} \\
-&= y_A' y_B x_2 + y_A y_B' x_1' + y_A y_B' x_2' \quad && \text{(Identity \& Distributive Laws)}
-\end{align*}
-
-\noindent For \textbf{Flip-Flop B}:
-\begin{align*}
-y_B(t+1) &= J_B y_B' + K_B' y_B \\
-&= (y_A x_1) y_B' + (y_A y_B x_1 + y_B x_2)' y_B \\
-&= y_A y_B' x_1 + [y_B (y_A x_1 + x_2)]' y_B \quad && \text{(Distributive Law)} \\
-&= y_A y_B' x_1 + [y_B' + (y_A x_1 + x_2)'] y_B \quad && \text{(De Morgan's Law)} \\
-&= y_A y_B' x_1 + y_B' y_B + (y_A x_1 + x_2)' y_B \quad && \text{(Distributive Law)} \\
-&= y_A y_B' x_1 + 0 + (y_A x_1)' x_2' y_B \quad && \text{(Complementarity \& De Morgan's Laws)} \\
-&= y_A y_B' x_1 + (y_A' + x_1') x_2' y_B \quad && \text{(De Morgan's Law)} \\
-&= y_A y_B' x_1 + y_A' y_B x_2' + y_B x_1' x_2' \quad && \text{(Distributive Law)}
-\end{align*}
-
-\newpage
-\textbf{2. Excitation and Transition Table}\\
-Evaluating the excitation formulas and the derived next-state equations for all $2^4 = 16$ permutations of states ($y_A, y_B$) and inputs ($x_1, x_2$), we compile the comprehensive transition table. The output is simplified as $z = (y_A + y_B)x_1 x_2$.
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\small
-\begin{tabular}{cccc|cccc|cc|c}
-\toprule
-\multicolumn{2}{c}{\textbf{Present State}} & \multicolumn{2}{c|}{\textbf{Inputs}} & \multicolumn{4}{c|}{\textbf{Excitation Inputs}} & \multicolumn{2}{c|}{\textbf{Next State}} & \textbf{Output} \\
-$y_A$ & $y_B$ & $x_1$ & $x_2$ & $J_A$ & $K_A$ & $J_B$ & $K_B$ & $y_A(t+1)$ & $y_B(t+1)$ & $z$ \\
-\midrule
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-0 & 0 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 0 & 0 \\
-\midrule
-0 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
-0 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 & 0 \\
-0 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\
-0 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\
-\midrule
-1 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
-1 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 1 & 0 & 0 \\
-1 & 0 & 1 & 0 & 1 & 0 & 1 & 0 & 1 & 1 & 0 \\
-1 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 \\
-\midrule
-1 & 1 & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 0 \\
-1 & 1 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 \\
-1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\
-1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{1em}
-\textbf{3. Compact State Table}\\
-By grouping the next state and output combinations based on input pairs ($x_1 x_2$), we format the traditional state table:
-
-\begin{center}
-\renewcommand{\arraystretch}{1.3}
-\begin{tabular}{c|cccc|cccc}
-\toprule
-\textbf{Present State} & \multicolumn{4}{c|}{\textbf{Next State $y_A(t+1) y_B(t+1)$}} & \multicolumn{4}{c}{\textbf{Output $z$}} \\
-$y_A y_B$ & $x_1 x_2 = 00$ & $01$ & $10$ & $11$ & $x_1 x_2 = 00$ & $01$ & $10$ & $11$ \\
-\midrule
-00 & 00 & 00 & 00 & 00 & 0 & 0 & 0 & 0 \\
-01 & 01 & 10 & 01 & 10 & 0 & 0 & 0 & 1 \\
-10 & 10 & 10 & 11 & 01 & 0 & 0 & 0 & 1 \\
-11 & 01 & 00 & 00 & 00 & 0 & 0 & 0 & 1 \\
-\bottomrule
-\end{tabular}
-\end{center}
-
-\vspace{1em}
-\subsection*{(c) State Diagram}
-The directed graph below illustrates the state transitions. Edges are labeled as $\text{Inputs } (x_1 x_2) \, / \, \text{Output } (z)$. Since multiple input conditions can trigger the same transition, they are grouped to preserve clarity.
 
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt, node distance=4.5cm, on grid, auto, thick,
                     every state/.style={fill=cF!8, draw=cF, thick, minimum size=1.3cm}]
     
-    % Node Placements
-    \node[state] (S00) at (0,4)  {$00$};
-    \node[state] (S01) at (0,0)  {$01$};
-    \node[state] (S10) at (5,4)  {$10$};
-    \node[state] (S11) at (5,0)  {$11$};
+    % Node Placements: Triangle + Tail layout to eliminate ALL overlaps
+    \node[state] (S01) at (0,0)    {$01$};
+    \node[state] (S11) at (6,0)    {$11$};
+    \node[state] (S10) at (3,5)    {$10$};
+    \node[state] (S00) at (11.5,0) {$00$};
 
     % Graph Path Operations
     \path[->]
-    (S00) edge [loop left] node [align=center] {00/0, 01/0,\\10/0, 11/0} (S00)
+    % State 00 (Sink State at the tail)
+    (S00) edge [loop right] node [align=left] {00/0, 01/0,\\10/0, 11/0} (S00)
     
+    % State 01 (Bottom Left)
     (S01) edge [loop left] node [align=center] {00/0,\\10/0} (S01)
-          edge [bend left=15] node [above] {01/0, 11/1} (S10)
+          edge [bend left=15] node [above left] {01/0, 11/1} (S10)
           
-    (S10) edge [loop right] node [align=center] {00/0,\\01/0} (S10)
-          edge [bend left=15] node [below] {11/1} (S01)
-          edge node [right] {10/0} (S11)
+    % State 10 (Top Center)
+    (S10) edge [loop above] node [align=center] {00/0,\\01/0} (S10)
+          edge [bend left=15] node [below right] {11/1} (S01)
+          edge node [above right] {10/0} (S11)
           
+    % State 11 (Bottom Right)
     (S11) edge node [above] {00/0} (S01)
-          edge [bend right=25] node [above right=0.1cm and 0.1cm, align=left] {01/0, 10/0,\\11/1} (S00);
+          edge node [above, align=center] {01/0, 10/0,\\11/1} (S00);
 \end{tikzpicture}
 \end{center}
 
+
+
 \end{tcolorbox}
+
+
+
 
 \item A sequential circuit has two JK Flip-Flops $A$ and $B$, two inputs $x$ and $y$, and one output $z$. The flip-flop input equations and circuit output equation are:
 \begin{align*}
@@ -23512,6 +23621,8 @@ The directed graph below illustrates the state transitions. Edges are labeled as
   \item Draw the state diagram.
   \end{enumerate}
 \mk{4+7+4} \yr{CSE 205 | L-2/T-1 | 2016--17}
+
+
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
 
@@ -23535,6 +23646,139 @@ Given the structural complexity and density of feedback connections for this mul
         \item The output is defined as $z = Axy + Bxy$. A simplified implementation uses a 2-input OR gate to compute $(A + B)$, which then feeds into a 3-input AND gate alongside inputs $x$ and $y$ to generate the Mealy output $z$.
     \end{itemize}
 \end{enumerate}
+
+\vspace{1em}
+\begin{center}
+\begin{circuitikz}[thick, scale=0.85, transform shape, font=\sffamily]
+    % Bus Coordinates Setup
+    \coordinate (Bx) at (0, 0);
+    \coordinate (By) at (1, 0);
+    \coordinate (BA) at (2, 0);
+    \coordinate (BB) at (3, 0);
+    \coordinate (Bclk) at (4, 0);
+
+    % Draw Vertical Signal Bus
+    \draw (Bx |- 0, 11.5) -- (Bx |- 0, -2.5) node[below] {$x$};
+    \draw (By |- 0, 11.5) -- (By |- 0, -2.5) node[below] {$y$};
+    \draw[blue] (BA |- 0, 12.2) -- (BA |- 0, -2.5);
+    \draw[red] (BB |- 0, 11.8) -- (BB |- 0, -2.5);
+    \draw[green!50!black] (Bclk |- 0, 11.5) -- (Bclk |- 0, -2.5) node[below] {CLK};
+
+    % Bus Top Labels
+    \node[above] at (Bx |- 0, 11.5) {\textbf{$x$}};
+    \node[above] at (By |- 0, 11.5) {\textbf{$y$}};
+    \node[above, blue] at (BA |- 0, 12.2) {\textbf{$A$}};
+    \node[above, red] at (BB |- 0, 11.8) {\textbf{$B$}};
+    \node[above, green!50!black] at (Bclk |- 0, 11.5) {\textbf{CLK}};
+
+    % ================= LOGIC GATES =================
+    
+    % J_A Logic
+    \node[and port, scale=0.85] (A1) at (6.5, 10.0) {};
+    \node[and port, scale=0.85] (A2) at (6.5, 8.5) {};
+    \node[or port, scale=0.85]  (O1) at (8.5, 9.25) {};
+    
+    \draw[blue] (BA |- A1.in 1) node[circ]{} -- (A1.in 1);
+    \draw (Bx |- A1.in 2) node[circ]{} -- (A1.in 2);
+    
+    \draw[red] (BB |- A2.in 1) node[circ]{} -- (A2.in 1);
+    \draw (By |- A2.in 2) node[circ]{} -- (A2.in 2);
+    
+    \draw (A1.out) -- ++(0.3,0) |- (O1.in 1);
+    \draw (A2.out) -- ++(0.3,0) |- (O1.in 2);
+
+    % K_A Logic
+    \node[and port, scale=0.85] (A3) at (6.5, 7.0) {};
+    \node[and port, scale=0.85] (A4) at (6.5, 5.5) {};
+    \node[or port, scale=0.85]  (O2) at (8.5, 6.25) {};
+    
+    \draw[blue] (BA |- A3.in 1) node[circ]{} -- (A3.in 1);
+    \draw[red] (BB |- A3.in 2) node[circ]{} -- (A3.in 2);
+    
+    \draw (Bx |- A4.in 1) node[circ]{} -- (A4.in 1);
+    \draw (By |- A4.in 2) node[circ]{} -- (A4.in 2);
+    
+    \draw (A3.out) -- ++(0.3,0) |- (O2.in 1);
+    \draw (A4.out) -- ++(0.3,0) |- (O2.in 2);
+
+    % J_B Logic
+    \node[and port, scale=0.85] (A5) at (6.5, 4.0) {};
+    
+    \draw[blue] (BA |- A5.in 1) node[circ]{} -- (A5.in 1);
+    \draw (Bx |- A5.in 2) node[circ]{} -- (A5.in 2);
+
+    % K_B Logic
+    \node[and port, number inputs=3, scale=0.85] (A6) at (6.5, 2.5) {};
+    \node[and port, scale=0.85] (A7) at (6.5, 1.0) {};
+    \node[or port, scale=0.85]  (O3) at (8.5, 1.75) {};
+    
+    \draw[blue] (BA |- A6.in 1) node[circ]{} -- (A6.in 1);
+    \draw[red] (BB |- A6.in 2) node[circ]{} -- (A6.in 2);
+    \draw (Bx |- A6.in 3) node[circ]{} -- (A6.in 3);
+    
+    \draw[red] (BB |- A7.in 1) node[circ]{} -- (A7.in 1);
+    \draw (By |- A7.in 2) node[circ]{} -- (A7.in 2);
+    
+    \draw (A6.out) -- ++(0.3,0) |- (O3.in 1);
+    \draw (A7.out) -- ++(0.3,0) |- (O3.in 2);
+
+    % Z Output Logic (A+B)xy
+    \node[or port, scale=0.85] (O4) at (6.5, -0.5) {};
+    \node[and port, number inputs=3, scale=0.85] (A8) at (8.5, -1.25) {};
+    
+    \draw[blue] (BA |- O4.in 1) node[circ]{} -- (O4.in 1);
+    \draw[red] (BB |- O4.in 2) node[circ]{} -- (O4.in 2);
+    
+    \draw (O4.out) -- ++(0.3,0) |- (A8.in 1);
+    \draw (Bx |- A8.in 2) node[circ]{} -- (A8.in 2);
+    \draw (By |- A8.in 3) node[circ]{} -- (A8.in 3);
+    
+    \draw[->, thick] (A8.out) -- ++(0.8,0) node[right] {\large \textbf{$z$ Output}};
+
+    % ================= FLIP-FLOPS =================
+
+    % FF A
+    \draw[thick, fill=white] (10.5, 5.75) rectangle (12.0, 9.75);
+    \node at (11.25, 7.75) {\textbf{FF A}};
+    \node[font=\small] at (11.25, 7.25) {JK-Type};
+    \node[right, font=\small] at (10.5, 9.25) {$J$};
+    \node[right, font=\small] at (10.5, 6.25) {$K$};
+    \node[right, font=\small] at (10.5, 7.75) {$CLK$};
+    \draw (10.5, 7.55) -- (10.7, 7.75) -- (10.5, 7.95);
+    \node[left, font=\small] at (12.0, 9.25) {$A$};
+    \node[left, font=\small] at (12.0, 6.25) {$\overline{A}$};
+
+    % Connect Logic to FF A
+    \draw (O1.out) -- (10.5, 9.25);
+    \draw (O2.out) -- (10.5, 6.25);
+    \draw[green!50!black] (Bclk |- 0, 7.75) node[circ]{} -- (10.5, 7.75);
+    
+    % Feedback Routing A
+    \draw[blue, thick] (12.0, 9.25) -- (12.8, 9.25) node[right] {\textbf{$A$}};
+    \draw[blue, thick] (12.4, 9.25) node[circ]{} -- (12.4, 12.2) -- (BA |- 0, 12.2);
+
+    % FF B
+    \draw[thick, fill=white] (10.5, 1.25) rectangle (12.0, 4.5);
+    \node at (11.25, 2.875) {\textbf{FF B}};
+    \node[font=\small] at (11.25, 2.375) {JK-Type};
+    \node[right, font=\small] at (10.5, 4.0) {$J$};
+    \node[right, font=\small] at (10.5, 1.75) {$K$};
+    \node[right, font=\small] at (10.5, 2.875) {$CLK$};
+    \draw (10.5, 2.675) -- (10.7, 2.875) -- (10.5, 3.075);
+    \node[left, font=\small] at (12.0, 4.0) {$B$};
+    \node[left, font=\small] at (12.0, 1.75) {$\overline{B}$};
+
+    % Connect Logic to FF B
+    \draw (A5.out) -- (10.5, 4.0);
+    \draw (O3.out) -- (10.5, 1.75);
+    \draw[green!50!black] (Bclk |- 0, 3.3) node[circ]{} -- (8,3.3) |- (10.5, 2.875);
+    
+    % Feedback Routing B
+    \draw[red, thick] (12.0, 4.0) -- (12.8, 4.0) node[right] {\textbf{$B$}};
+    \draw[red, thick] (12.6, 4.0) node[circ]{} -- (12.6, 11.8) -- (BB |- 0, 11.8);
+
+\end{circuitikz}
+\end{center}
 
 \vspace{1em}
 \subsection*{(b) Derivation of the State Table}
@@ -23623,33 +23867,45 @@ $AB$ & $xy = 00$ & $01$ & $10$ & $11$ & $xy = 00$ & $01$ & $10$ & $11$ \\
 \subsection*{(c) State Diagram}
 The directed graph below illustrates the state transitions. Edges are labeled as $\text{Inputs } (xy) \, / \, \text{Output } (z)$. To prevent visual clutter, transitions spanning multiple input conditions between the same nodes are grouped together.
 
+
 \begin{center}
 \begin{tikzpicture}[shorten >=1pt, node distance=4.5cm, on grid, auto, thick,
                     every state/.style={fill=cF!8, draw=cF, thick, minimum size=1.3cm}]
     
-    % Node Placements
-    \node[state] (S00) at (0,4.5)  {$00$};
+    % Node Placements (Triangle + Tail Layout to avoid all overlaps)
     \node[state] (S01) at (0,0)    {$01$};
-    \node[state] (S10) at (5,4.5)  {$10$};
     \node[state] (S11) at (5,0)    {$11$};
+    \node[state] (S10) at (2.5,4)  {$10$};
+    \node[state] (S00) at (9,2)    {$00$};
 
     % Graph Path Operations
     \path[->]
-    (S00) edge [loop left] node [align=center] {00/0, 01/0,\\10/0, 11/0} (S00)
+    % State 00 (Sink State on the right)
+    (S00) edge [loop right] node [align=left] {00/0, 01/0,\\10/0, 11/0} (S00)
     
+    % State 01 (Bottom Left)
     (S01) edge [loop left] node [align=center] {00/0,\\10/0} (S01)
-          edge [bend left=15] node [pos=0.7, right=0.1cm] {01/0, 11/1} (S10)
+          edge [bend left=20] node [above left] {01/0, 11/1} (S10)
           
-    (S10) edge [loop right] node [align=center] {00/0,\\01/0} (S10)
-          edge [bend left=15] node [pos=0.7, left=0.1cm] {11/1} (S01)
-          edge node [right] {10/0} (S11)
+    % State 10 (Top Center)
+    (S10) edge [loop above] node [align=center] {00/0,\\01/0} (S10)
+          edge [bend left=20] node [below right] {11/1} (S01)
+          edge node [above right] {10/0} (S11)
           
+    % State 11 (Bottom Right)
     (S11) edge node [above] {00/0} (S01)
-          edge [bend right=25] node [above right=0.1cm and 0.1cm, align=left] {01/0, 10/0,\\11/1} (S00);
+          edge [bend right=15] node [above, align=center] {01/0, 10/0,\\11/1} (S00);
 \end{tikzpicture}
 \end{center}
 
+
+
 \end{tcolorbox}
+
+
+
+
+
 
 \item A sequential circuit has two JK Flip-Flops $A$ and $B$, two inputs $x$ and $y$, and one output $z$. The Flip-Flop input equations and circuit output equation are:
 \[
@@ -23680,6 +23936,137 @@ Given the structural complexity and density of feedback connections for this mul
         \item The output is defined as $z = Ax'y' + Bx'y'$. This can be structurally implemented using a 3-input AND gate for $Ax'y'$, another 3-input AND gate for $Bx'y'$, and a 2-input OR gate to sum them. (Alternatively, a simplified structure uses an OR gate for $(A+B)$ feeding into a 3-input AND gate with $x'$ and $y'$).
     \end{itemize}
 \end{enumerate}
+
+\vspace{1em}
+\begin{center}
+\begin{circuitikz}[thick, scale=0.85, transform shape, font=\sffamily]
+    % Bus Coordinates Setup
+    \coordinate (Bx)  at (0.0, 0);
+    \coordinate (Bnx) at (0.8, 0);
+    \coordinate (By)  at (1.6, 0);
+    \coordinate (Bny) at (2.4, 0);
+    \coordinate (BA)  at (3.2, 0);
+    \coordinate (Bna) at (4.0, 0);
+    \coordinate (BB)  at (4.8, 0);
+    \coordinate (Bnb) at (5.6, 0);
+    \coordinate (Bclk) at (6.4, 0);
+
+    % Main Input Buses (x, y) and Inverters
+    \draw (Bx |- 0, 12.5) node[above] {\textbf{$x$}} -- (Bx |- 0, -2.5);
+    \node[not port, scale=0.5, rotate=-90] (Nx) at (Bnx |- 0, 11.5) {};
+    \draw (Bx |- 0, 12.0) node[circ]{} -- (Bnx |- 0, 12.0) -- (Nx.in);
+    \draw (Nx.out) -- (Bnx |- 0, -2.5) node[below] {$x'$};
+
+    \draw (By |- 0, 12.5) node[above] {\textbf{$y$}} -- (By |- 0, -2.5);
+    \node[not port, scale=0.5, rotate=-90] (Ny) at (Bny |- 0, 11.5) {};
+    \draw (By |- 0, 12.0) node[circ]{} -- (Bny |- 0, 12.0) -- (Ny.in);
+    \draw (Ny.out) -- (Bny |- 0, -2.5) node[below] {$y'$};
+
+    % State Variable Buses (A, A', B, B')
+    \draw[blue] (BA |- 0, 12.0) node[above] {\textbf{$A$}} -- (BA |- 0, -2.5);
+    \draw[blue] (Bna |- 0, 11.8) node[above] {\textbf{$A'$}} -- (Bna |- 0, -2.5);
+    \draw[red] (BB |- 0, 11.6) node[above] {\textbf{$B$}} -- (BB |- 0, -2.5);
+    \draw[red] (Bnb |- 0, 11.4) node[above] {\textbf{$B'$}} -- (Bnb |- 0, -2.5);
+    
+    % Clock Bus
+    \draw[green!50!black] (Bclk |- 0, 12.5) node[above] {\textbf{CLK}} -- (Bclk |- 0, -2.5);
+
+    % ================= LOGIC GATES =================
+    
+    % J_A Logic: Bx + B'y'
+    \node[and port, scale=0.85] (A1) at (8.5, 10.25) {};
+    \node[and port, scale=0.85] (A2) at (8.5, 9.25) {};
+    \node[or port, scale=0.85]  (O1) at (11.0, 9.75) {};
+    
+    \draw[red] (BB |- A1.in 1) node[circ]{} -- (A1.in 1);
+    \draw (Bx |- A1.in 2) node[circ]{} -- (A1.in 2);
+    
+    \draw[red] (Bnb |- A2.in 1) node[circ]{} -- (A2.in 1);
+    \draw (Bny |- A2.in 2) node[circ]{} -- (A2.in 2);
+    
+    \draw (A1.out) -- ++(0.3,0) |- (O1.in 1);
+    \draw (A2.out) -- ++(0.3,0) |- (O1.in 2);
+
+    % K_A Logic: B'xy'
+    \node[and port, number inputs=3, scale=0.85] (A3) at (8.5, 7.75) {};
+    
+    \draw[red] (Bnb |- A3.in 1) node[circ]{} -- (A3.in 1);
+    \draw (Bx |- A3.in 2) node[circ]{} -- (A3.in 2);
+    \draw (Bny |- A3.in 3) node[circ]{} -- (A3.in 3);
+
+    % J_B Logic: A'x
+    \node[and port, scale=0.85] (A4) at (8.5, 4.75) {};
+    
+    \draw[blue] (Bna |- A4.in 1) node[circ]{} -- (A4.in 1);
+    \draw (Bx |- A4.in 2) node[circ]{} -- (A4.in 2);
+
+    % K_B Logic: A + xy'
+    \node[and port, scale=0.85] (A5) at (8.5, 2.25) {};
+    \node[or port, scale=0.85]  (O2) at (11.0, 2.75) {};
+    
+    \draw (Bx |- A5.in 1) node[circ]{} -- (A5.in 1);
+    \draw (Bny |- A5.in 2) node[circ]{} -- (A5.in 2);
+    \draw[blue] (BA |- O2.in 1) node[circ]{} -- (O2.in 1);
+    
+    \draw (A5.out) -- ++(0.3,0) |- (O2.in 2);
+
+    % Z Output Logic: (A+B)x'y'
+    \node[or port, scale=0.85] (O3) at (8.5, 0.0) {};
+    \node[and port, number inputs=3, scale=0.85] (A6) at (11.0, -1.0) {};
+    
+    \draw[blue] (BA |- O3.in 1) node[circ]{} -- (O3.in 1);
+    \draw[red] (BB |- O3.in 2) node[circ]{} -- (O3.in 2);
+    
+    \draw (O3.out) -- ++(0.3,0) |- (A6.in 1);
+    \draw (Bnx |- A6.in 2) node[circ]{} -- (A6.in 2);
+    \draw (Bny |- A6.in 3) node[circ]{} -- (A6.in 3);
+    
+    \draw[->, thick] (A6.out) -- ++(1.0,0) node[right] {\large \textbf{$z$ Output}};
+
+    % ================= FLIP-FLOPS =================
+
+    % FF A
+    \draw[thick, fill=white] (13.0, 7.0) rectangle (14.5, 10.5);
+    \node at (13.75, 9.2) {\textbf{FF A}};
+    \node[font=\small] at (13.75, 8.25) {JK-Type};
+    \node[right, font=\small] at (13.0, 9.75) {$J$};
+    \node[right, font=\small] at (13.0, 7.75) {$K$};
+    \node[right, font=\small] at (13.0, 8.75) {$CLK$};
+    \draw (13.0, 8.55) -- (13.2, 8.75) -- (13.0, 8.95);
+    \node[left, font=\small] at (14.5, 9.75) {$A$};
+    \node[left, font=\small] at (14.5, 7.75) {$A'$};
+
+    % Connect Logic to FF A
+    \draw (O1.out) -- (13.0, 9.75);
+    \draw (A3.out) -- (13.0, 7.75);
+    \draw[green!50!black] (Bclk |- 0, 8.75) node[circ]{} -- (13.0, 8.75);
+    
+    % Feedback Routing A & A'
+    \draw[blue, thick] (14.5, 9.75) -- (15.0, 9.75) -- (15.0, 12.0) -- (BA |- 0, 12.0);
+    \draw[blue, thick] (14.5, 7.75) -- (15.2, 7.75) -- (15.2, 11.8) -- (Bna |- 0, 11.8);
+
+    % FF B
+    \draw[thick, fill=white] (13.0, 2.0) rectangle (14.5, 5.5);
+    \node at (13.75, 4.2) {\textbf{FF B}};
+    \node[font=\small] at (13.75, 3.25) {JK-Type};
+    \node[right, font=\small] at (13.0, 4.75) {$J$};
+    \node[right, font=\small] at (13.0, 2.75) {$K$};
+    \node[right, font=\small] at (13.0, 3.75) {$CLK$};
+    \draw (13.0, 3.55) -- (13.2, 3.75) -- (13.0, 3.95);
+    \node[left, font=\small] at (14.5, 4.75) {$B$};
+    \node[left, font=\small] at (14.5, 2.75) {$B'$};
+
+    % Connect Logic to FF B
+    \draw (A4.out) -- (13.0, 4.75);
+    \draw (O2.out) -- (13.0, 2.75);
+    \draw[green!50!black] (Bclk |- 0, 3.75) node[circ]{} -- (13.0, 3.75);
+    
+    % Feedback Routing B & B'
+    \draw[red, thick] (14.5, 4.75) -- (15.4, 4.75) -- (15.4, 11.6) -- (BB |- 0, 11.6);
+    \draw[red, thick] (14.5, 2.75) -- (15.6, 2.75) -- (15.6, 11.4) -- (Bnb |- 0, 11.4);
+
+\end{circuitikz}
+\end{center}
 
 \vspace{1em}
 \subsection*{(b) Derivation of the State Equations}
@@ -24012,16 +24399,12 @@ $A(t)$ & $B(t)$ & $x$ & $A(t+1)$ & $B(t+1)$ & $T_A$ & $T_B$ \\
 We derive the simplified Boolean expressions for $T_A$ and $T_B$ using Karnaugh Maps. The variables are ordered as $A, B$ (rows) and $x$ (columns).
 
 \vspace{1em}
-\subsection*{2. T Flip-Flop Input Equations}
-We derive the simplified Boolean expressions for $T_A$ and $T_B$ using Karnaugh Maps. The variables are ordered as $A, B$ (rows) and $x$ (columns).
-
-\vspace{1em}
 \noindent
 \begin{minipage}{0.45\textwidth}
 \begin{center}
 \textbf{K-Map for $\mathbf{T_A}$} \\
 \vspace{0.75em}
-\begin{karnaugh-map}[2][4][1][$x$][$AB$]
+\begin{karnaugh-map}[2][4][1][$x$][$B$][$A$]
     \minterms{3,6,7}
     \autoterms[0]
     \implicant{3}{7}
@@ -24034,7 +24417,7 @@ We derive the simplified Boolean expressions for $T_A$ and $T_B$ using Karnaugh 
 \begin{center}
 \textbf{K-Map for $\mathbf{T_B}$} \\
 \vspace{0.75em}
-\begin{karnaugh-map}[2][4][1][$x$][$AB$]
+\begin{karnaugh-map}[2][4][1][$x$][$B$][$A$]
     \minterms{1,2,3,5,6}
     \autoterms[0]
     \implicant{1}{3}
@@ -24060,6 +24443,7 @@ T_B &= A'x + B'x + Bx' \\
 \vspace{1em}
 \subsection*{3. Circuit Diagram}
 The logic diagram is implemented using two T flip-flops. To maintain a clean and professional schematic free of spaghetti wiring, feedback connections are indicated using labeled signal nodes.
+
 
 \vspace{1em}
 \begin{center}
@@ -24098,17 +24482,17 @@ The logic diagram is implemented using two T flip-flops. To maintain a clean and
     % -----------------------------------------
     % Combinational Logic for T_A = AB + Bx
     % -----------------------------------------
-    \node[and port] (andA1) at (3.5, 7.5) {};
-    \node[and port] (andA2) at (3.5, 5.5) {};
-    \node[or port]  (orA)   at (5.5, 6.5) {};
+    \node[or port] (andA1) at (3.5, 7.5) {};
+    \node[and port]  (orA)   at (5.5, 6.5) {};
     
     \draw (andA1.in 1) node[left] {$A$};
-    \draw (andA1.in 2) node[left] {$B$};
-    \draw (andA2.in 1) node[left] {$B$};
-    \draw (andA2.in 2) node[left] {$x$};
+    \draw (andA1.in 2) node[left] {$x$};
+    \draw (orA.in 2) node[left]{$B$};
+
+
     
-    \draw (andA1.out) -- (orA.in 1);
-    \draw (andA2.out) -- (orA.in 2);
+    \draw (andA1.out) -| (orA.in 1);
+
     \draw (orA.out) -- (7, 6.5);
 
     % -----------------------------------------
@@ -24130,13 +24514,14 @@ The logic diagram is implemented using two T flip-flops. To maintain a clean and
     % -----------------------------------------
     % Global Clock Routing
     % -----------------------------------------
-    \coordinate (clk_start) at (5.5, 2.5);
+    \coordinate (clk_start) at (6.5, 2.5);
     \draw (clk_start) node[left] {Clock} |- (7, 5.5);
     \draw (clk_start) |- (7, -0.5);
     \node[circ] at (clk_start) {};
 
 \end{circuitikz}
 \end{center}
+
 
 \end{tcolorbox}
 
@@ -24396,7 +24781,7 @@ We apply Karnaugh Maps to derive the simplified Boolean expressions. The grid fo
 \begin{center}
 \textbf{K-Map for $\mathbf{J_A}$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$AB$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$B$][$A$]
     \minterms{1,4,5}
     \indeterminants{8,9,10,11,12,13,14,15}
     \autoterms[0]
@@ -24410,7 +24795,7 @@ We apply Karnaugh Maps to derive the simplified Boolean expressions. The grid fo
 \begin{center}
 \textbf{K-Map for $\mathbf{K_A}$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$AB$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$B$][$A$]
     \minterms{9,10,11,12,13,14,15}
     \indeterminants{0,1,2,3,4,5,6,7}
     \autoterms[0]
@@ -24426,7 +24811,7 @@ We apply Karnaugh Maps to derive the simplified Boolean expressions. The grid fo
 \begin{center}
 \textbf{K-Map for $\mathbf{J_B}$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$AB$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$B$][$A$]
     \minterms{0,8}
     \indeterminants{4,5,6,7,12,13,14,15}
     \autoterms[0]
@@ -24439,7 +24824,7 @@ We apply Karnaugh Maps to derive the simplified Boolean expressions. The grid fo
 \begin{center}
 \textbf{K-Map for $\mathbf{K_B}$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$AB$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$B$][$A$]
     \minterms{4,6,7,12,13,14,15}
     \indeterminants{0,1,2,3,8,9,10,11}
     \autoterms[0]
@@ -24455,7 +24840,7 @@ We apply Karnaugh Maps to derive the simplified Boolean expressions. The grid fo
 \begin{center}
 \textbf{K-Map for $\mathbf{Z_1}$ (Drink)} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$AB$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$B$][$A$]
     \minterms{2,6,9,10,12,13,14}
     \autoterms[0]
     \implicant{2}{10}  % X1 X2'
@@ -24469,7 +24854,7 @@ We apply Karnaugh Maps to derive the simplified Boolean expressions. The grid fo
 \begin{center}
 \textbf{K-Map for $\mathbf{Z_2}$ (Change)} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$AB$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$B$][$A$]
     \minterms{7,11,15}
     \autoterms[0]
     \implicant{7}{15}  % B X1 X2
@@ -24599,7 +24984,7 @@ We derive the minimized Boolean expressions using Karnaugh Maps mapped with $Q_1
 \begin{center}
 \textbf{K-Map for $\mathbf{D_1}$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[2][4][1][$x$][$Q_1Q_0$]
+\begin{karnaugh-map}[2][4][1][$x$][$Q_0$][$Q_1$]
     \minterms{3,5,7}
     \autoterms[0]
     \implicant{3}{7}
@@ -24612,7 +24997,7 @@ We derive the minimized Boolean expressions using Karnaugh Maps mapped with $Q_1
 \begin{center}
 \textbf{K-Map for $\mathbf{D_0}$} \\
 \vspace{0.5em}
-\begin{karnaugh-map}[2][4][1][$x$][$Q_1Q_0$]
+\begin{karnaugh-map}[2][4][1][$x$][$Q_0$][$Q_1$]
     \minterms{1,5,7}
     \autoterms[0]
     \implicant{7}{5}
@@ -24723,7 +25108,7 @@ We derive the simplified Boolean expressions for $T_1$, $T_0$, and Output $Y$ us
 \noindent
 \textbf{K-Map for $T_1$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{2,4,7}
     \autoterms[0]
     \implicant{2}{2}
@@ -24740,7 +25125,7 @@ We derive the simplified Boolean expressions for $T_1$, $T_0$, and Output $Y$ us
 \noindent
 \textbf{K-Map for $T_0$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{1,2,5,6,7}
     \autoterms[0]
     \implicant{1}{5}
@@ -24926,7 +25311,7 @@ We derive the simplified Boolean expressions for $S_1, R_1, S_0, R_0$ and Output
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $S_1$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{3}
     \indeterminants{4,5}
     \autoterms[0]
@@ -24941,7 +25326,7 @@ We derive the simplified Boolean expressions for $S_1, R_1, S_0, R_0$ and Output
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $R_1$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{6,7}
     \indeterminants{0,1,2}
     \autoterms[0]
@@ -24958,7 +25343,7 @@ We derive the simplified Boolean expressions for $S_1, R_1, S_0, R_0$ and Output
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $S_0$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{1,4}
     \indeterminants{7}
     \autoterms[0]
@@ -24975,7 +25360,7 @@ We derive the simplified Boolean expressions for $S_1, R_1, S_0, R_0$ and Output
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $R_0$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{2,3,6}
     \indeterminants{0,5}
     \autoterms[0]
@@ -25162,7 +25547,7 @@ We derive the simplified Boolean expressions for $T_1$, $T_0$, and $z$.
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $T_1$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0x$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$x$][$Q_0$][$Q_1$]
     \minterms{2,4,7}
     \autoterms[0]
     \implicant{2}{2}
@@ -25179,7 +25564,7 @@ We derive the simplified Boolean expressions for $T_1$, $T_0$, and $z$.
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $T_0$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0x$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$x$][$Q_0$][$Q_1$]
     \minterms{1,2,5,6}
     \autoterms[0]
     \implicant{1}{5}
@@ -25448,7 +25833,7 @@ We extract the simplified Boolean expressions for $D_1$, $D_0$, and $Y$ based on
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $D_1$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{3,5,7}
     \autoterms[0]
     \implicant{3}{7}
@@ -25464,7 +25849,7 @@ We extract the simplified Boolean expressions for $D_1$, $D_0$, and $Y$ based on
 \begin{minipage}{0.48\textwidth}
 \textbf{K-Map for $D_0$:}
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$Q_0X$][$Q_1$]
+\begin{karnaugh-map}[4][2][1][$X$][$Q_0$][$Q_1$]
     \minterms{1,5,7}
     \autoterms[0]
     \implicant{1}{5}
@@ -28302,6 +28687,57 @@ $-$   & \textbf{011} & $-, -$ & $-, -$ & $-, -$ & $-, -$ & $-, -$ & $-, -$ & $-,
 \end{tabular}
 \end{center}
 
+
+\begin{center}
+    \begin{tikzpicture}[
+    font=\sffamily,
+    >=Stealth,
+    block/.style={rectangle, draw, thick, minimum width=4.5cm, minimum height=5cm, align=center, fill=blue!5},
+    delay/.style={rectangle, draw, thick, minimum width=3.5cm, minimum height=1.5cm, align=center, fill=orange!10},
+    wire/.style={thick, -Stealth},
+    line/.style={thick}
+]
+
+    % Combinational Logic Block
+    \node[block] (CL) {\Large Combinational \\ \Large Logic \\ \Large Network};
+
+    % External Inputs (a, b, c)
+    \coordinate (in_a) at ($(CL.north west)!0.15!(CL.south west)$);
+    \coordinate (in_b) at ($(CL.north west)!0.30!(CL.south west)$);
+    \coordinate (in_c) at ($(CL.north west)!0.45!(CL.south west)$);
+    
+    \draw[wire] ([xshift=-3.5cm]in_a) -- node[above, pos=0.1] {$a$} (in_a);
+    \draw[wire] ([xshift=-3.5cm]in_b) -- node[above, pos=0.1] {$b$} (in_b);
+    \draw[wire] ([xshift=-3.5cm]in_c) -- node[above, pos=0.1] {$c$} (in_c);
+
+    % Output U
+    \coordinate (out_U) at ($(CL.north east)!0.3!(CL.south east)$);
+    \draw[wire] (out_U) -- node[above, pos=0.9] {$U$} ++(3.5,0);
+
+    % Delay Block (Implicit or Explicit in Fundamental Mode)
+    \node[delay] (D) at ($(CL.south) - (0, 2.5)$) {Delay Elements \\ (Feedback Path)};
+
+    % Next State Outputs (Y1, Y2, Y3)
+    \coordinate (out_Y1) at ($(CL.north east)!0.65!(CL.south east)$);
+    \coordinate (out_Y2) at ($(CL.north east)!0.77!(CL.south east)$);
+    \coordinate (out_Y3) at ($(CL.north east)!0.89!(CL.south east)$);
+
+    \draw[wire] (out_Y1) -- ++(1.5,0) node[above, pos=0.5] {$Y_1$} |- ($(D.east) + (0, 0.4)$);
+    \draw[wire] (out_Y2) -- ++(2.0,0) node[above, pos=0.5] {$Y_2$} |- ($(D.east) + (0, 0)$);
+    \draw[wire] (out_Y3) -- ++(2.5,0) node[above, pos=0.5] {$Y_3$} |- ($(D.east) + (0, -0.4)$);
+
+    % Present State Inputs (y1, y2, y3)
+    \coordinate (in_y1) at ($(CL.north west)!0.65!(CL.south west)$);
+    \coordinate (in_y2) at ($(CL.north west)!0.77!(CL.south west)$);
+    \coordinate (in_y3) at ($(CL.north west)!0.89!(CL.south west)$);
+
+    \draw[wire] ($(D.west) + (0, 0.4)$) -- ++(-1.5,0) node[above, pos=0.5] {$y_1$} |- (in_y1);
+    \draw[wire] ($(D.west) + (0, 0)$) -- ++(-2.0,0) node[above, pos=0.5] {$y_2$} |- (in_y2);
+    \draw[wire] ($(D.west) + (0, -0.4)$) -- ++(-2.5,0) node[above, pos=0.5] {$y_3$} |- (in_y3);
+
+\end{tikzpicture}
+\end{center}
+
 \end{tcolorbox}
 
 \item At a junction of a single-track railroad and a road, traffic lights are to be installed. The lights are to be controlled by switches that are pressed or released by the trains. When a train approaches the junction from either direction and is within 1500 feet from it, the lights are to change from green to red and remain red until the train is 1500 feet past the junction. You may assume that the length of a train is smaller than 3000 feet. Determine a primitive flow table and reduce it.
@@ -28732,7 +29168,7 @@ We derive the simplified expressions for $Y_1^+$, $Y_2^+$, and $Z$ using Karnaug
 
 \subsubsection*{K-Map for $Y_1^+$}
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$Y_1Y_2$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$Y_2$][$Y_1$]
     \manualterms{0,0,0,0,0,1,0,0,0,X,X,0,1,1,X,1}
     \implicant{12}{14}
     \implicant{5}{13}
@@ -28746,7 +29182,7 @@ Y_1^+ &= Y_2(Y_1 + \bar{X}_1X_2) \tag{Distributive Law}
 
 \subsubsection*{K-Map for $Y_2^+$}
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$Y_1Y_2$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$Y_2$][$Y_1$]
     \manualterms{0,0,1,0,1,1,1,0,0,X,X,0,0,1,X,0}
     \implicant{2}{10}
     \implicant{4}{5}
@@ -28761,7 +29197,7 @@ Y_2^+ &= X_1\bar{X}_2 + Y_2\bar{X}_1(\bar{Y}_1 + X_2) \tag{Distributive Law}
 
 \subsubsection*{K-Map for Output $Z$}
 \begin{center}
-\begin{karnaugh-map}[4][4][1][$X_1X_2$][$Y_1Y_2$]
+\begin{karnaugh-map}[4][4][1][$X_2$][$X_1$][$Y_2$][$Y_1$]
     \manualterms{0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0}
     \implicant{13}{13}
 \end{karnaugh-map}
@@ -28979,6 +29415,8 @@ Replacing the old states with the combined states A, B, and C in the transition 
 \item Design a circuit for a digital lock using T latches. The lock has two push-button inputs $A$ and $B$ and produces a single pulse $Z_1$ for each activation. The two switches are mechanically interlocked so that simultaneous pulses are not possible. Features: (i) opening sequence is AABABA; (ii) three $B$ pulses give absolute reset; (iii) any incorrect use of $A$ produces output $Z_2$ to ring a bell.
 \mk{20} \yr{CSE 205 | L-2/T-1 | 2018--19}
 
+
+
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cF!4,colframe=cF,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cF]
 
 \section*{Design of Digital Lock using T Latches (Pulse-Mode Asynchronous FSM)}
@@ -29117,7 +29555,105 @@ Given the complex mathematical nature of 4 fully populated T-latches, manual wir
     \item \textbf{Outputs:} Two discrete output AND gates generate $Z_1$ and $Z_2$ as directly derived in Section 5.
 \end{enumerate}
 
+\vspace{1em}
+\subsection*{7. Schematic Circuit Diagram}
+\begin{center}
+\begin{tikzpicture}[thick, >=stealth, font=\sffamily\small]
+
+   % 1. State Latches (y_3 top, y_0 bottom)
+   \foreach \i/\y in {3/9, 2/6, 1/3, 0/0} {
+       \draw[fill=cF!5, draw=cF, line width=1pt] (10, \y) rectangle (12, \y+1.5);
+       \node at (11, \y+0.75) {\textbf{T-Latch} $y_\i$};
+       \draw (10, \y+0.75) -- (9.7, \y+0.75); % T input stub
+       \draw (12, \y+1) -- (12.5, \y+1); % y_i output
+       \node[above] at (12.25, \y+1) {$y_\i$};
+   }
+
+   % Feedback Bus
+   \draw[blue, thick] (12.5, 1) -- (13, 1) -- (13, -1) -- (0, -1) -- (0, 10.5);
+   \draw[blue, thick] (12.5, 4) -- (13, 4);
+   \draw[blue, thick] (12.5, 7) -- (13, 7);
+   \draw[blue, thick] (12.5, 10) -- (13, 10);
+   
+   % Bus connection dots
+   \fill[blue] (13, 4) circle (0.07);
+   \fill[blue] (13, 7) circle (0.07);
+   \fill[blue] (13, 10) circle (0.07);
+   \node[blue, right] at (0, 10.75) {\textbf{State Feedback Bus} $(y_3, y_2, y_1, y_0)$};
+
+   % Combinational Logic Blocks
+   \draw[fill=white, rounded corners, draw=black] (1, 6) rectangle (3.5, 10);
+   \node[align=center] at (2.25, 8) {\textbf{Next-State} \\ \textbf{Logic (Pulse A)} \\ $T_i^A$};
+   \foreach \y in {6.5, 7.5, 8.5, 9.5} { \draw[blue, ->] (0, \y) -- (1, \y); }
+
+   \draw[fill=white, rounded corners, draw=black] (1, 0) rectangle (3.5, 4);
+   \node[align=center] at (2.25, 2) {\textbf{Next-State} \\ \textbf{Logic (Pulse B)} \\ $T_i^B$};
+   \foreach \y in {0.5, 1.5, 2.5, 3.5} { \draw[blue, ->] (0, \y) -- (1, \y); }
+
+   % Pulse Inputs A and B
+   \draw[red, thick] (5.2, 11.5) node[below] {\textbf{Pulse A}} -- (5.2, -3.2) -- (7.5, -3.2);
+   \draw[green!50!black, thick] (5.8, 11.5) node[above] {\textbf{Pulse B}} -- (5.8, 0.5);
+
+   % Gate macros for clean drawing without external libraries
+   \def\andgate#1#2{ % x, y
+       \draw[fill=white] (#1, #2+0.25) -- (#1+0.4, #2+0.25) arc(90:-90:0.25) -- (#1, #2-0.25) -- cycle;
+   }
+   \def\orgate#1#2{ % x, y
+       \draw[fill=white] (#1, #2+0.3) .. controls (#1+0.15, #2+0.3) and (#1+0.45, #2+0.05) .. (#1+0.6, #2)
+                        .. controls (#1+0.45, #2-0.05) and (#1+0.15, #2-0.3) .. (#1, #2-0.3)
+                        .. controls (#1+0.1, #2-0.15) and (#1+0.1, #2+0.15) .. (#1, #2+0.3);
+   }
+
+   % Routing for each latch i=3,2,1,0
+   % \vxa and \vxb are spaced vertical channels to prevent overlapping lines
+   \foreach \i/\y/\ay/\by/\vxa/\vxb in {3/9/9.5/3.5/3.9/4.5, 2/6/8.5/2.5/3.8/4.4, 1/3/7.5/1.5/3.7/4.3, 0/0/6.5/0.5/3.6/4.2} {
+       
+       % AND gate A
+       \andgate{6.5}{\y+1.1}
+       % route T_i^A
+       \draw (3.5, \ay) -- (\vxa, \ay) -- (\vxa, \y+0.95) -- (6.5, \y+0.95);
+       % route Pulse A
+       \fill[red] (5.2, \y+1.25) circle (0.07);
+       \draw[red, ->] (5.2, \y+1.25) -- (6.5, \y+1.25);
+
+       % AND gate B
+       \andgate{6.5}{\y+0.4}
+       % route T_i^B
+       \draw (3.5, \by) -- (\vxb, \by) -- (\vxb, \y+0.25) -- (6.5, \y+0.25);
+       % route Pulse B
+       \fill[green!50!black] (5.8, \y+0.55) circle (0.07);
+       \draw[green!50!black, ->] (5.8, \y+0.55) -- (6.5, \y+0.55);
+
+       % OR gate
+       \orgate{8}{\y+0.75}
+       % connect ANDs to OR
+       \draw[->] (7.15, \y+1.1) -- (7.6, \y+1.1) -- (7.6, \y+0.9) -- (8, \y+0.9);
+       \draw[->] (7.15, \y+0.4) -- (7.6, \y+0.4) -- (7.6, \y+0.6) -- (8, \y+0.6);
+       
+       % OR to Latch
+       \draw[->] (8.6, \y+0.75) -- (10, \y+0.75);
+       \node[above] at (9.3, \y+0.75) {$T_\i$};
+   }
+
+   % Output Logic Block (Z1 and Z2)
+   \draw[fill=white, rounded corners, draw=black] (7.5, -4.5) rectangle (10.0, -2.5);
+   \node[align=center] at (8.75, -3.5) {\textbf{Output Logic} \\ \textbf{($Z_1, Z_2$)}};
+   
+   % State bus dropping into Output Logic
+   \fill[blue] (8.75, -1) circle (0.07);
+   \draw[blue, ->] (8.75, -1) -- (8.75, -2.5);
+   
+   % Outputs
+   \draw[->, thick] (10.0, -3.1) -- (11.0, -3.1) node[right] {\textbf{$Z_1$} (Unlock)};
+   \draw[->, thick] (10.0, -3.9) -- (11.0, -3.9) node[right] {\textbf{$Z_2$} (Alarm)};
+
+\end{tikzpicture}
+\end{center}
+
 \end{tcolorbox}
+
+
+
 
 \item Construct a primitive flow table for a fundamental mode circuit with two inputs ($x_1$, $x_2$) and two outputs ($z_1$, $z_2$). Specifications: when $x_1x_2=00$, $z_1z_2=00$. Output 10 is produced following input sequence $00\to01\to11$ and remains until $x_1x_2$ returns to 00. Output 01 is produced following sequence $00\to10\to11$ and remains until 00 input returns the output to 00. Determine the minimum row-reduced flow table.
 \mk{10+10} \yr{CSE 205 | L-2/T-1 | 2017--18}
@@ -30164,7 +30700,7 @@ However, physical logic gates have propagation delays. The inverter generating $
 A static-1 hazard exists when two adjacent $1$s in a Karnaugh map are not covered by the same grouping (implicant). The transition between $m_7$ ($111$) and $m_3$ ($011$) jumps between two separate groups, exposing the circuit to a hazard.
 
 \begin{center}
-\begin{karnaugh-map}[4][2][1][$BC$][$A$]
+\begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
     \minterms{1, 3, 6, 7}
     \implicant{7}{6}
     \implicant{1}{3}
@@ -32176,38 +32712,38 @@ The excitation inputs are modeled as $T_i = T_{iA} \cdot A + T_{iB} \cdot B$.
 % Row 1: T_1A, T_2A, T_3A
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{3,4,5,6,7}
     \autoterms[0]
     \implicant{4}{6}
     \implicant{3}{7}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$T_{1A} = y_1 + y_2 y_3$}
+\par\small $T_{1A} = y_1 + y_2 y_3$
 \end{minipage}
 \hfill
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{1,2,3,6,7}
     \autoterms[0]
     \implicant{3}{6}
     \implicant{1}{3}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$T_{2A} = y_2 + \bar{y_1} y_3$}
+\par\small $T_{2A} = y_2 + \bar{y_1} y_3$
 \end{minipage}
 \hfill
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{0,1,3,5,7}
     \autoterms[0]
     \implicant{1}{7}
     \implicant{0}{1}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$T_{3A} = \bar{y_1}\bar{y_2} + y_3$}
+\par\small $T_{3A} = \bar{y_1}\bar{y_2} + y_3$
 \end{minipage}
 
 \vspace{0.5cm}
@@ -32215,7 +32751,7 @@ The excitation inputs are modeled as $T_i = T_{iA} \cdot A + T_{iB} \cdot B$.
 % Row 2: T_1B, T_2B, T_3B
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{0,1,3,7}
     \autoterms[0]
     \implicant{3}{7}
@@ -32223,24 +32759,24 @@ The excitation inputs are modeled as $T_i = T_{iA} \cdot A + T_{iB} \cdot B$.
     \implicant{0}{1}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$T_{1B} = \bar{y_1}\bar{y_2} + \bar{y_1} y_3 + y_2 y_3$}
+\par\small $T_{1B} = \bar{y_1}\bar{y_2} + \bar{y_1} y_3 + y_2 y_3$
 \end{minipage}
 \hfill
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{0,1,5,7}
     \autoterms[0]
     \implicant{5}{7}
     \implicant{0}{1}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$T_{2B} = \bar{y_1}\bar{y_2} + y_1 y_3$}
+\par\small $T_{2B} = \bar{y_1}\bar{y_2} + y_1 y_3$
 \end{minipage}
 \hfill
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{1,2,4,6,7}
     \autoterms[0]
     \implicant{2}{6}
@@ -32249,7 +32785,7 @@ The excitation inputs are modeled as $T_i = T_{iA} \cdot A + T_{iB} \cdot B$.
     \implicant{1}{1}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$T_{3B} = Z_{2A} + \bar{y_1}\bar{y_2}y_3$}
+\par\small $T_{3B} = Z_{2A} + \bar{y_1}\bar{y_2}y_3$
 \end{minipage}
 
 \vspace{0.5cm}
@@ -32257,18 +32793,18 @@ The excitation inputs are modeled as $T_i = T_{iA} \cdot A + T_{iB} \cdot B$.
 % Row 3: Z_1A, Z_2A
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{5}
     \autoterms[0]
     \implicant{5}{5}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$Z_{1A} = y_1 \bar{y_2} y_3$}
+\par\small $Z_{1A} = y_1 \bar{y_2} y_3$
 \end{minipage}
 \hspace{0.05\textwidth}
 \begin{minipage}{0.3\textwidth}
 \centering
-\begin{karnaugh-map}[4][2][1][$y_2y_3$][$y_1$]
+\begin{karnaugh-map}[4][2][1][$y_3$][$y_2$][$y_1$]
     \minterms{2,4,6,7}
     \autoterms[0]
     \implicant{2}{6}
@@ -32276,7 +32812,7 @@ The excitation inputs are modeled as $T_i = T_{iA} \cdot A + T_{iB} \cdot B$.
     \implicant{7}{6}
 \end{karnaugh-map}
 \vspace{-0.2cm}
-\caption*{$Z_{2A} = y_2\bar{y_3} + y_1\bar{y_3} + y_1 y_2$}
+\par\small $Z_{2A} = y_2\bar{y_3} + y_1\bar{y_3} + y_1 y_2$
 \end{minipage}
 \end{figure}
 
@@ -32570,16 +33106,22 @@ In addition to the duration of a single pulse, there is a restriction on the tim
 \end{enumerate}
 
 
+% The corresponding content is located later in the source, after S8.
+% Register it here so the PDF outline keeps it under its logical S6 parent.
+\bookmark[level=2,dest=sub.s6.sync-design]{Synchronous Sequential Circuit Design}
+
+
 %% ══════════════════════════════════════════════════════════════════════
 %%  SECTION 7: REGISTERS & COUNTERS
 %% ══════════════════════════════════════════════════════════════════════
 \secdivider{Registers \& Counters}{Shift Registers, Asynchronous \& Synchronous Counters, Ring Counters}{cG}{pink!60!red}
 
 \markboth{S7: Registers \& Counters}{S7: Registers \& Counters}
+\pdfbookmark[1]{S7: Registers \& Counters}{sec:S7}
 \label{sec:S7}
 \titleformat{\section}{\large\bfseries\color{cG}}{}{0em}{}[\titlerule]
 \section*{S7 \quad Registers \& Counters}
-\addcontentsline{toc}{section}{S7: Registers \& Counters}
+\addsectiontotoc{S7: Registers \& Counters}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cG}{Ripple (Asynchronous) Counter}
@@ -34233,6 +34775,7 @@ We map $J_2$, $K_2$, $T_1$, and $D_0$ to 3-variable Karnaugh maps (inputs $Q_2, 
 \vspace{0.4cm}
 \noindent
 \begin{minipage}{0.24\textwidth}
+    \hfuzz=30pt
     \centering
     \textbf{$J_2$ Map} \\
     \vspace{0.1cm}
@@ -34247,6 +34790,7 @@ We map $J_2$, $K_2$, $T_1$, and $D_0$ to 3-variable Karnaugh maps (inputs $Q_2, 
 \end{minipage}
 \hfill
 \begin{minipage}{0.24\textwidth}
+    \hfuzz=30pt
     \centering
     \textbf{$K_2$ Map} \\
     \vspace{0.1cm}
@@ -34261,6 +34805,7 @@ We map $J_2$, $K_2$, $T_1$, and $D_0$ to 3-variable Karnaugh maps (inputs $Q_2, 
 \end{minipage}
 \hfill
 \begin{minipage}{0.24\textwidth}
+    \hfuzz=30pt
     \centering
     \textbf{$T_1$ Map} \\
     \vspace{0.1cm}
@@ -34274,6 +34819,7 @@ We map $J_2$, $K_2$, $T_1$, and $D_0$ to 3-variable Karnaugh maps (inputs $Q_2, 
 \end{minipage}
 \hfill
 \begin{minipage}{0.24\textwidth}
+    \hfuzz=30pt
     \centering
     \textbf{$D_0$ Map} \\
     \vspace{0.1cm}
@@ -35040,7 +35586,8 @@ Using the derived equations, the schematic is drawn utilizing three D flip-flops
 
 \vspace{0.5cm}
 \begin{center}
-\begin{circuitikz}[scale=0.9,x=1.2cm,  transform shape]
+\begingroup\hfuzz=40pt
+\begin{circuitikz}[scale=0.84,x=1.2cm,transform shape]
     
     % Define custom color for 'cG' to ensure no compilation errors
     \colorlet{cG}{green!50!black}
@@ -35123,6 +35670,7 @@ Using the derived equations, the schematic is drawn utilizing three D flip-flops
     }
 
 \end{circuitikz}
+\endgroup
 \end{center}
 
 \end{tcolorbox}
@@ -35423,11 +35971,12 @@ Notice that the product term $\mathbf{\overline{Q_2}Q_1}$ is shared between $T_2
 To maintain a pristine, cross-talk-free schematic, local input tags are used to route signals into the logic gates feeding the T inputs.
 
 \vspace{0.5cm}
+\begingroup\hfuzz=30pt
 \begin{tikzpicture}[
     >=latex,
     thick,
     font=\sffamily,
-    scale=1,
+    scale=0.95,
     transform shape
 ]
 
@@ -35527,6 +36076,7 @@ To maintain a pristine, cross-talk-free schematic, local input tags are used to 
     }
 
 \end{tikzpicture}
+\endgroup
 
 
 \end{tcolorbox}
@@ -36067,13 +36617,13 @@ $Q_2$ & $Q_1$ & $Q_0$ & $Q_2^+$ & $Q_1^+$ & $Q_0^+$ & $J_2$ & $K_2$ & $J_1$ & $K
 \subsubsection*{\textcolor{cG}{3. K-Map Simplification \& Boolean Equations}}
 Using the table above, we plot the Karnaugh maps for the $J$ and $K$ inputs of each flip-flop.
 
+
 \begin{center}
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$J_2$ K-Map}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{2}
-        \autoterms[0]
         \indeterminants{4,5,6,7}
         \implicant{2}{6}
     \end{karnaugh-map}
@@ -36086,9 +36636,8 @@ Using the table above, we plot the Karnaugh maps for the $J$ and $K$ inputs of e
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$K_2$ K-Map}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{4}
-        \autoterms[0]
         \indeterminants{0,1,2,3}
         \implicant{0}{4}
     \end{karnaugh-map}
@@ -36103,9 +36652,8 @@ Using the table above, we plot the Karnaugh maps for the $J$ and $K$ inputs of e
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$J_1$ K-Map}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{1}
-        \autoterms[0]
         \indeterminants{2,3,6,7}
         \implicant{1}{3}
     \end{karnaugh-map}
@@ -36118,9 +36666,8 @@ Using the table above, we plot the Karnaugh maps for the $J$ and $K$ inputs of e
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$K_1$ K-Map}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{7}
-        \autoterms[0]
         \indeterminants{0,1,4,5}
         \implicant{5}{7}
     \end{karnaugh-map}
@@ -36135,9 +36682,8 @@ Using the table above, we plot the Karnaugh maps for the $J$ and $K$ inputs of e
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$J_0$ K-Map}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{0,6}
-        \autoterms[0]
         \indeterminants{1,3,5,7}
         \implicant{0}{1}
         \implicant{7}{6}
@@ -36152,9 +36698,8 @@ Using the table above, we plot the Karnaugh maps for the $J$ and $K$ inputs of e
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$K_0$ K-Map}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{3,5}
-        \autoterms[0]
         \indeterminants{0,2,4,6}
         \implicant{3}{2}
         \implicant{4}{5}
@@ -36166,6 +36711,7 @@ Using the table above, we plot the Karnaugh maps for the $J$ and $K$ inputs of e
     \end{align*}
 \end{minipage}
 \end{center}
+
 
 \vspace{0.3cm}
 \subsubsection*{\textcolor{cG}{4. Logic Circuit Diagram}}
@@ -36297,9 +36843,8 @@ Using the values from the state table, we plot the K-maps for each $J$ and $K$ i
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$J_2$ Input}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{2}
-        \autoterms[0]
         \indeterminants{4,5,6,7}
         \implicant{2}{6}
     \end{karnaugh-map}
@@ -36311,9 +36856,8 @@ Using the values from the state table, we plot the K-maps for each $J$ and $K$ i
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$K_2$ Input}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{4}
-        \autoterms[0]
         \indeterminants{0,1,2,3}
         \implicant{0}{4}
     \end{karnaugh-map}
@@ -36327,9 +36871,8 @@ Using the values from the state table, we plot the K-maps for each $J$ and $K$ i
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$J_1$ Input}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{1}
-        \autoterms[0]
         \indeterminants{2,3,6,7}
         \implicant{1}{3}
     \end{karnaugh-map}
@@ -36341,9 +36884,8 @@ Using the values from the state table, we plot the K-maps for each $J$ and $K$ i
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$K_1$ Input}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{7}
-        \autoterms[0]
         \indeterminants{0,1,4,5}
         \implicant{5}{7}
     \end{karnaugh-map}
@@ -36357,9 +36899,8 @@ Using the values from the state table, we plot the K-maps for each $J$ and $K$ i
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$J_0$ Input}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{0,6}
-        \autoterms[0]
         \indeterminants{1,3,5,7}
         \implicant{0}{1}
         \implicant{7}{6}
@@ -36373,9 +36914,8 @@ Using the values from the state table, we plot the K-maps for each $J$ and $K$ i
 \begin{minipage}{0.45\textwidth}
     \centering
     \textbf{$K_0$ Input}\\
-    \begin{karnaugh-map}[4][2][1][$Q_1 Q_0$][$Q_2$]
+    \begin{karnaugh-map}[4][2][1][$Q_0$][$Q_1$][$Q_2$]
         \minterms{3,5}
-        \autoterms[0]
         \indeterminants{0,2,4,6}
         \implicant{3}{2}
         \implicant{4}{5}
@@ -38337,7 +38877,7 @@ The schematic structure below maps the register blocks, the recirculation lines,
   \node[regblock] (regA) at (0, 3) {SHIFT REGISTER A\\[0.3em](Recirculating $N$-Bits)};
   
   % Shift Register B Node
-  \node[regblock] (regB) at (0, 0) {SHIFT REGISTER B\\[0.3em](Target Destination)};
+  \node[regblock] (regB) at (5, 0) {SHIFT REGISTER B\\[0.3em](Target Destination)};
 
   % Input/Output Port Labels on Register A
   \node[right, font=\scriptsize] at (regA.west) {SI};
@@ -38385,6 +38925,7 @@ The schematic structure below maps the register blocks, the recirculation lines,
 
 \end{tikzpicture}
 \end{center}
+
 
 
 \end{tcolorbox}
@@ -39052,16 +39593,78 @@ $$0101_2 + 0011_2 \implies 5_{10} + 3_{10} = 8_{10} = 1000_2$$
 \secdivider{Memory \& Programmable Logic}{RAM, ROM, Address Multiplexing, PLA Design}{cH}{cyan!30!black}
 
 \markboth{S8: Memory \& Programmable Logic}{S8: Memory \& Programmable Logic}
+\pdfbookmark[1]{S8: Memory \& Programmable Logic}{sec:S8}
 \label{sec:S8}
 \titleformat{\section}{\large\bfseries\color{cH}}{}{0em}{}[\titlerule]
 \section*{S8 \quad Memory \& Programmable Logic}
-\addcontentsline{toc}{section}{S8: Memory \& Programmable Logic}
+\addsectiontotoc{S8: Memory \& Programmable Logic}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{ROM Design \& Expansion}
+\subtopic{cH}{RAM \& ROM Design \& Expansion}
 \label{sub:s8-rom}
 
 \begin{enumerate}
+
+\item If you use two dimensional decoding for addressing a 1K word memory, can you optimize the cost? Justify your answer.
+\mk{8} \yr{CSE 205 | L-2/T-1 | 2024--25}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cH!4,colframe=cH,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cH]
+
+\textbf{Conclusion} \\
+\textbf{Yes}, using two-dimensional (2D) decoding significantly optimizes both the hardware cost and complexity compared to one-dimensional (1D) decoding for a 1K word memory.
+
+\vspace{1em}
+\textbf{1. Address Bus Calculation} \\
+A memory size of 1K words translates to $1024$ distinct memory locations. 
+Since $1024 = 2^{10}$, the system requires exactly \textbf{10 address lines} ($A_9 \dots A_0$) to uniquely identify each word.
+
+\vspace{1em}
+\textbf{2. One-Dimensional (Linear) Decoding Cost} \\
+In a standard 1D addressing scheme, a single monolithic decoder processes the entire address bus.
+\begin{itemize}
+    \item \textbf{Decoder Type:} One $10 \times 1024$ decoder.
+    \item \textbf{Gate Count:} It requires $2^{10} = \textcolor{cH}{\mathbf{1024}}$ AND gates.
+    \item \textbf{Gate Complexity:} Each AND gate must accommodate \textbf{10 inputs} (fan-in of 10), which is highly impractical and expensive at the transistor level.
+\end{itemize}
+
+\vspace{1em}
+\textbf{3. Two-Dimensional (Coincident) Decoding Cost} \\
+In a 2D addressing scheme, the memory is arranged as a square (or near-square) grid. The 10-bit address is split into two halves: Row and Column addresses. 
+For a 10-bit address, we split it symmetrically: 
+\begin{align*}
+    \text{Row bits ($X$)} &= 5 \text{ bits} \implies 2^5 = 32 \text{ rows} \\
+    \text{Column bits ($Y$)} &= 5 \text{ bits} \implies 2^5 = 32 \text{ columns}
+\end{align*}
+This requires two smaller, separate decoders:
+\begin{itemize}
+    \item \textbf{Row Decoder:} One $5 \times 32$ decoder (requires 32 AND gates, each with 5 inputs).
+    \item \textbf{Column Decoder:} One $5 \times 32$ decoder (requires 32 AND gates, each with 5 inputs).
+    \item \textbf{Total Gate Count:} $32 + 32 = \textcolor{cH}{\mathbf{64}}$ AND gates.
+\end{itemize}
+
+\vspace{1em}
+\textbf{4. Justification \& Hardware Cost Comparison} \\
+By reorganizing the memory geometrically into a $32 \times 32$ matrix, the coincident selection (where a memory cell is accessed only when both its corresponding row and column lines are asserted) drastically trims the peripheral decoding logic.
+
+\begin{center}
+    \renewcommand{\arraystretch}{1.3}
+    \begin{tabular}{p{4cm} c c}
+        \toprule
+        \textbf{Parameter} & \textbf{1D Decoding} & \textbf{2D Decoding} \\
+        \midrule
+        Memory Matrix Layout & $1024 \times 1$ & $32 \times 32$ \\
+        Number of Decoders & 1 & 2 \\
+        Decoder Sizes & One $10 \times 1024$ & Two $5 \times 32$ \\
+        Total AND Gates Required & \textcolor{cH}{\textbf{1024}} & \textcolor{cH}{\textbf{64}} \\
+        Fan-in (Inputs per gate) & 10 & 5 \\
+        \bottomrule
+    \end{tabular}
+\end{center}
+
+\textbf{Final Verdict:} \\
+The 2D decoding scheme reduces the number of required decoding AND gates from \textbf{1024} to just \textbf{64} (a $\sim 93.75\%$ reduction). Additionally, it halves the fan-in requirement from 10 inputs to 5 inputs per gate. This reduction in both gate count and gate complexity results in a significantly smaller silicon footprint, lower power consumption, and vastly optimized cost.
+
+\end{tcolorbox}
 
 \item You have several $32 \times 4$ ROMs in the laboratory. Each ROM can be enabled/disabled using a 1/0 signal respectively. How would you implement a $128 \times 4$ ROM using the available ROMs? You may use any additional circuitry if needed.
 \mk{10} \yr{CSE 205 | L-2/T-1 | 2013--14}
@@ -39261,65 +39864,89 @@ $P_8 = xyz$              & 1 & 1 & 1 & 0 & 1 & 0 & 1 \\
 \vspace{0.5cm}
 
 \subsubsection*{Step 4: PLA Circuit Diagram}
+
+
 \begin{center}
-\begin{tikzpicture}[x=0.7cm, y=0.6cm]
+\begin{tikzpicture}[x=0.85cm, y=0.8cm]
     
-    % --- AND PLANE ---
-    \node[font=\bfseries] at (2.5, 2) {AND Plane};
-    
-    % Vertical Input Lines
-    \foreach \i/\label in {0/x, 1/\bar{x}, 2/y, 3/\bar{y}, 4/z, 5/\bar{z}} {
-        \draw[thick] (\i, 1) -- (\i, -9.5);
-        \node[above] at (\i, 1) {$\label$};
-    }
-    
-    % Horizontal Product Lines
-    \foreach \j/\p in {1/P_1, 2/P_2, 3/P_3, 4/P_4, 5/P_5, 6/P_6, 7/P_7, 8/P_8} {
-        \draw[thick] (-1, -\j) -- (12.5, -\j);
-        \node[left] at (-1, -\j) {$\p$};
-    }
+    % --- Plane Labels & Divider ---
+    \node[font=\bfseries] at (2.25, 4.5) {AND Plane};
+    \node[font=\bfseries] at (7.5, 4.5) {OR Plane};
+    \draw[dashed, gray, thick] (5.7, 4.5) -- (5.7, -9.5);
 
-    % Crosspoints style
-    \tikzstyle{cross}=[circle, fill=cH, inner sep=1.8pt]
+    % --- Inputs (Buffers and initial vertical routing) ---
+    % Stacked from top to bottom: x (y=3), y (y=2), z (y=1)
+    \PLAinput{3}{1}{1.5}{x}
+    \PLAinput{2}{2}{2.5}{y}
+    \PLAinput{1}{3}{3.5}{z}
+
+    % Extend input lines downwards through the AND plane
+    \foreach \x in {1, 1.5, 2, 2.5, 3, 3.5} {
+        \draw (\x, 0.5) -- (\x, -8.5);
+    }
     
-    % AND Plane Connections
+    % Bottom input labels for clarity
+    \node[below, font=\scriptsize] at (1, -8.5) {$x$};
+    \node[below, font=\scriptsize] at (1.5, -8.5) {$\bar{x}$};
+    \node[below, font=\scriptsize] at (2, -8.5) {$y$};
+    \node[below, font=\scriptsize] at (2.5, -8.5) {$\bar{y}$};
+    \node[below, font=\scriptsize] at (3, -8.5) {$z$};
+    \node[below, font=\scriptsize] at (3.5, -8.5) {$\bar{z}$};
+
+    % --- AND Plane (Horizontal Gates) ---
+    \PLAand{-1}{1}{10}
+    \PLAand{-2}{2}{10}
+    \PLAand{-3}{3}{10}
+    \PLAand{-4}{4}{10}
+    \PLAand{-5}{5}{10}
+    \PLAand{-6}{6}{10}
+    \PLAand{-7}{7}{10}
+    \PLAand{-8}{8}{10}
+
+    % --- OR Plane (Vertical Gates) ---
+    \PLAor{6}{-9}
+    \PLAor{7}{-9}
+    \PLAor{8}{-9}
+    \PLAor{9}{-9}
+
+    % Final output routing (drawing arrows from the tips of OR gates)
+    \draw[-latex, thick] (6, -9.8) -- (6, -10.5) node[below, font=\bfseries] {$F_1$};
+    \draw[-latex, thick] (7, -9.8) -- (7, -10.5) node[below, font=\bfseries] {$F_2$};
+    \draw[-latex, thick] (8, -9.8) -- (8, -10.5) node[below, font=\bfseries] {$F_3$};
+    \draw[-latex, thick] (9, -9.8) -- (9, -10.5) node[below, font=\bfseries] {$F_4$};
+
+    % --- AND Plane Crosspoints ---
+    % True lines at: x=1, y=2, z=3
+    % False lines at: x=1.5, y=2.5, z=3.5
+
     % P1 = x'y'
-    \node[cross] at (1, -1) {}; \node[cross] at (3, -1) {};
+    \bluecross{1.5}{-1} \bluecross{2.5}{-1}
     % P2 = x'y'z
-    \node[cross] at (1, -2) {}; \node[cross] at (3, -2) {}; \node[cross] at (4, -2) {};
+    \bluecross{1.5}{-2} \bluecross{2.5}{-2} \bluecross{3}{-2}
     % P3 = x'yz'
-    \node[cross] at (1, -3) {}; \node[cross] at (2, -3) {}; \node[cross] at (5, -3) {};
+    \bluecross{1.5}{-3} \bluecross{2}{-3} \bluecross{3.5}{-3}
     % P4 = x'yz
-    \node[cross] at (1, -4) {}; \node[cross] at (2, -4) {}; \node[cross] at (4, -4) {};
+    \bluecross{1.5}{-4} \bluecross{2}{-4} \bluecross{3}{-4}
     % P5 = xy'
-    \node[cross] at (0, -5) {}; \node[cross] at (3, -5) {};
+    \bluecross{1}{-5} \bluecross{2.5}{-5}
     % P6 = xy'z
-    \node[cross] at (0, -6) {}; \node[cross] at (3, -6) {}; \node[cross] at (4, -6) {};
+    \bluecross{1}{-6} \bluecross{2.5}{-6} \bluecross{3}{-6}
     % P7 = xyz'
-    \node[cross] at (0, -7) {}; \node[cross] at (2, -7) {}; \node[cross] at (5, -7) {};
+    \bluecross{1}{-7} \bluecross{2}{-7} \bluecross{3.5}{-7}
     % P8 = xyz
-    \node[cross] at (0, -8) {}; \node[cross] at (2, -8) {}; \node[cross] at (4, -8) {};
+    \bluecross{1}{-8} \bluecross{2}{-8} \bluecross{3}{-8}
 
-    % --- Divider ---
-    \draw[dashed, gray, thick] (6.5, 1.5) -- (6.5, -9.5);
-    
-    % --- OR PLANE ---
-    \node[font=\bfseries] at (10, 2) {OR Plane};
-    
-    % Vertical Output Lines
-    \foreach \i/\label in {8.5/F_1, 9.5/F_2, 10.5/F_3, 11.5/F_4} {
-        \draw[thick, -latex] (\i, 1) -- (\i, -10.5) node[below, font=\bfseries] {$\label$};
-    }
-    
-    % OR Plane Connections
-    % F1: P2, P4, P6, P7
-    \node[cross] at (8.5, -2) {}; \node[cross] at (8.5, -4) {}; \node[cross] at (8.5, -6) {}; \node[cross] at (8.5, -7) {};
-    % F2: P1, P7, P8
-    \node[cross] at (9.5, -1) {}; \node[cross] at (9.5, -7) {}; \node[cross] at (9.5, -8) {};
-    % F3: P4, P6
-    \node[cross] at (10.5, -4) {}; \node[cross] at (10.5, -6) {};
-    % F4: P2, P3, P5, P8
-    \node[cross] at (11.5, -2) {}; \node[cross] at (11.5, -3) {}; \node[cross] at (11.5, -5) {}; \node[cross] at (11.5, -8) {};
+    % --- OR Plane Crosspoints ---
+    % Columns: F1=6, F2=7, F3=8, F4=9
+
+    % F1 = P2 + P4 + P6 + P7
+    \bluecross{6}{-2} \bluecross{6}{-4} \bluecross{6}{-6} \bluecross{6}{-7}
+    % F2 = P1 + P7 + P8
+    \bluecross{7}{-1} \bluecross{7}{-7} \bluecross{7}{-8}
+    % F3 = P4 + P6
+    \bluecross{8}{-4} \bluecross{8}{-6}
+    % F4 = P2 + P3 + P5 + P8
+    \bluecross{9}{-2} \bluecross{9}{-3} \bluecross{9}{-5} \bluecross{9}{-8}
 
 \end{tikzpicture}
 \end{center}
@@ -39445,7 +40072,7 @@ By programming the PLA for $F_1'$ and $F_2$, we perfectly match the 4 product te
 \begin{center}
 \begin{tabular}{cc}
     \textbf{Map for $F_1' = \Sigma\,(0,1,2,4)$} & \textbf{Map for $F_2 = \Sigma\,(0,2,4,7)$} \\
-    \begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
         \minterms{0,1,2,4}
         \maxterms{3,5,6,7}
         \implicant{0}{1}
@@ -39453,7 +40080,7 @@ By programming the PLA for $F_1'$ and $F_2$, we perfectly match the 4 product te
         \implicantedge{0}{0}{2}{2}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
         \minterms{0,2,4,7}
         \maxterms{1,3,5,6}
         \implicant{0}{4}
@@ -39489,6 +40116,87 @@ The programming table defines the connections in the PLA matrices:
         \bottomrule
     \end{tabular}
 \end{center}
+
+
+\vspace{1em}
+\textbf{5.  PLA Circuit Diagram} \\
+\begin{center}
+\begin{tikzpicture}[scale=0.95, every node/.style={transform shape}]
+
+    % --- 1. Dual-Rail Inputs ---
+    % \PLAinput{y}{x_true}{x_comp}{label}
+    \PLAinput{7.0}{1.0}{1.5}{A}
+    \PLAinput{6.0}{2.0}{2.5}{B}
+    \PLAinput{5.0}{3.0}{3.5}{C}
+
+    % Labels for true and complemented input lines
+    \node[above, font=\small] at (1.0, 7.0) {$A$};
+    \node[above, font=\small] at (1.5, 7.8) {$A'$};
+    \node[above, font=\small] at (2.0, 6.0) {$B$};
+    \node[above, font=\small] at (2.5, 6.8) {$B'$};
+    \node[above, font=\small] at (3.0, 5.0) {$C$};
+    \node[above, font=\small] at (3.5, 5.8) {$C'$};
+
+    % --- 2. AND Gates (Product Terms 1 to 4) ---
+    % Extended end_x to 10.5 to accommodate the 3.5 spacing
+    % \PLAand{y}{label}{end_x}
+    \PLAand{4.0}{1}{10.5} % Term 1: A'B'
+    \PLAand{3.0}{2}{10.5} % Term 2: A'C'
+    \PLAand{2.0}{3}{10.5} % Term 3: B'C'
+    \PLAand{1.0}{4}{10.5} % Term 4: ABC
+
+    % --- 3. OR Gates ---
+    % 3.5 horizontal spacing between columns
+    % \PLAor{x}{y_top_of_gate}
+    \PLAor{6.0}{0.2} % Output array column for F1'
+    \PLAor{9.5}{0.2} % Output array column for F2
+
+    % Connections from OR gates to XOR gates
+    \draw (6.0, -0.6) -- (6.0, -1.6);
+    \draw (9.5, -0.6) -- (9.5, -1.6);
+
+    % --- 4. XOR Gates (Output Invert / True Logic) ---
+    % XOR x-coordinates are OR_x + 0.8
+    % \PLAxor{x}{y}{label}
+    \PLAxor{6.8}{-1.8}{F_1}
+    \PLAxor{10.3}{-1.8}{F_2}
+
+    % Programming bits for Output True/Complement Control
+    \node[left, font=\small] at (6.0, -2.0) {$1$}; % 1 = Invert (Complement mode C)
+    \node[left, font=\small] at (9.5, -2.0) {$0$}; % 0 = True mode (T)
+
+    % --- 5. AND Matrix Connections (Crosses) ---
+    % Term 1 (A'B'): A' (1.5), B' (2.5) at y = 4.0
+    \bluecross{1.5}{4.0}
+    \bluecross{2.5}{4.0}
+
+    % Term 2 (A'C'): A' (1.5), C' (3.5) at y = 3.0
+    \bluecross{1.5}{3.0}
+    \bluecross{3.5}{3.0}
+
+    % Term 3 (B'C'): B' (2.5), C' (3.5) at y = 2.0
+    \bluecross{2.5}{2.0}
+    \bluecross{3.5}{2.0}
+
+    % Term 4 (ABC): A (1.0), B (2.0), C (3.0) at y = 1.0
+    \bluecross{1.0}{1.0}
+    \bluecross{2.0}{1.0}
+    \bluecross{3.0}{1.0}
+
+    % --- 6. OR Matrix Connections (Crosses) ---
+    % Column 1 (F1' = P1 + P2 + P3) at x = 6.0
+    \bluecross{6.0}{4.0}
+    \bluecross{6.0}{3.0}
+    \bluecross{6.0}{2.0}
+
+    % Column 2 (F2 = P2 + P3 + P4) at x = 9.5
+    \bluecross{9.5}{3.0}
+    \bluecross{9.5}{2.0}
+    \bluecross{9.5}{1.0}
+
+\end{tikzpicture}
+\end{center}
+
 
 \end{tcolorbox}
 
@@ -39532,7 +40240,7 @@ We derive the simplified Boolean expressions using K-maps. We evaluate both the 
 \begin{center}
 \begin{tabular}{cc}
     \textbf{Map for $W(A,B,C,D)$} & \textbf{Map for $X'(A,B,C,D)$} \\
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{5,6,7,8,9}
 
         \indeterminants{10,11,12,13,14,15}
@@ -39541,7 +40249,7 @@ We derive the simplified Boolean expressions using K-maps. We evaluate both the 
         \implicant{7}{14}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{0,5,6,7,8}
 
         \indeterminants{10,11,12,13,14,15}
@@ -39559,7 +40267,7 @@ Notice that evaluating $X'$ (the complement of $X$) yields the product terms $BC
 \begin{center}
 \begin{tabular}{cc}
     \textbf{Map for $Y(A,B,C,D)$} & \textbf{Map for $Z(A,B,C,D)$} \\
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{0,3,4,7,8}
 
         \indeterminants{10,11,12,13,14,15}
@@ -39568,7 +40276,7 @@ Notice that evaluating $X'$ (the complement of $X$) yields the product terms $BC
         \autoterms[0]
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][4][1][$CD$][$AB$]
+    \begin{karnaugh-map}[4][4][1][$D$][$C$][$B$][$A$]
         \minterms{0,2,4,6,8}
    
         \indeterminants{10,11,12,13,14,15}
@@ -39619,6 +40327,117 @@ The following table provides the PLA programming connections.
         \multicolumn{5}{r}{\textbf{Output Form (T/C):}} && \textbf{T} & \textcolor{cH}{\textbf{C}} & \textbf{T} & \textbf{T} \\
         \bottomrule
     \end{tabular}
+\end{center}
+
+
+\vspace{1em}
+\textbf{5.  PLA Circuit Diagram} \\
+\begin{center}
+    \begin{tikzpicture}[thick, x=1.3cm, y=1.4cm, scale=0.75, every node/.style={transform shape}]
+
+    % --- 1. Dual-Rail Inputs (A, B, C, D) ---
+    % \PLAinput{y}{x_true}{x_comp}{label}
+    \PLAinput{10.0}{1.0}{1.5}{A}
+    \PLAinput{9.0}{2.0}{2.5}{B}
+    \PLAinput{8.0}{3.0}{3.5}{C}
+    \PLAinput{7.0}{4.0}{4.3}{D}
+
+    % Input Labels
+    \node[above, font=\small] at (1.0, 10.0) {$A$};
+    \node[above, font=\small] at (1.5, 10.8) {$A'$};
+    \node[above, font=\small] at (2.0, 9.0)  {$B$};
+    \node[above, font=\small] at (2.5, 9.8)  {$B'$};
+    \node[above, font=\small] at (3.0, 8.0)  {$C$};
+    \node[above, font=\small] at (3.5, 8.8)  {$C'$};
+    \node[above, font=\small] at (4.0, 7.0)  {$D$};
+    \node[above, font=\small] at (4.5, 7.8)  {$D'$};
+
+    % --- 2. AND Gates (7 Product Terms) ---
+    % Extended end_x to 17.5 to accommodate the 3.5 spacing
+    % \PLAand{y}{label}{end_x}
+    \PLAand{6.0}{1}{17.5} % Term 1: A
+    \PLAand{5.1}{2}{17.5} % Term 2: BC
+    \PLAand{4.2}{3}{17.5} % Term 3: BD
+    \PLAand{3.3}{4}{17.5} % Term 4: B'C'D'
+    \PLAand{2.4}{5}{17.5} % Term 5: CD
+    \PLAand{1.5}{6}{17.5} % Term 6: C'D'
+    \PLAand{0.6}{7}{17.5} % Term 7: D'
+
+    % --- 3. OR Gates (Outputs W, X, Y, Z) ---
+    % 3.5 horizontal spacing between columns
+    % \PLAor{x}{y_offset}
+    \PLAor{6.0}{0.0}  % Column for W
+    \PLAor{9.5}{0.0}  % Column for X (programming X')
+    \PLAor{13.0}{0.0} % Column for Y
+    \PLAor{16.5}{0.0} % Column for Z
+
+    % Wire connections from OR gates down to XOR gates
+    \draw (6.0, -0.8) -- (6.0, -1.0);
+    \draw (9.5, -0.8) -- (9.5, -1.0);
+    \draw (13.0, -0.8) -- (13.0, -1.0);
+    \draw (16.5, -0.8) -- (16.5, -1.0);
+
+    % --- 4. XOR Gates (Output T/C Control) ---
+    % XOR x-coordinates are OR_x + 0.8 to perfectly align top inputs
+    % \PLAxor{x}{y}{label}
+    \PLAxor{6.8}{-1.2}{W}
+    \PLAxor{10.3}{-1.2}{X}
+    \PLAxor{13.8}{-1.2}{Y}
+    \PLAxor{17.3}{-1.2}{Z}
+
+    % Programming control bits (0 = True, 1 = Complement)
+    \node[left, font=\small] at (6.0, -1.4) {$0$}; % True (T) for W
+    \node[left, font=\small] at (9.5, -1.4) {$1$}; % Complement (C) for X
+    \node[left, font=\small] at (13.0, -1.4) {$0$}; % True (T) for Y
+    \node[left, font=\small] at (16.5, -1.4) {$0$}; % True (T) for Z
+
+    % --- 5. AND Matrix Connections (Input Crosses) ---
+    % P1 = A
+    \bluecross{1.0}{6.0}
+
+    % P2 = BC
+    \bluecross{2.0}{5.1}
+    \bluecross{3.0}{5.1}
+
+    % P3 = BD
+    \bluecross{2.0}{4.2}
+    \bluecross{4.0}{4.2}
+
+    % P4 = B'C'D'
+    \bluecross{2.5}{3.3}
+    \bluecross{3.5}{3.3}
+    \bluecross{4.3}{3.3}
+
+    % P5 = CD
+    \bluecross{3.0}{2.4}
+    \bluecross{4.0}{2.4}
+
+    % P6 = C'D'
+    \bluecross{3.5}{1.5}
+    \bluecross{4.3}{1.5}
+
+    % P7 = D'
+    \bluecross{4.3}{0.6}
+
+    % --- 6. OR Matrix Connections (Output Crosses) ---
+    % Column W = P1 + P2 + P3
+    \bluecross{6.0}{6.0}
+    \bluecross{6.0}{5.1}
+    \bluecross{6.0}{4.2}
+
+    % Column X' = P2 + P3 + P4
+    \bluecross{9.5}{5.1}
+    \bluecross{9.5}{4.2}
+    \bluecross{9.5}{3.3}
+
+    % Column Y = P5 + P6
+    \bluecross{13.0}{2.4}
+    \bluecross{13.0}{1.5}
+
+    % Column Z = P7
+    \bluecross{16.5}{0.6}
+
+    \end{tikzpicture}
 \end{center}
 
 \end{tcolorbox}
@@ -39718,6 +40537,84 @@ The table below establishes the internal routing connections for the PLA design:
     \end{tabular}
 \end{center}
 
+
+\vspace{1em}
+\textbf{5.  PLA Circuit Diagram} \\
+\begin{center}
+    \begin{tikzpicture}[scale=1]
+
+    % --- 1. Dual-Rail Inputs ---
+    % \PLAinput{y}{x_true}{x_comp}{label}
+    \PLAinput{7.0}{1.0}{1.5}{x}
+    \PLAinput{6.0}{2.0}{2.5}{y}
+    \PLAinput{5.0}{3.0}{3.5}{z}
+
+    % Labels for true and complemented input lines
+    \node[above, font=\small] at (1.0, 7.0) {$x$};
+    \node[above, font=\small] at (1.5, 7.8) {$x'$};
+    \node[above, font=\small] at (2.0, 6.0) {$y$};
+    \node[above, font=\small] at (2.5, 6.8) {$y'$};
+    \node[above, font=\small] at (3.0, 5.0) {$z$};
+    \node[above, font=\small] at (3.5, 5.8) {$z'$};
+
+    % --- 2. AND Gates (Product Terms 1 to 4) ---
+    % \PLAand{y}{label}{end_x}
+    \PLAand{4.0}{1}{8.5} % Term 1: x'yz
+    \PLAand{3.0}{2}{8.5} % Term 2: xz'
+    \PLAand{2.0}{3}{8.5} % Term 3: x'yz'
+    \PLAand{1.0}{4}{8.5} % Term 4: xy'
+
+    % --- 3. OR Gates ---
+    % \PLAor{x}{y_top_of_gate}
+    \PLAor{6.0}{0.2} % Output array column for A'
+    \PLAor{8.0}{0.2} % Output array column for B'
+
+    % Connections from OR gates to XOR gates
+    \draw (6.0, -0.6) -- (6.0, -1.6);
+    \draw (8.0, -0.6) -- (8.0, -1.6);
+
+    % --- 4. XOR Gates (Output Invert / True Logic) ---
+    % \PLAxor{x}{y}{label}
+    \PLAxor{6.8}{-1.8}{A}
+    \PLAxor{8.8}{-1.8}{B}
+
+    % Programming bits for Output True/Complement Control
+    \node[left, font=\small] at (6.0, -2.0) {$1$}; % 1 = Invert (Complement mode C)
+    \node[left, font=\small] at (8.0, -2.0) {$1$}; % 1 = Invert (Complement mode C)
+
+    % --- 5. AND Matrix Connections (Crosses) ---
+    % Term 1 (x'yz): x' (1.5), y (2.0), z (3.0) at y = 4.0
+    \bluecross{1.5}{4.0}
+    \bluecross{2.0}{4.0}
+    \bluecross{3.0}{4.0}
+
+    % Term 2 (xz'): x (1.0), z' (3.5) at y = 3.0
+    \bluecross{1.0}{3.0}
+    \bluecross{3.5}{3.0}
+
+    % Term 3 (x'yz'): x' (1.5), y (2.0), z' (3.5) at y = 2.0
+    \bluecross{1.5}{2.0}
+    \bluecross{2.0}{2.0}
+    \bluecross{3.5}{2.0}
+
+    % Term 4 (xy'): x (1.0), y' (2.5) at y = 1.0
+    \bluecross{1.0}{1.0}
+    \bluecross{2.5}{1.0}
+
+    % --- 6. OR Matrix Connections (Crosses) ---
+    % Column 1 (A' = P1 + P2) at x = 6.0
+    \bluecross{6.0}{4.0}
+    \bluecross{6.0}{3.0}
+
+    % Column 2 (B' = P3 + P4) at x = 8.0
+    \bluecross{8.0}{2.0}
+    \bluecross{8.0}{1.0}
+
+\end{tikzpicture}
+
+\end{center}
+
+
 \end{tcolorbox}
 
 \item Design a security lock using PLA which will be opened using the following combinations:
@@ -39755,7 +40652,7 @@ We map out $A'$, $B$, $C'$, and $D'$ to extract the optimal shared product terms
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{cc}
     \textbf{Map for $A'(x,y,z) = \Sigma\,(0,2,4,7)$} & \textbf{Map for $B(x,y,z) = \Sigma\,(0,1,6,7)$} \\
-    \begin{karnaugh-map}[4][2][1][$yz$][$x$]
+    \begin{karnaugh-map}[4][2][1][$z$][$y$][$x$]
         \minterms{0,2,4,7}
         \autoterms[0]
         \implicantedge{0}{0}{2}{2}
@@ -39763,7 +40660,7 @@ We map out $A'$, $B$, $C'$, and $D'$ to extract the optimal shared product terms
         \implicant{7}{7}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$yz$][$x$]
+    \begin{karnaugh-map}[4][2][1][$z$][$y$][$x$]
         \minterms{0,1,6,7}
         \autoterms[0]
         \implicant{0}{1}
@@ -39771,7 +40668,7 @@ We map out $A'$, $B$, $C'$, and $D'$ to extract the optimal shared product terms
     \end{karnaugh-map}
     \\[1.5em]
     \textbf{Map for $C'(x,y,z) = \Sigma\,(0,1,2,4,6,7)$} & \textbf{Map for $D'(x,y,z) = \Sigma\,(0,2,6)$} \\
-    \begin{karnaugh-map}[4][2][1][$yz$][$x$]
+    \begin{karnaugh-map}[4][2][1][$z$][$y$][$x$]
         \minterms{0,1,2,4,6,7}
         \autoterms[0]
         \implicant{0}{1}
@@ -39780,7 +40677,7 @@ We map out $A'$, $B$, $C'$, and $D'$ to extract the optimal shared product terms
         \implicantedge{0}{0}{2}{2}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$yz$][$x$]
+    \begin{karnaugh-map}[4][2][1][$z$][$y$][$x$]
         \minterms{0,2,6}
         \autoterms[0]
         \implicantedge{0}{0}{2}{2}
@@ -39829,6 +40726,115 @@ The internal connections are documented below:
         \multicolumn{4}{r}{\textbf{Output Form (T/C):}} && \textcolor{cH}{\textbf{C}} & \textbf{T} & \textcolor{cH}{\textbf{C}} & \textcolor{cH}{\textbf{C}} \\
         \bottomrule
     \end{tabular}
+\end{center}
+
+
+\vspace{1em}
+\textbf{5.  PLA Circuit Diagram} \\
+
+\begin{center}
+
+\begin{tikzpicture}[scale=0.75, every node/.style={transform shape}]
+
+    % --- 1. Dual-Rail Inputs (x, y, z) ---
+    % \PLAinput{y}{x_true}{x_comp}{label}
+    \PLAinput{9.0}{1.0}{1.5}{x}
+    \PLAinput{8.0}{2.0}{2.5}{y}
+    \PLAinput{7.0}{3.0}{3.5}{z}
+
+    % Labels for true and complemented input lines
+    \node[above, font=\small] at (1.0, 9.0) {$x$};
+    \node[above, font=\small] at (1.5, 9.8) {$x'$};
+    \node[above, font=\small] at (2.0, 8.0) {$y$};
+    \node[above, font=\small] at (2.5, 8.8) {$y'$};
+    \node[above, font=\small] at (3.0, 7.0) {$z$};
+    \node[above, font=\small] at (3.5, 7.8) {$z'$};
+
+    % --- 2. AND Gates (Product Terms 1 to 6) ---
+    % Extended end_x to 17.5 to accommodate 3.5 spacing between columns
+    % \PLAand{y}{label}{end_x}
+    \PLAand{6.0}{1}{17.5} % P1: x'z'
+    \PLAand{5.0}{2}{17.5} % P2: y'z'
+    \PLAand{4.0}{3}{17.5} % P3: xyz
+    \PLAand{3.0}{4}{17.5} % P4: yz'
+    \PLAand{2.0}{5}{17.5} % P5: x'y'
+    \PLAand{1.0}{6}{17.5} % P6: xy
+
+    % --- 3. OR Gates (Outputs A, B, C, D) ---
+    % Horizontal gap exactly 3.5 units apart
+    % \PLAor{x}{y_offset}
+    \PLAor{6.0}{0.0}  % Column for A
+    \PLAor{9.5}{0.0}  % Column for B (6.0 + 3.5)
+    \PLAor{13.0}{0.0} % Column for C (9.5 + 3.5)
+    \PLAor{16.5}{0.0} % Column for D (13.0 + 3.5)
+
+    % Wire connections from OR gates down to XOR gates
+    \draw (6.0, -0.8) -- (6.0, -1.0);
+    \draw (9.5, -0.8) -- (9.5, -1.0);
+    \draw (13.0, -0.8) -- (13.0, -1.0);
+    \draw (16.5, -0.8) -- (16.5, -1.0);
+
+    % --- 4. XOR Gates (Output Invert / True Control) ---
+    % XOR x-coordinates are OR_x + 0.8
+    % \PLAxor{x}{y}{label}
+    \PLAxor{6.8}{-1.2}{A}
+    \PLAxor{10.3}{-1.2}{B}
+    \PLAxor{13.8}{-1.2}{C}
+    \PLAxor{17.3}{-1.2}{D}
+
+    % Programming bits for Output True/Complement Control
+    \node[left, font=\small] at (6.0, -1.4) {$1$}; % A = Complement (1)
+    \node[left, font=\small] at (9.5, -1.4) {$0$}; % B = True (0)
+    \node[left, font=\small] at (13.0, -1.4) {$1$}; % C = Complement (1)
+    \node[left, font=\small] at (16.5, -1.4) {$1$}; % D = Complement (1)
+
+    % --- 5. AND Matrix Connections (Input Crosses) ---
+    % P1 (x'z'): x' (1.5), z' (3.5)
+    \bluecross{1.5}{6.0}
+    \bluecross{3.5}{6.0}
+
+    % P2 (y'z'): y' (2.5), z' (3.5)
+    \bluecross{2.5}{5.0}
+    \bluecross{3.5}{5.0}
+
+    % P3 (xyz): x (1.0), y (2.0), z (3.0)
+    \bluecross{1.0}{4.0}
+    \bluecross{2.0}{4.0}
+    \bluecross{3.0}{4.0}
+
+    % P4 (yz'): y (2.0), z' (3.5)
+    \bluecross{2.0}{3.0}
+    \bluecross{3.5}{3.0}
+
+    % P5 (x'y'): x' (1.5), y' (2.5)
+    \bluecross{1.5}{2.0}
+    \bluecross{2.5}{2.0}
+
+    % P6 (xy): x (1.0), y (2.0)
+    \bluecross{1.0}{1.0}
+    \bluecross{2.0}{1.0}
+
+    % --- 6. OR Matrix Connections (Output Crosses) ---
+    % Output A' = P1 + P2 + P3
+    \bluecross{6.0}{6.0} % P1
+    \bluecross{6.0}{5.0} % P2
+    \bluecross{6.0}{4.0} % P3
+
+    % Output B = P5 + P6
+    \bluecross{9.5}{2.0} % P5
+    \bluecross{9.5}{1.0} % P6
+
+    % Output C' = P1 + P2 + P5 + P6
+    \bluecross{13.0}{6.0} % P1
+    \bluecross{13.0}{5.0} % P2
+    \bluecross{13.0}{2.0} % P5
+    \bluecross{13.0}{1.0} % P6
+
+    % Output D' = P1 + P4
+    \bluecross{16.5}{6.0} % P1
+    \bluecross{16.5}{3.0} % P4
+
+\end{tikzpicture}
 \end{center}
 
 \end{tcolorbox}
@@ -40092,7 +41098,7 @@ Let us use Karnaugh Maps to minimize $F_1'$ and $F_2$ to check if they share pri
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{cc}
     \textbf{Map for $F_1'(A,B,C) = \Sigma\,(3,5,6,7)$} & \textbf{Map for $F_2(A,B,C) = \Sigma\,(0,5,6,7)$} \\
-    \begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
         \minterms{3,5,6,7}
     
         \implicant{5}{7}
@@ -40100,7 +41106,7 @@ Let us use Karnaugh Maps to minimize $F_1'$ and $F_2$ to check if they share pri
         \implicant{3}{7}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
         \minterms{0,5,6,7}
    
         \implicant{5}{7}
@@ -40141,6 +41147,100 @@ The PLA programming table specifies the connections in the AND array (inputs) an
         \bottomrule
     \end{tabular}
 \end{center}
+
+
+\vspace{1em}
+\textbf{4.  PLA Circuit Diagram} \\
+
+
+\begin{center}
+\begin{tikzpicture}[>=stealth, scale=0.9, every node/.style={font=\small}]
+
+
+    % ==========================================
+    % 1. Input Buffers & Vertical Wires
+    % ==========================================
+    % \PLAinput{y}{true_x}{comp_x}{label}
+    \PLAinput{7}{1.0}{1.5}{A}
+    \PLAinput{6}{2.0}{2.5}{B}
+    \PLAinput{5}{3.0}{3.5}{C}
+
+    % Optional: Label the true and complement lines at the top
+    \foreach \x/\label in {1.0/A, 1.5/A', 2.0/B, 2.5/B', 3.0/C, 3.5/C'} {
+        \node[above, font=\scriptsize, text=gray] at (\x, 7.8) {$\label$};
+    }
+
+    % ==========================================
+    % 2. AND Plane (Product Terms)
+    % ==========================================
+    % \PLAand{y}{label}{end_x}
+    \PLAand{4}{1}{8}
+    \PLAand{3}{2}{8}
+    \PLAand{2}{3}{8}
+    \PLAand{1}{4}{8}
+
+    % Connections for AND plane (Inputs to Product Terms)
+    % P1 = A B
+    \bluecross{1.0}{4} % A
+    \bluecross{2.0}{4} % B
+
+    % P2 = A C
+    \bluecross{1.0}{3} % A
+    \bluecross{3.0}{3} % C
+
+    % P3 = B C
+    \bluecross{2.0}{2} % B
+    \bluecross{3.0}{2} % C
+
+    % P4 = A' B' C'
+    \bluecross{1.5}{1} % A'
+    \bluecross{2.5}{1} % B'
+    \bluecross{3.5}{1} % C'
+
+    % ==========================================
+    % 3. OR Plane (Outputs)
+    % ==========================================
+    % \PLAor{x}{y_offset_for_top_of_gate}
+    \PLAor{6.0}{0}
+    \PLAor{7.0}{0}
+
+    % Connections for OR plane (Product Terms to OR Gates)
+    % F1' = P1 + P2 + P3  (OR gate at x = 6.0)
+    \bluecross{6.0}{4} % P1
+    \bluecross{6.0}{3} % P2
+    \bluecross{6.0}{2} % P3
+
+    % F2 = P1 + P2 + P4   (OR gate at x = 7.0)
+    \bluecross{7.0}{4} % P1
+    \bluecross{7.0}{3} % P2
+    \bluecross{7.0}{1} % P4
+
+    % ==========================================
+    % 4. Output XOR Gates (True / Complement)
+    % ==========================================
+    % \PLAxor{x}{y}{label}
+    \PLAxor{9.0}{-1.5}{F_1}
+    \PLAxor{9.0}{-3.0}{F_2}
+
+    % Route OR outputs to XOR top inputs
+    % XOR top input is at (x-0.8, y+0.2) according to the macro
+    \draw (6.0, -0.8) |- (8.2, -1.3); % F1 route
+    \draw (7.0, -0.8) |- (8.2, -2.8); % F2 route
+
+    % Route XOR bottom inputs (Programming True/Complement)
+    % XOR bottom input is at (x-0.8, y-0.2)
+    % F1 is Complemented -> Tie to 1
+    \draw (8.2, -1.7) -- (7.8, -1.7) node[left, font=\scriptsize] {$1$ (C)};
+    % F2 is True -> Tie to 0
+    \draw (8.2, -3.2) -- (7.8, -3.2) node[left, font=\scriptsize] {$0$ (T)};
+
+    % Labels for the Planes
+    \node[font=\bfseries, text=gray] at (2.25, 8.5) {AND Plane};
+    \node[font=\bfseries, text=gray] at (6.5, 5.0) {OR Plane};
+
+\end{tikzpicture}
+\end{center}
+
 
 \end{tcolorbox}
 
@@ -40264,7 +41364,7 @@ We simplify the candidate functions to find optimal shared terms. It turns out t
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{ccc}
     \textbf{Map for $F_1'(A,B,C)$} & \textbf{Map for $F_2(A,B,C)$} & \textbf{Map for $F_3(A,B,C)$} \\
-    \begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
         \minterms{3,5,6,7}
         \autoterms[0]
         \implicant{5}{7}
@@ -40272,7 +41372,7 @@ We simplify the candidate functions to find optimal shared terms. It turns out t
         \implicant{3}{7}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
         \minterms{0,5,6,7}
         \autoterms[0]
         \implicant{5}{7}
@@ -40280,7 +41380,7 @@ We simplify the candidate functions to find optimal shared terms. It turns out t
         \implicant{0}{0}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$BC$][$A$]
+    \begin{karnaugh-map}[4][2][1][$C$][$B$][$A$]
         \minterms{0,3,5,7}
         \autoterms[0]
         \implicant{3}{7}
@@ -40324,82 +41424,107 @@ The table below illustrates the internal connections of the PLA. A `1` or `0` in
     \end{tabular}
 \end{center}
 
-\end{tcolorbox}
-
-\end{enumerate}
-
-%%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{RAM Design}
-\label{sub:s8-ram}
-
-\begin{enumerate}
-
-\item If you use two dimensional decoding for addressing a 1K word memory, can you optimize the cost? Justify your answer.
-\mk{8} \yr{CSE 205 | L-2/T-1 | 2024--25}
-
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cH!4,colframe=cH,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cH]
-
-\textbf{Conclusion} \\
-\textbf{Yes}, using two-dimensional (2D) decoding significantly optimizes both the hardware cost and complexity compared to one-dimensional (1D) decoding for a 1K word memory.
 
 \vspace{1em}
-\textbf{1. Address Bus Calculation} \\
-A memory size of 1K words translates to $1024$ distinct memory locations. 
-Since $1024 = 2^{10}$, the system requires exactly \textbf{10 address lines} ($A_9 \dots A_0$) to uniquely identify each word.
-
-\vspace{1em}
-\textbf{2. One-Dimensional (Linear) Decoding Cost} \\
-In a standard 1D addressing scheme, a single monolithic decoder processes the entire address bus.
-\begin{itemize}
-    \item \textbf{Decoder Type:} One $10 \times 1024$ decoder.
-    \item \textbf{Gate Count:} It requires $2^{10} = \textcolor{cH}{\mathbf{1024}}$ AND gates.
-    \item \textbf{Gate Complexity:} Each AND gate must accommodate \textbf{10 inputs} (fan-in of 10), which is highly impractical and expensive at the transistor level.
-\end{itemize}
-
-\vspace{1em}
-\textbf{3. Two-Dimensional (Coincident) Decoding Cost} \\
-In a 2D addressing scheme, the memory is arranged as a square (or near-square) grid. The 10-bit address is split into two halves: Row and Column addresses. 
-For a 10-bit address, we split it symmetrically: 
-\begin{align*}
-    \text{Row bits ($X$)} &= 5 \text{ bits} \implies 2^5 = 32 \text{ rows} \\
-    \text{Column bits ($Y$)} &= 5 \text{ bits} \implies 2^5 = 32 \text{ columns}
-\end{align*}
-This requires two smaller, separate decoders:
-\begin{itemize}
-    \item \textbf{Row Decoder:} One $5 \times 32$ decoder (requires 32 AND gates, each with 5 inputs).
-    \item \textbf{Column Decoder:} One $5 \times 32$ decoder (requires 32 AND gates, each with 5 inputs).
-    \item \textbf{Total Gate Count:} $32 + 32 = \textcolor{cH}{\mathbf{64}}$ AND gates.
-\end{itemize}
-
-\vspace{1em}
-\textbf{4. Justification \& Hardware Cost Comparison} \\
-By reorganizing the memory geometrically into a $32 \times 32$ matrix, the coincident selection (where a memory cell is accessed only when both its corresponding row and column lines are asserted) drastically trims the peripheral decoding logic.
+\textbf{5.  PLA Circuit Diagram} \\
 
 \begin{center}
-    \renewcommand{\arraystretch}{1.3}
-    \begin{tabular}{p{4cm} c c}
-        \toprule
-        \textbf{Parameter} & \textbf{1D Decoding} & \textbf{2D Decoding} \\
-        \midrule
-        Memory Matrix Layout & $1024 \times 1$ & $32 \times 32$ \\
-        Number of Decoders & 1 & 2 \\
-        Decoder Sizes & One $10 \times 1024$ & Two $5 \times 32$ \\
-        Total AND Gates Required & \textcolor{cH}{\textbf{1024}} & \textcolor{cH}{\textbf{64}} \\
-        Fan-in (Inputs per gate) & 10 & 5 \\
-        \bottomrule
-    \end{tabular}
-\end{center}
+    
+\begin{tikzpicture}[every node/.style={transform shape}]
 
-\textbf{Final Verdict:} \\
-The 2D decoding scheme reduces the number of required decoding AND gates from \textbf{1024} to just \textbf{64} (a $\sim 93.75\%$ reduction). Additionally, it halves the fan-in requirement from 10 inputs to 5 inputs per gate. This reduction in both gate count and gate complexity results in a significantly smaller silicon footprint, lower power consumption, and vastly optimized cost.
+    % --- 1. Dual-Rail Inputs (A, B, C) ---
+    % \PLAinput{y}{x_true}{x_comp}{label}
+    \PLAinput{9.0}{1.0}{1.5}{A}
+    \PLAinput{8.0}{2.0}{2.5}{B}
+    \PLAinput{7.0}{3.0}{3.5}{C}
+
+    % Labels for true and complemented input lines
+    \node[above, font=\small] at (1.0, 9.0) {$A$};
+    \node[above, font=\small] at (1.5, 9.8) {$A'$};
+    \node[above, font=\small] at (2.0, 8.0) {$B$};
+    \node[above, font=\small] at (2.5, 8.8) {$B'$};
+    \node[above, font=\small] at (3.0, 7.0) {$C$};
+    \node[above, font=\small] at (3.5, 7.8) {$C'$};
+
+    % --- 2. AND Gates (Product Terms 1 to 4) ---
+    % end_x extends slightly past the last OR gate column (13.0)
+    % \PLAand{y}{label}{end_x}
+    \PLAand{4.0}{1}{14.5} % P1 = AB
+    \PLAand{3.0}{2}{14.5} % P2 = AC
+    \PLAand{2.0}{3}{14.5} % P3 = BC
+    \PLAand{1.0}{4}{14.5} % P4 = A'B'C'
+
+    % --- 3. OR Gates (Outputs F1, F2, F3) ---
+    % 3.5 horizontal spacing to avoid XOR overlap
+    % \PLAor{x}{y_offset}
+    \PLAor{6.0}{0.0}  % Column for F1
+    \PLAor{9.5}{0.0}  % Column for F2 (6.0 + 3.5)
+    \PLAor{13.0}{0.0} % Column for F3 (9.5 + 3.5)
+
+    % Wire connections from OR gates down to XOR gates
+    \draw (6.0, -0.8) -- (6.0, -1.0);
+    \draw (9.5, -0.8) -- (9.5, -1.0);
+    \draw (13.0, -0.8) -- (13.0, -1.0);
+
+    % --- 4. XOR Gates (Output Invert / True Control) ---
+    % XOR x-coordinates are OR_x + 0.8 to perfectly align top inputs
+    % \PLAxor{x}{y}{label}
+    \PLAxor{6.8}{-1.2}{F_1}
+    \PLAxor{10.3}{-1.2}{F_2}
+    \PLAxor{13.8}{-1.2}{F_3}
+
+    % Programming bits for Output True/Complement Control
+    \node[left, font=\small] at (6.0, -1.4) {$1$}; % F1 = Complement (1)
+    \node[left, font=\small] at (9.5, -1.4) {$0$}; % F2 = True (0)
+    \node[left, font=\small] at (13.0, -1.4) {$0$}; % F3 = True (0)
+
+    % --- 5. AND Matrix Connections (Input Crosses) ---
+    % P1 (AB): A (1.0), B (2.0)
+    \bluecross{1.0}{4.0}
+    \bluecross{2.0}{4.0}
+
+    % P2 (AC): A (1.0), C (3.0)
+    \bluecross{1.0}{3.0}
+    \bluecross{3.0}{3.0}
+
+    % P3 (BC): B (2.0), C (3.0)
+    \bluecross{2.0}{2.0}
+    \bluecross{3.0}{2.0}
+
+    % P4 (A'B'C'): A' (1.5), B' (2.5), C' (3.5)
+    \bluecross{1.5}{1.0}
+    \bluecross{2.5}{1.0}
+    \bluecross{3.5}{1.0}
+
+    % --- 6. OR Matrix Connections (Output Crosses) ---
+    % Output F1' = P1 + P2 + P3
+    \bluecross{6.0}{4.0} % P1
+    \bluecross{6.0}{3.0} % P2
+    \bluecross{6.0}{2.0} % P3
+
+    % Output F2 = P1 + P2 + P4
+    \bluecross{9.5}{4.0} % P1
+    \bluecross{9.5}{3.0} % P2
+    \bluecross{9.5}{1.0} % P4
+
+    % Output F3 = P2 + P3 + P4
+    \bluecross{13.0}{3.0} % P2
+    \bluecross{13.0}{2.0} % P3
+    \bluecross{13.0}{1.0} % P4
+
+\end{tikzpicture}
+
+\end{center}
 
 \end{tcolorbox}
 
 \end{enumerate}
 
 
+
+
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Synchronous Sequential Circuit Design}
+\anchoredsubtopic{cF}{Synchronous Sequential Circuit Design}{sub.s6.sync-design}
 \label{sub:s6-sync-design}
 
 \begin{enumerate}
@@ -40830,14 +41955,14 @@ We map the excitation inputs $D_1, D_0$ and the output $y$ over variables $Q_1, 
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{ccc}
     \textbf{Map for $D_1(Q_1, Q_0, x)$} & \textbf{Map for $D_0(Q_1, Q_0, x)$} & \textbf{Map for $y(Q_1, Q_0, x)$} \\
-    \begin{karnaugh-map}[4][2][1][$Q_0x$][$Q_1$]
+    \begin{karnaugh-map}[4][2][1][$x$][$Q_0$][$Q_1$]
         \minterms{3, 4}
         \indeterminants{6, 7}
         \implicant{3}{7}
         \implicantedge{4}{4}{6}{6}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$Q_0x$][$Q_1$]
+    \begin{karnaugh-map}[4][2][1][$x$][$Q_0$][$Q_1$]
         \minterms{1, 2}
         \indeterminants{6, 7}
 
@@ -40845,7 +41970,7 @@ We map the excitation inputs $D_1, D_0$ and the output $y$ over variables $Q_1, 
         \implicant{1}{1}
     \end{karnaugh-map}
     &
-    \begin{karnaugh-map}[4][2][1][$Q_0x$][$Q_1$]
+    \begin{karnaugh-map}[4][2][1][$x$][$Q_0$][$Q_1$]
         \minterms{5}
         \indeterminants{6, 7}
 

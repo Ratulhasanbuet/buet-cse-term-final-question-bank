@@ -1,4 +1,12 @@
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
+
+\usepackage{fix-cm}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\DeclareFontShape{T1}{cmtt}{bx}{n}{<->ssub*cmtt/m/n}{}
+\DeclareFontShape{T1}{cmss}{bx}{it}{<->ssub*cmss/bx/sl}{}
+\DeclareFontFamily{OMS}{cmtt}{}
+\DeclareFontShape{OMS}{cmtt}{m}{n}{<->ssub*cmsy/m/n}{}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
@@ -25,10 +33,12 @@
 \usepackage{caption}
 \usepackage{forest}
 \usepackage{tabularx}
+\usepackage{bookmark}
+\bookmarksetup{open=true, depth=2}
 
 \usetikzlibrary{shadows}
 
-\usetikzlibrary{snakes}
+\usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary{er}
 \usetikzlibrary{chains}
 \usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
@@ -42,8 +52,16 @@
 
 \usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
-\tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\tcbset{
+  ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin},
+  before upper={\hfuzz=100pt}
+}
+
+% Narrow tables and long schema identifiers are intentional in this handout.
+\hbadness=10000
+\hfuzz=100pt
+\tracinglostchars=0
 
 %% ── Colors ────────────────────────────────────────────────────────────
 \definecolor{pblue}{RGB}{13,71,161}
@@ -162,8 +180,11 @@
   {\footnotesize\textcolor{cG}{\textit{\textbf{[Visual:} #1\textbf{]}}}}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
-\newcommand{\subtopic}[2]{%
+\newcommand{\subtopic}[3]{%
   \vspace{10pt}
+  \phantomsection
+  \label{#3}%
+  \pdfbookmark[2]{#2}{#3}%
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
     \small\bfseries\textcolor{#1}{#2}
@@ -344,13 +365,13 @@
 \titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
 
 %% ── S1: Database Fundamentals ─────────────────────────────────────────
-\section{S1 --- Database Fundamentals}
+\section*{S1 --- Database Fundamentals}
+\pdfbookmark[1]{S1: Database Fundamentals}{sec:S1}
 \label{sec:S1}
 \markboth{S1 --- Database Fundamentals}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Concepts of Database Systems}
-\label{sub:s1-concepts}
+\subtopic{cA}{Concepts of Database Systems}{sub:s1-concepts}
 
 \begin{enumerate}
 
@@ -413,8 +434,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Relational Model}
-\label{sub:s1-relational}
+\subtopic{cA}{Relational Model}{sub:s1-relational}
 
 \begin{enumerate}
 
@@ -445,13 +465,13 @@
 \end{enumerate}
 
 %% ── S2: Database Design ───────────────────────────────────────────────
-\section{S2 --- Database Design}
+\section*{S2 --- Database Design}
+\pdfbookmark[1]{S2: Database Design}{sec:S2}
 \label{sec:S2}
 \markboth{S2 --- Database Design}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Entity-Relationship (ER) Model}
-\label{sub:s2-er}
+\subtopic{cA}{Entity-Relationship (ER) Model}{sub:s2-er}
 
 \begin{enumerate}
 
@@ -501,8 +521,7 @@ Define entities and their attributes for the hospital management system describe
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{ER Diagrams}
-\label{sub:s2-erdiag}
+\subtopic{cA}{ER Diagrams}{sub:s2-erdiag}
 
 \begin{enumerate}
 
@@ -609,8 +628,7 @@ Draw ER diagrams to show the relationships among entities of the hospital manage
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Database Schema Design}
-\label{sub:s2-schema}
+\subtopic{cA}{Database Schema Design}{sub:s2-schema}
 
 \begin{enumerate}
 
@@ -1433,13 +1451,13 @@ Suggest suitable keys and foreign keys of the above relations.
 \titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
 
 %% ── S3: Query Languages ───────────────────────────────────────────────
-\section{S3 --- Query Languages}
+\section*{S3 --- Query Languages}
+\pdfbookmark[1]{S3: Query Languages}{sec:S3}
 \label{sec:S3}
 \markboth{S3 --- Query Languages}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{SQL}
-\label{sub:s3-sql}
+\subtopic{cB}{SQL}{sub:s3-sql}
 
 \begin{enumerate}
 
@@ -2133,8 +2151,7 @@ Write SQL statements to answer the following queries:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Relational Algebra}
-\label{sub:s3-relalg}
+\subtopic{cB}{Relational Algebra}{sub:s3-relalg}
 
 \begin{enumerate}
 
@@ -2501,8 +2518,7 @@ Answer the following queries in relational algebra:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Joins}
-\label{sub:s3-joins}
+\subtopic{cB}{Joins}{sub:s3-joins}
 
 \begin{enumerate}
 
@@ -2522,8 +2538,7 @@ Answer the following queries in relational algebra:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Constraints, Assertions \& Triggers}
-\label{sub:s3-constraints}
+\subtopic{cB}{Constraints, Assertions \& Triggers}{sub:s3-constraints}
 
 \begin{enumerate}
 
@@ -2640,8 +2655,7 @@ Write necessary triggers to implement the following constraints:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Functions and Procedures}
-\label{sub:s3-funcs}
+\subtopic{cB}{Functions and Procedures}{sub:s3-funcs}
 
 \begin{enumerate}
 
@@ -2845,13 +2859,13 @@ Write a stored procedure that takes as input the name of a studio and a year, th
 \titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
 
 %% ── S4: Normalization ─────────────────────────────────────────────────
-\section{S4 --- Normalization}
+\section*{S4 --- Normalization}
+\pdfbookmark[1]{S4: Normalization}{sec:S4}
 \label{sec:S4}
 \markboth{S4 --- Normalization}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Functional Dependencies}
-\label{sub:s4-fd}
+\subtopic{cC}{Functional Dependencies}{sub:s4-fd}
 
 \begin{enumerate}
 
@@ -2952,8 +2966,7 @@ Compute the attribute closure $(AG)^+$ and show that $AG$ is a candidate key of 
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Normal Forms (BCNF, 3NF, 4NF)}
-\label{sub:s4-nf}
+\subtopic{cC}{Normal Forms (BCNF, 3NF, 4NF)}{sub:s4-nf}
 
 \begin{enumerate}
 
@@ -3085,8 +3098,7 @@ A person can have different types of phone numbers (e.g.\ Mobile, Home or Office
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Anomalies \& Normalization}
-\label{sub:s4-anomaly}
+\subtopic{cC}{Anomalies \& Normalization}{sub:s4-anomaly}
 
 \begin{enumerate}
 
@@ -3184,13 +3196,13 @@ PG16 & 24-Oct-01 & 14.00 & 5 Novar Dr, Glasgow    & Good condition             &
 \titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
 
 %% ── S5: Storage and Indexing ──────────────────────────────────────────
-\section{S5 --- Storage and Indexing}
+\section*{S5 --- Storage and Indexing}
+\pdfbookmark[1]{S5: Storage and Indexing}{sec:S5}
 \label{sec:S5}
 \markboth{S5 --- Storage and Indexing}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Data Storage Architecture \& RAID}
-\label{sub:s5-storage}
+\subtopic{cD}{Data Storage Architecture \& RAID}{sub:s5-storage}
 
 \begin{enumerate}
 
@@ -3587,8 +3599,7 @@ Show the finishing time and latency for each request using the elevator algorith
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Primary Index}
-\label{sub:s5-primary}
+\subtopic{cD}{Primary Index}{sub:s5-primary}
 
 \begin{enumerate}
 
@@ -3830,8 +3841,7 @@ Also explain the deletion of records from 10101 to 22222 from the instructor rel
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Secondary \& Bitmap Index}
-\label{sub:s5-secondary}
+\subtopic{cD}{Secondary \& Bitmap Index}{sub:s5-secondary}
 
 \begin{enumerate}
 
@@ -3922,8 +3932,7 @@ Find the query costs using indices for:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{B\textsuperscript{+} Tree Index}
-\label{sub:s5-btree}
+\subtopic{cD}{\texorpdfstring{B\textsuperscript{+} Tree Index}{B+ Tree Index}}{sub:s5-btree}
 
 \begin{enumerate}
 
@@ -4267,8 +4276,7 @@ Construct the B$^+$ tree primary index for the relation $r$  (relation $R(A,B,C)
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Hash Index}
-\label{sub:s5-hash}
+\subtopic{cD}{Hash Index}{sub:s5-hash}
 
 \begin{enumerate}
 
@@ -4431,13 +4439,13 @@ blocks can be used if necessary.
 \end{enumerate}
 
 %% ── S6: Query Processing ──────────────────────────────────────────────
-\section{S6 --- Query Processing}
+\section*{S6 --- Query Processing}
+\pdfbookmark[1]{S6: Query Processing}{sec:S6}
 \label{sec:S6}
 \markboth{S6 --- Query Processing}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Query Processing}
-\label{sub:s6-qp}
+\subtopic{cD}{Query Processing}{sub:s6-qp}
 
 \begin{enumerate}
 
@@ -4528,8 +4536,7 @@ where $b_r$ is the number of blocks of relation $r$ and $M$ is the size of the m
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Query Optimization}
-\label{sub:s6-qo}
+\subtopic{cD}{Query Optimization}{sub:s6-qo}
 
 \begin{enumerate}
 
@@ -4656,8 +4663,7 @@ WHERE starName IN (
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Joins}
-\label{sub:s6-joins}
+\subtopic{cD}{Joins}{sub:s6-joins}
 
 \begin{enumerate}
     
@@ -4704,12 +4710,12 @@ WHERE starName IN (
 \titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
 
 %% ── S7: Transaction Management ────────────────────────────────────────
-\section{S7 --- Transaction Management}
+\section*{S7 --- Transaction Management}
+\pdfbookmark[1]{S7: Transaction Management}{sec:S7}
 \label{sec:S7}
 \markboth{S7 --- Transaction Management}{}
 
-\subtopic{cE}{Transactions \& ACID Properties}
-\label{sub:s7-acid}
+\subtopic{cE}{Transactions \& ACID Properties}{sub:s7-acid}
 
 \begin{enumerate}
 
@@ -4755,8 +4761,7 @@ Prepare a concurrent schedule for the above two transactions and prove that the 
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Concurrency Control}
-\label{sub:s7-cc}
+\subtopic{cE}{Concurrency Control}{sub:s7-cc}
 
 \begin{enumerate}
 
@@ -5160,8 +5165,7 @@ Also explain how the lock manager processes a lock request using the structure.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Deadlock}
-\label{sub:s7-deadlock}
+\subtopic{cE}{Deadlock}{sub:s7-deadlock}
 
 \begin{enumerate}
 
@@ -5205,8 +5209,7 @@ Assume that the deadlock-timestamps of $T_1, T_2, T_3$ and $T_4$ are 1, 2, 3 and
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Recovery Systems}
-\label{sub:s7-recovery}
+\subtopic{cE}{Recovery Systems}{sub:s7-recovery}
 
 \begin{enumerate}
 
@@ -5429,13 +5432,13 @@ Write(A)     &             & B = B + 50\\
 \end{enumerate}
 
 %% ── S8: Advanced Topics ───────────────────────────────────────────────
-\section{S8 --- Advanced Topics}
+\section*{S8 --- Advanced Topics}
+\pdfbookmark[1]{S8: Advanced Topics}{sec:S8}
 \label{sec:S8}
 \markboth{S8 --- Advanced Topics}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Distributed \& Parallel Databases}
-\label{sub:s8-dist}
+\subtopic{cE}{Distributed \& Parallel Databases}{sub:s8-dist}
 
 \begin{enumerate}
 
@@ -5525,8 +5528,7 @@ Write(A)     &             & B = B + 50\\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Big Data \& XML}
-\label{sub:s8-bigdata}
+\subtopic{cE}{Big Data \& XML}{sub:s8-bigdata}
 
 \begin{enumerate}
 
@@ -5555,8 +5557,7 @@ Write(A)     &             & B = B + 50\\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Table Partitioning}
-\label{sub:s8-partition}
+\subtopic{cE}{Table Partitioning}{sub:s8-partition}
 
 \begin{enumerate}
 

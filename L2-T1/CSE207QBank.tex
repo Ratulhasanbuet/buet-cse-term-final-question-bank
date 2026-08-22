@@ -1,40 +1,40 @@
 
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
+\usepackage{fix-cm}
+\usepackage[T1]{fontenc}
+\DeclareFontShape{T1}{cmtt}{bx}{n}{<->ssub*cmtt/m/n}{}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \usepackage[utf8]{inputenc}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
 \usepackage{geometry}
+\usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage[hidelinks,colorlinks=true,linkcolor=blue!70!black]{hyperref}
-\usepackage{xcolor}
+\usepackage{bookmark}
+\bookmarksetup{open=true,depth=2}
 \usepackage{fancyhdr}
-\usepackage{tcolorbox}
 \usepackage{multicol}
 \usepackage{needspace}
 \usepackage[strings]{underscore}
 \usepackage{array,booktabs}
 \usepackage{multirow}
 \usepackage[table]{xcolor}
-\usepackage{tikz}
-\usepackage{caption}   
+\usepackage{caption}
+\captionsetup{hypcap=false}
 \usepackage{listings}
 \usepackage{makecell}
 \usepackage{tabularx}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{xcolor}
 \usepackage{tcolorbox}
 \usepackage{tikz}
 \usepackage{float}
 \usepackage{amsthm}
-\usepackage{tabularx}
-
-\usepackage{tcolorbox}
 \usepackage{etoolbox}
-\usepackage{hyperref}
 
 \newcounter{myboxcount}
 
@@ -46,16 +46,10 @@
 }
 
 % enhanced এবং breakable অপশন সচল করার জন্য লাইব্রেরি
-\tcbuselibrary{skins, breakable}
-
-
-\usetikzlibrary{matrix}
-
-\tcbuselibrary{listings}
-\usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
-\usetikzlibrary{decorations.pathreplacing}
-\tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\tcbuselibrary{skins,breakable,listings}
+\usetikzlibrary{matrix,shapes.multipart,decorations.pathreplacing,
+  shapes.geometric,automata,positioning,calc,arrows.meta,graphs}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 \tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
 
 
@@ -65,14 +59,6 @@
 \definecolor{pcomment}{HTML}{6A737D}
 \definecolor{pstring}{HTML}{032F62}
 \definecolor{glassybg}{RGB}{245, 246, 250}
-
-\usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
-\usetikzlibrary{automata, positioning, arrows.meta}
-\usetikzlibrary{graphs, graphdrawing, positioning}
-
-
-\tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 
 \definecolor{pblue}{RGB}{13,71,161}
 \definecolor{dgray}{RGB}{66,66,66}
@@ -157,7 +143,10 @@
   {\footnotesize\textcolor{cG}{\textit{\textbf{[Visual:} #1\textbf{]}}}}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
-\newcommand{\subtopic}[2]{%
+\newcommand{\subtopic}[3]{%
+  \phantomsection%
+  \label{#3}%
+  \pdfbookmark[2]{#2}{#3}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -242,8 +231,8 @@
 %% Part I
 \begin{tcolorbox}[breakable,colback=cA!5,colframe=cA,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cA}{Part I --- Graph Algorithms}}\\[5pt]
-  \textcolor{cA!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cA}{Part I --- Graph Algorithms}}\par\smallskip
+  \noindent\textcolor{cA!40}{\rule{\textwidth}{0.4pt}}\par\smallskip
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cA}{$\triangleright$}}]
     \item \hyperref[sec:S1]{\textbf{S1.} Graph Algorithms}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cA}{$\cdot$}}]
@@ -260,8 +249,8 @@
 %% Part II
 \begin{tcolorbox}[breakable,colback=cB!5,colframe=cB,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cB}{Part II --- Advanced Data Structures}}\\[5pt]
-  \textcolor{cB!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cB}{Part II --- Advanced Data Structures}}\par\smallskip
+  \noindent\textcolor{cB!40}{\rule{\textwidth}{0.4pt}}\par\smallskip
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cB}{$\triangleright$}}]
     \item \hyperref[sec:S2]{\textbf{S2.} Advanced Data Structures}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cB}{$\cdot$}}]
@@ -278,8 +267,8 @@
 %% Part III
 \begin{tcolorbox}[breakable,colback=cC!5,colframe=cC,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cC}{Part III --- Hashing}}\\[5pt]
-  \textcolor{cC!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cC}{Part III --- Hashing}}\par\smallskip
+  \noindent\textcolor{cC!40}{\rule{\textwidth}{0.4pt}}\par\smallskip
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cC}{$\triangleright$}}]
     \item \hyperref[sec:S3]{\textbf{S3.} Hashing}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cC}{$\cdot$}}]
@@ -291,8 +280,8 @@
 %% Part IV
 \begin{tcolorbox}[breakable,colback=cD!5,colframe=cD,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cD}{Part IV --- NP-Completeness}}\\[5pt]
-  \textcolor{cD!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cD}{Part IV --- NP-Completeness}}\par\smallskip
+  \noindent\textcolor{cD!40}{\rule{\textwidth}{0.4pt}}\par\smallskip
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cD}{$\triangleright$}}]
     \item \hyperref[sec:S4]{\textbf{S4.} NP-Completeness}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cD}{$\cdot$}}]
@@ -306,8 +295,8 @@
 %% Part V
 \begin{tcolorbox}[breakable,colback=cE!5,colframe=cE,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cE}{Part V --- Coping with Hardness}}\\[5pt]
-  \textcolor{cE!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cE}{Part V --- Coping with Hardness}}\par\smallskip
+  \noindent\textcolor{cE!40}{\rule{\textwidth}{0.4pt}}\par\smallskip
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cE}{$\triangleright$}}]
     \item \hyperref[sec:S5]{\textbf{S5.} Coping with Hardness}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cE}{$\cdot$}}]
@@ -321,8 +310,8 @@
 %% Part VI
 \begin{tcolorbox}[breakable,colback=cG!5,colframe=cG,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cG}{Part VI --- String Matching Algorithms \& Randomized Algorithms}}\\[5pt]
-  \textcolor{cF!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cG}{Part VI --- String Matching Algorithms \& Randomized Algorithms}}\par\smallskip
+  \noindent\textcolor{cF!40}{\rule{\textwidth}{0.4pt}}\par\smallskip
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cG}{$\triangleright$}}]
     \item \hyperref[sec:S6]{\textbf{S6.} String Matching Algorithms}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cG}{$\cdot$}}]
@@ -350,13 +339,14 @@
 \secdivider{Part I}{Graph Algorithms}{cA}{cA}{Shortest Paths, Minimum Spanning Trees, Maximum Flow, Maximum Bipartite Matching, Stable Matching (Gale-Shapley), Graph Traversal \& Properties}
 
 %% ── S1: Graph Algorithms ──────────────────────────────────────────────
-\section{S1 --- Graph Algorithms}
+\section*{S1 --- Graph Algorithms}
+\phantomsection
 \label{sec:S1}
+\pdfbookmark[1]{S1: Graph Algorithms}{sec:S1}
 \markboth{S1 --- Graph Algorithms}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Shortest Paths}
-\label{sub:s1-shortestpaths}
+\subtopic{cA}{Shortest Paths}{sub:s1-shortestpaths}
 
 \begin{enumerate}
 
@@ -648,7 +638,8 @@ Dijkstra (G)
 
 
 \item What does $d[v]$ represent at the end of the execution of Algorithm 1, if the algorithm is applied on an unweighted directed acyclic graph (DAG) $G$ with a source $s$? What is the runtime complexity in terms of $|V|$ and $|E|$ of Algorithm 1?
-\begin{tcolorbox}[colback=white, colframe=cA!50, arc=3pt, title=\textbf{Algorithm: \textsc{LongestPath-DAG}($G$)}]
+\begin{tcolorbox}[colback=white, colframe=cA!50, arc=3pt,
+  title={\textbf{Algorithm: }\textsc{LongestPath-DAG}($G$)}]
 \begin{algorithmic}[1]
 \State Compute a topological sorting of $G$
 \For{each $v \in V[G]$}
@@ -732,8 +723,7 @@ Dijkstra (G)
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Minimum Spanning Trees}
-\label{sub:s1-mst}
+\subtopic{cA}{Minimum Spanning Trees}{sub:s1-mst}
 
 \begin{enumerate}
 
@@ -1170,8 +1160,7 @@ to all the $n$ houses.\mk{12}
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Maximum Flow}
-\label{sub:s1-maxflow}
+\subtopic{cA}{Maximum Flow}{sub:s1-maxflow}
 
 \begin{enumerate}
 
@@ -1568,8 +1557,7 @@ H & -  & -  & - & -  & - & -  & -  & - \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Maximum Bipartite Matching}
-\label{sub:s1-bipartite}
+\subtopic{cA}{Maximum Bipartite Matching}{sub:s1-bipartite}
 
 \begin{enumerate}
 
@@ -1596,8 +1584,7 @@ if and only if there is a maximum flow $f$ in $G'$. \mk{17.5}
 \end{enumerate}
 
 
-\subtopic{cA}{Stable Matching (Gale-Shapley)}
-\label{sub:s1-stablematching}
+\subtopic{cA}{Stable Matching (Gale-Shapley)}{sub:s1-stablematching}
 
 \begin{enumerate}
   \item In a stable matching problem (\textbf{Gale-Shapley algorithm}) each participant has a true preference order. Now consider a woman $w$. Suppose $w$ prefers man $m$ to $m'$, but both $m$ and $m'$ are low on her list of preferences. Can it be the case that by switching the order of $m$ and $m'$ on her list of preferences (i.e., by falsely claiming that she prefers $m'$ to $m$) and running the algorithm with this false preference list, $w$ will end up with a man $m''$ that she truly prefers to both $m$ and $m'$? Give proof to support your answer.
@@ -1608,8 +1595,7 @@ if and only if there is a maximum flow $f$ in $G'$. \mk{17.5}
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Graph Traversal \& Properties}
-\label{sub:s1-traversal}
+\subtopic{cA}{Graph Traversal \& Properties}{sub:s1-traversal}
 
 \begin{enumerate}
 
@@ -1927,13 +1913,14 @@ complexity of the algorithm.
 \secdivider{Part II}{Advanced Data Structures}{cB}{cB}{Balanced Binary Search Trees (AVL Trees), Red-Black Trees, Splay Trees, Skip Lists, Advanced Heaps (Binomial Heaps), Advanced Heaps (Fibonacci Heaps)}
 
 %% ── S2: Advanced Data Structures ─────────────────────────────────────
-\section{S2 --- Advanced Data Structures}
+\section*{S2 --- Advanced Data Structures}
+\phantomsection
 \label{sec:S2}
+\pdfbookmark[1]{S2: Advanced Data Structures}{sec:S2}
 \markboth{S2 --- Advanced Data Structures}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Balanced Binary Search Trees (AVL Trees)}
-\label{sub:s2-avl}
+\subtopic{cB}{Balanced Binary Search Trees (AVL Trees)}{sub:s2-avl}
 
 \begin{enumerate}
 
@@ -2153,8 +2140,7 @@ complexity of the algorithm.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Red-Black Trees}
-\label{sub:s2-rbt}
+\subtopic{cB}{Red-Black Trees}{sub:s2-rbt}
 
 \begin{enumerate}
 
@@ -2424,8 +2410,7 @@ complexity of the algorithm.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Splay Trees}
-\label{sub:s2-splay}
+\subtopic{cB}{Splay Trees}{sub:s2-splay}
 
 \begin{enumerate}
 
@@ -2529,8 +2514,7 @@ complexity of the algorithm.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Skip Lists}
-\label{sub:s2-skip}
+\subtopic{cB}{Skip Lists}{sub:s2-skip}
 
 \begin{enumerate}
 
@@ -2681,8 +2665,7 @@ Perform the following operations on the skip-list and show the procedures:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Advanced Heaps (Binomial Heaps)}
-\label{sub:s2-binheap}
+\subtopic{cB}{Advanced Heaps (Binomial Heaps)}{sub:s2-binheap}
 
 \begin{enumerate}
 
@@ -3022,8 +3005,7 @@ Perform the following operations on the skip-list and show the procedures:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Advanced Heaps (Fibonacci Heaps)}
-\label{sub:s2-fibheap}
+\subtopic{cB}{Advanced Heaps (Fibonacci Heaps)}{sub:s2-fibheap}
 
 \begin{enumerate}
 
@@ -3337,13 +3319,14 @@ Here double-circled nodes are marked and single-circled nodes are unmarked.
 \secdivider{Part III}{Hashing}{cC}{cC}{Hash Functions and Collision Resolution}
 
 %% ── S3: Hashing ───────────────────────────────────────────────────────
-\section{S3 --- Hashing}
+\section*{S3 --- Hashing}
+\phantomsection
 \label{sec:S3}
+\pdfbookmark[1]{S3: Hashing}{sec:S3}
 \markboth{S3 --- Hashing}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Hash Functions and Collision Resolution}
-\label{sub:s3-hash}
+\subtopic{cC}{Hash Functions and Collision Resolution}{sub:s3-hash}
 
 \begin{enumerate}
 
@@ -3476,13 +3459,14 @@ Draw the resulting hash table. \mk{13}
 \secdivider{Part IV}{NP-Completeness}{cD}{cD}{P vs NP Classes, Reductions, NP-hard and NP-complete Problems}
 
 %% ── S4: NP-Completeness ───────────────────────────────────────────────
-\section{S4 --- NP-Completeness}
+\section*{S4 --- NP-Completeness}
+\phantomsection
 \label{sec:S4}
+\pdfbookmark[1]{S4: NP-Completeness}{sec:S4}
 \markboth{S4 --- NP-Completeness}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{P vs NP Classes}
-\label{sub:s4-pvsnp}
+\subtopic{cD}{P vs NP Classes}{sub:s4-pvsnp}
 
 \begin{enumerate}
 
@@ -3544,8 +3528,7 @@ Draw the resulting hash table. \mk{13}
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Reductions}
-\label{sub:s4-reductions}
+\subtopic{cD}{Reductions}{sub:s4-reductions}
 
 \begin{enumerate}
 
@@ -3655,8 +3638,7 @@ Mention the number of boolean variables and clauses in the 3-SAT problem.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{NP-hard and NP-complete Problems}
-\label{sub:s4-nphard}
+\subtopic{cD}{NP-hard and NP-complete Problems}{sub:s4-nphard}
 
 \begin{enumerate}
 
@@ -3730,13 +3712,14 @@ Prove that the satisfiability of Boolean formulas is NP-complete.\\
 \secdivider{Part V}{Coping with Hardness}{cE}{cE}{Approximation Algorithms, Backtracking, Branch and Bound}
 
 %% ── S5: Coping with Hardness ──────────────────────────────────────────
-\section{S5 --- Coping with Hardness}
+\section*{S5 --- Coping with Hardness}
+\phantomsection
 \label{sec:S5}
+\pdfbookmark[1]{S5: Coping with Hardness}{sec:S5}
 \markboth{S5 --- Coping with Hardness}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Approximation Algorithms}
-\label{sub:s5-approx}
+\subtopic{cE}{Approximation Algorithms}{sub:s5-approx}
 
 \begin{enumerate}
 
@@ -3942,8 +3925,7 @@ GreedyVertexCover(G):
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Backtracking}
-\label{sub:s5-backtrack}
+\subtopic{cE}{Backtracking}{sub:s5-backtrack}
 
 \begin{enumerate}
 
@@ -4051,8 +4033,7 @@ Use the backtracking algorithm to decide whether this is satisfiable or not. You
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Branch and Bound}
-\label{sub:s5-branchbound}
+\subtopic{cE}{Branch and Bound}{sub:s5-branchbound}
 
 \begin{enumerate}
 
@@ -4265,13 +4246,14 @@ Item & Weight & Value \\
 \secdivider{Part VI}{String Matching Algorithms \& Randomized Algorithms}{cG}{cG}{Knuth-Morris-Pratt (KMP) Algorithm, Monte Carlo Algorithms \& Probability Amplification, Las Vegas Algorithms \& Randomized Quick Sort}
 
 %% ── S6: String Matching Algorithms ───────────────────────────────────
-\section{S6 --- String Matching Algorithms }
+\section*{S6 --- String Matching Algorithms}
+\phantomsection
 \label{sec:S6}
+\pdfbookmark[1]{S6: String Matching Algorithms}{sec:S6}
 \markboth{S6 --- String Matching Algorithms}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Knuth-Morris-Pratt (KMP) Algorithm}
-\label{sub:s6-kmp}
+\subtopic{cG}{Knuth-Morris-Pratt (KMP) Algorithm}{sub:s6-kmp}
 
 \begin{enumerate}
 
@@ -4281,11 +4263,12 @@ Item & Weight & Value \\
 
 \end{enumerate}
 
-\section{S7 --- Randomized Algorithms}
+\section*{S7 --- Randomized Algorithms}
+\phantomsection
 \label{sec:S7}
+\pdfbookmark[1]{S7: Randomized Algorithms}{sec:S7}
 
-\subtopic{cG}{Monte Carlo Algorithms \& Probability Amplification}
-\label{sub:s7-montecarlo}
+\subtopic{cG}{Monte Carlo Algorithms \& Probability Amplification}{sub:s7-montecarlo}
 
 \begin{enumerate}
   \item  Suppose you have designed a Monte Carlo Algorithm for a given problem which succeeds with probability $\ge \frac{1}{n^2}$. However, your boss has asked you to achieve at least $(1 - \frac{1}{n})$ success probability. Explain how you can achieve this.
@@ -4294,8 +4277,7 @@ Item & Weight & Value \\
   
 \end{enumerate}
 
-\subtopic{cG}{Las Vegas Algorithms \& Randomized Quick Sort}
-\label{sub:s7-lasvegas}
+\subtopic{cG}{Las Vegas Algorithms \& Randomized Quick Sort}{sub:s7-lasvegas}
 
 \begin{enumerate}
   \item Analyze the running time of the randomized quick sort algorithm.

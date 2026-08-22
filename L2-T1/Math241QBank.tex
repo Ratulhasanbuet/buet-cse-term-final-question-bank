@@ -1,4 +1,5 @@
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
+\usepackage{fix-cm}
 \usepackage{pgfplots}
 
 %% ── Packages ──────────────────────────────────────────────────────────
@@ -30,6 +31,8 @@
 \usepackage{tcolorbox}
 \usepackage{etoolbox}
 \usepackage{hyperref}
+\usepackage{bookmark}
+\bookmarksetup{open=true, depth=2}
 
 \newcounter{myboxcount}
 
@@ -50,7 +53,7 @@
 \usetikzlibrary{positioning, calc, arrows.meta, decorations.pathreplacing}
 
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 \tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
 
 
@@ -87,7 +90,10 @@
 \newcommand{\diagram}{\par\vspace{4pt}\textcolor{gray!55}{\small\itshape[Diagram to be added manually]}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
+\newcounter{subtopicbm}
 \newcommand{\subtopic}[2]{%
+  \stepcounter{subtopicbm}%
+  \pdfbookmark[2]{#2}{subtopicbm.\thesubtopicbm}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -166,8 +172,8 @@
 %% Part IV
 \begin{tcolorbox}[breakable,colback=cD!5,colframe=cD,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cD}{Part I --- Vector Calculus}}\\[5pt]
-  \textcolor{cD!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cD}{Part I --- Vector Calculus}}\par\vspace{5pt}
+  \textcolor{cD!40}{\rule{\linewidth}{0.4pt}}\par\vspace{3pt}
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cD}{$\triangleright$}}]
     \item \hyperref[sec:S4]{\textbf{S1.} Vector Calculus}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cD}{$\cdot$}}]
@@ -188,8 +194,8 @@
 %% Part V
 \begin{tcolorbox}[breakable,colback=cE!5,colframe=cE,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cE}{Part II --- Complex Calculus}}\\[5pt]
-  \textcolor{cE!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cE}{Part II --- Complex Calculus}}\par\vspace{5pt}
+  \textcolor{cE!40}{\rule{\linewidth}{0.4pt}}\par\vspace{3pt}
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cE}{$\triangleright$}}]
     \item \hyperref[sec:S5]{\textbf{S2.} Complex Calculus}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cE}{$\cdot$}}]
@@ -213,8 +219,8 @@
 %% Part VI
 \begin{tcolorbox}[breakable,colback=cF!5,colframe=cF,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cF}{Part III --- Partial Differential Equations}}\\[5pt]
-  \textcolor{cF!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cF}{Part III --- Partial Differential Equations}}\par\vspace{5pt}
+  \textcolor{cF!40}{\rule{\linewidth}{0.4pt}}\par\vspace{3pt}
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cF}{$\triangleright$}}]
     \item \hyperref[sec:S6]{\textbf{S3.} Partial Differential Equations}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cF}{$\cdot$}}]

@@ -1,12 +1,16 @@
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
+\usepackage{lmodern}
 \usepackage{geometry}
 \usepackage{enumitem}
 \usepackage{titlesec}
 \usepackage[hidelinks,colorlinks=true,linkcolor=blue!70!black]{hyperref}
+\usepackage{bookmark}
+\bookmarksetup{open=true,depth=2}
 \usepackage{xcolor}
 \usepackage{fancyhdr}
 \usepackage{tcolorbox}
@@ -17,7 +21,6 @@
 \usepackage[american]{circuitikz}
 \usepackage{karnaugh-map}
 \usepackage{diagbox}
-\usepackage{circuitikz}[american]
 \usepackage{tikz}
 \usepackage{tikz-timing}
 \usepackage{multirow}
@@ -53,7 +56,7 @@
 \usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 \tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
 \usetikzlibrary{circuits.logic.US}
 
@@ -69,7 +72,12 @@
 
 \usetikzlibrary{decorations.pathreplacing}
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+
+% The compact contents panels and long exam prompts intentionally use tight
+% line boxes; avoid non-actionable bad-box diagnostics in the build log.
+\hbadness=10000
+\hfuzz=40pt
 
 %% ── Colors ────────────────────────────────────────────────────────────
 \definecolor{pblue}{RGB}{13,71,161}
@@ -100,9 +108,18 @@
 \newcommand{\mk}[1]{\textcolor{orange!70!black}{\small\textbf{(#1 marks)}}}
 \newcommand{\variant}[1]{\par\vspace{1pt}\textcolor{blue!50!black}%
   {\footnotesize\textit{$\hookrightarrow$ Similar: #1}}}
+\newcommand{\addsectiontoc}[1]{%
+  \begingroup
+    \hypersetup{bookmarksdepth=0}% Keep the TOC entry without a duplicate outline item.
+    \addcontentsline{toc}{section}{#1}%
+  \endgroup
+}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
-\newcommand{\subtopic}[2]{%
+\newcommand{\subtopic}[3]{%
+  \phantomsection
+  \label{#3}%
+  \pdfbookmark[2]{#2}{#3}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -320,14 +337,15 @@
 \secdivider{Boolean Algebra, Theorems \& Logic Gates}{Postulates, Duality, Truth Tables, Gate Implementations}{cA}{cA}
 
 \markboth{S1: Boolean Algebra, Theorems \& Logic Gates}{S1: Boolean Algebra, Theorems \& Logic Gates}
-\label{sec:S1}
 \titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S1}
+\pdfbookmark[1]{S1: Boolean Algebra, Theorems \& Logic Gates}{sec:S1}
 \section*{S1 \quad Boolean Algebra, Theorems \& Logic Gates}
-\addcontentsline{toc}{section}{S1: Boolean Algebra, Theorems \& Logic Gates}
+\addsectiontoc{S1: Boolean Algebra, Theorems \& Logic Gates}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Boolean Algebra \& Simplification}
-\label{sub:s1-bool-algebra}
+\subtopic{cA}{Boolean Algebra \& Simplification}{sub:s1-bool-algebra}
 
 \begin{enumerate}
 
@@ -412,8 +430,7 @@ Justify your answer.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{De Morgan's Theorem}
-\label{sub:s1-demorgan}
+\subtopic{cA}{De Morgan's Theorem}{sub:s1-demorgan}
 
 \begin{enumerate}
 
@@ -437,8 +454,7 @@ Justify your answer.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Logic Gates, Universal Gates \& Definitions}
-\label{sub:s1-logic-gates}
+\subtopic{cA}{Logic Gates, Universal Gates \& Definitions}{sub:s1-logic-gates}
 
 \begin{enumerate}
 
@@ -476,8 +492,7 @@ Justify your answer.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Circuit Analysis}
-\label{sub:s1-circuit-analysis}
+\subtopic{cA}{Circuit Analysis}{sub:s1-circuit-analysis}
 
 \begin{enumerate}
 
@@ -519,8 +534,7 @@ Justify your answer.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Two-Level \& Multi-Level Logic Implementation}
-\label{sub:s1-two-level}
+\subtopic{cA}{Two-Level \& Multi-Level Logic Implementation}{sub:s1-two-level}
 
 \begin{enumerate}
 
@@ -578,8 +592,7 @@ Assume that both the normal and complement inputs are available.
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{NOR Gate Implementation}
-\label{sub:s1-nor-impl}
+\subtopic{cA}{NOR Gate Implementation}{sub:s1-nor-impl}
 
 \begin{enumerate}
 
@@ -611,8 +624,7 @@ Your implementation should use as few NOR gates as possible.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{XOR Properties}
-\label{sub:s1-xor}
+\subtopic{cA}{XOR Properties}{sub:s1-xor}
 
 \begin{enumerate}
 
@@ -633,8 +645,7 @@ Your implementation should use as few NOR gates as possible.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Parity Checker and Generator}
-\label{sub:s1-parity}
+\subtopic{cA}{Parity Checker and Generator}{sub:s1-parity}
 
 \begin{enumerate}
 
@@ -663,14 +674,15 @@ Your implementation should use as few NOR gates as possible.
 \secdivider{Canonical \& Standard Forms}{Minterms, Maxterms, SOP, POS, Conversion}{cB}{blue}
 
 \markboth{S2: Canonical Forms \& Boolean Functions}{S2: Canonical Forms \& Boolean Functions}
-\label{sec:S2}
 \titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S2}
+\pdfbookmark[1]{S2: Canonical Forms \& Boolean Functions}{sec:S2}
 \section*{S2 \quad Canonical Forms \& Boolean Functions}
-\addcontentsline{toc}{section}{S2: Canonical Forms \& Boolean Functions}
+\addsectiontoc{S2: Canonical Forms \& Boolean Functions}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Canonical vs Standard Forms}
-\label{sub:s2-canonical}
+\subtopic{cB}{Canonical vs Standard Forms}{sub:s2-canonical}
 
 \begin{enumerate}
 
@@ -690,8 +702,7 @@ Your implementation should use as few NOR gates as possible.
 \end{enumerate}
 
 
-\subtopic{cB}{Minterms, Maxterms}
-\label{sub:s2-Min-Maxterms}
+\subtopic{cB}{Minterms, Maxterms}{sub:s2-Min-Maxterms}
 \begin{enumerate}
   
 
@@ -828,14 +839,15 @@ Your implementation should use as few NOR gates as possible.
 \secdivider{Minimization Techniques}{K-Maps (2/3/4/5-variable), Quine-McCluskey, Don't-Care Conditions}{cC}{green}
 
 \markboth{S3: Minimization Techniques}{S3: Minimization Techniques}
-\label{sec:S3}
 \titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S3}
+\pdfbookmark[1]{S3: Minimization Techniques}{sec:S3}
 \section*{S3 \quad Minimization Techniques}
-\addcontentsline{toc}{section}{S3: Minimization Techniques}
+\addsectiontoc{S3: Minimization Techniques}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Prime Implicants}
-\label{sub:s3-prime-implicants}
+\subtopic{cC}{Prime Implicants}{sub:s3-prime-implicants}
 
 \begin{enumerate}
 
@@ -852,8 +864,7 @@ Your implementation should use as few NOR gates as possible.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Karnaugh Map}
-\label{sub:s3-kmap}
+\subtopic{cC}{Karnaugh Map}{sub:s3-kmap}
 
 \begin{enumerate}
 
@@ -911,8 +922,7 @@ Don't-care minterms: $d = \Sigma\,(6,20,24,25,26,27)$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Tabulation Method (Quine-McCluskey)}
-\label{sub:s3-tabulation}
+\subtopic{cC}{Tabulation Method (Quine-McCluskey)}{sub:s3-tabulation}
 
 \begin{enumerate}
 
@@ -969,13 +979,14 @@ What is the main purpose of the tabulation method (Quine-McCluskey method) in di
 \secdivider{Combinational Logic}{Adders, Subtractors, Comparators, Decoders, Encoders, MUX, DEMUX}{cD}{violet}
 
 \markboth{S4: Combinational Logic}{S4: Combinational Logic}
-\label{sec:S4}
 \titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S4}
+\pdfbookmark[1]{S4: Combinational Logic}{sec:S4}
 \section*{S4 \quad Combinational Logic}
-\addcontentsline{toc}{section}{S4: Combinational Logic}
+\addsectiontoc{S4: Combinational Logic}
 
-\subtopic{cD}{Number System \& Arithmetic Operations}
-\label{sub:s4-number-sys}
+\subtopic{cD}{Number System \& Arithmetic Operations}{sub:s4-number-sys}
 
 \begin{enumerate}
 
@@ -1031,8 +1042,7 @@ What is the main purpose of the tabulation method (Quine-McCluskey method) in di
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Code Converter}
-\label{sub:s4-code-converter}
+\subtopic{cD}{Code Converter}{sub:s4-code-converter}
 
 \begin{enumerate}
 
@@ -1073,8 +1083,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Binary Adder \& Subtractor}
-\label{sub:s4-adder-sub}
+\subtopic{cD}{Binary Adder \& Subtractor}{sub:s4-adder-sub}
 
 \begin{enumerate}
 
@@ -1114,8 +1123,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{BCD Adder-Subtractor}
-\label{sub:s4-bcd-addsub}
+\subtopic{cD}{BCD Adder-Subtractor}{sub:s4-bcd-addsub}
 
 \begin{enumerate}
 
@@ -1137,8 +1145,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Carry Look-Ahead Adder (CLA)}
-\label{sub:s4-cla}
+\subtopic{cD}{Carry Look-Ahead Adder (CLA)}{sub:s4-cla}
 
 \begin{enumerate}
 
@@ -1174,8 +1181,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{2's Complement Circuit}
-\label{sub:s4-2scomp}
+\subtopic{cD}{2's Complement Circuit}{sub:s4-2scomp}
 
 \begin{enumerate}
 
@@ -1191,8 +1197,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Overflow Detection}
-\label{sub:s4-overflow}
+\subtopic{cD}{Overflow Detection}{sub:s4-overflow}
 
 \begin{enumerate}
 
@@ -1207,8 +1212,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Binary Multiplier}
-\label{sub:s4-multiplier}
+\subtopic{cD}{Binary Multiplier}{sub:s4-multiplier}
 
 \begin{enumerate}
 
@@ -1264,8 +1268,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Incrementer}
-\label{sub:s4-incrementer}
+\subtopic{cD}{Incrementer}{sub:s4-incrementer}
 
 \begin{enumerate}
 
@@ -1282,8 +1285,7 @@ Decimal Digit & \begin{tabular}{@{}c@{}}Random Code \\ ABCD\end{tabular} & \begi
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Magnitude Comparator}
-\label{sub:s4-comparator}
+\subtopic{cD}{Magnitude Comparator}{sub:s4-comparator}
 
 \begin{enumerate}
 
@@ -1313,8 +1315,7 @@ expressed as $Z_2Z_1Z_0$).
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Encoders}
-\label{sub:s4-encoders}
+\subtopic{cD}{Encoders}{sub:s4-encoders}
 
 \begin{enumerate}
 
@@ -1378,8 +1379,7 @@ expressed as $Z_2Z_1Z_0$).
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Decoders}
-\label{sub:s4-decoder-func}
+\subtopic{cD}{Decoders}{sub:s4-decoder-func}
 
 \begin{enumerate}
 
@@ -1450,8 +1450,7 @@ Note that you will need to implement both functions in a single circuit. You may
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Decoder as Demultiplexer}
-\label{sub:s4-demux}
+\subtopic{cD}{Decoder as Demultiplexer}{sub:s4-demux}
 
 \begin{enumerate}
   
@@ -1474,8 +1473,7 @@ Note that you will need to implement both functions in a single circuit. You may
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{BCD to 7-Segment Decoder \& BCD Error Detector}
-\label{sub:s4-bcd}
+\subtopic{cD}{BCD to 7-Segment Decoder \& BCD Error Detector}{sub:s4-bcd}
 
 \begin{enumerate}
 
@@ -1490,8 +1488,7 @@ Note that you will need to implement both functions in a single circuit. You may
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Multiplexers \& Demultiplexers}
-\label{sub:s4-mux}
+\subtopic{cD}{Multiplexers \& Demultiplexers}{sub:s4-mux}
 
 \begin{enumerate}
 
@@ -1630,8 +1627,7 @@ Note that you will need to implement both functions in a single circuit. You may
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Custom Combinational Circuit Design}
-\label{sub:s4-comb-custom}
+\subtopic{cD}{Custom Combinational Circuit Design}{sub:s4-comb-custom}
 
 \begin{enumerate}
 
@@ -1700,14 +1696,15 @@ Note that you will need to implement both functions in a single circuit. You may
 \secdivider{Flip-Flops, Latches \& Race-Around Problems}{SR, JK, D, T Flip-Flops, Excitation Tables, Race Conditions}{cE}{orange}
 
 \markboth{S5: Flip-Flops, Latches \& Race-Around Problems}{S5: Flip-Flops, Latches \& Race-Around Problems}
-\label{sec:S5}
 \titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S5}
+\pdfbookmark[1]{S5: Flip-Flops, Latches \& Race-Around Problems}{sec:S5}
 \section*{S5 \quad Flip-Flops, Latches \& Race-Around Problems}
-\addcontentsline{toc}{section}{S5: Flip-Flops, Latches \& Race-Around Problems}
+\addsectiontoc{S5: Flip-Flops, Latches \& Race-Around Problems}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{SR Latch \& SR/JK Undefined Condition}
-\label{sub:s5-sr}
+\subtopic{cE}{SR Latch \& SR/JK Undefined Condition}{sub:s5-sr}
 
 \begin{enumerate}
 
@@ -1752,8 +1749,7 @@ Design the circuit with NAND SR latches and gates.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{JK Flip-Flop Characteristics}
-\label{sub:s5-jk}
+\subtopic{cE}{JK Flip-Flop Characteristics}{sub:s5-jk}
 
 \begin{enumerate}
 
@@ -1768,8 +1764,7 @@ Design the circuit with NAND SR latches and gates.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Master-Slave D Flip-Flop}
-\label{sub:s5-master-slave}
+\subtopic{cE}{Master-Slave D Flip-Flop}{sub:s5-master-slave}
 
 \begin{enumerate}
 
@@ -1808,8 +1803,7 @@ Design the circuit with NAND SR latches and gates.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Sequential Circuit Timing Analysis}
-\label{sub:s5-timing}
+\subtopic{cE}{Sequential Circuit Timing Analysis}{sub:s5-timing}
 
 \begin{enumerate}
 
@@ -1925,8 +1919,7 @@ Design the circuit with NAND SR latches and gates.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Latch vs Flip-Flop}
-\label{sub:s5-latch-ff}
+\subtopic{cE}{Latch vs Flip-Flop}{sub:s5-latch-ff}
 
 \begin{enumerate}
 
@@ -1937,8 +1930,7 @@ Design the circuit with NAND SR latches and gates.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Flip-Flop Conversion}
-\label{sub:s5-conversion}
+\subtopic{cE}{Flip-Flop Conversion}{sub:s5-conversion}
 
 \begin{enumerate}
 
@@ -1983,14 +1975,15 @@ Design the circuit with NAND SR latches and gates.
 \secdivider{Sequential Circuits, State Diagrams \& FSM}{Mealy \& Moore Machines, State Tables, State Minimization, Pulse/Fundamental Mode}{cF}{teal}
 
 \markboth{S6: Sequential Circuits, State Diagrams \& FSM}{S6: Sequential Circuits, State Diagrams \& FSM}
-\label{sec:S6}
 \titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S6}
+\pdfbookmark[1]{S6: Sequential Circuits, State Diagrams \& FSM}{sec:S6}
 \section*{S6 \quad Sequential Circuits, State Diagrams \& FSM}
-\addcontentsline{toc}{section}{S6: Sequential Circuits, State Diagrams \& FSM}
+\addsectiontoc{S6: Sequential Circuits, State Diagrams \& FSM}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{State Diagram Derivation from Circuit}
-\label{sub:s6-state-derivation}
+\subtopic{cF}{State Diagram Derivation from Circuit}{sub:s6-state-derivation}
 
 \begin{enumerate}
 
@@ -2083,24 +2076,7 @@ Design the circuit with NAND SR latches and gates.
   \item Derive the transition table, excitation table and state table.
   \item Draw the state diagram.
 \end{enumerate}
-\mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22}
-
-
-%% -- Q7(b): Analyze sequential circuit; transition, excitation, state table (figure-based) --
-\item A sequential circuit has two flip-flops $A$ and $B$, two inputs $x_1$ and $x_2$, and one output $z$. The flip-flop input equations and circuit output equations are:
-\begin{align*}
-  J_A &= y_A x_1 + y_B x_2,\quad  & K_A &= y_A y_B + x_1 x_2 \\
-  J_B &= y_A x_1,\quad             & K_B &= y_A y_B x_1 + y_B x_2 \\
-  z   &= y_A x_1 x_2 + y_B x_1 x_2
-\end{align*}
-
-For the above circuit:
-\begin{enumerate}
-  \item Draw the logic diagram of the circuit.
-  \item Derive the transition table, excitation table, and state table.
-  \item Draw the state diagram.
-\end{enumerate}
-\mk{25} \yr{CSE 205 | L-2/T-1 | 2019--20}
+\mk{20} \yr{CSE 205 | L-2/T-1 | 2021--22, 2019--20}
 
 
 \item A sequential circuit has two JK Flip-Flops $A$ and $B$, two inputs $x$ and $y$, and one output $z$. The flip-flop input equations and circuit output equation are:
@@ -2224,9 +2200,7 @@ Draw the logic diagram of the circuit, tabulate the state table and derive the s
 
 
 \end{enumerate}
-\subtopic{cF}{Circuit Design from State Diagram}
-
-\label{sub:s6-circuit-design}
+\subtopic{cF}{Circuit Design from State Diagram}{sub:s6-circuit-design}
 
 \begin{enumerate}
 
@@ -2319,8 +2293,7 @@ CHANGE & 11 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Sequence Detector}
-\label{sub:s6-sequence}
+\subtopic{cF}{Sequence Detector}{sub:s6-sequence}
 
 \begin{enumerate}
 
@@ -2358,8 +2331,7 @@ CHANGE & 11 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Mealy \& Moore Model Comparison \& Block Diagrams}
-\label{sub:s6-mealy-moore}
+\subtopic{cF}{Mealy \& Moore Model Comparison \& Block Diagrams}{sub:s6-mealy-moore}
 
 \begin{enumerate}
 
@@ -2431,9 +2403,7 @@ D & A & D & 0 \\ \hline
 
 \end{enumerate}
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{State Minimization (Implication Table)}
-
-\label{sub:s6-state-min}
+\subtopic{cF}{State Minimization (Implication Table)}{sub:s6-state-min}
 
 \begin{enumerate}
 
@@ -2629,8 +2599,7 @@ h & h & c & 0 & 0 \\ \hline
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Incompletely Specified Machine Minimization}
-\label{sub:s6-incomp}
+\subtopic{cF}{Incompletely Specified Machine Minimization}{sub:s6-incomp}
 
 \begin{enumerate}
 
@@ -2804,9 +2773,7 @@ G & G, - & G, - \\
 \end{enumerate}
 
 
-\subtopic{cF}{Redundant States}
-
-\label{sub:s6-redundant}
+\subtopic{cF}{Redundant States}{sub:s6-redundant}
 
 \begin{enumerate}
 
@@ -2817,8 +2784,7 @@ G & G, - & G, - \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Output Assignment in Flow Table}
-\label{sub:s6-output-assign}
+\subtopic{cF}{Output Assignment in Flow Table}{sub:s6-output-assign}
 
 \begin{enumerate}
 
@@ -2829,8 +2795,7 @@ G & G, - & G, - \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Fundamental Mode Design}
-\label{sub:s6-fundamental}
+\subtopic{cF}{Fundamental Mode Design}{sub:s6-fundamental}
 
 \begin{enumerate}
 
@@ -2890,9 +2855,7 @@ Derive the primitive flow table and then obtain the reduced flow table.
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Excitation Function \& Transition Table}
-
-\label{sub:s6-excitation}
+\subtopic{cF}{Excitation Function \& Transition Table}{sub:s6-excitation}
 
 \begin{enumerate}
 
@@ -2924,8 +2887,7 @@ Draw the logic diagram of the circuit and derive the transition table.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Hazards in Asynchronous Circuits}
-\label{sub:s6-hazards}
+\subtopic{cF}{Hazards in Asynchronous Circuits}{sub:s6-hazards}
 
 \begin{enumerate}
 
@@ -2936,8 +2898,7 @@ Draw the logic diagram of the circuit and derive the transition table.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Serial Parity Generation}
-\label{sub:s6-parity}
+\subtopic{cF}{Serial Parity Generation}{sub:s6-parity}
 
 \begin{enumerate}
     
@@ -2979,8 +2940,7 @@ $h$ & $a$, $-$ & $-$, $-$ & $-$, $-$ & \circled{$h$}, $0$ \\ \hline
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Race Around Condition}
-\label{sub:s6-race}
+\subtopic{cF}{Race Around Condition}{sub:s6-race}
 
 \begin{enumerate}
 
@@ -3082,8 +3042,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Pulse Mode Logic}
-\label{sub:s6-pulse}
+\subtopic{cF}{Pulse Mode Logic}{sub:s6-pulse}
 
 \begin{enumerate}
 
@@ -3120,14 +3079,15 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \secdivider{Registers \& Counters}{Shift Registers, Asynchronous \& Synchronous Counters, Ring Counters}{cG}{pink!60!red}
 
 \markboth{S7: Registers \& Counters}{S7: Registers \& Counters}
-\label{sec:S7}
 \titleformat{\section}{\large\bfseries\color{cG}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S7}
+\pdfbookmark[1]{S7: Registers \& Counters}{sec:S7}
 \section*{S7 \quad Registers \& Counters}
-\addcontentsline{toc}{section}{S7: Registers \& Counters}
+\addsectiontoc{S7: Registers \& Counters}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Ripple (Asynchronous) Counter}
-\label{sub:s7-ripple}
+\subtopic{cG}{Ripple (Asynchronous) Counter}{sub:s7-ripple}
 
 \begin{enumerate}
 
@@ -3177,8 +3137,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Synchronous Counter Design}
-\label{sub:s7-sync-counter}
+\subtopic{cG}{Synchronous Counter Design}{sub:s7-sync-counter}
 
 \begin{enumerate}
 
@@ -3262,8 +3221,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Synchronous Gray Code Counter}
-\label{sub:s7-gray}
+\subtopic{cG}{Synchronous Gray Code Counter}{sub:s7-gray}
 
 \begin{enumerate}
 
@@ -3279,8 +3237,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Switch-Tail Ring Counter}
-\label{sub:s7-ring}
+\subtopic{cG}{Switch-Tail Ring Counter}{sub:s7-ring}
 
 \begin{enumerate}
 
@@ -3296,8 +3253,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Johnson Counter vs Ring Counter}
-\label{sub:s7-johnson}
+\subtopic{cG}{Johnson Counter vs Ring Counter}{sub:s7-johnson}
 
 \begin{enumerate}
 
@@ -3322,8 +3278,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Counter Direction Analysis}
-\label{sub:s7-direction}
+\subtopic{cG}{Counter Direction Analysis}{sub:s7-direction}
 
 \begin{enumerate}
 
@@ -3414,8 +3369,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Clock Generator / Divider}
-\label{sub:s7-clock}
+\subtopic{cG}{Clock Generator / Divider}{sub:s7-clock}
 
 \begin{enumerate}
 
@@ -3426,8 +3380,7 @@ d & a/0 & \circled{d}/0 & b/0 & \circled{d}/1 \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Universal Shift Register}
-\label{sub:s7-universal}
+\subtopic{cG}{Universal Shift Register}{sub:s7-universal}
 
 \begin{enumerate}
 
@@ -3470,8 +3423,7 @@ $S_1$ & $S_0$ & Mode \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Serial Adder \& Serial Subtractor}
-\label{sub:s7-serial}
+\subtopic{cG}{Serial Adder \& Serial Subtractor}{sub:s7-serial}
 
 \begin{enumerate}
 
@@ -3512,14 +3464,15 @@ $S_1$ & $S_0$ & Mode \\
 \secdivider{Memory \& Programmable Logic}{RAM, ROM, Address Multiplexing, PLA Design}{cH}{cyan!30!black}
 
 \markboth{S8: Memory \& Programmable Logic}{S8: Memory \& Programmable Logic}
-\label{sec:S8}
 \titleformat{\section}{\large\bfseries\color{cH}}{}{0em}{}[\titlerule]
+\phantomsection
+\label{sec:S8}
+\pdfbookmark[1]{S8: Memory \& Programmable Logic}{sec:S8}
 \section*{S8 \quad Memory \& Programmable Logic}
-\addcontentsline{toc}{section}{S8: Memory \& Programmable Logic}
+\addsectiontoc{S8: Memory \& Programmable Logic}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{ROM Design \& Expansion}
-\label{sub:s8-rom}
+\subtopic{cH}{ROM Design \& Expansion}{sub:s8-rom}
 
 \begin{enumerate}
 
@@ -3530,8 +3483,7 @@ $S_1$ & $S_0$ & Mode \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{PLA Design}
-\label{sub:s8-pla}
+\subtopic{cH}{PLA Design}{sub:s8-pla}
 
 \begin{enumerate}
 
@@ -3745,8 +3697,7 @@ Implement the circuit with a PLA having three inputs, four product terms and two
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cH}{RAM Design}
-\label{sub:s8-ram}
+\subtopic{cH}{RAM Design}{sub:s8-ram}
 
 \begin{enumerate}
 
@@ -3758,8 +3709,7 @@ Implement the circuit with a PLA having three inputs, four product terms and two
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Synchronous Sequential Circuit Design}
-\label{sub:s6-sync-design}
+\subtopic{cF}{Synchronous Sequential Circuit Design}{sub:s6-sync-design}
 
 \begin{enumerate}
 

@@ -1,6 +1,7 @@
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
+\usepackage{fix-cm}
 \usepackage{pgfplots}
-
+% !TEX program = lualatex
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
 \usepackage{geometry}
@@ -30,6 +31,8 @@
 \usepackage{tcolorbox}
 \usepackage{etoolbox}
 \usepackage{hyperref}
+\usepackage{bookmark}
+\bookmarksetup{open=true, depth=2}
 
 \newcounter{myboxcount}
 
@@ -50,7 +53,7 @@
 \usetikzlibrary{positioning, calc, arrows.meta, decorations.pathreplacing}
 
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
 \tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
 
 
@@ -87,7 +90,10 @@
 \newcommand{\diagram}{\par\vspace{4pt}\textcolor{gray!55}{\small\itshape[Diagram to be added manually]}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
+\newcounter{subtopicbm}
 \newcommand{\subtopic}[2]{%
+  \stepcounter{subtopicbm}%
+  \pdfbookmark[2]{#2}{subtopicbm.\thesubtopicbm}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -165,8 +171,8 @@
 %% Part IV
 \begin{tcolorbox}[breakable,colback=cD!5,colframe=cD,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cD}{Part I --- Vector Calculus}}\\[5pt]
-  \textcolor{cD!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cD}{Part I --- Vector Calculus}}\par\vspace{5pt}
+  \textcolor{cD!40}{\rule{\linewidth}{0.4pt}}\par\vspace{3pt}
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cD}{$\triangleright$}}]
     \item \hyperref[sec:S4]{\textbf{S1.} Vector Calculus}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cD}{$\cdot$}}]
@@ -187,8 +193,8 @@
 %% Part V
 \begin{tcolorbox}[breakable,colback=cE!5,colframe=cE,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cE}{Part II --- Complex Calculus}}\\[5pt]
-  \textcolor{cE!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cE}{Part II --- Complex Calculus}}\par\vspace{5pt}
+  \textcolor{cE!40}{\rule{\linewidth}{0.4pt}}\par\vspace{3pt}
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cE}{$\triangleright$}}]
     \item \hyperref[sec:S5]{\textbf{S2.} Complex Calculus}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cE}{$\cdot$}}]
@@ -212,8 +218,8 @@
 %% Part VI
 \begin{tcolorbox}[breakable,colback=cF!5,colframe=cF,boxrule=1pt,arc=5pt,
   left=8pt,right=8pt,top=8pt,bottom=8pt,before skip=4pt]
-  {\large\bfseries\textcolor{cF}{Part III --- Partial Differential Equations}}\\[5pt]
-  \textcolor{cF!40}{\rule{\textwidth}{0.4pt}}\\[3pt]
+  {\large\bfseries\textcolor{cF}{Part III --- Partial Differential Equations}}\par\vspace{5pt}
+  \textcolor{cF!40}{\rule{\linewidth}{0.4pt}}\par\vspace{3pt}
   \small\begin{itemize}[leftmargin=1.2em,itemsep=1pt,label={\textcolor{cF}{$\triangleright$}}]
     \item \hyperref[sec:S6]{\textbf{S3.} Partial Differential Equations}
       \begin{itemize}[leftmargin=1.5em,itemsep=0pt,label={\textcolor{cF}{$\cdot$}}]
@@ -6570,7 +6576,7 @@ Thus, the expression is proven. $\blacksquare$
 
     % Center and Circle Parameters
     \coordinate (Z0) at (1.5, 1.5);
-    \def\R{1.2}; % Radius
+    \def\R{1.2} % Radius
 
     % Draw the circle
     \draw[very thick, blue] (Z0) circle (\R);
@@ -7500,7 +7506,7 @@ Here, $\Delta z = \Delta x$. The derivative becomes:
 \begin{align*}
 f'(z) &= \lim_{\Delta x \to 0} \frac{[u(x + \Delta x, y) + iv(x + \Delta x, y)] - [u(x, y) + iv(x, y)]}{\Delta x} \\
 &= \lim_{\Delta x \to 0} \left[ \frac{u(x + \Delta x, y) - u(x, y)}{\Delta x} + i \frac{v(x + \Delta x, y) - v(x, y)}{\Delta x} \right] \\
-&= \frac{\partial u}{\partial x} + i \frac{\partial v}{\partial x} \tag{1}
+&= \frac{\partial u}{\partial x} + i \frac{\partial v}{\partial x} \qquad\text{(1)}
 \end{align*}
 
 \textbf{Path 2: Approaching along the imaginary axis ($\Delta x = 0$)} \\
@@ -7511,7 +7517,7 @@ f'(z) &= \lim_{\Delta y \to 0} \frac{[u(x, y + \Delta y) + iv(x, y + \Delta y)] 
 \end{align*}
 Using $\frac{1}{i} = -i$, we get:
 \begin{equation}
-f'(z) = \frac{\partial v}{\partial y} - i \frac{\partial u}{\partial y} \tag{2}
+f'(z) = \frac{\partial v}{\partial y} - i \frac{\partial u}{\partial y} \qquad\text{(2)}
 \end{equation}
 
 \textbf{Equating the results:} \\
@@ -21734,7 +21740,7 @@ Thus, the complementary function is:
 \[ \text{C.F.} = \phi_1(y+2x) + \phi_2(y-x) \]
 where $\phi_1$ and $\phi_2$ are arbitrary functions.
 
-\textbf{Particular Integral (P.I.):} \\
+\textbf{Particular Integral (P.I.):}\par
 \begin{align*}
     \text{P.I.} &= \frac{1}{D_{x}^{2}-D_{x}D_{y}-2D_{y}^{2}} \left[ (y-1)e^{x} \right]
 \end{align*}
@@ -21774,7 +21780,7 @@ Using the standard form $(D_x - mD_y - c)$, the factors yield:
 \end{itemize}
 \[ \text{C.F.} = e^x \phi_1(y) + e^{-x} \phi_2(y+x) \]
 
-\textbf{Particular Integral (P.I.):} \\
+\textbf{Particular Integral (P.I.):}\par
 Let $\text{P.I.} = \text{P.I.}_1 + \text{P.I.}_2 + \text{P.I.}_3$ corresponding to the three RHS terms.
 
 \textit{For} $\text{P.I.}_1 = \frac{1}{D_{x}^{2}-D_{x}D_{y}+D_{y}-1} \cos(x+2y)$: \\
@@ -21822,7 +21828,7 @@ Using $(D_x - mD_y - c)$:
 \end{itemize}
 \[ \text{C.F.} = e^{-x} \phi_1(y) + e^x \phi_2(y-x) \]
 
-\textbf{Particular Integral (P.I.):} \\
+\textbf{Particular Integral (P.I.):}\par
 \begin{align*}
     \text{P.I.} &= \frac{1}{D_{x}^{2}+D_{x}D_{y}+D_{y}-1} \cos(x+2y)
 \end{align*}
@@ -22526,7 +22532,7 @@ Taking $42$ common from the denominator to form a binomial expression:
 \[ \text{P.I.} = \frac{e^{x+3y}}{42} \left[ 1 + \left( \frac{27D_x + 19D_y + 3D_x^2 + 7D_xD_y + 2D_y^2}{42} \right) \right]^{-1} \left[ x^2y^2 \right] \]
 Using the binomial expansion $(1+X)^{-1} = 1 - X + X^2 - X^3 + X^4 - \dots$, where:
 \[ X = \frac{27D_x + 19D_y + 3D_x^2 + 7D_xD_y + 2D_y^2}{42} \]
-Since the target function is $x^2y^2$, any derivative term higher than $D_x^2$ or $D_y^2$ will vanish ($0$ হয়ে যাবে)। We expand $X$ up to combinations of $D_x^2 D_y^2$:
+Since the target function is $x^2y^2$, any derivative term higher than $D_x^2$ or $D_y^2$ will vanish. We expand $X$ up to combinations of $D_x^2 D_y^2$:
 \begin{align*}
     X &= \frac{27}{42}D_x + \frac{19}{42}D_y + \frac{3}{42}D_x^2 + \frac{7}{42}D_xD_y + \frac{2}{42}D_y^2 \\
     X^2 &= \left(\frac{27}{42}D_x + \frac{19}{42}D_y\right)^2 + 2\left(\frac{27}{42}D_x + \frac{19}{42}D_y\right)\left(\frac{3}{42}D_x^2 + \frac{7}{42}D_xD_y + \frac{2}{42}D_y^2\right) + \dots \\
@@ -22839,7 +22845,7 @@ Substitute $C = 8$ and $k = -12$ back into the general solution:
 \vspace{1em}
 \textbf{Final Answer:}
 \begin{center}
-    \boxed{\Large u(x,y) = 8e^{-12x-3y}}
+    \boxed{\displaystyle u(x,y) = 8e^{-12x-3y}}
 \end{center}
 
 \vspace{1em}
@@ -22976,7 +22982,7 @@ If $n$ is odd ($n = 2m-1$), $1 - (-1)^n = 2$, so:
 \textbf{Final Answer:}
 Substituting $B_n$ back into the general solution yields the final displacement:
 \begin{center}
-    \boxed{\Large y(x,t) = \frac{8kl^2}{\pi^3} \sum_{m=1}^{\infty} \frac{1}{(2m-1)^3} \sin\left(\frac{(2m-1)\pi x}{l}\right) \cos\left(\frac{c(2m-1)\pi t}{l}\right)}
+    \boxed{\displaystyle y(x,t) = \frac{8kl^2}{\pi^3} \sum_{m=1}^{\infty} \frac{1}{(2m-1)^3} \sin\left(\frac{(2m-1)\pi x}{l}\right) \cos\left(\frac{c(2m-1)\pi t}{l}\right)}
 \end{center}
 
 \vspace{1em}
@@ -23095,7 +23101,7 @@ By directly comparing the coefficients of like terms on both sides:
 \textbf{Final Solution:}
 Substituting these constants back into the general solution gives the explicit temperature distribution:
 \begin{center}
-    \boxed{\Large u(x,t) = \sin\left(\frac{\pi x}{2}\right) e^{-\frac{\pi^2 \alpha^2}{4} t} + 3\sin\left(\frac{5\pi x}{2}\right) e^{-\frac{25\pi^2 \alpha^2}{4} t}}
+    \boxed{\displaystyle u(x,t) = \sin\left(\frac{\pi x}{2}\right) e^{-\frac{\pi^2 \alpha^2}{4} t} + 3\sin\left(\frac{5\pi x}{2}\right) e^{-\frac{25\pi^2 \alpha^2}{4} t}}
 \end{center}
 
 \vspace{2em}
@@ -23204,7 +23210,7 @@ All other coefficients $C_n$ for $n \notin \{2, 8\}$ are exactly zero.
 \textbf{Final Expression:}
 Substituting $C_2 = 6$ and $C_8 = -3$ back into the general solution format (Equation 4), we get:
 \begin{center}
-    \boxed{\Large u(x,t) = 6\sin(\pi x)\cos(4\pi t) - 3\sin(4\pi x)\cos(16\pi t)}
+    \boxed{\displaystyle u(x,t) = 6\sin(\pi x)\cos(4\pi t) - 3\sin(4\pi x)\cos(16\pi t)}
 \end{center}
 
 \vspace{2em}
@@ -23340,7 +23346,7 @@ Let $n = 2m$ for $m = 1, 2, 3, \dots$. Then:
 \textbf{Final Complete Solution:}
 Combining $u_s(x)$ and $u_t(x,t)$ with $n = 2m$, the temperature distribution at any subsequent time $t$ is:
 \begin{center}
-    \boxed{\Large u(x,t) = 90 - 3x - \frac{80}{\pi} \sum_{m=1}^{\infty} \frac{1}{m} \sin\left(\frac{m\pi x}{5}\right) e^{-\frac{m^2 \pi^2 \alpha^2}{25}t}}
+    \boxed{\displaystyle u(x,t) = 90 - 3x - \frac{80}{\pi} \sum_{m=1}^{\infty} \frac{1}{m} \sin\left(\frac{m\pi x}{5}\right) e^{-\frac{m^2 \pi^2 \alpha^2}{25}t}}
 \end{center}
 
 \vspace{2em}
@@ -23455,7 +23461,7 @@ Setting $n = 2m-1$ for $m = 1, 2, 3, \dots$, we get $A_{2m-1} = \dfrac{32}{(2m-1
 \subsubsection*{Final Explicit Solution}
 Substituting the non-zero coefficients back into equation (3) yields:
 \begin{center}
-    \boxed{\Large u(x,t) = \frac{32}{\pi^3} \sum_{m=1}^{\infty} \frac{1}{(2m-1)^3} \sin\left(\frac{(2m-1)\pi x}{2}\right) \cos\left(2(2m-1)\pi t\right)}
+    \boxed{\displaystyle u(x,t) = \frac{32}{\pi^3} \sum_{m=1}^{\infty} \frac{1}{(2m-1)^3} \sin\left(\frac{(2m-1)\pi x}{2}\right) \cos\left(2(2m-1)\pi t\right)}
 \end{center}
 
 \vspace{1.5em}
@@ -23569,7 +23575,7 @@ Let $n = 2m-1$ for $m = 1, 2, 3, \dots$. Then, $B_{2m-1} = \dfrac{8}{\pi(2m-1)^3
 \subsubsection*{Final Answer}
 Substituting the non-zero coefficients back into equation (4) gives the complete explicit solution:
 \begin{center}
-    \boxed{\Large y(x,t) = \frac{8}{\pi} \sum_{m=1}^{\infty} \frac{1}{(2m-1)^3} \sin\left((2m-1)x\right) \cos\left(2(2m-1)t\right)}
+    \boxed{\displaystyle y(x,t) = \frac{8}{\pi} \sum_{m=1}^{\infty} \frac{1}{(2m-1)^3} \sin\left((2m-1)x\right) \cos\left(2(2m-1)t\right)}
 \end{center}
 
 \vspace{1.5em}
@@ -23667,7 +23673,7 @@ All other coefficients $B_n$ for $n \notin \{2, 4\}$ are exactly zero.
 \textbf{Final Answer:}
 Substituting $B_2 = 6$ and $B_4 = 3$ back into the general solution yields the explicit temperature distribution for the bar at any time $t > 0$:
 \begin{center}
-    \boxed{\Large u(x,t) = 6\sin\left(\frac{\pi x}{2}\right) e^{-\frac{\pi^2}{4}t} + 3\sin(\pi x) e^{-\pi^2 t}}
+    \boxed{\displaystyle u(x,t) = 6\sin\left(\frac{\pi x}{2}\right) e^{-\frac{\pi^2}{4}t} + 3\sin(\pi x) e^{-\pi^2 t}}
 \end{center}
 
 \vspace{2em}
@@ -23767,7 +23773,7 @@ By directly matching the coefficients of the corresponding orthogonal sine terms
 \textbf{Final Explicit Solution:}
 Substituting these coefficients back into the general expression gives the explicit temperature distribution equation:
 \begin{center}
-    \boxed{\Large u(x,t) = \sin(2\pi x) e^{-400\pi^2 t} - \sin(5\pi x) e^{-2500\pi^2 t}}
+    \boxed{\displaystyle u(x,t) = \sin(2\pi x) e^{-400\pi^2 t} - \sin(5\pi x) e^{-2500\pi^2 t}}
 \end{center}
 
 \vspace{2em}
@@ -23873,7 +23879,7 @@ By direct comparison of orthogonal terms, we find:
 \textbf{Final Explicit Solution:}
 Substituting these non-zero coefficients back into the general solution gives the explicit temperature distribution expression:
 \begin{center}
-    \boxed{\Large u(x,t) = 2\sin\left(\frac{\pi x}{2}\right) e^{-\frac{\pi^2}{16}t} - \sin(\pi x) e^{-\frac{\pi^2}{4}t} + 4\sin(2\pi x) e^{-\pi^2 t}}
+    \boxed{\displaystyle u(x,t) = 2\sin\left(\frac{\pi x}{2}\right) e^{-\frac{\pi^2}{16}t} - \sin(\pi x) e^{-\frac{\pi^2}{4}t} + 4\sin(2\pi x) e^{-\pi^2 t}}
 \end{center}
 
 \vspace{2em}
@@ -23976,7 +23982,7 @@ Integrating by parts with $u = x \implies du = dx$ and $dv = \sin\left(\frac{n\p
 
 Thus, the explicit analytical solution is:
 \begin{center}
-    \boxed{\Large u(x,t) = \frac{4}{\pi} \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} \sin\left(\frac{n\pi x}{2}\right) e^{-\frac{3n^2\pi^2}{4}t}}
+    \boxed{\displaystyle u(x,t) = \frac{4}{\pi} \sum_{n=1}^{\infty} \frac{(-1)^{n+1}}{n} \sin\left(\frac{n\pi x}{2}\right) e^{-\frac{3n^2\pi^2}{4}t}}
 \end{center}
 
 ---
@@ -24097,7 +24103,7 @@ By directly matching the coefficients of the orthogonal sine components on both 
 \textbf{Final Explicit Solution:}
 Substituting these non-zero coefficients back into the general summation gives the complete temperature distribution:
 \begin{center}
-    \boxed{\Large u(x,t) = 2\sin(3x) e^{-36t} - 4\sin(5x) e^{-100t}}
+    \boxed{\displaystyle u(x,t) = 2\sin(3x) e^{-36t} - 4\sin(5x) e^{-100t}}
 \end{center}
 
 \vspace{2em}

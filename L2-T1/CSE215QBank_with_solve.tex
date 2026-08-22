@@ -1,4 +1,12 @@
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
+
+\usepackage{fix-cm}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\DeclareFontShape{T1}{cmtt}{bx}{n}{<->ssub*cmtt/m/n}{}
+\DeclareFontShape{T1}{cmss}{bx}{it}{<->ssub*cmss/bx/sl}{}
+\DeclareFontFamily{OMS}{cmtt}{}
+\DeclareFontShape{OMS}{cmtt}{m}{n}{<->ssub*cmsy/m/n}{}
 
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
@@ -25,10 +33,13 @@
 \usepackage{caption}
 \usepackage{forest}
 \usepackage{tabularx}
+\usepackage{bookmark}
+\bookmarksetup{open=true, depth=2}
+
 
 \usetikzlibrary{shadows}
 
-\usetikzlibrary{snakes}
+\usetikzlibrary{decorations.pathmorphing}
 \usetikzlibrary{er}
 \usetikzlibrary{chains}
 \usetikzlibrary{shapes.geometric, positioning, arrows.meta, calc}
@@ -42,8 +53,16 @@
 
 \usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
-\tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\tcbset{
+  ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin},
+  before upper={\hfuzz=100pt}
+}
+
+% Narrow tables and long schema identifiers are intentional in this handout.
+\hbadness=10000
+\hfuzz=100pt
+\tracinglostchars=0
 
 %% ── Colors ────────────────────────────────────────────────────────────
 \definecolor{pblue}{RGB}{13,71,161}
@@ -162,7 +181,10 @@
   {\footnotesize\textcolor{cG}{\textit{\textbf{[Visual:} #1\textbf{]}}}}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
+\newcounter{subtopicbm}
 \newcommand{\subtopic}[2]{%
+  \stepcounter{subtopicbm}%
+  \pdfbookmark[2]{#2}{subtopicbm.\thesubtopicbm}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -3836,7 +3858,7 @@ To yield the fewest number of relations, we apply the standard mapping rule for 
 \vspace{1em}
 \begin{center}
 \renewcommand{\arraystretch}{1.5}
-\begin{tabular}{@{} p{3.2cm} p{8.5cm} p{3.5cm} @{}}
+\begin{tabular}{@{} p{4.2cm} p{7.5cm} p{3.5cm} @{}}
 \toprule
 \textbf{Relation} & \textbf{Attributes \small (Primary Key Underlined)} & \textbf{Foreign Keys (FK)} \\
 \midrule
@@ -23660,7 +23682,7 @@ To demonstrate the file structure modifications, we assume an initial fixed-leng
 \textbf{File Structure Layout:}
 \begin{center}
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{p{2cm} p{2cm} p{3.5cm} p{1.5cm} p{1.5cm} p{1.5cm}}
+\begin{tabular}{p{2.5cm} p{2cm} p{3cm} p{1.5cm} p{1.5cm} p{1.5cm}}
 \toprule
 \textbf{Record Type} & \textbf{Field 1} & \textbf{Field 2} & \textbf{Field 3} & \textbf{Field 4} & \textbf{Field 5} \\
 \midrule
@@ -24166,7 +24188,7 @@ A disk failure (often referred to as a \textbf{media failure}) occurs when the n
 \vspace{0.3cm}
 \begin{center}
 \renewcommand{\arraystretch}{1.3}
-\begin{tabular}{p{3.5cm} p{6.5cm} p{4cm}}
+\begin{tabular}{p{4.5cm} p{5.5cm} p{4cm}}
 \toprule
 \textbf{Failure Type} & \textbf{Description} & \textbf{Primary Mitigation} \\
 \midrule
@@ -25121,22 +25143,22 @@ Below is the updated design of the sparse index and relation file following the 
 
     % 1. Draw Updated Sparse Index Table
     \matrix (idx) [index_table] {
-        32343 & \phantom{\bullet} \\
-        76766 & \phantom{\bullet} \\
+        32343 & \phantom{$\bullet$} \\
+        76766 & \phantom{$\bullet$} \\
     };
     \node at (idx-1-2.center) {$\bullet$};
     \node at (idx-2-2.center) {$\bullet$};
 
     % 2. Draw Remaining Instructor Relation Table
     \matrix (rel) [relation_table, right=2cm of idx.north east, anchor=north west] {
-        32343 & El Said    & History    & 60000 & \phantom{\bullet} \\
-        33456 & Gold        & Physics    & 87000 & \phantom{\bullet} \\
-        45565 & Katz        & Comp. Sci. & 75000 & \phantom{\bullet} \\
-        58583 & Califieri   & History    & 62000 & \phantom{\bullet} \\
-        76543 & Singh       & Finance    & 80000 & \phantom{\bullet} \\
-        76766 & Crick       & Biology    & 72000 & \phantom{\bullet} \\
-        83821 & Brandt      & Comp. Sci. & 92000 & \phantom{\bullet} \\
-        98345 & Kim         & Elec. Eng. & 80000 & \phantom{\bullet} \\
+        32343 & El Said    & History    & 60000 & \phantom{$\bullet$} \\
+        33456 & Gold        & Physics    & 87000 & \phantom{$\bullet$} \\
+        45565 & Katz        & Comp. Sci. & 75000 & \phantom{$\bullet$} \\
+        58583 & Califieri   & History    & 62000 & \phantom{$\bullet$} \\
+        76543 & Singh       & Finance    & 80000 & \phantom{$\bullet$} \\
+        76766 & Crick       & Biology    & 72000 & \phantom{$\bullet$} \\
+        83821 & Brandt      & Comp. Sci. & 92000 & \phantom{$\bullet$} \\
+        98345 & Kim         & Elec. Eng. & 80000 & \phantom{$\bullet$} \\
     };
 
     % 3. Draw Index Pointers
@@ -30289,7 +30311,7 @@ C0001 & 1000 & 1 & \texttt{0001} & 10 (Last)\\
 
 \begin{center}
 \begin{tikzpicture}[
-    >=stealth, thick,
+    >=stealth, thick,y=1.5cm,
     dirnode/.style={draw, rectangle, minimum width=1.5cm, minimum height=0.6cm, fill=gray!10, align=center},
     bucket/.style={draw, rectangle, rounded corners=4pt, minimum width=3cm, minimum height=1.2cm, fill=white, align=center},
     pointer/.style={->, thick, rounded corners=2pt}

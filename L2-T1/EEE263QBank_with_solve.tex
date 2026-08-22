@@ -1,5 +1,7 @@
-\documentclass[12pt,a3paper]{article}
+\documentclass[12pt]{article}
+\usepackage{fix-cm}
 \usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 %% ── Packages ──────────────────────────────────────────────────────────
 \usepackage{amsmath,amssymb}
 \usepackage{amsmath}
@@ -19,8 +21,12 @@
 \usepackage{multirow}
 \usepackage[table]{xcolor}
 \usepackage{tabularx}
-\usepackage{caption}
+\usepackage[hypcap=false]{caption}
 \usepackage{enumitem}
+
+\usepackage{bookmark}
+\bookmarksetup{open=true, depth=2}
+
 
 \usetikzlibrary{decorations.pathreplacing}
 
@@ -51,7 +57,8 @@
 \usetikzlibrary{shapes.multipart, positioning, calc, arrows.meta}
 \usetikzlibrary{decorations.pathreplacing}
 \tcbuselibrary{skins,breakable}
-\geometry{margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\geometry{a3paper,margin=2.5cm,headheight=20pt,top=3cm,bottom=3cm}
+\hbadness=10000
 \tcbset{ansbox/.style={enlarge left by=-\leftmargin, width=\linewidth+\leftmargin}}
 \usetikzlibrary{circuits.logic.US}
 
@@ -88,7 +95,11 @@
 \newcommand{\diagram}{\par\vspace{4pt}\textcolor{gray!55}{\small\textit{[Diagram to be added manually]}}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
-\newcommand{\subtopic}[2]{%
+\newcounter{subtopicbm}
+
+\newcommand{\subtopic}[2]{
+  \stepcounter{subtopicbm}
+  \pdfbookmark[2]{#2}{subtopicbm.\thesubtopicbm}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -271,7 +282,7 @@
         \item \hyperref[sub:s5-cmos]{CMOS Logic Implementation}
         \item \hyperref[sub:s5-sizing]{CMOS Sizing and Delay}
         \item \hyperref[sub:s5-nmos]{NMOS Circuit Design}
-        \item \hyperref[sub:s5-cmos]{CMOS Inverter Analysis}
+        \item \hyperref[sub:s5-cmos-inverter]{CMOS Inverter Analysis}
             
       \end{itemize}
     \item \hyperref[sec:S6]{\textbf{S6.} MOSFET Amplifiers}
@@ -2035,7 +2046,7 @@ The voltage across the diode is zero:
 \item In the circuit shown, ``$I$'' is a DC current source and ``$V_i$'' is a sinusoidal signal with small amplitude ($<10\,\text{mV}$) and a frequency of 100\,kHz. Representing the diode by its small-signal resistance $r_d$ (a function of $I$):\\
 (i) sketch the small-signal equivalent circuit for determining the sinusoidal output $V_o$ across the capacitor; \\ 
 (ii) find the phase shift between $V_i$ and $V_o$; \\
-(iii) find the value of $I$ that will provide a phase shift of $-45°$; \\
+(iii) find the value of $I$ that will provide a phase shift of $-45^\circ$; \\
 (iv) find the range of phase shift achieved as $I$ is varied from 0.1 to 10 times the value found in (iii). Assume $n=1$.\\
 \begin{center}
         \begin{circuitikz}[american, thick]
@@ -7129,7 +7140,7 @@ Substituting the values calculated previously:
 \subsection*{4. Comparison: SCR vs. TRIAC}
 
 \begin{center}
-\begin{tabular}{lll}
+\begin{tabularx}{\linewidth}{@{}lXX@{}}
 \toprule
 \textbf{Feature} & \textbf{SCR} & \textbf{TRIAC} \\ \midrule
 \textbf{Directionality} & Unidirectional (DC current flow) & Bidirectional (AC current flow) \\
@@ -7138,7 +7149,7 @@ Substituting the values calculated previously:
 \textbf{Power Rating} & Very High (up to several thousand Amperes) & Moderate to Medium ($< 100\text{ A}$ typical) \\
 \textbf{Symmetry} & Asymmetric control & Symmetric control over full AC cycles \\
 \textbf{Common Applications} & Controlled rectifiers, High-voltage DC transmission & Light dimmers, fan regulators, AC motor drives \\ \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \end{tcolorbox}
@@ -10034,11 +10045,11 @@ Based on the provided circuit diagram, the output voltage $v_0$ is explicitly de
 The circuit consists of a single loop for charging the capacitor. The diode $D$ will turn ON (forward-biased) only when the potential at its anode ($V_A$) exceeds the potential at its cathode ($V_K$) by at least $V_\gamma$.
 
 \textbf{Condition for Diode Conduction:}
-\begin{align*}
+\begin{align}
     V_A - V_K &\ge V_\gamma \notag \\
     (v_i - v_0) - 1\text{ V} &\ge 0.7\text{ V} \notag \\
     v_i - v_0 &\ge 1.7\text{ V} \label{eq:cond}
-\end{align*}
+\end{align}
 
 \textbf{Transient Charging Phase:}
 \begin{itemize}
@@ -11173,11 +11184,11 @@ In saturation, $I_C \neq \beta I_B$. We assume standard saturation voltages:
 We now set up KVL equations for both the base-emitter and collector-emitter loops. We know that $I_E = I_C + I_B$.
 
 \textbf{Loop 1 (Base-Emitter Loop):}
-\begin{align*}
+\begin{align}
     V_{TH} - I_B R_{TH} - V_{BE(sat)} - (I_C + I_B)R_E - V_{EE} &= 0 \\
     2.5 - 10 I_B - 0.7 - 0.2(I_C + I_B) - (-5) &= 0 \quad \text{(currents in mA, resistances in k}\Omega\text{)} \nonumber \\
     6.8 &= 10.2 I_B + 0.2 I_C \label{eq:loop1}
-\end{align*}
+\end{align}
 
 \textbf{Loop 2 (Collector-Emitter Loop):}
 \begin{align}
@@ -12530,10 +12541,10 @@ Next, apply KVL from the $9\,\text{V}$ supply through the emitter-base junction 
     V_{C1} = V_{B2} = 9 - I_{E2} R_{E2} - V_{EB2}
 \end{equation}
 Substitute $V_{EB2} = 0.7\,\text{V}$ and $I_{E2} = (\beta_p + 1)I_{B2} = 81 I_{B2}$:
-\begin{align*}
+\begin{align}
     V_{C1} &= 9 - (81 I_{B2})(0.1\,\text{k}\Omega) - 0.7 \nonumber \\
     V_{C1} &= 8.3 - 8.1 I_{B2} \label{eq:vc1}
-\end{align*}
+\end{align}
 
 Substitute Equation \eqref{eq:vc1} back into Equation \eqref{eq:node}:
 \begin{align*}
@@ -13145,15 +13156,15 @@ Applying Kirchhoff's Voltage Law (KVL) at the base loop:
 Solving for the base current $I_B$:
 \begin{align*}
     I_B &= \frac{5\text{ V} - 0.7\text{ V}}{100\text{ k}\Omega} \\
-    I_B &= \frac{4.3\text{ V}}{100\text{ k}\Omega} = 43\text{ \mu A}
+    I_B &= \frac{4.3\text{ V}}{100\text{ k}\Omega} = 43\,\mu\text{A}
 \end{align*}
 Note that $I_B$ is constant regardless of the transistor's $\beta$.
 
 \subsection*{4. Design for Active Mode (Finding $R_C$)}
 The collector current $I_C$ depends on the current gain $\beta$, which varies between $50$ and $150$. 
 \begin{align*}
-    I_{C,min} &= \beta_{min} I_B = 50 \times 43\text{ \mu A} = 2.15\text{ mA} \\
-    I_{C,max} &= \beta_{max} I_B = 150 \times 43\text{ \mu A} = 6.45\text{ mA}
+    I_{C,min} &= \beta_{min} I_B = 50 \times 43\,\mu\text{A} = 2.15\text{ mA} \\
+    I_{C,max} &= \beta_{max} I_B = 150 \times 43\,\mu\text{A} = 6.45\text{ mA}
 \end{align*}
 The collector-emitter voltage is given by KVL at the output loop:
 \begin{equation}
@@ -16341,7 +16352,7 @@ Using the given common-emitter current gain $\beta = 100$, we find $\alpha$ and 
 \begin{align*}
     \alpha &= \frac{\beta}{\beta + 1} = \frac{100}{101} \approx 0.99 \\
     I_C &= \alpha I_E = \left(\frac{100}{101}\right)(1 \text{ mA}) = 0.99 \text{ mA} \\
-    I_B &= \frac{I_E}{\beta + 1} = \frac{1 \text{ mA}}{101} \approx 9.9 \text{ \mu A}
+    I_B &= \frac{I_E}{\beta + 1} = \frac{1 \text{ mA}}{101} \approx 9.9\,\mu\text{A}
 \end{align*}
 Now, we calculate the DC voltages at the respective nodes. For the base voltage ($V_B$), the base current flows through $R_B$ to ground:
 \begin{align*}
@@ -16544,9 +16555,9 @@ Applying Kirchhoff's Current Law (KCL) at the emitter node (E), we observe that 
     i_{in} + i_e = 0 \implies i_{in} &= -i_e \label{eq:iin}
 \end{align}
 Applying Ohm's law across the emitter resistance $r_e$ (with $i_e$ flowing upward):
-\begin{align*}
+\begin{align}
     v_i - 0 &= -i_e r_e \implies v_i = -i_e r_e \label{eq:vi}
-\end{align*}
+\end{align}
 Substituting Equation \ref{eq:iin} into Equation \ref{eq:vi}:
 \begin{align*}
     v_i &= i_{in} r_e \implies R_{\text{in}} = \frac{v_i}{i_{in}} = r_e
@@ -18253,14 +18264,14 @@ When the collector resistance $R_C$ is increased to $R_C' > R_C$, the supply vol
 \subsection*{4. Summary Table}
 
 \begin{center}
-\begin{tabular}{lcccc}
+\begin{tabularx}{\linewidth}{@{}lXXXX@{}}
 \toprule
 \textbf{Parameter Change} & \textbf{Cut-off Voltage Level} & \textbf{Active Region Slope} & \textbf{Saturation Voltage Level} & \textbf{Saturation Onset ($V_{in}$)} \\
 \midrule
 Increase $V_{CC}$ & Increases ($V_{CC}'$) & Marginally shifted & Unchanged ($0.2\text{ V}$) & Delayed (Higher $V_{in}$) \\
 Increase $R_C$    & Unchanged ($V_{CC}$)  & Steeper (Higher Gain) & Unchanged ($0.2\text{ V}$) & Accelerated (Lower $V_{in}$) \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \end{center}
 
 \end{tcolorbox}
@@ -18976,7 +18987,7 @@ Electrons traveling from the source move through the inverted channel driven by 
 
 \begin{center}
     \renewcommand{\arraystretch}{1.4}
-    \begin{tabular}{@{}p{3.5cm} p{5.5cm} p{5.5cm}@{}}
+    \begin{tabular}{@{}p{4cm} p{5.25cm} p{5.25cm}@{}}
         \toprule
         \textbf{Parameter} & \textbf{BJT (Bipolar Junction Transistor)} & \textbf{MOSFET} \\
         \midrule
@@ -20822,9 +20833,9 @@ $$W_2 = 2\,\mu\text{m}$$
         \toprule
         \textbf{Parameter} & \textbf{Calculated Value} \\
         \midrule
-        \textbf{Resistor ($R$)} & **12.5 kΩ** \\
-        \textbf{Width of Q1 ($W_1$)} & **8 μm** \\
-        \textbf{Width of Q2 ($W_2$)} & **2 μm** \\
+        \textbf{Resistor ($R$)} & \textbf{$12.5\,\text{k}\Omega$} \\
+        \textbf{Width of Q1 ($W_1$)} & \textbf{$8\,\mu\text{m}$} \\
+        \textbf{Width of Q2 ($W_2$)} & \textbf{$2\,\mu\text{m}$} \\
         \bottomrule
     \end{tabular}
 \end{center}
@@ -21114,9 +21125,9 @@ $$W_3 = 8\,\mu\text{m}$$
         \toprule
         \textbf{Transistor} & \textbf{Overdrive Voltage ($V_{GS} - V_t$)} & \textbf{Required Width ($W$)} \\
         \midrule
-        \textbf{$Q_1$} & $0.5\,\text{V}$ & \textbf{8 μm} \\
-        \textbf{$Q_2$} & $1.0\,\text{V}$ & \textbf{2 μm} \\
-        \textbf{$Q_3$} & $0.5\,\text{V}$ & \textbf{8 μm} \\
+        \textbf{$Q_1$} & $0.5\,\text{V}$ & \textbf{$8\,\mu\text{m}$} \\
+        \textbf{$Q_2$} & $1.0\,\text{V}$ & \textbf{$2\,\mu\text{m}$} \\
+        \textbf{$Q_3$} & $0.5\,\text{V}$ & \textbf{$8\,\mu\text{m}$} \\
         \bottomrule
     \end{tabular}
 \end{center}
@@ -22157,10 +22168,10 @@ To counteract this, a source resistor $R_S$ is introduced at the source terminal
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
     Applying Kirchhoff's Voltage Law (KVL) at the input loop yields:
-    \begin{align*}
+    \begin{align}
         V_G &= V_{GS} + I_D R_S \nonumber \\
         \implies V_{GS} &= V_G - I_D R_S \label{eq:load_line}
-    \end{align*}
+    \end{align}
     Equation \eqref{eq:load_line} represents a \textbf{negative DC feedback} mechanism. \\
     
     \textbf{Mechanism of action:} \\
@@ -22734,7 +22745,7 @@ $\mathbf{R_D = 7 \, \text{k}\Omega}$ and $\mathbf{R_S = 3.33 \, \text{k}\Omega}$
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cB}{CMOS Inverter Analysis}
-\label{sub:s5-cmos}
+\label{sub:s5-cmos-inverter}
 
 \begin{enumerate}
     
@@ -22859,12 +22870,12 @@ We evaluate the required voltage terms:
     \item Source-to-Drain voltage: $v_{SDp} = v_{Sp} - v_o = 2.5 - v_o$
 \end{itemize}
 Substituting these into the current equation (working in $\mathrm{mA}$ and $\mathrm{V}$):
-\begin{align*}
+\begin{align}
     i_{Dp} &= 1 \cdot \left[ 4(2.5 - v_o) - 0.5(2.5 - v_o)^2 \right] \nonumber \\
     i_{Dp} &= 10 - 4v_o - 0.5\left( 6.25 - 5v_o + v_o^2 \right) \nonumber \\
     i_{Dp} &= 10 - 4v_o - 3.125 + 2.5v_o - 0.5v_o^2 \nonumber \\
     i_{Dp} &= -0.5v_o^2 - 1.5v_o + 6.875 \label{eq:triode}
-\end{align*}
+\end{align}
 Equating Eq. (\ref{eq:kcl}) and Eq. (\ref{eq:triode}):
 \begin{align*}
     \frac{v_o}{10} &= -0.5v_o^2 - 1.5v_o + 6.875 \nonumber \\
@@ -23531,11 +23542,11 @@ To find the sensitivity of $I_D$ with respect to threshold voltage $V_t$, we tak
     \frac{\partial I_D}{\partial V_t} = k_n (V_G - I_D R_S - V_t) \cdot \frac{\partial}{\partial V_t} (V_G - I_D R_S - V_t)
 \end{equation}
 Recognizing that $k_n (V_G - I_D R_S - V_t) = k_n (V_{GS} - V_t) = g_m$, and noting that $V_G$ is a constant independent of $V_t$:
-\begin{align*}
+\begin{align}
     \frac{\partial I_D}{\partial V_t} &= g_m \left( -R_S \frac{\partial I_D}{\partial V_t} - 1 \right) \nonumber \\[1ex]
     \frac{\partial I_D}{\partial V_t} &= -g_m R_S \frac{\partial I_D}{\partial V_t} - g_m \nonumber \\[1ex]
     \frac{\partial I_D}{\partial V_t} (1 + g_m R_S) &= -g_m \implies \frac{\partial I_D}{\partial V_t} = \frac{-g_m}{1 + g_m R_S} \label{eq:vt_sensitivity}
-\end{align*}
+\end{align}
 \textbf{Interpretation:} Without $R_S$ (i.e., $R_S = 0$), the sensitivity is $\partial I_D / \partial V_t = -g_m$. Equation \eqref{eq:vt_sensitivity} demonstrates that adding $R_S$ reduces the sensitivity of the drain current to $V_t$ variations by a \textbf{desensitivity factor} of $(1 + g_m R_S)$.
 
 \vspace{1em}
@@ -23552,11 +23563,11 @@ Evaluating the partial derivatives:
     \item From Equation \eqref{eq:vgs_rs}, $\Delta V_{GS} = -R_S \Delta I_D$
 \end{itemize}
 Substituting these into the differential equation:
-\begin{align*}
+\begin{align}
     \Delta I_D &\approx \left( \frac{I_D}{k_n} \right) \Delta k_n + g_m (-R_S \Delta I_D) \nonumber \\[1ex]
     \Delta I_D + g_m R_S \Delta I_D &\approx I_D \left( \frac{\Delta k_n}{k_n} \right) \nonumber \\[1ex]
     \Delta I_D (1 + g_m R_S) &\approx I_D \left( \frac{\Delta k_n}{k_n} \right) \implies \frac{\Delta I_D}{I_D} = \frac{1}{1 + g_m R_S} \left( \frac{\Delta k_n}{k_n} \right) \label{eq:kn_sensitivity}
-\end{align*}
+\end{align}
 \textbf{Interpretation:} Equation \eqref{eq:kn_sensitivity} correlates the fractional change in drain current ($\Delta I_D / I_D$) to the fractional change in the transconductance parameter ($\Delta k_n / k_n$). Without source degeneration ($R_S = 0$), a 10\% variation in $k_n$ would cause a direct 10\% variation in $I_D$. However, the presence of $R_S$ attenuates this percentage variation by the same desensitivity factor, $(1 + g_m R_S)$.
 
 \vspace{1em}
@@ -25343,7 +25354,7 @@ Consider practical values for a typical operational amplifier (like the $\mu$A74
 Calculating the maximum differential voltage required to drive the output to full scale:
 \begin{align*}
     E_{d(\text{max})} &= \frac{13\text{ V}}{200,000} \\
-    E_{d(\text{max})} &= 65\text{ \mu V}
+    E_{d(\text{max})} &= 65\,\mu\text{V}
 \end{align*}
 
 \subsubsection*{3. Conclusion: The Ideal Limit}
@@ -25973,10 +25984,10 @@ Applying KCL at the inverting node of the second op-amp:
 \end{align}
 
 Now, substitute the expression for $v_x$ from Equation \eqref{eq:vx} into Equation \eqref{eq:vo_intermediate}:
-\begin{align*}
+\begin{align}
     v_o &= - \left( -(5v_1 + v_2) + 2v_3 + 2v_4 \right) \nonumber \\
     v_o &= 5v_1 + v_2 - 2v_3 - 2v_4 \label{eq:vo_final}
-\end{align*}
+\end{align}
 This is the general expression for the output voltage $v_o$ in terms of the input voltages.
 
 \vspace{0.3cm}
@@ -27562,10 +27573,10 @@ We can analyze the circuit using Nodal Analysis (Kirchhoff's Current Law) at nod
 
 \textbf{Step 1: Determine the voltage at the non-inverting node ($V_b$)}\\
 The non-inverting terminal is connected to a voltage divider formed by the input resistor $R$ and the grounding resistor $R$. Since no current enters the op-amp ($I_+ = 0$), the voltage $V_b$ is:
-\begin{align*}
+\begin{align}
     V_b &= v_1 \left( \frac{R}{R + R} \right) \nonumber \\
     V_b &= v_1 \left( \frac{R}{2R} \right) = \frac{v_1}{2} \label{eq:Vb}
-\end{align*}
+\end{align}
 
 \textbf{Step 2: Apply Virtual Short Concept}\\
 Due to the infinite gain of the ideal op-amp, a virtual short exists between the input terminals. Therefore, the voltage at the inverting node ($V_a$) is equal to $V_b$:
@@ -27584,11 +27595,11 @@ Multiplying the entire equation by $R$ to eliminate the denominators:
 \end{equation}
 Rearranging the terms to isolate the variables:
 \begin{equation}
-    2V_a - v_2 - v_0 = 0 \implies v_0 = 2V_a - v_2 \label{eq:KCL}
+    2V_a - v_2 - v_0 = 0 \implies v_0 = 2V_a - v_2 \label{eq:KCL_difference}
 \end{equation}
 
 \textbf{Step 4: Substitute and Solve for $v_0$}\\
-Substitute the value of $V_a$ from Equation \eqref{eq:Va} into Equation \eqref{eq:KCL}:
+Substitute the value of $V_a$ from Equation \eqref{eq:Va} into Equation \eqref{eq:KCL_difference}:
 \begin{align*}
     v_0 &= 2 \left( \frac{v_1}{2} \right) - v_2 \nonumber \\
     v_0 &= v_1 - v_2
@@ -27683,10 +27694,10 @@ The sum of currents leaving node $V_a$ is zero:
     \frac{V_a - V_2}{R_1} + \frac{V_a - V_o}{R_2} = 0
 \end{equation}
 Rearranging to solve for $V_o$:
-\begin{align*}
+\begin{align}
     \frac{V_o}{R_2} &= V_a \left( \frac{1}{R_1} + \frac{1}{R_2} \right) - \frac{V_2}{R_1} \nonumber \\
     V_o &= V_a \left( 1 + \frac{R_2}{R_1} \right) - V_2 \left( \frac{R_2}{R_1} \right) \label{eq:Vo_intermediate}
-\end{align*}
+\end{align}
 
 \textbf{Step 4: Substitute $V_a$ to get the complete transfer function}\\
 Substitute Equation \eqref{eq:Va_diff} into Equation \eqref{eq:Vo_intermediate}:
@@ -28101,7 +28112,7 @@ The upper threshold occurs when the output is in positive saturation ($V_{out} =
 \end{equation}
 From this relation, we find:
 \begin{equation}
-    22 R_1 + V_{ref} R_2 = 0 \implies V_{ref} R_2 = -22 R_1 \label{eq:1}
+    22 R_1 + V_{ref} R_2 = 0 \implies V_{ref} R_2 = -22 R_1 \label{eq:schmitt_ref}
 \end{equation}
 
 \textbf{Step 2: Lower Threshold Voltage ($V_{LT}$)}\\
@@ -28109,7 +28120,7 @@ The lower threshold occurs when the output is in negative saturation ($V_{out} =
 \begin{equation}
     V_{LT} = \frac{-12 R_1 + V_{ref} R_2}{R_1 + R_2} = -8\text{ V}
 \end{equation}
-Substituting Equation \eqref{eq:1e} into this equation:
+Substituting Equation \eqref{eq:schmitt_ref} into this equation:
 \begin{equation}
     \frac{-12 R_1 - 22 R_1}{R_1 + R_2} = -8
 \end{equation}
@@ -28127,7 +28138,7 @@ Let us choose a standard value for $R_1$:
     \item $R_2 = 3.25 \times 10\text{ k}\Omega = 32.5\text{ k}\Omega$
 \end{itemize}
 
-Now, determine the required reference voltage $V_{ref}$ using Equation \eqref{eq:1e}:
+Now, determine the required reference voltage $V_{ref}$ using Equation \eqref{eq:schmitt_ref}:
 \begin{equation}
     V_{ref} = -22 \left(\frac{R_1}{R_2}\right) = -22 \left(\frac{1}{3.25}\right) = -\frac{88}{13}\text{ V} \approx -6.77\text{ V}
 \end{equation}
@@ -28207,11 +28218,11 @@ The upper threshold voltage occurs when the output is initially sitting high ($V
     V_{UT} = 16 \left( \frac{R_1}{R_1 + R_2} \right) + V_{ref} \left( \frac{R_2}{R_1 + R_2} \right) = 12\text{ V}
 \end{equation}
 Multiplying through by $(R_1 + R_2)$:
-\begin{align*}
+\begin{align}
     16 R_1 + V_{ref} R_2 &= 12 (R_1 + R_2) \nonumber \\
     16 R_1 + V_{ref} R_2 &= 12 R_1 + 12 R_2 \nonumber \\
     4 R_1 + V_{ref} R_2 &= 12 R_2 \label{eq:V_UT_final}
-\end{align*}
+\end{align}
 
 \textbf{Step 2: Formulate Equation for Lower Threshold Voltage ($V_{LT}$)}\\
 The lower threshold voltage occurs when the output is initially sitting low ($V_o = -V_{sat} = -16\text{ V}$):
@@ -28219,11 +28230,11 @@ The lower threshold voltage occurs when the output is initially sitting low ($V_
     V_{LT} = -16 \left( \frac{R_1}{R_1 + R_2} \right) + V_{ref} \left( \frac{R_2}{R_1 + R_2} \right) = 8\text{ V}
 \end{equation}
 Multiplying through by $(R_1 + R_2)$:
-\begin{align*}
+\begin{align}
     -16 R_1 + V_{ref} R_2 &= 8 (R_1 + R_2) \nonumber \\
     -16 R_1 + V_{ref} R_2 &= 8 R_1 + 8 R_2 \nonumber \\
     -24 R_1 + V_{ref} R_2 &= 8 R_2 \label{eq:V_LT_final}
-\end{align*}
+\end{align}
 
 \textbf{Step 3: Solve the System of Linear Equations for Resistor Ratios}\\
 Subtracting Equation \eqref{eq:V_LT_final} from Equation \eqref{eq:V_UT_final} to eliminate the $V_{ref} R_2$ term:
@@ -29545,7 +29556,7 @@ The target sum is $V_0 = -\left(3v' + 2v + 4\cos(10t)\right)$. We set the feedba
 \subsubsection*{4. Overall Connection Diagram}
 
 \begin{center}
-\begin{circuitikz}[american, thick, scale=0.75,x=1.5cm, y=1.3cm,  transform shape]
+\begin{circuitikz}[american, thick, scale=0.70,x=1.5cm, y=1.3cm, transform shape]
     % U1: Summing Amplifier
     \node[op amp] (op1) at (0,0) {};
     \node[above] at (op1.center) {$U_1$};
@@ -30739,7 +30750,7 @@ Because the system is dynamically \textbf{unstable}, any small input (including 
 
 \end{tcolorbox}
 
-\item In the circuit shown, input voltage is $v_{in}(t) = 5 + 3\cos(300\pi t - 30°) + 8\sin(1000\pi t) + 7\sin(1600\pi t + 45°)$ volt. Design the active filter blocks and summing amplifier to obtain output $V_{out}(t) = 7 + 12\sin(1000\pi t)$ volt. Sketch the frequency response and specify the cutoff frequency for each filter. Specify all values of resistors and capacitors/inductors.
+\item In the circuit shown, input voltage is $v_{in}(t) = 5 + 3\cos(300\pi t - 30^\circ) + 8\sin(1000\pi t) + 7\sin(1600\pi t + 45^\circ)$ volt. Design the active filter blocks and summing amplifier to obtain output $V_{out}(t) = 7 + 12\sin(1000\pi t)$ volt. Sketch the frequency response and specify the cutoff frequency for each filter. Specify all values of resistors and capacitors/inductors.
 \begin{center}
   \begin{tikzpicture}[thick,
         % Style definitions
@@ -31800,10 +31811,10 @@ By the virtual short concept, $V_1 = V_2$. Substituting $V_1 = V_2$ into Eq. (\r
     V_{\text{out}} = 2V_2 - V_{\text{in}} \label{eq:vout_v2}
 \end{align}
 Now, substitute Eq. (\ref{eq:vout_v2}) into Eq. (\ref{eq:kcl2}):
-\begin{align*}
+\begin{align}
     \frac{(2V_2 - V_{\text{in}}) - V_2}{R_3} &= V_2 \left( \frac{1}{R_4} + \frac{1}{R_L} \right) \notag \\
     \frac{V_2 - V_{\text{in}}}{R_3} &= V_2 \left( \frac{1}{R_4} + \frac{1}{R_L} \right) \label{eq:v2_sub}
-\end{align*}
+\end{align}
 We are given $V_{\text{in}} = -5\text{ V}$, $R_3 = 1\text{ k}\Omega$, $R_4 = 1\text{ k}\Omega$, and $R_L = 100\ \Omega = 0.1\text{ k}\Omega$. Substituting these into Eq. (\ref{eq:v2_sub}):
 \begin{align*}
     \frac{V_2 - (-5)}{1\text{ k}\Omega} &= V_2 \left( \frac{1}{1\text{ k}\Omega} + \frac{1}{0.1\text{ k}\Omega} \right) \notag \\
@@ -32636,10 +32647,10 @@ For an inverting integrator consisting of an input resistor $R$ and a feedback c
     \frac{v_I(t) - v^-}{R} + C \frac{d(v_O(t) - v^-)}{dt} &= 0
 \end{align*}
 Applying the virtual ground principle ($v^- = 0$):
-\begin{align*}
+\begin{align}
     \frac{v_I(t)}{R} + C \frac{dv_O(t)}{dt} &= 0 \nonumber \\
     \frac{dv_O(t)}{dt} &= -\frac{1}{RC} v_I(t) \label{eq:diff}
-\end{align*}
+\end{align}
 Integrating both sides with respect to time $t$, and assuming the capacitor is initially uncharged ($v_O(0) = 0$):
 \begin{equation}
     v_O(t) = -\frac{1}{RC} \int_0^t v_I(\tau) \, d\tau
@@ -32838,11 +32849,11 @@ The current flowing through the input resistor $R_1$ is driven by the potential 
 \textbf{Step 2: Determine the voltage $v_X$ at the T-junction} \\
 Because the op-amp draws no current ($i_{in}^- = 0$), the entirety of the input current $i_I$ must flow through resistor $R_2$. Thus, $i_2 = i_I$. 
 The voltage at the T-junction, $v_X$, is found by analyzing the voltage drop across $R_2$:
-\begin{align*}
+\begin{align}
     v^- - v_X &= i_I R_2 \nonumber \\
     0 - v_X &= i_I R_2 \nonumber \\
-    v_X &= -i_I R_2 = -v_I \frac{R_2}{R_1} \label{eq:vx}
-\end{align*}
+    v_X &= -i_I R_2 = -v_I \frac{R_2}{R_1} \label{eq:vx_tnetwork}
+\end{align}
 
 \textbf{Step 3: Apply Kirchhoff's Current Law (KCL) at node $v_X$} \\
 At the T-junction ($v_X$), the current $i_2$ entering the node splits into $i_4$ (flowing down through $R_4$) and $i_3$ (flowing right through $R_3$):
@@ -32858,11 +32869,11 @@ Rearranging to solve for the feedback current $i_3$:
 
 \textbf{Step 4: Determine the output voltage $v_O$} \\
 The output voltage is the potential at node $v_X$ minus the voltage drop across $R_3$:
-\begin{align*}
+\begin{align}
     v_O &= v_X - i_3 R_3 \nonumber \\
     v_O &= -i_I R_2 - i_I \left( 1 + \frac{R_2}{R_4} \right) R_3 \nonumber \\
     v_O &= -i_I \left( R_2 + R_3 + \frac{R_2 R_3}{R_4} \right) \label{eq:vo_ii}
-\end{align*}
+\end{align}
 Substituting Equation \eqref{eq:i1} ($i_I = v_I / R_1$) into Equation \eqref{eq:vo_ii}:
 \begin{equation}
     v_O = -\frac{v_I}{R_1} \left( R_2 + R_3 + \frac{R_2 R_3}{R_4} \right)
@@ -33006,9 +33017,9 @@ To derive the transfer function and corresponding differential equations, we ass
 \vspace{0.25cm}
 \textbf{Inverting Terminal Analysis ($v^-$):} \\
 Applying the voltage divider rule to the non-inverting terminal network (or applying KCL at node $v^-$):
-\begin{align*}
-    v^- &= V_{out} \left( \frac{R_1}{R_1 + R_2} \right) \label{eq:v_minus}
-\end{align*}
+\begin{align}
+    v^- &= V_{out} \left( \frac{R_1}{R_1 + R_2} \right) \label{eq:v_minus_feedback}
+\end{align}
 By the virtual short principle, $v^+ = v^-$. Therefore:
 \begin{equation}
     v^+ = V_{out} \left( \frac{R_1}{R_1 + R_2} \right) = \frac{V_{out}}{A_{v,ni}} \label{eq:v_plus}
@@ -33106,7 +33117,7 @@ This implies that designing an amplifier with a higher closed-loop gain will ine
 \textbf{B. Slew Rate (SR)}
 The slew rate is the maximum rate at which the op-amp's output voltage can change in response to a step input. It is caused by the finite current available to charge and discharge the internal compensation capacitor of the op-amp.
 \begin{equation}
-    \text{SR} = \left. \frac{dv_{out}}{dt} \right|_{\text{max}} \quad \text{(typically measured in V/\mu s)}
+    \text{SR} = \left. \frac{dv_{out}}{dt} \right|_{\text{max}} \quad \text{(typically measured in V/}\mu\text{s)}
 \end{equation}
 Slew rate limiting causes high-frequency, large-amplitude sine waves to distort into triangle waves. The maximum frequency $f_{max}$ at which an un-distorted sine wave of peak amplitude $V_p$ can be obtained is the \textit{full-power bandwidth}:
 \begin{equation}
@@ -33532,12 +33543,12 @@ where:
 \textbf{2. Derivation of Desensitivity}
 
 To find how a percentage change in the open-loop gain ($dA/A$) affects the percentage change in the closed-loop gain ($dA_f/A_f$), we differentiate Equation \eqref{eq:Af} with respect to $A$:
-\begin{align*}
+\begin{align}
     \frac{dA_f}{dA} &= \frac{d}{dA} \left( \frac{A}{1 + A\beta} \right) \nonumber \\
     &= \frac{1 \cdot (1 + A\beta) - A \cdot (\beta)}{(1 + A\beta)^2} \nonumber \\
     &= \frac{1 + A\beta - A\beta}{(1 + A\beta)^2} \nonumber \\
-    \frac{dA_f}{dA} &= \frac{1}{(1 + A\beta)^2} \label{eq:diff}
-\end{align*}
+    \frac{dA_f}{dA} &= \frac{1}{(1 + A\beta)^2} \label{eq:gain_diff}
+\end{align}
 
 We can express the differential change in closed-loop gain $dA_f$ as:
 \begin{equation}
@@ -33549,11 +33560,11 @@ To find the fractional change (or percentage change), we divide both sides by $A
     \frac{dA_f}{A_f} &= \frac{\frac{dA}{(1 + A\beta)^2}}{A_f} \nonumber
 \end{align*}
 Substitute $A_f = \frac{A}{1 + A\beta}$ into the denominator on the right side:
-\begin{align*}
+\begin{align}
     \frac{dA_f}{A_f} &= \frac{\frac{dA}{(1 + A\beta)^2}}{\frac{A}{1 + A\beta}} \nonumber \\
     \frac{dA_f}{A_f} &= \frac{dA}{(1 + A\beta)^2} \cdot \frac{1 + A\beta}{A} \nonumber \\
     \frac{dA_f}{A_f} &= \frac{1}{(1 + A\beta)} \left( \frac{dA}{A} \right) \label{eq:sensitivity_final}
-\end{align*}
+\end{align}
 
 \vspace{0.25cm}
 \textbf{Sensitivity ($S_{A}^{A_f}$):} This is defined as the ratio of the fractional change in $A_f$ to the fractional change in $A$:
@@ -33954,12 +33965,12 @@ The feedback factor $\beta$ provided to the non-inverting terminal is:
     \beta = \frac{V_+}{V_0} = \frac{Z_2}{Z_1 + Z_2} = \frac{1}{1 + \frac{Z_1}{Z_2}}
 \end{equation}
 Calculating the ratio $\frac{Z_1}{Z_2}$:
-\begin{align*}
+\begin{align}
     \frac{Z_1}{Z_2} &= \left( \frac{1 + j\omega R_1 C_1}{j\omega C_1} \right) \left( \frac{1 + j\omega R_2 C_2}{R_2} \right) \nonumber \\
     &= \frac{1 - \omega^2 R_1 R_2 C_1 C_2 + j\omega(R_1 C_1 + R_2 C_2)}{j\omega R_2 C_1} \nonumber \\
     &= \frac{R_1 C_1 + R_2 C_2}{R_2 C_1} + \frac{1 - \omega^2 R_1 R_2 C_1 C_2}{j\omega R_2 C_1} \nonumber \\
-    &= \frac{R_1}{R_2} + \frac{C_2}{C_1} + j\left( \omega R_1 C_2 - \frac{1}{\omega R_2 C_1} \right) \label{eq:ratio}
-\end{align*}
+    &= \frac{R_1}{R_2} + \frac{C_2}{C_1} + j\left( \omega R_1 C_2 - \frac{1}{\omega R_2 C_1} \right) \label{eq:wien_ratio}
+\end{align}
 To satisfy the Barkhausen phase condition, the imaginary part must be zero:
 \begin{align*}
     \omega R_1 C_2 - \frac{1}{\omega R_2 C_1} &= 0 \nonumber \\
@@ -33974,7 +33985,7 @@ Thus, the oscillation frequency $f_0$ is:
 \vspace{0.5cm}
 \textbf{(c) Voltage Gain $A_V$ Requirement}
 
-At the oscillation frequency $\omega_0$, the imaginary part of Equation \eqref{eq:ratio} is zero. Substituting this back into the expression for $\beta$ gives:
+At the oscillation frequency $\omega_0$, the imaginary part of Equation \eqref{eq:wien_ratio} is zero. Substituting this back into the expression for $\beta$ gives:
 \begin{equation}
     \beta = \frac{1}{1 + \frac{R_1}{R_2} + \frac{C_2}{C_1}}
 \end{equation}
@@ -34507,11 +34518,11 @@ From Equation \eqref{eq:mesh3}, we express $I_2$ in terms of $I_3$:
 \end{equation}
 
 Substitute Equation \eqref{eq:I2} into Equation \eqref{eq:mesh2} to find $I_1$ in terms of $I_3$:
-\begin{align*}
+\begin{align}
     I_1 R &= I_3 \left( \frac{2R + Z}{R} \right) (2R + Z) - I_3 R \nonumber \\
     I_1 R &= I_3 \left[ \frac{(2R + Z)^2}{R} - R \right] = I_3 \left[ \frac{4R^2 + 4RZ + Z^2 - R^2}{R} \right] \nonumber \\
     I_1 &= I_3 \left[ \frac{3R^2 + 4RZ + Z^2}{R^2} \right] \label{eq:I1}
-\end{align*}
+\end{align}
 
 Now, substitute $I_1$ and $I_2$ into Equation \eqref{eq:mesh1}:
 \begin{align*}
@@ -35179,12 +35190,12 @@ To facilitate the derivation, we redraw the circuit clearly labeling the interme
 Assuming an ideal op-amp, the current entering the non-inverting terminal is zero. Thus, the current $I_{R2}$ flowing through $R_2$ is equal to the current $I_{L2}$ flowing through the vertical inductor $L$. 
 
 Applying Ohm's law and AC impedances ($Z_L = sL$) at node $V_+$:
-\begin{align*}
+\begin{align}
     I_{R2} &= I_{L2} \nonumber \\
     \frac{V_x - V_+}{R_2} &= \frac{V_+}{sL} \nonumber \\
     V_x - V_+ &= V_+ \frac{R_2}{sL} \nonumber \\
     V_x &= V_+ \left( 1 + \frac{R_2}{sL} \right) \label{eq:Vx}
-\end{align*}
+\end{align}
 
 Next, applying Kirchhoff's Current Law (KCL) at node $V_x$:
 \begin{align*}
@@ -35667,10 +35678,10 @@ The sum of currents leaving the gate node must be zero:
     j\omega C_1 v_{gs} + \frac{v_{gs}}{j\omega L} - \frac{v_d}{j\omega L} &= 0
 \end{align*}
 Multiplying by $j\omega L$ yields:
-\begin{align*}
+\begin{align}
     -\omega^2 L C_1 v_{gs} + v_{gs} - v_d &= 0 \nonumber \\
     v_d &= v_{gs} (1 - \omega^2 L C_1) \label{eq:vd}
-\end{align*}
+\end{align}
 
 \textbf{Step 3.2: KCL at the Drain Node (D)} \\
 The sum of currents leaving the drain node must be zero:
@@ -36028,12 +36039,12 @@ During the quasi-stable state, the capacitor discharges from $+V_D$ towards $-V_
 \end{equation}
 
 Substituting the known values for the quasi-stable state ($\tau = RC$):
-\begin{align*}
+\begin{align}
     v_{initial} &= V_D \nonumber \\
     v_{final} &= -V_{sat} \nonumber \\
     v_c(t) &= -V_{sat} + \left(V_D - (-V_{sat})\right) e^{-t/RC} \nonumber \\
     v_c(t) &= -V_{sat} + \left(V_D + V_{sat}\right) e^{-t/RC} \label{eq:vct}
-\end{align*}
+\end{align}
 
 The quasi-stable state terminates at $t = T$ when the capacitor voltage reaches the threshold set by the positive feedback network, which is $-\beta V_{sat}$. Substituting $t = T$ and $v_c(T) = -\beta V_{sat}$ into Equation \eqref{eq:vct}:
 \begin{align*}
@@ -36465,14 +36476,14 @@ Substituting these values into the equation gives:
 \end{equation}
 
 The pulse ends at time $t = T$ when the capacitor voltage reaches the upper threshold voltage of the 555 timer, which is $\frac{2}{3}V_{CC}$. Substituting these conditions:
-\begin{align*}
+\begin{align}
     v_c(T) &= \frac{2}{3}V_{CC} \nonumber \\
     \frac{2}{3}V_{CC} &= V_{CC} \left( 1 - e^{-T/RC} \right) \nonumber \\
     \frac{2}{3} &= 1 - e^{-T/RC} \nonumber \\
     e^{-T/RC} &= \frac{1}{3} \nonumber \\
     -\frac{T}{RC} &= \ln\left(\frac{1}{3}\right) = -\ln(3) \nonumber \\
     T &= RC \ln(3) \approx \mathbf{1.1 RC} \label{eq:pulsewidth}
-\end{align*}
+\end{align}
 
  
 \vspace{1em}
@@ -37057,11 +37068,11 @@ The standard design equations for the 555 astable multivibrator are:
 \end{align}
 
 Dividing Equation \eqref{eq:thigh} by Equation \eqref{eq:tlow}:
-\begin{align*}
+\begin{align}
     \frac{t_{high}}{t_{low}} &= \frac{R_A + R_B}{R_B} \nonumber \\
     \frac{7.5\text{ ms}}{2.5\text{ ms}} &= \frac{R_A}{R_B} + 1 \nonumber \\
     3 &= \frac{R_A}{R_B} + 1 \implies \frac{R_A}{R_B} = 2 \implies \mathbf{R_A = 2R_B} \label{eq:rel}
-\end{align*}
+\end{align}
 
 \textbf{Step 3: Component Selection}
 Let us select a standard timing capacitor value. For a $10\text{ ms}$ period ($100\text{ Hz}$ frequency), a $1\ \mu\text{F}$ capacitor is appropriate.
@@ -37236,13 +37247,13 @@ The voltage across the charging capacitor is governed by the step-response equat
 \end{equation}
 
 The output pulse ends at time $t = T$ when the capacitor voltage reaches $\frac{2}{3}V_{CC}$. Substituting these conditions:
-\begin{align*}
+\begin{align}
     \frac{2}{3}V_{CC} &= V_{CC} \left( 1 - e^{-T/RC} \right) \nonumber \\
     \frac{2}{3} &= 1 - e^{-T/RC} \nonumber \\
     e^{-T/RC} &= \frac{1}{3} \nonumber \\
     -\frac{T}{RC} &= \ln\left(\frac{1}{3}\right) = -\ln(3) \nonumber \\
     T &= \ln(3) \cdot R \cdot C \approx 1.1 R C \label{eq:monostable_T}
-\end{align*}
+\end{align}
 
  
 \vspace{1em}
@@ -37422,16 +37433,16 @@ The duty cycle $D$ determines the HIGH time ($t_{high}$) and LOW time ($t_{low}$
 \textbf{Step 2: Establish Resistor Relationships}
 The standard design equations for the 555 astable multivibrator are:
 \begin{align}
-    t_{high} &= \ln(2) \cdot (R_A + R_B) \cdot C \approx 0.693 (R_A + R_B) C \label{eq:thigh} \\
-    t_{low} &= \ln(2) \cdot R_B \cdot C \approx 0.693 R_B C \label{eq:tlow}
+    t_{high} &= \ln(2) \cdot (R_A + R_B) \cdot C \approx 0.693 (R_A + R_B) C \label{eq:thigh_second} \\
+    t_{low} &= \ln(2) \cdot R_B \cdot C \approx 0.693 R_B C \label{eq:tlow_second}
 \end{align}
 
-Dividing Equation \eqref{eq:thigh} by Equation \eqref{eq:tlow}:
-\begin{align*}
+Dividing Equation \eqref{eq:thigh_second} by Equation \eqref{eq:tlow_second}:
+\begin{align}
     \frac{t_{high}}{t_{low}} &= \frac{R_A + R_B}{R_B} \nonumber \\
     \frac{7.5\text{ ms}}{2.5\text{ ms}} &= \frac{R_A}{R_B} + 1 \nonumber \\
-    3 &= \frac{R_A}{R_B} + 1 \implies \frac{R_A}{R_B} = 2 \implies \mathbf{R_A = 2R_B} \label{eq:rel}
-\end{align*}
+    3 &= \frac{R_A}{R_B} + 1 \implies \frac{R_A}{R_B} = 2 \implies \mathbf{R_A = 2R_B} \label{eq:rel_second}
+\end{align}
 
 \textbf{Step 3: Component Selection}
 Let us select a standard, commercially available timing capacitor value. For a $10\text{ ms}$ period, a $1\ \mu\text{F}$ capacitor is highly appropriate to keep resistor values in the optimal $1\text{ k}\Omega$ to $100\text{ k}\Omega$ range.
@@ -37439,13 +37450,13 @@ Let us select a standard, commercially available timing capacitor value. For a $
     \mathbf{C = 1\ \mu\text{F} = 1 \times 10^{-6}\text{ F}}
 \end{equation}
 
-Substitute $C$ and $t_{low}$ into Equation \eqref{eq:tlow} to solve for $R_B$:
+Substitute $C$ and $t_{low}$ into Equation \eqref{eq:tlow_second} to solve for $R_B$:
 \begin{align*}
     2.5 \times 10^{-3} &= 0.693 \cdot R_B \cdot (1 \times 10^{-6}) \nonumber \\
     R_B &= \frac{2.5 \times 10^{-3}}{0.693 \times 10^{-6}} \approx 3607.5\ \Omega \approx \mathbf{3.6\text{ k}\Omega}
 \end{align*}
 
-Using the relationship established in Equation \eqref{eq:rel}, calculate $R_A$:
+Using the relationship established in Equation \eqref{eq:rel_second}, calculate $R_A$:
 \begin{equation}
     R_A = 2 R_B = 2 \times 3607.5\ \Omega \approx 7215\ \Omega \approx \mathbf{7.2\text{ k}\Omega}
 \end{equation}
@@ -38202,10 +38213,10 @@ The output of the ideal integrator is given by:
     V_{tri}(t) = -\frac{1}{R_1 C} \int V_{sq} dt
 \end{equation}
 Assume $V_{sq} = -V_{sat}$. The integrator output ramps linearly upwards from $V_{TL}$ to $V_{TH}$. The time taken for this upward ramp is exactly half the time period ($T/2$).
-\begin{align*}
+\begin{align}
     \Delta V_{tri} &= -\frac{1}{R_1 C} (-V_{sat}) \left(\frac{T}{2}\right) \nonumber \\
     V_{TH} - V_{TL} &= \frac{V_{sat}}{R_1 C} \left(\frac{T}{2}\right) \label{eq:sweep}
-\end{align*}
+\end{align}
 
 \textbf{Step 3.3: Final Frequency Calculation} \\
 Equating \eqref{eq:vpp} and \eqref{eq:sweep}:
@@ -38521,7 +38532,7 @@ Since $V_{sq}$ can be either $+V_{sat}$ or $-V_{sat}$, we get two threshold volt
 \end{align*}
 The peak-to-peak amplitude of the triangular wave is:
 \begin{equation}
-    V_{PP} = V_{TH} - V_{TL} = 2 V_{sat} \left( \frac{R_1}{R_2} \right) \label{eq:vpp}
+    V_{PP} = V_{TH} - V_{TL} = 2 V_{sat} \left( \frac{R_1}{R_2} \right) \label{eq:vpp_second}
 \end{equation}
 
 \textbf{Step 3.2: Integrator Output Equation} \\
@@ -38530,12 +38541,12 @@ The output of the inverting integrator is:
     V_{tri}(t) = -\frac{1}{RC} \int_{0}^{t} V_{sq} dt + V_{tri}(0)
 \end{equation}
 During the time interval $0 \leq t \leq T/2$, let $V_{sq} = -V_{sat}$. The output ramps linearly from $V_{TL}$ to $V_{TH}$. The change in voltage is:
-\begin{align*}
-    \Delta V_{tri} &= -\frac{1}{RC} (-V_{sat}) \left(\frac{T}{2}\right) = \frac{V_{sat} T}{2RC} \label{eq:sweep}
-\end{align*}
+\begin{align}
+    \Delta V_{tri} &= -\frac{1}{RC} (-V_{sat}) \left(\frac{T}{2}\right) = \frac{V_{sat} T}{2RC} \label{eq:sweep_second}
+\end{align}
 
 \textbf{Step 3.3: Frequency of Oscillation} \\
-Equating the peak-to-peak voltage from \eqref{eq:vpp} with the voltage sweep from \eqref{eq:sweep}:
+Equating the peak-to-peak voltage from \eqref{eq:vpp_second} with the voltage sweep from \eqref{eq:sweep_second}:
 \begin{align*}
     2 V_{sat} \left( \frac{R_1}{R_2} \right) &= \frac{V_{sat} T}{2RC} \nonumber \\
     T &= \frac{4 R_1 R C}{R_2}
@@ -41167,7 +41178,7 @@ We derive the Boolean expressions for the J and K inputs using the tables above:
     \coordinate (FFA) at (0,0);
     \draw[fill=gray!5] (-1, -1.75) rectangle (1, 1.75);
     \node[font=\sffamily\bfseries] at (0, 1.1) {FF A};
-    \node[font=\sffamily\small\itshape, text=gray!80!black] at (0, 0.7) {(MSB)};
+    \node[font=\sffamily\small\slshape, text=gray!80!black] at (0, 0.7) {(MSB)};
     
     % FF A Terminals
     \node[right, font=\sffamily\footnotesize] at (-1, 1.0) {$J_A$};
@@ -41184,7 +41195,7 @@ We derive the Boolean expressions for the J and K inputs using the tables above:
     \coordinate (FFB) at (5,0);
     \draw[fill=gray!5] (4, -1.75) rectangle (6, 1.75);
     \node[font=\sffamily\bfseries] at (5, 1.1) {FF B};
-    \node[font=\sffamily\small\itshape, text=gray!80!black] at (5, 0.7) {(LSB)};
+    \node[font=\sffamily\small\slshape, text=gray!80!black] at (5, 0.7) {(LSB)};
     
     % FF B Terminals
     \node[right, font=\sffamily\footnotesize] at (4, 1.0) {$J_B$};
@@ -41433,7 +41444,7 @@ To force $Q_{next} = 0$, we require $T = Q_{current}$. Therefore, a built-in syn
 \textbf{4. Circuit Implementation}
 
 \begin{center}
-\begin{circuitikz}[thick, scale=0.85, transform shape, font=\sffamily]
+\begin{circuitikz}[thick, scale=0.78, transform shape, font=\sffamily]
     
     % ==========================================
     % Global Power, Clock and Reset Rails
@@ -42238,7 +42249,7 @@ The detailed schematic below shows the 4-bit register using four D flip-flops an
 
 \vspace{1.5em}
 \begin{center}
-\begin{tikzpicture}[scale=0.7, transform shape, thick, x=1.3cm]
+\begin{tikzpicture}[scale=0.64, transform shape, thick, x=1.3cm]
     
     % Global Control Rails
     \draw (-1.5, 6.0) node[left]{\textbf{$S_1$}} -- (21.5, 6.0);
