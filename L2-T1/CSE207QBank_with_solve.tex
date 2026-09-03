@@ -165,13 +165,12 @@
 {\footnotesize\textcolor{cG}{\textit{\textbf{[Visual:} #1\textbf{]}}}}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
-\newcommand{\subtopic}[3]{%
+\newcounter{subtopicbm}
+\newcommand{\subtopic}[2]{%
+  \stepcounter{subtopicbm}%
+  \pdfbookmark[2]{#2}{subtopicbm.\thesubtopicbm}%
   \vspace{10pt}
-  \phantomsection
-  \label{#3}%
-  \pdfbookmark[2]{#2}{#3}%
-  \noindent
-  \begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
+  \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
     \small\bfseries\textcolor{#1}{#2}
   \end{tcolorbox}
@@ -364,13 +363,12 @@
 \secdivider{Part I}{Graph Algorithms}{cA}{cA}{Shortest Paths, Minimum Spanning Trees, Maximum Flow, Maximum Bipartite Matching, Stable Matching (Gale-Shapley), Graph Traversal \& Properties}
 
 %% ── S1: Graph Algorithms ──────────────────────────────────────────────
-\section*{S1 --- Graph Algorithms}
-\pdfbookmark[1]{S1: Graph Algorithms}{sec:S1}
+\section{S1 --- Graph Algorithms}
 \label{sec:S1}
 \markboth{S1 --- Graph Algorithms}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Shortest Paths}{sub:s1-shortestpaths}
+\subtopic{cA}{Shortest Paths}\label{sub:s1-shortestpaths}
 
 \begin{enumerate}
 
@@ -4342,7 +4340,7 @@ Dijkstra (G)
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Minimum Spanning Trees}{sub:s1-mst}
+\subtopic{cA}{Minimum Spanning Trees}\label{sub:s1-mst}
 
 \begin{enumerate}
 
@@ -6216,7 +6214,7 @@ Dijkstra (G)
 
     \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,
         boxrule=0.8pt,arc=5pt,
-      title={\textbf{Detailed Answer: Kruskal's \& Prim's Algorithm}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+      title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
 
       %% Global TikZ Styles
       \tikzset{
@@ -6249,11 +6247,11 @@ Dijkstra (G)
         \draw[edge] (f) -- node[lbl, right]       {8} (e);
       }
 
-      \section*{Part 1: Kruskal's Algorithm}
+      \textbf{Part 1: Kruskal's Algorithm}
       \textbf{Step 1: Sort edges by weight.} When weights are equal, sort alphabetically (e.g., $ac$ before $ad$).\\
       Sorted list: $ce(1), ab(2), ac(3), ad(3), be(3), bc(4), cd(5), df(7), ef(8), fg(9)$.
 
-      \section*{Part 1: Kruskal's Algorithm Step-by-Step}
+      \textbf{Part 1: Kruskal's Algorithm Step-by-Step}
       \textbf{Step 1: Sort edges by weight.} When weights are equal, sort alphabetically (e.g., $ac$ before $ad$).\\
       Sorted list: $ce(1), ab(2), ac(3), ad(3), be(3), bc(4), cd(5), df(7), ef(8), fg(9)$.
 
@@ -6355,7 +6353,7 @@ Dijkstra (G)
 
       \vspace{0.5cm}
 
-      \section*{Part 2: Prim's Algorithm (Using Key Values)}
+      \textbf{Part 2: Prim's Algorithm (Using Key Values)}
       Start at vertex \textbf{a}. We maintain a \textbf{Key} value for each vertex (initialized to $\infty$, meaning unreachable) and its \textbf{Parent}. In each step, we extract the unvisited vertex with the minimum key. Ties are broken alphabetically.
 
       \vspace{0.2cm}
@@ -6384,7 +6382,7 @@ Dijkstra (G)
       (Blue shaded nodes are in the MST. Red values indicate the current minimum cost to connect that unvisited node).
 
       \vspace{0.5cm}
-      \begin{center}
+\begin{center}
         \tikzset{
           stepnode/.style={circle, draw=black!70, minimum size=0.8cm, font=\bfseries, fill=white},
           visited/.style={fill=blue!15, draw=blue, thick},
@@ -6408,137 +6406,146 @@ Dijkstra (G)
           \draw[baseedge] (f) -- node[baselbl] {8} (e);
         }
 
-        %% Step 0
-        \begin{tikzpicture}[scale=0.8, transform shape]
-          \node[stepnode, visited] (a) at (0, 2) {a};
-          \node[stepnode, label={[lbl]left:2}] (b) at (0, -3) {b};
-          \node[stepnode, label={[lbl]below right:3}] (c) at (3, -0.5) {c};
-          \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
-          \node[stepnode, label={[lbl]below right:$\infty$}] (e) at (7, -3) {e};
-          \node[stepnode, label={[lbl]right:$\infty$}] (f) at (7, -0.5) {f};
-          \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
+        % --- Row 1 (Step 0 & Step 1) ---
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8, transform shape]
+              \node[stepnode, visited] (a) at (0, 2) {a};
+              \node[stepnode, label={[lbl]left:2}] (b) at (0, -3) {b};
+              \node[stepnode, label={[lbl]below right:3}] (c) at (3, -0.5) {c};
+              \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
+              \node[stepnode, label={[lbl]below right:$\infty$}] (e) at (7, -3) {e};
+              \node[stepnode, label={[lbl]right:$\infty$}] (f) at (7, -0.5) {f};
+              \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
+    
+              \drawBaseEdges
+              \node[draw=none, fill=none, font=\bfseries, blue, left=0.6cm of a] {Root $\rightarrow$};
+              \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 0: Add a};
+            \end{tikzpicture}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8, transform shape]
+              \node[stepnode, visited] (a) at (0, 2) {a};
+              \node[stepnode, visited] (b) at (0, -3) {b};
+              \node[stepnode, label={[lbl]below right:3}] (c) at (3, -0.5) {c};
+              \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
+              \node[stepnode, label={[lbl]below right:3}] (e) at (7, -3) {e};
+              \node[stepnode, label={[lbl]right:$\infty$}] (f) at (7, -0.5) {f};
+              \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
+    
+              \drawBaseEdges
+              \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
+              \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 1: Add b};
+            \end{tikzpicture}
+        \end{minipage}
+        
+        \vspace{0.8cm} % Spacing between rows
 
-          \drawBaseEdges
-          \node[draw=none, fill=none, font=\bfseries, blue, left=0.6cm of a] {Root $\rightarrow$};
-          \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 0: Add a};
-        \end{tikzpicture}
+        % --- Row 2 (Step 2 & Step 3) ---
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8, transform shape]
+              \node[stepnode, visited] (a) at (0, 2) {a};
+              \node[stepnode, visited] (b) at (0, -3) {b};
+              \node[stepnode, visited] (c) at (3, -0.5) {c};
+              \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
+              \node[stepnode, label={[lbl]below right:1}] (e) at (7, -3) {e};
+              \node[stepnode, label={[lbl]right:$\infty$}] (f) at (7, -0.5) {f};
+              \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
+    
+              \drawBaseEdges
+              \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
+              \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
+              \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 2: Add c};
+            \end{tikzpicture}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8, transform shape]
+              \node[stepnode, visited] (a) at (0, 2) {a};
+              \node[stepnode, visited] (b) at (0, -3) {b};
+              \node[stepnode, visited] (c) at (3, -0.5) {c};
+              \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
+              \node[stepnode, visited] (e) at (7, -3) {e};
+              \node[stepnode, label={[lbl]right:8}] (f) at (7, -0.5) {f};
+              \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
+    
+              \drawBaseEdges
+              \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
+              \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
+              \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
+              \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 3: Add e};
+            \end{tikzpicture}
+        \end{minipage}
 
-        \vspace{0.4cm}
+        \vspace{0.8cm} % Spacing between rows
 
-        %% Step 1
-        \begin{tikzpicture}[scale=0.8, transform shape]
-          \node[stepnode, visited] (a) at (0, 2) {a};
-          \node[stepnode, visited] (b) at (0, -3) {b};
-          \node[stepnode, label={[lbl]below right:3}] (c) at (3, -0.5) {c};
-          \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
-          \node[stepnode, label={[lbl]below right:3}] (e) at (7, -3) {e};
-          \node[stepnode, label={[lbl]right:$\infty$}] (f) at (7, -0.5) {f};
-          \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
+        % --- Row 3 (Step 4 & Step 5) ---
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8, transform shape]
+              \node[stepnode, visited] (a) at (0, 2) {a};
+              \node[stepnode, visited] (b) at (0, -3) {b};
+              \node[stepnode, visited] (c) at (3, -0.5) {c};
+              \node[stepnode, visited] (d) at (3, 2) {d};
+              \node[stepnode, visited] (e) at (7, -3) {e};
+              \node[stepnode, label={[lbl]right:7}] (f) at (7, -0.5) {f};
+              \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
+    
+              \drawBaseEdges
+              \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
+              \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
+              \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
+              \draw[mstedge] (a) -- (d) node[midway, above, edgelbl]{3};
+              \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 4: Add d};
+            \end{tikzpicture}
+        \end{minipage}\hfill
+        \begin{minipage}{0.48\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8, transform shape]
+              \node[stepnode, visited] (a) at (0, 2) {a};
+              \node[stepnode, visited] (b) at (0, -3) {b};
+              \node[stepnode, visited] (c) at (3, -0.5) {c};
+              \node[stepnode, visited] (d) at (3, 2) {d};
+              \node[stepnode, visited] (e) at (7, -3) {e};
+              \node[stepnode, visited] (f) at (7, -0.5) {f};
+              \node[stepnode, label={[lbl]above right:9}] (g) at (7, 2) {g};
+    
+              \drawBaseEdges
+              \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
+              \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
+              \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
+              \draw[mstedge] (a) -- (d) node[midway, above, edgelbl]{3};
+              \draw[mstedge] (d) -- (f) node[midway, above right, edgelbl]{7};
+              \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 5: Add f};
+            \end{tikzpicture}
+        \end{minipage}
 
-          \drawBaseEdges
-          \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
-          \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 1: Add b};
-        \end{tikzpicture}
+        \vspace{0.8cm} % Spacing before the last single step
 
-        \vspace{0.4cm}
-
-        %% Step 2
-        \begin{tikzpicture}[scale=0.8, transform shape]
-          \node[stepnode, visited] (a) at (0, 2) {a};
-          \node[stepnode, visited] (b) at (0, -3) {b};
-          \node[stepnode, visited] (c) at (3, -0.5) {c};
-          \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
-          \node[stepnode, label={[lbl]below right:1}] (e) at (7, -3) {e};
-          \node[stepnode, label={[lbl]right:$\infty$}] (f) at (7, -0.5) {f};
-          \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
-
-          \drawBaseEdges
-          \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
-          \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
-          \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 2: Add c};
-        \end{tikzpicture}
-
-        \vspace{0.4cm}
-
-        %% Step 3
-        \begin{tikzpicture}[scale=0.8, transform shape]
-          \node[stepnode, visited] (a) at (0, 2) {a};
-          \node[stepnode, visited] (b) at (0, -3) {b};
-          \node[stepnode, visited] (c) at (3, -0.5) {c};
-          \node[stepnode, label={[lbl]above right:3}] (d) at (3, 2) {d};
-          \node[stepnode, visited] (e) at (7, -3) {e};
-          \node[stepnode, label={[lbl]right:8}] (f) at (7, -0.5) {f};
-          \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
-
-          \drawBaseEdges
-          \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
-          \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
-          \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
-          \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 3: Add e};
-        \end{tikzpicture}
-
-        \vspace{0.4cm}
-
-        %% Step 4
-        \begin{tikzpicture}[scale=0.8, transform shape]
-          \node[stepnode, visited] (a) at (0, 2) {a};
-          \node[stepnode, visited] (b) at (0, -3) {b};
-          \node[stepnode, visited] (c) at (3, -0.5) {c};
-          \node[stepnode, visited] (d) at (3, 2) {d};
-          \node[stepnode, visited] (e) at (7, -3) {e};
-          \node[stepnode, label={[lbl]right:7}] (f) at (7, -0.5) {f};
-          \node[stepnode, label={[lbl]above right:$\infty$}] (g) at (7, 2) {g};
-
-          \drawBaseEdges
-          \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
-          \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
-          \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
-          \draw[mstedge] (a) -- (d) node[midway, above, edgelbl]{3};
-          \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 4: Add d};
-        \end{tikzpicture}
-
-        \vspace{0.4cm}
-
-        %% Step 5
-        \begin{tikzpicture}[scale=0.8, transform shape]
-          \node[stepnode, visited] (a) at (0, 2) {a};
-          \node[stepnode, visited] (b) at (0, -3) {b};
-          \node[stepnode, visited] (c) at (3, -0.5) {c};
-          \node[stepnode, visited] (d) at (3, 2) {d};
-          \node[stepnode, visited] (e) at (7, -3) {e};
-          \node[stepnode, visited] (f) at (7, -0.5) {f};
-          \node[stepnode, label={[lbl]above right:9}] (g) at (7, 2) {g};
-
-          \drawBaseEdges
-          \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
-          \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
-          \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
-          \draw[mstedge] (a) -- (d) node[midway, above, edgelbl]{3};
-          \draw[mstedge] (d) -- (f) node[midway, above right, edgelbl]{7};
-          \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 5: Add f};
-        \end{tikzpicture}
-
-        \vspace{0.4cm}
-
-        %% Step 6 (Final)
-        \begin{tikzpicture}[scale=0.8, transform shape]
-          \node[stepnode, visited] (a) at (0, 2) {a};
-          \node[stepnode, visited] (b) at (0, -3) {b};
-          \node[stepnode, visited] (c) at (3, -0.5) {c};
-          \node[stepnode, visited] (d) at (3, 2) {d};
-          \node[stepnode, visited] (e) at (7, -3) {e};
-          \node[stepnode, visited] (f) at (7, -0.5) {f};
-          \node[stepnode, visited] (g) at (7, 2) {g};
-
-          \drawBaseEdges
-          \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
-          \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
-          \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
-          \draw[mstedge] (a) -- (d) node[midway, above, edgelbl]{3};
-          \draw[mstedge] (d) -- (f) node[midway, above right, edgelbl]{7};
-          \draw[mstedge] (f) -- (g) node[midway, right, edgelbl]{9};
-          \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 6: Add g (Final MST)};
-        \end{tikzpicture}
+        % --- Row 4 (Step 6 / Final - Centered) ---
+        \begin{minipage}{\textwidth}
+            \centering
+            \begin{tikzpicture}[scale=0.8, transform shape]
+              \node[stepnode, visited] (a) at (0, 2) {a};
+              \node[stepnode, visited] (b) at (0, -3) {b};
+              \node[stepnode, visited] (c) at (3, -0.5) {c};
+              \node[stepnode, visited] (d) at (3, 2) {d};
+              \node[stepnode, visited] (e) at (7, -3) {e};
+              \node[stepnode, visited] (f) at (7, -0.5) {f};
+              \node[stepnode, visited] (g) at (7, 2) {g};
+    
+              \drawBaseEdges
+              \draw[mstedge] (a) -- (b) node[midway, left, edgelbl]{2};
+              \draw[mstedge] (a) -- (c) node[midway, above right, edgelbl]{3};
+              \draw[mstedge] (c) -- (e) node[midway, below right, edgelbl]{1};
+              \draw[mstedge] (a) -- (d) node[midway, above, edgelbl]{3};
+              \draw[mstedge] (d) -- (f) node[midway, above right, edgelbl]{7};
+              \draw[mstedge] (f) -- (g) node[midway, right, edgelbl]{9};
+              \node[draw=none, fill=none, font=\large\bfseries] at (3.5, -4.5) {Step 6: Add g (Final MST)};
+            \end{tikzpicture}
+        \end{minipage}
 
       \end{center}
 
@@ -6861,7 +6868,7 @@ Dijkstra (G)
 
   \item For the graph below, show the value of $u$, $v.key$, $Q$ for the following algorithm (show each step):
 
-    \begin{tcolorbox}[ansbox, colback=white, colframe=cA!50, arc=3pt, title=\textbf{Algorithm: \textsc{MST}($G,\, w,\, r$)}]
+    \begin{tcolorbox}[ansbox, colback=white, colframe=cA!50, arc=3pt, title=\textbf{Algorithm: MST($G,\, w,\, r$)}]
       \begin{algorithmic}[1]
         \State $Q \gets V[G]$
         \For{each $u \in Q$}
@@ -7485,7 +7492,7 @@ Dijkstra (G)
 
     \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,
         boxrule=0.8pt,arc=5pt,
-      title={\textbf{Answer: Prim's Algorithm}},fonttitle=\bfseries\color{white},colbacktitle=cA]
+      title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
 
       \textbf{Start Node:} $a$. \\
       When ties occur (e.g., between edges $a$--$h(8)$ and $b$--$c(8)$), we pick alphabetically (adding $c$ instead of $h$).
@@ -7929,7 +7936,7 @@ Dijkstra (G)
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Maximum Flow}{sub:s1-maxflow}
+\subtopic{cA}{Maximum Flow}\label{sub:s1-maxflow}
 
 \begin{enumerate}
 
@@ -11094,7 +11101,7 @@ Dijkstra (G)
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Maximum Bipartite Matching}{sub:s1-bipartite}
+\subtopic{cA}{Maximum Bipartite Matching}\label{sub:s1-bipartite}
 
 \begin{enumerate}
 
@@ -11425,7 +11432,7 @@ Dijkstra (G)
 \end{enumerate}
 
 
-\subtopic{cA}{Stable Matching (Gale-Shapley)}{sub:s1-stablematching}
+\subtopic{cA}{Stable Matching (Gale-Shapley)}\label{sub:s1-stablematching}
 
 \begin{enumerate}
   \item In a stable matching problem (\textbf{Gale-Shapley algorithm}) each participant has a true preference order. Now consider a woman $w$. Suppose $w$ prefers man $m$ to $m'$, but both $m$ and $m'$ are low on her list of preferences. Can it be the case that by switching the order of $m$ and $m'$ on her list of preferences (i.e., by falsely claiming that she prefers $m'$ to $m$) and running the algorithm with this false preference list, $w$ will end up with a man $m''$ that she truly prefers to both $m$ and $m'$? Give proof to support your answer.
@@ -11529,7 +11536,7 @@ Dijkstra (G)
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Graph Traversal \& Properties}{sub:s1-traversal}
+\subtopic{cA}{Graph Traversal \& Properties}\label{sub:s1-traversal}
 
 \begin{enumerate}
 
@@ -14174,13 +14181,12 @@ Dijkstra (G)
 \secdivider{Part II}{Advanced Data Structures}{cB}{cB}{Balanced Binary Search Trees (AVL Trees), Red-Black Trees, Splay Trees, Skip Lists, Advanced Heaps (Binomial Heaps), Advanced Heaps (Fibonacci Heaps)}
 
 %% ── S2: Advanced Data Structures ─────────────────────────────────────
-\section*{S2 --- Advanced Data Structures}
-\pdfbookmark[1]{S2: Advanced Data Structures}{sec:S2}
+\section{S2 --- Advanced Data Structures}
 \label{sec:S2}
 \markboth{S2 --- Advanced Data Structures}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Balanced Binary Search Trees (AVL Trees)}{sub:s2-avl}
+\subtopic{cB}{Balanced Binary Search Trees (AVL Trees)}\label{sub:s2-avl}
 
 \begin{enumerate}
 
@@ -14219,69 +14225,79 @@ Dijkstra (G)
 
       Let $C$ be the right child of $B$. Let $T_1$, $T_2$, $T_3$, and $T_4$ denote the subtrees. The transformations are visualized below:
 
-      \begin{center}
-        \begin{tikzpicture}[
+\begin{center}
+        \tikzset{
             >=Stealth,
-            node distance=1.5cm,
             treenode/.style={circle, draw=cB, fill=cB!10, thick, minimum size=8mm, inner sep=0pt, font=\bfseries},
             subtree/.style={regular polygon, regular polygon sides=3, draw=gray, fill=gray!10, thick, minimum size=12mm, inner sep=0pt, yshift=-0.2cm, font=\small},
             level 1/.style={sibling distance=4cm, level distance=1.5cm},
             level 2/.style={sibling distance=2cm, level distance=1.5cm},
             level 3/.style={sibling distance=1.2cm, level distance=1.5cm}
-          ]
+        }
 
-          % ================= INITIAL STATE =================
-          \begin{scope}[shift={(0,0)}]
-            \node[font=\large\bfseries] at (0, 1.2) {Initial (LR Imbalance)};
+        % ================= INITIAL STATE =================
+        \begin{tikzpicture}
+          \node[font=\large\bfseries] at (0, 1.2) {Initial (LR Imbalance)};
 
-            \node[treenode, label=right:{\color{red}\small BF=+2}] (A) at (0, 0) {$A$}
-            child {node[treenode, label=left:{\color{orange}\small BF=-1}] (B) {$B$}
-              child {node[subtree] {$T_1$}}
-              child {node[treenode, label=right:{\small BF=0}] (C) {$C$}
-                child {node[subtree] {$T_2$}}
-                child {node[subtree] {$T_3$}}
-              }
-            }
-            child {node[subtree] {$T_4$}};
-          \end{scope}
-
-          % Transition Arrow 1
-          \draw[->, thick, cB, dashed] (0, -4.6) -- node[right, font=\bfseries, text=black] {Left-Rotate(B)} (0, -5.6);
-
-          % ================= INTERMEDIATE STATE =================
-          \begin{scope}[shift={(0,-7.5)}]
-            \node[font=\large\bfseries] at (0, 1.2) {Intermediate (LL State)};
-
-            \node[treenode, label=right:{\color{red}\small BF=+2}] (A2) at (0, 0) {$A$}
-            child {node[treenode, label=left:{\color{cB}\small BF=+1}] (C2) {$C$}
-              child {node[treenode, label=left:{\color{green!60!black}\small BF=0}] (B2) {$B$}
-                child {node[subtree] {$T_1$}}
-                child {node[subtree] {$T_2$}}
-              }
+          \node[treenode, label=right:{\color{red}\small BF=+2}] (A) at (0, 0) {$A$}
+          child {node[treenode, label=left:{\color{orange}\small BF=-1}] (B) {$B$}
+            child {node[subtree] {$T_1$}}
+            child {node[treenode, label=right:{\small BF=0}] (C) {$C$}
+              child {node[subtree] {$T_2$}}
               child {node[subtree] {$T_3$}}
             }
-            child {node[subtree] {$T_4$}};
-          \end{scope}
+          }
+          child {node[subtree] {$T_4$}};
+        \end{tikzpicture}
 
-          % Transition Arrow 2
-          \draw[->, thick, cB, dashed] (0, -12.1) -- node[right, font=\bfseries, text=black] {Right-Rotate(A)} (0, -13.1);
+        \vspace{0.3cm} % ছবি এবং অ্যারোর মাঝে একটু স্পেস
 
-          % ================= FINAL STATE =================
-          \begin{scope}[shift={(0,-15)}]
-            \node[font=\large\bfseries] at (0, 1.2) {Final (Balanced)};
+        % Transition Arrow 1
+        \begin{tikzpicture}
+          \draw[->, thick, cB, dashed] (0, 0) -- node[right, font=\bfseries, text=black] {Left-Rotate(B)} (0, -1);
+        \end{tikzpicture}
 
-            \node[treenode, label=right:{\color{green!60!black}\small BF=0}] (C3) at (0, 0) {$C$}
-            child {node[treenode, label=left:{\color{green!60!black}\small BF=0}] (B3) {$B$}
+        \vspace{0.3cm}
+
+        % ================= INTERMEDIATE STATE =================
+        \begin{tikzpicture}
+          \node[font=\large\bfseries] at (0, 1.2) {Intermediate (LL State)};
+
+          \node[treenode, label=right:{\color{red}\small BF=+2}] (A2) at (0, 0) {$A$}
+          child {node[treenode, label=left:{\color{cB}\small BF=+1}] (C2) {$C$}
+            child {node[treenode, label=left:{\color{green!60!black}\small BF=0}] (B2) {$B$}
               child {node[subtree] {$T_1$}}
               child {node[subtree] {$T_2$}}
             }
-            child {node[treenode, label=right:{\color{green!60!black}\small BF=0}] (A3) {$A$}
-              child {node[subtree] {$T_3$}}
-              child {node[subtree] {$T_4$}}
-            };
-          \end{scope}
-
+            child {node[subtree] {$T_3$}}
+          }
+          child {node[subtree] {$T_4$}};
         \end{tikzpicture}
+
+        \vspace{0.3cm}
+
+        % Transition Arrow 2
+        \begin{tikzpicture}
+          \draw[->, thick, cB, dashed] (0, 0) -- node[right, font=\bfseries, text=black] {Right-Rotate(A)} (0, -1);
+        \end{tikzpicture}
+
+        \vspace{0.3cm}
+
+        % ================= FINAL STATE =================
+        \begin{tikzpicture}
+          \node[font=\large\bfseries] at (0, 1.2) {Final (Balanced)};
+
+          \node[treenode, label=right:{\color{green!60!black}\small BF=0}] (C3) at (0, 0) {$C$}
+          child {node[treenode, label=left:{\color{green!60!black}\small BF=0}] (B3) {$B$}
+            child {node[subtree] {$T_1$}}
+            child {node[subtree] {$T_2$}}
+          }
+          child {node[treenode, label=right:{\color{green!60!black}\small BF=0}] (A3) {$A$}
+            child {node[subtree] {$T_3$}}
+            child {node[subtree] {$T_4$}}
+          };
+        \end{tikzpicture}
+        
       \end{center}
 
       \vspace{0.3cm}
@@ -16595,7 +16611,7 @@ Unlike insertion—where a single structural fix always restores the pre-inserti
 \item Design an AVL tree by inserting the keys $5, 12, 3, -2, -5, -3, 1$ in order. Show all steps. \mk{15}
 \yr{CSE 203 | L-2/T-1 | 2012--13}
 
-\begin{tcolorbox}[ansbox, enhanced,breakable,boxrule=0.8pt,arc=5pt,colback=cB!4,colframe=cB,title={\textbf{Answer: AVL Tree Design Step-by-Step}},fonttitle=\bfseries\color{white}]
+\begin{tcolorbox}[ansbox, enhanced,breakable,boxrule=0.8pt,arc=5pt,colback=cB!4,colframe=cB,title={\textbf{Answer}},fonttitle=\bfseries\color{white}]
 
 We will insert the keys $\mathbf{[5, 12, 3, -2, -5, -3, 1]}$ successively into an initially empty AVL tree. For each step, the Balance Factor ($\text{BF}$) is calculated as $\text{BF} = \text{Height}(\text{Left Subtree}) - \text{Height}(\text{Right Subtree})$.
 
@@ -16815,7 +16831,7 @@ Because the maximum possible height is $1.44 \log_2(n + 2)$, an AVL tree's heigh
 \item Build a 2-3-4 tree with the keys $12, 5, 6, 10, 15, 8, 13, 17, 11, 14, 4$. Then delete elements in the following sequence: $4, 12, 13$. Show all steps. \mk{25}
 \yr{CSE 203 | L-2/T-1 | 2012--13}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: 2-3-4 Tree Construction and Deletion}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 We will use the standard \textbf{proactive top-down} approach for the 2-3-4 tree (B-tree of order 4):
 \begin{itemize}
@@ -16976,7 +16992,7 @@ The final structural state of the tree after completing all insertions and delet
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Red-Black Trees}{sub:s2-rbt}
+\subtopic{cB}{Red-Black Trees}\label{sub:s2-rbt}
 
 \begin{enumerate}
 
@@ -17541,7 +17557,7 @@ Both Red-Black Trees and AVL Trees are self-balancing Binary Search Trees that g
 \item What are the properties of a red-black tree? Derive that if a tree with $n$ keys follows the red-black properties, its height $h$ can be bounded as $h \leq 2\lg(n + 1)$.
 \mk{15} \yr{CSE 207 | L-2/T-2 | 2021--22}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Red-Black Tree Properties \& Height Bound Derivation}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 
 
@@ -17732,7 +17748,7 @@ Rewriting the inequality, we get $\mathbf{h \le 2\lg(n + 1)}$. This proves that 
 
 \mk{20} \yr{CSE 207 | L-2/T-2 | 2020--21}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Red-Black Tree Deletion Analysis and Execution}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 \subsection*{1. Restoring Balance Without Rotations: Is It Possible?}
 
@@ -17894,7 +17910,7 @@ Below is the complete, valid configuration of the Red-Black tree after completin
 \item Mr.\ X has proposed a new algorithm for insertion to a Red-Black tree, where the color of the newly inserted node is set to black by default. Discuss the advantages and disadvantages of this algorithm over the traditional algorithm followed for insertion to a Red-Black tree.
 \mk{5} \yr{CSE 207 | L-2/T-2 | 2020--21}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Comparative Analysis of Default-Black Insertion Algorithm}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 In the traditional Red-Black Tree insertion algorithm, a newly inserted node is always colored \textbf{Red} by default. Mr. X's alternative proposal suggests coloring the newly inserted node \textbf{Black} by default.
 
@@ -18007,7 +18023,7 @@ Mr. X's algorithm is \textbf{not recommended}. Swapping a temporary red-red viol
 \end{center}
 \mk{15} \yr{CSE 207 | L-2/T-2 | 2019--20}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Red-Black Tree Insertion of Key 11}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 Here are the intermediate steps to insert the key \textbf{11} into the given Red-Black tree.
 
@@ -18164,7 +18180,7 @@ Examining node $8$: it forms a straight "Left-Left" line with its parent ($15$) 
 \item When we insert a node into a red-black tree, we initially set the color of the new node to red. Why don't we choose to set the color to black?
 \mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Why New Nodes are Colored Red}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 When inserting a new node into a Red-Black tree, we must choose to color it either Red or Black. The decision to always default to \textbf{Red} is strategically based on choosing the "lesser of two evils" regarding tree property violations.
 
@@ -18194,7 +18210,7 @@ We set the initial color to \textbf{Red} because fixing a localized color confli
 \item Would inserting a new node to a red-black tree and then immediately deleting it change the tree? Explain with an example.
 \mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Effect of Immediate Insertion and Deletion in a Red-Black Tree}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 \textbf{Yes}, inserting a new node into a Red-Black tree and then immediately deleting it \textbf{can permanently change the tree}. It can alter both the color configuration of the nodes and the actual structural topology (the shape and pointer connections) of the tree.
 
@@ -18298,7 +18314,7 @@ After deleting key $2$, the final configuration of the tree is:
 \item What is the ratio between the lengths of the longest path and the shortest path in a red-black tree?
 \mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Ratio of Longest to Shortest Path in a Red-Black Tree}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 The ratio between the length of the longest path and the shortest path from the root to any descendant leaf in a Red-Black tree is \textbf{at most 2}.
 
@@ -18366,7 +18382,7 @@ This strict geometric constraint ensures that the tree remains approximately bal
 \end{tikzpicture}
 \end{center}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Step-by-Step Insertion of Key 11 (15 Marks)}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 Here is the complete, step-by-step execution to insert key \textbf{11} into the given Red-Black Tree, conforming to standard academic evaluation standards.
 
@@ -18531,7 +18547,7 @@ Evaluating node $\mathbf{8}$: it forms a straight, Left-Left linear layout with 
 \item Write the properties of a red-black tree. Show that the height of a red-black tree $T$ storing $n$ items is $O(\log n)$. Explain, with examples, the three cases that may arise for inserting a node in a red-black tree. \mk{15}
 \yr{CSE 203 | L-2/T-1 | 2015--16, 2014--15}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Red-Black Tree Invariants, Height Proof, and Insertion Cases (15 Marks)}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 \subsection*{1. Properties of a Red-Black Tree}
 A Red-Black tree is a binary search tree where each node contains an extra attribute representing its color (\textbf{Red} or \textbf{Black}). A binary search tree is a valid Red-Black tree if it satisfies the following five structural properties:
@@ -18590,7 +18606,6 @@ h = O(\log n)
 
 ---
 
-\pagebreak
 \subsection*{3. Three Cases for Node Insertion (With Examples)}
 When a new node $z$ is inserted, it is always inserted as a binary search tree leaf and colored \textbf{Red}. A conflict occurs only if $z$'s parent, $P(z)$, is also \textbf{Red}, violating Property 4.
 
@@ -18671,7 +18686,7 @@ edge from parent/.style={draw=black, thick}
 \item Explain, with examples, the four cases that may arise for deleting a node from a red-black tree. \mk{15}
 \yr{CSE 203 | L-2/T-1 | 2014--15}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Comprehensive Analysis of Red-Black Tree Deletion Cases (15 Marks)}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 In a Red-Black tree, standard Binary Search Tree (BST) deletion always reduces to removing a node with at most one internal child. Let the node physically unlinked from the tree be $y$.
 \begin{itemize}
@@ -18846,7 +18861,7 @@ B/.style = {treenode, text=white, fill=black!80, draw=black, thick},
 edge from parent/.style={draw, thick, -stealth}
 }
 
-\section*{Part 1: Insertion of 11}
+\textbf{Part 1: Insertion of 11}
 
 \textbf{Step 1: Standard BST Insertion} \\
 We insert 11 following the standard Binary Search Tree properties: $11 < 23$ (go left), $11 > 8$ (go right), $11 < 15$ (go left), $11 < 13$ (go left). The new node 11 is inserted as the left child of 13 and is initially colored \textcolor{red}{\textbf{RED}}.
@@ -18980,7 +18995,7 @@ The tree now fully satisfies all Red-Black properties.
 
 \vspace{1em}
 
-\section*{Part 2: Properties \& Successive Insertions}
+\textbf{Part 2: Properties \& Successive Insertions}
 
 \subsection*{Properties of a Red-Black Tree}
 A Red-Black Tree is a Binary Search Tree that satisfies the following five properties:
@@ -19080,7 +19095,7 @@ A Red-Black Tree is a Binary Search Tree that satisfies the following five prope
 \item Write down the properties of a red-black tree. With an example, show the insertion and deletion operations and their costs in a red-black tree. \mk{5+15=20}
 \yr{CSE 203 | L-2/T-1 | 2012--13}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Red-Black Tree Properties, Insertion, and Deletion (20 Marks)}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 \subsection*{1. Properties of a Red-Black Tree (5 Marks)}
 A Red-Black Tree is a self-balancing binary search tree that guarantees $\mathcal{O}(\log n)$ operations by strictly satisfying the following five structural invariants:
@@ -19202,7 +19217,7 @@ Assume a perfectly balanced tree where 20 is the Black root, with 10 and 30 as B
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Splay Trees}{sub:s2-splay}
+\subtopic{cB}{Splay Trees}\label{sub:s2-splay}
 
 \begin{enumerate}
 
@@ -19215,7 +19230,6 @@ Assume a perfectly balanced tree where 20 is the Black root, with 10 and 30 as B
   thick
 ]
 
-% ট্রি স্ট্রাকচার অনুযায়ী নোড পজিশনিং
 \node (13) at (0,4) {13}
 child {node {7}}
 child {node {26}
@@ -19718,7 +19732,7 @@ A naive "rotate-to-root" strategy (doing only single Zig rotations) pushes the t
 \item Define the rank of a node of a splay tree. Prove that the change in potential of a splay tree not resulting from any splay after an insertion operation is $O(\log n)$, where the splay tree had $n$ nodes before the insertion operation.
 \mk{15} \yr{CSE 207 | L-2/T-2 | 2020--21}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Splay Tree Rank and Potential Change Proof}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 \subsection*{1. Definition of the Rank of a Node}
 
@@ -20488,7 +20502,7 @@ While Splay Trees do not \textit{explicitly} track or correct height imbalance, 
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Skip Lists}{sub:s2-skip}
+\subtopic{cB}{Skip Lists}\label{sub:s2-skip}
 
 \begin{enumerate}
 
@@ -20654,7 +20668,7 @@ The node containing 25 is removed from all levels. The topmost empty levels ($S_
 \end{enumerate}
 \mk{15} \yr{CSE 207 | L-2/T-2 | 2018--19}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Skip List Complexity Proofs}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 In a standard skip list, each element is inserted at the base level (level $0$) and is repeatedly promoted to the next level with a fixed probability $p$ (typically $p = 1/2$). The promotion stops as soon as a "tails" (failure) is flipped.
 
@@ -20923,7 +20937,7 @@ $i = 2 < h = 4$. Key 84 is inserted into $S_0, S_1, S_2$.
 \item Write algorithms for the search, insertion and deletion operations of skip lists. Show that the expected search, insertion and deletion time is $O(\log n)$ in a skip list with $n$ entries. Also show that the expected space used is $O(n)$. \mk{18}
 \yr{CSE 203 | L-2/T-1 | 2013--14}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Skip List Algorithms and Complexity Proofs (18 Marks)}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 \subsection*{1. Algorithms for Skip List Operations}
 
@@ -21344,7 +21358,7 @@ Search procedure on the updated skip list:
 \item Show that the expected running time of searching in a probabilistic skip-list is $O(\log n)$. \mk{6}
 \yr{CSE 203 | L-2/T-1 | 2011--12}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer: Proof of $\mathcal{O}(\log n)$ Expected Search Time (6 Marks)}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
 
 To prove that the expected search time in a probabilistic skip list with $n$ entries is $\mathcal{O}(\log n)$, we use the standard technique of \textbf{Backward Analysis}.
 
@@ -21397,7 +21411,7 @@ E[C] = \mathcal{O}(\log n)
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Advanced Heaps (Binomial Heaps)}{sub:s2-binheap}
+\subtopic{cB}{Advanced Heaps (Binomial Heaps)}\label{sub:s2-binheap}
 
 \begin{enumerate}
 
@@ -21474,36 +21488,62 @@ The property directly mirrors Pascal's Triangle. The diagram below illustrates $
 
 \begin{center}
 \begin{tikzpicture}[
+    x=1.5cm, y=-1.5cm, 
     thick,
-    level 1/.style={sibling distance=3.5cm, level distance=1.5cm},
-    level 2/.style={sibling distance=2cm, level distance=1.5cm},
-    level 3/.style={sibling distance=1.5cm, level distance=1.5cm},
-    every node/.style={circle, draw, fill=cB!15, minimum size=0.8cm, font=\bfseries\color{black}}
+    every node/.style={circle, draw, fill=cyan!15, minimum size=0.8cm, font=\bfseries\color{black}, inner sep=0pt},
+    edge/.style={draw=black, thick}
   ]
 
-  % Root
-  \node (root) {$0$}
-  child { node {$1$}
-    child { node {$2$}
-      child { node {$3$} }
-    }
-    child { node {$2$} }
-  }
-  child { node {$1$}
-    child { node {$2$} }
-  }
-  child { node {$1$} };
+  % =======================
+  % Nodes
+  % =======================
+  
+  % Depth 0 (Root)
+  \node (n0) at (3, 0) {$0$};
 
+  % Depth 1
+  \node (n1_1) at (1, 1) {$1$}; % B2 Subtree Root
+  \node (n1_2) at (2, 1) {$1$}; % B1 Subtree Root
+  \node (n1_3) at (3, 1) {$1$}; % B0 Subtree Root
+
+  % Depth 2
+  \node (n2_1) at (0, 2) {$2$}; % B1 Subtree Root (under B2)
+  \node (n2_2) at (1, 2) {$2$}; % B0 Subtree Root (under B2)
+  \node (n2_3) at (2, 2) {$2$}; % B0 Subtree Root (under B1)
+
+  % Depth 3
+  \node (n3_1) at (0, 3) {$3$}; % B0 Subtree Root (under B1 under B2)
+
+  % =======================
+  % Edges
+  % =======================
+  
+  % From Depth 0
+  \draw[edge] (n0) -- (n1_1);
+  \draw[edge] (n0) -- (n1_2);
+  \draw[edge] (n0) -- (n1_3);
+
+  % From Depth 1
+  \draw[edge] (n1_1) -- (n2_1);
+  \draw[edge] (n1_1) -- (n2_2);
+  \draw[edge] (n1_2) -- (n2_3);
+
+  % From Depth 2
+  \draw[edge] (n2_1) -- (n3_1);
+
+  % =======================
   % Depth Labels
+  % =======================
   \begin{scope}[every node/.style={right, draw=none, fill=none, font=\small, color=black!80}]
-    \draw[dashed, thin, gray] (-4.5, 0) -- (4, 0) node {Depth 0: $\binom{3}{0} = 1$};
-    \draw[dashed, thin, gray] (-4.5, -1.5) -- (4, -1.5) node {Depth 1: $\binom{3}{1} = 3$};
-    \draw[dashed, thin, gray] (-4.5, -3.0) -- (4, -3.0) node {Depth 2: $\binom{3}{2} = 3$};
-    \draw[dashed, thin, gray] (-4.5, -4.5) -- (4, -4.5) node {Depth 3: $\binom{3}{3} = 1$};
+    \draw[dashed, thin, gray] (-0.8, 0) -- (3.8, 0) node {Depth 0: $\binom{3}{0} = 1$};
+    \draw[dashed, thin, gray] (-0.8, 1) -- (3.8, 1) node {Depth 1: $\binom{3}{1} = 3$};
+    \draw[dashed, thin, gray] (-0.8, 2) -- (3.8, 2) node {Depth 2: $\binom{3}{2} = 3$};
+    \draw[dashed, thin, gray] (-0.8, 3) -- (3.8, 3) node {Depth 3: $\binom{3}{3} = 1$};
   \end{scope}
 
 \end{tikzpicture}
 \end{center}
+
 
 \subsubsection*{Structural Complexity}
 \begin{itemize}
@@ -21513,125 +21553,7 @@ The property directly mirrors Pascal's Triangle. The diagram below illustrates $
 
 \end{tcolorbox}
 
-%% Q — 2024-25
-\item Draw the maximally damaged tree resulting from $B_6$.
-\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25, 2019--20}
 
-\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
-
-\subsubsection*{Concept: The Maximally Damaged Tree}
-In the context of advanced data structures like \textbf{Fibonacci Heaps}, a binomial tree $B_k$ becomes "damaged" when nodes are cut from it during `Decrease-Key` operations.
-
-To maintain a bounded maximum degree, Fibonacci heaps enforce a \textit{cascading cut} rule: a non-root node can lose at most \textbf{one} child before it is forcibly cut from its parent. Therefore, a \textbf{maximally damaged tree} of order $k$ (often denoted as $F_k$ or a tree of rank $k$) is formed from $B_k$ under the following worst-case conditions:
-\begin{enumerate}
-\item Every non-root node loses exactly one child (any more would trigger a cascading cut).
-\item To minimize the remaining size of the tree, the lost child is the \textit{heaviest} (highest degree) subtree.
-\item The root maintains its original $k$ children (thus remaining a tree of order/rank $k$).
-\end{enumerate}
-
-\subsubsection*{Deriving the Structure for $B_6$}
-A standard binomial tree $B_6$ has exactly $2^6 = 64$ nodes. The root has 6 children with degrees: $5, 4, 3, 2, 1, 0$.
-Applying the maximum damage rule recursively:
-\begin{itemize}
-\item The child of degree $5$ loses its heaviest child (degree 4), becoming degree $4$.
-\item The child of degree $4$ loses its heaviest child (degree 3), becoming degree $3$.
-\item \dots and so on. The child of degree $0$ cannot lose a child, so it remains degree $0$.
-\end{itemize}
-The new degrees of the root's children become precisely: \textbf{4, 3, 2, 1, 0, 0}.
-
-This recursive "thinning" mimics the Fibonacci sequence. Let $S_k$ be the minimum number of nodes in a maximally damaged tree of rank $k$. The recurrence relation is $S_k = S_{k-2} + S_{k-1}$ (with base cases $S_0 = 1, S_1 = 2$). The total size strictly follows the Fibonacci sequence $S_k = F_{k+2}$ (where $F_1=1, F_2=1, F_3=2, \dots$).
-
-For $B_6$, the maximally damaged tree has exactly $\mathbf{F_8 = 21}$ \textbf{nodes} (a significant reduction from 64).
-
-\vspace{1em}
-
-\vspace{1em}
-
-\subsubsection*{Diagram: Maximally Damaged Tree from $B_6$}
-\textit{Note: The integer inside each node represents its current \textbf{degree} (number of children). The tree is spread horizontally to prevent overlap.}
-
-\begin{center}
-\begin{tikzpicture}[
-    scale=0.9, transform shape,
-    thick,
-    main/.style={circle, draw=cB!80!black, fill=cB!10, minimum size=0.8cm, font=\bfseries},
-    edge/.style={draw=black!70, thick}
-  ]
-
-  % Root Level 0
-  \node[main, fill=cB!30] (root) at (1, 0) {6};
-
-  % Level 1 (Children of Root)
-  \node[main] (c1) at (-4, -1.5) {0};
-  \node[main] (c2) at (-3, -1.5) {0};
-  \node[main] (c3) at (-2, -1.5) {1};
-  \node[main] (c4) at (-0.5, -1.5) {2};
-  \node[main] (c5) at (2, -1.5) {3};
-  \node[main] (c6) at (6, -1.5) {4};
-
-  % Level 2
-  \node[main] (c31) at (-2, -3) {0};
-  \node[main] (c41) at (-1, -3) {0};
-  \node[main] (c42) at (0, -3) {0};
-  \node[main] (c51) at (1, -3) {0};
-  \node[main] (c52) at (2, -3) {0};
-  \node[main] (c53) at (3, -3) {1};
-  \node[main] (c61) at (4.5, -3) {0};
-  \node[main] (c62) at (5.5, -3) {0};
-  \node[main] (c63) at (6.5, -3) {1};
-  \node[main] (c64) at (8, -3) {2};
-
-  % Level 3
-  \node[main] (c531) at (3, -4.5) {0};
-  \node[main] (c631) at (6.5, -4.5) {0};
-  \node[main] (c641) at (7.5, -4.5) {0};
-  \node[main] (c642) at (8.5, -4.5) {0};
-
-  % Edges from Root
-  \draw[edge] (root) -- (c1);
-  \draw[edge] (root) -- (c2);
-  \draw[edge] (root) -- (c3);
-  \draw[edge] (root) -- (c4);
-  \draw[edge] (root) -- (c5);
-  \draw[edge] (root) -- (c6);
-
-  % Edges from Level 1
-  \draw[edge] (c3) -- (c31);
-
-  \draw[edge] (c4) -- (c41);
-  \draw[edge] (c4) -- (c42);
-
-  \draw[edge] (c5) -- (c51);
-  \draw[edge] (c5) -- (c52);
-  \draw[edge] (c5) -- (c53);
-
-  \draw[edge] (c6) -- (c61);
-  \draw[edge] (c6) -- (c62);
-  \draw[edge] (c6) -- (c63);
-  \draw[edge] (c6) -- (c64);
-
-  % Edges from Level 2
-  \draw[edge] (c53) -- (c531);
-
-  \draw[edge] (c63) -- (c631);
-
-  \draw[edge] (c64) -- (c641);
-  \draw[edge] (c64) -- (c642);
-
-\end{tikzpicture}
-\end{center}
-
-\vspace{0.5em}
-
-\vspace{1em}
-
-\subsubsection*{Complexity \& Analytical Properties}
-\begin{itemize}
-\item \textbf{Total Nodes:} Summing the nodes yields $1 \text{ (root)} + 1 + 1 + 2 + 3 + 5 + 8 = \textbf{21}$.
-\item \textbf{Implication on Time Complexity:} Because a tree of order $k$ cannot have fewer than $F_{k+2}$ nodes, and $F_{k+2} \ge \phi^k$ (where $\phi$ is the golden ratio $\approx 1.618$), the maximum degree $D(n)$ of any node in an $n$-node Fibonacci Heap is bounded by $\log_\phi n = \mathcal{O}(\log n)$. This tight mathematical bound is the core reason \texttt{Extract-Min} operates in amortized $\mathcal{O}(\log n)$ time despite extreme potential tree damage.
-\end{itemize}
-
-\end{tcolorbox}
 
 %% Q — 2024-25
 \item Let $H_1$ and $H_2$ be binomial heaps. Suppose the highest order tree in heap $H_1$ is of order $m$, and the highest order tree in $H_2$ has degree $m+1$. Prove or disprove: ``$H_2$ must have more nodes than $H_1$, regardless of how many trees are present in $H_1$ and $H_2$.''
@@ -21818,52 +21740,69 @@ We initialize $H_1$ and $H_2$ with valid values that rigorously maintain the \te
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
+    x=1.1cm, y=-1.3cm,
     thick,
-    node/.style={circle, draw, fill=cB!15, minimum size=0.7cm, inner sep=0, font=\bfseries}
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick},
+    rootarrow/.style={->, thick, dashed, color=black!70}
   ]
-  % --- HEAP 1 ---
-  \node[font=\bfseries, text=cB] at (1, 1) {Heap $H_1$ (6 nodes)};
+
+  % =======================
+  % HEAP 1
+  % =======================
+  \node[font=\bfseries\Large, text=black!80] at (1.5, -1) {Heap $H_1$ (6 nodes)};
 
   % B1 of H1
+  \node[font=\small\bfseries, color=gray] at (0, -0.4) {$B_1$};
   \node[node] (h1_10) at (0, 0) {10};
-  \node[node] (h1_20) at (0, -1) {20};
-  \draw (h1_10) -- (h1_20);
-  \node[font=\small, color=gray] at (0, 0.6) {$B_1$};
+  \node[node] (h1_20) at (0, 1) {20};
+  \draw[edge] (h1_10) -- (h1_20);
 
   % B2 of H1
-  \node[node] (h1_5) at (3, 0) {5};
-  \node[node] (h1_8) at (2, -1) {8};
-  \node[node] (h1_15) at (4, -1) {15};
-  \node[node] (h1_12) at (2, -2) {12};
-  \draw (h1_5) -- (h1_8); \draw (h1_5) -- (h1_15); \draw (h1_8) -- (h1_12);
-  \node[font=\small, color=gray] at (3, 0.6) {$B_2$};
+  \node[font=\small\bfseries, color=gray] at (2.5, -0.4) {$B_2$};
+  \node[node] (h1_5)  at (3, 0) {5};
+  \node[node] (h1_8)  at (2, 1) {8};
+  \node[node] (h1_15) at (3, 1) {15};
+  \node[node] (h1_12) at (2, 2) {12};
 
-  \draw[->, thick, dashed] (h1_10) -- (h1_5);
+  \draw[edge] (h1_5) -- (h1_8);
+  \draw[edge] (h1_5) -- (h1_15);
+  \draw[edge] (h1_8) -- (h1_12);
 
-  % --- HEAP 2 ---
-  \begin{scope}[xshift=8cm]
-    \node[font=\bfseries, text=cB] at (2.5, 1) {Heap $H_2$ (7 nodes)};
+  % Root list link
+  \draw[rootarrow] (h1_10) -- (h1_5);
+
+
+  % =======================
+  % HEAP 2
+  % =======================
+  \begin{scope}[xshift=5.5cm]
+    \node[font=\bfseries\Large, text=black!80] at (2, -1) {Heap $H_2$ (7 nodes)};
 
     % B0 of H2
+    \node[font=\small\bfseries, color=gray] at (0, -0.4) {$B_0$};
     \node[node] (h2_7) at (0, 0) {7};
-    \node[font=\small, color=gray] at (0, 0.6) {$B_0$};
 
     % B1 of H2
-    \node[node] (h2_11) at (2, 0) {11};
-    \node[node] (h2_22) at (2, -1) {22};
-    \draw (h2_11) -- (h2_22);
-    \node[font=\small, color=gray] at (2, 0.6) {$B_1$};
+    \node[font=\small\bfseries, color=gray] at (1.5, -0.4) {$B_1$};
+    \node[node] (h2_11) at (1.5, 0) {11};
+    \node[node] (h2_22) at (1.5, 1) {22};
+    \draw[edge] (h2_11) -- (h2_22);
 
     % B2 of H2
-    \node[node] (h2_3) at (5, 0) {3};
-    \node[node] (h2_6) at (4, -1) {6};
-    \node[node] (h2_14) at (6, -1) {14};
-    \node[node] (h2_18) at (4, -2) {18};
-    \draw (h2_3) -- (h2_6); \draw (h2_3) -- (h2_14); \draw (h2_6) -- (h2_18);
-    \node[font=\small, color=gray] at (5, 0.6) {$B_2$};
+    \node[font=\small\bfseries, color=gray] at (4, -0.4) {$B_2$};
+    \node[node] (h2_3)  at (4.5, 0) {3};
+    \node[node] (h2_6)  at (3.5, 1) {6};
+    \node[node] (h2_14) at (4.5, 1) {14};
+    \node[node] (h2_18) at (3.5, 2) {18};
 
-    \draw[->, thick, dashed] (h2_7) -- (h2_11);
-    \draw[->, thick, dashed] (h2_11) -- (h2_3);
+    \draw[edge] (h2_3) -- (h2_6);
+    \draw[edge] (h2_3) -- (h2_14);
+    \draw[edge] (h2_6) -- (h2_18);
+
+    % Root list links
+    \draw[rootarrow] (h2_7) -- (h2_11);
+    \draw[rootarrow] (h2_11) -- (h2_3);
   \end{scope}
 
 \end{tikzpicture}
@@ -21910,45 +21849,68 @@ The resulting heap contains exactly 13 nodes, properly distributed among $B_0, B
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
+    x=1.1cm, y=-1.3cm,
     thick,
-    node/.style={circle, draw, fill=cB!15, minimum size=0.7cm, inner sep=0, font=\bfseries}
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick},
+    rootarrow/.style={->, thick, dashed, color=black!70}
   ]
-  % --- FINAL HEAP ---
 
-  % B0
-  \node[node] (f_7) at (-3, 0) {7};
-  \node[font=\small, color=gray] at (-3, 0.6) {$B_0$};
+  % =======================
+  % Tree B0 (Root 7)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (0, -0.4) {$B_0$};
+  \node[node] (f_7) at (0, 0) {7};
 
-  % B2 (Root 10)
-  \node[node] (f_10) at (0, 0) {10};
-  \node[node] (f_11) at (-1, -1) {11};
-  \node[node] (f_20) at (1, -1) {20};
-  \node[node] (f_22) at (-1, -2) {22};
-  \draw (f_10) -- (f_11); \draw (f_10) -- (f_20); \draw (f_11) -- (f_22);
-  \node[font=\small, color=gray] at (0, 0.6) {$B_2$};
+  % =======================
+  % Tree B2 (Root 10)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (2.5, -0.4) {$B_2$};
+  \node[node] (f_10) at (2.5, 0) {10};
+  \node[node] (f_11) at (1.5, 1) {11};
+  \node[node] (f_20) at (2.5, 1) {20};
+  \node[node] (f_22) at (1.5, 2) {22};
 
-  % B3 (Root 3)
-  \node[node] (f_3) at (5, 0) {3};
-  \node[node] (f_5) at (2, -1) {5};
-  \node[node] (f_6) at (5, -1) {6};
-  \node[node] (f_14) at (8, -1) {14};
+  \draw[edge] (f_10) -- (f_11);
+  \draw[edge] (f_10) -- (f_20);
+  \draw[edge] (f_11) -- (f_22);
 
-  % Children of 5
-  \node[node] (f_8) at (1, -2) {8};
-  \node[node] (f_15) at (3, -2) {15};
-  \node[node] (f_12) at (1, -3) {12};
+  % =======================
+  % Tree B3 (Root 3)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (8, -0.4) {$B_3$};
+  \node[node] (f_3) at (8, 0) {3};
 
-  % Children of 6
-  \node[node] (f_18) at (5, -2) {18};
+  % Level 1
+  \node[node] (f_5)  at (6, 1) {5};
+  \node[node] (f_6)  at (7, 1) {6};
+  \node[node] (f_14) at (8, 1) {14};
 
-  \draw (f_3) -- (f_5); \draw (f_3) -- (f_6); \draw (f_3) -- (f_14);
-  \draw (f_5) -- (f_8); \draw (f_5) -- (f_15); \draw (f_8) -- (f_12);
-  \draw (f_6) -- (f_18);
-  \node[font=\small, color=gray] at (5, 0.6) {$B_3$};
+  % Level 2
+  \node[node] (f_8)  at (5, 2) {8};
+  \node[node] (f_15) at (6, 2) {15};
+  \node[node] (f_18) at (7, 2) {18};
 
-  % Root list pointers
-  \draw[->, thick, dashed] (f_7) -- (f_10);
-  \draw[->, thick, dashed] (f_10) -- (f_3);
+  % Level 3
+  \node[node] (f_12) at (5, 3) {12};
+
+  % Edges for B3
+  \draw[edge] (f_3) -- (f_5);
+  \draw[edge] (f_3) -- (f_6);
+  \draw[edge] (f_3) -- (f_14);
+
+  \draw[edge] (f_5) -- (f_8);
+  \draw[edge] (f_5) -- (f_15);
+
+  \draw[edge] (f_6) -- (f_18);
+
+  \draw[edge] (f_8) -- (f_12);
+
+  % =======================
+  % Root List Connections
+  % =======================
+  \draw[rootarrow] (f_7) -- (f_10);
+  \draw[rootarrow] (f_10) -- (f_3);
 
 \end{tikzpicture}
 \end{center}
@@ -21984,34 +21946,58 @@ Binary representation of 11 is $1011_2$. Thus, \texttt{pq1} contains three binom
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
+    x=1.1cm, y=-1.3cm,
     thick,
-    level/.style={sibling distance=25mm/#1, level distance=12mm},
-    node/.style={circle, draw, fill=cB!15, minimum size=0.7cm, inner sep=0, font=\bfseries}
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick}
   ]
-  % B0
+
+  % =======================
+  % Tree B0 (Root 18)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (0, -0.4) {$B_0$};
   \node[node] (b0) at (0, 0) {18};
-  \node[font=\small, color=gray] at (0, 0.6) {$B_0$};
 
-  % B1
-  \node[node] (b1) at (2, 0) {3}
-  child { node[node] {2} };
-  \node[font=\small, color=gray] at (2, 0.6) {$B_1$};
+  % =======================
+  % Tree B1 (Root 3)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (1.5, -0.4) {$B_1$};
+  \node[node] (b1) at (1.5, 0) {3};
+  \node[node] (b1_1) at (1.5, 1) {2};
 
-  % B3
-  \begin{scope}[xshift=6cm]
-    \node[node] (b3) {20}
-    child { node[node] {12}
-      child { node[node] {1}
-        child { node[node] {-3} }
-      }
-      child { node[node] {6} }
-    }
-    child { node[node] {19}
-      child { node[node] {4} }
-    }
-    child { node[node] {-5} };
-    \node[font=\small, color=gray] at (0, 0.6) {$B_3$};
-  \end{scope}
+  \draw[edge] (b1) -- (b1_1);
+
+  % =======================
+  % Tree B3 (Root 20)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (6.5, -0.4) {$B_3$};
+  \node[node] (b3) at (6.5, 0) {20};
+
+  % Level 1
+  \node[node] (b3_12) at (4.5, 1) {12};
+  \node[node] (b3_19) at (5.5, 1) {19};
+  \node[node] (b3_m5) at (6.5, 1) {-5};
+
+  % Level 2
+  \node[node] (b3_1)  at (3.5, 2) {1};
+  \node[node] (b3_6)  at (4.5, 2) {6};
+  \node[node] (b3_4)  at (5.5, 2) {4};
+
+  % Level 3
+  \node[node] (b3_m3) at (3.5, 3) {-3};
+
+  % Edges for B3
+  \draw[edge] (b3) -- (b3_12);
+  \draw[edge] (b3) -- (b3_19);
+  \draw[edge] (b3) -- (b3_m5);
+
+  \draw[edge] (b3_12) -- (b3_1);
+  \draw[edge] (b3_12) -- (b3_6);
+
+  \draw[edge] (b3_19) -- (b3_4);
+
+  \draw[edge] (b3_1) -- (b3_m3);
+
 \end{tikzpicture}
 \end{center}
 \vspace{1em}
@@ -22023,29 +22009,49 @@ Binary representation of 9 is $1001_2$. Thus, \texttt{pq2} contains two binomial
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
+    x=1.1cm, y=-1.3cm,
     thick,
-    level/.style={sibling distance=25mm/#1, level distance=12mm},
-    node/.style={circle, draw, fill=cB!15, minimum size=0.7cm, inner sep=0, font=\bfseries}
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick}
   ]
-  % B0
-  \node[node] (b0) at (0, 0) {7};
-  \node[font=\small, color=gray] at (0, 0.6) {$B_0$};
 
-  % B3
-  \begin{scope}[xshift=4cm]
-    \node[node] (b3) {25}
-    child { node[node] {17}
-      child { node[node] {11}
-        child { node[node] {8} }
-      }
-      child { node[node] {9} }
-    }
-    child { node[node] {13}
-      child { node[node] {10} }
-    }
-    child { node[node] {21} };
-    \node[font=\small, color=gray] at (0, 0.6) {$B_3$};
-  \end{scope}
+  % =======================
+  % Tree B0 (Root 7)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (0, -0.4) {$B_0$};
+  \node[node] (b0) at (0, 0) {7};
+
+  % =======================
+  % Tree B3 (Root 25)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (6.5, -0.4) {$B_3$};
+  \node[node] (b3) at (6.5, 0) {25};
+
+  % Level 1
+  \node[node] (b3_17) at (4.5, 1) {17};
+  \node[node] (b3_13) at (5.5, 1) {13};
+  \node[node] (b3_21) at (6.5, 1) {21};
+
+  % Level 2
+  \node[node] (b3_11) at (3.5, 2) {11};
+  \node[node] (b3_9)  at (4.5, 2) {9};
+  \node[node] (b3_10) at (5.5, 2) {10};
+
+  % Level 3
+  \node[node] (b3_8)  at (3.5, 3) {8};
+
+  % Edges for B3
+  \draw[edge] (b3) -- (b3_17);
+  \draw[edge] (b3) -- (b3_13);
+  \draw[edge] (b3) -- (b3_21);
+
+  \draw[edge] (b3_17) -- (b3_11);
+  \draw[edge] (b3_17) -- (b3_9);
+
+  \draw[edge] (b3_13) -- (b3_10);
+
+  \draw[edge] (b3_11) -- (b3_8);
+
 \end{tikzpicture}
 \end{center}
 \vspace{1em}
@@ -22077,44 +22083,84 @@ When node $20$ is changed to $-20$, it violates the max-heap property. We sift i
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
+    x=1.1cm, y=-1.3cm,
     thick,
-    level/.style={sibling distance=35mm/#1, level distance=12mm},
-    level 3/.style={sibling distance=12mm},
-    node/.style={circle, draw, fill=cB!15, minimum size=0.7cm, inner sep=0, font=\bfseries}
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick}
   ]
-  % Final B2
-  \node[node] (b2) at (0, 0) {18}
-  child { node[node] {3}
-    child { node[node] {2} }
-  }
-  child { node[node] {7} };
-  \node[font=\small, color=gray] at (0, 0.6) {$B_2$};
 
-  % Final B4
-  \begin{scope}[xshift=10cm]
-    \node[node] (b4) {25}
-    child { node[node] {19}
-      child { node[node] {12}
-        child { node[node] {1} }
-        child { node[node] {6} }
-      }
-      child { node[node] {4}
-        child { node[node] {-20} }
-      }
-      child { node[node] {-5} }
-    }
-    child { node[node] {17}
-      child { node[node] {11}
-        child { node[node] {8} }
-      }
-      child { node[node] {9} }
-    }
-    child { node[node] {13}
-      child { node[node] {10} }
-    }
-    child { node[node] {21} };
-    \node[font=\small, color=gray] at (0, 0.6) {$B_4$};
-  \end{scope}
+  % =======================
+  % Tree B2 (Root 18)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (1.5, -0.4) {$B_2$};
+  \node[node] (b2) at (1.5, 0) {18};
+
+  % Level 1
+  \node[node] (b2_3) at (0.5, 1) {3};
+  \node[node] (b2_7) at (1.5, 1) {7};
+
+  % Level 2
+  \node[node] (b2_2) at (0.5, 2) {2};
+
+  % Edges for B2
+  \draw[edge] (b2) -- (b2_3);
+  \draw[edge] (b2) -- (b2_7);
+  \draw[edge] (b2_3) -- (b2_2);
+
+  % =======================
+  % Tree B4 (Root 25)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (13.5, -0.4) {$B_4$};
+  \node[node] (b4) at (13.5, 0) {25};
+
+  % Level 1
+  \node[node] (b4_19) at (9.5, 1) {19};
+  \node[node] (b4_17) at (11.5, 1) {17};
+  \node[node] (b4_13) at (12.5, 1) {13};
+  \node[node] (b4_21) at (13.5, 1) {21};
+
+  % Level 2
+  % Under 19
+  \node[node] (b4_12) at (7.5, 2) {12};
+  \node[node] (b4_4)  at (8.5, 2) {4};
+  \node[node] (b4_m5) at (9.5, 2) {-5};
+  % Under 17
+  \node[node] (b4_11) at (10.5, 2) {11};
+  \node[node] (b4_9)  at (11.5, 2) {9};
+  % Under 13
+  \node[node] (b4_10) at (12.5, 2) {10};
+
+  % Level 3
+  % Under 12
+  \node[node] (b4_1)   at (6.5, 3) {1};
+  \node[node] (b4_6)   at (7.5, 3) {6};
+  % Under 4
+  \node[node] (b4_m20) at (8.5, 3) {-20};
+  % Under 11
+  \node[node] (b4_8)   at (10.5, 3) {8};
+
+  % Edges for B4
+  \draw[edge] (b4) -- (b4_19);
+  \draw[edge] (b4) -- (b4_17);
+  \draw[edge] (b4) -- (b4_13);
+  \draw[edge] (b4) -- (b4_21);
+
+  \draw[edge] (b4_19) -- (b4_12);
+  \draw[edge] (b4_19) -- (b4_4);
+  \draw[edge] (b4_19) -- (b4_m5);
+
+  \draw[edge] (b4_17) -- (b4_11);
+  \draw[edge] (b4_17) -- (b4_9);
+
+  \draw[edge] (b4_13) -- (b4_10);
+
+  \draw[edge] (b4_12) -- (b4_1);
+  \draw[edge] (b4_12) -- (b4_6);
+
+  \draw[edge] (b4_4) -- (b4_m20);
+
+  \draw[edge] (b4_11) -- (b4_8);
+
 \end{tikzpicture}
 \end{center}
 
@@ -22604,94 +22650,93 @@ A 19-node binomial heap explicitly contains exactly three binomial trees: \textb
 \item Show the binomial heap that results when the node $X$ with key 17 is deleted from the binomial heap shown in the Figure below. Show the intermediate steps.
 \begin{center}
 \begin{tikzpicture}[
-  scale=0.85, transform shape,
-  >=stealth,
-  every node/.style={
-    circle,
-    draw=black,
-    ultra thick,
-    minimum size=0.7cm,
-    inner sep=0pt,
-    font=\small,
-    thick
-  },
-  edge/.style={
+    x=1.1cm, y=-1.3cm,
     thick,
-    black
-  },
-  label style/.style={
-    draw=none,
-    font=\large\bfseries,
-    above=2pt
-  }
-]
-% ==========================================
-% ROOT NODES (Main Backbone)
-% ==========================================
-\node (n3) at (5,2) {3};
-\node[right=3.5cm of n3] (n23_r) {23};
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick},
+    rootarrow/.style={->, thick, dashed, color=black!70}
+  ]
 
-% Horizontal root connection
-\draw[edge] (n3) -- (n23_r);
+  % =======================
+  % Tree B4 (Root 3)
+  % =======================
+  \node[node] (n3) at (9, 0) {3};
 
-% Rightmost Branch under root 23
-\node[below=1.0cm of n23_r] (n89) {89};
-\draw[edge] (n23_r) -- (n89);
+  % Level 1 (Children of Root 3)
+  \node[node] (n15) at (5, 1) {15};
+  \node[node] (n11) at (7, 1) {11};
+  \node[node] (n28) at (8, 1) {28};
+  \node[node] (n33) at (9, 1) {33};
 
-% ==========================================
-% CHILDREN OF ROOT '3'
-% ==========================================
-\node[below left=1.0cm and 3.5cm of n3] (n15) {15};
-\node[below left=1.2cm and 0.8cm of n3] (n11) {11};
-\node[below=1.2cm of n3] (n28) {28};
-\node[below right=1.2cm and 0.4cm of n3] (n33) {33};
+  % Level 2
+  % Under 15 (Node 17 has 'X' label)
+  \node[node, label={[font=\large\bfseries, black]above:X}] (n17) at (3, 2) {17};
+  \node[node] (n42)    at (4, 2) {42};
+  \node[node] (n23_l)  at (5, 2) {23};
+  % Under 11
+  \node[node] (n19)    at (6, 2) {19};
+  \node[node] (n16)    at (7, 2) {16};
+  % Under 28
+  \node[node] (n30)    at (8, 2) {30};
 
-\draw[edge] (n3) -- (n15);
-\draw[edge] (n3) -- (n11);
-\draw[edge] (n3) -- (n28);
-\draw[edge] (n3) -- (n33);
+  % Level 3
+  % Under 17
+  \node[node] (n21)  at (2, 3) {21};
+  \node[node] (n18)  at (3, 3) {18};
+  % Under 42
+  \node[node] (n45)  at (4, 3) {45};
+  % Under 19
+  \node[node] (n20)  at (6, 3) {20};
 
-% ==========================================
-% SUBTREE UNDER NODE '11' & '28'
-% ==========================================
-\node[below left=0.9cm and 0.5cm of n11] (n19) {19};
-\node[below right=0.9cm and 0.2cm of n11] (n16) {16};
-\draw[edge] (n11) -- (n19);
-\draw[edge] (n11) -- (n16);
+  % Level 4
+  % Under 21
+  \node[node] (n25)  at (2, 4) {25};
 
-\node[below=0.9cm of n19] (n20) {20};
-\draw[edge] (n19) -- (n20);
+  % =======================
+  % Tree B1 (Root 23)
+  % =======================
+  \node[node] (n23_r) at (11, 0) {23};
+  \node[node] (n89)   at (11, 1) {89};
 
-\node[below=0.9cm of n28] (n30) {30};
-\draw[edge] (n28) -- (n30);
+  % =======================
+  % Edges
+  % =======================
+  % Root list link
+  \draw[rootarrow] (n3) -- (n23_r);
 
-% ==========================================
-% SUBTREE UNDER NODE '15'
-% ==========================================
-% Node 17 has a label 'X' on top
-\node[below left=1.0cm and 1.2cm of n15, label={[label style]above:X}] (n17) {17};
-\node[below=1.2cm of n15] (n42) {42};
-\node[below right=1.0cm and 0.4cm of n15] (n23_l) {23};
+  % From Root 3
+  \draw[edge] (n3) -- (n15);
+  \draw[edge] (n3) -- (n11);
+  \draw[edge] (n3) -- (n28);
+  \draw[edge] (n3) -- (n33);
 
-\draw[edge] (n15) -- (n17);
-\draw[edge] (n15) -- (n42);
-\draw[edge] (n15) -- (n23_l);
+  % From 15
+  \draw[edge] (n15) -- (n17);
+  \draw[edge] (n15) -- (n42);
+  \draw[edge] (n15) -- (n23_l);
 
-% Under 42
-\node[below=0.9cm of n42] (n45) {45};
-\draw[edge] (n42) -- (n45);
+  % From 11
+  \draw[edge] (n11) -- (n19);
+  \draw[edge] (n11) -- (n16);
 
-% ==========================================
-% SUBTREE UNDER NODE '17'
-% ==========================================
-\node[below left=1.0cm and 0.6cm of n17] (n21) {21};
-\node[below=1.1cm of n17] (n18) {18};
-\draw[edge] (n17) -- (n21);
-\draw[edge] (n17) -- (n18);
+  % From 28
+  \draw[edge] (n28) -- (n30);
 
-% Bottom-most left node
-\node[below=0.9cm of n21] (n25) {25};
-\draw[edge] (n21) -- (n25);
+  % From 17
+  \draw[edge] (n17) -- (n21);
+  \draw[edge] (n17) -- (n18);
+
+  % From 42
+  \draw[edge] (n42) -- (n45);
+
+  % From 19
+  \draw[edge] (n19) -- (n20);
+
+  % From 21
+  \draw[edge] (n21) -- (n25);
+
+  % From Root 23
+  \draw[edge] (n23_r) -- (n89);
 
 \end{tikzpicture}
 \end{center}
@@ -22716,54 +22761,96 @@ The node $X$ (17) is decreased to $-\infty$. It swaps keys with its parent (15),
 
 \begin{center}
 \begin{tikzpicture}[
-    scale=0.8, transform shape,
-    >=stealth,
-    vertex/.style={
-      circle, draw=black, ultra thick, minimum size=0.7cm, inner sep=0pt, font=\small
-    },
-    edge/.style={ thick, black }
+    x=1.1cm, y=-1.3cm,
+    thick,
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick},
+    rootarrow/.style={->, thick, dashed, color=black!70}
   ]
-  % Root
-  \node[vertex] (n3) at (5,2) {$-\infty$};
-  \node[vertex, right=3.5cm of n3] (n23_r) {23};
-  \draw[edge] (n3) -- (n23_r);
 
-  \node[vertex, below=1.0cm of n23_r] (n89) {89};
-  \draw[edge] (n23_r) -- (n89);
+  % =======================
+  % Tree B4 (Root -\infty)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (9, -0.4) {$B_4$};
+  \node[node] (n3) at (9, 0) {$-\infty$};
 
-  % Children of -\infty
-  \node[vertex, below left=1.0cm and 3.5cm of n3] (n15) {3};
-  \node[vertex, below left=1.2cm and 0.8cm of n3] (n11) {11};
-  \node[vertex, below=1.2cm of n3] (n28) {28};
-  \node[vertex, below right=1.2cm and 0.4cm of n3] (n33) {33};
-  \draw[edge] (n3) -- (n15); \draw[edge] (n3) -- (n11);
-  \draw[edge] (n3) -- (n28); \draw[edge] (n3) -- (n33);
+  % Level 1 (Children of Root -\infty)
+  \node[node] (n15) at (5, 1) {3};
+  \node[node] (n11) at (7, 1) {11};
+  \node[node] (n28) at (8, 1) {28};
+  \node[node] (n33) at (9, 1) {33};
 
-  % Subtrees
-  \node[vertex, below left=0.9cm and 0.5cm of n11] (n19) {19};
-  \node[vertex, below right=0.9cm and 0.2cm of n11] (n16) {16};
-  \draw[edge] (n11) -- (n19); \draw[edge] (n11) -- (n16);
-  \node[vertex, below=0.9cm of n19] (n20) {20};
-  \draw[edge] (n19) -- (n20);
+  % Level 2
+  % Under Node 3
+  \node[node] (n17)   at (3, 2) {15};
+  \node[node] (n42)   at (4, 2) {42};
+  \node[node] (n23_l) at (5, 2) {23};
+  % Under Node 11
+  \node[node] (n19)   at (6, 2) {19};
+  \node[node] (n16)   at (7, 2) {16};
+  % Under Node 28
+  \node[node] (n30)   at (8, 2) {30};
 
-  \node[vertex, below=0.9cm of n28] (n30) {30};
+  % Level 3
+  % Under Node 15
+  \node[node] (n21) at (2, 3) {21};
+  \node[node] (n18) at (3, 3) {18};
+  % Under Node 42
+  \node[node] (n45) at (4, 3) {45};
+  % Under Node 19
+  \node[node] (n20) at (6, 3) {20};
+
+  % Level 4
+  % Under Node 21
+  \node[node] (n25) at (2, 4) {25};
+
+  % =======================
+  % Tree B1 (Root 23)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (11, -0.4) {$B_1$};
+  \node[node] (n23_r) at (11, 0) {23};
+  \node[node] (n89)   at (11, 1) {89};
+
+  % =======================
+  % Edges
+  % =======================
+  % Root list connection
+  \draw[rootarrow] (n3) -- (n23_r);
+
+  % From Root -\infty
+  \draw[edge] (n3) -- (n15);
+  \draw[edge] (n3) -- (n11);
+  \draw[edge] (n3) -- (n28);
+  \draw[edge] (n3) -- (n33);
+
+  % From Node 3
+  \draw[edge] (n15) -- (n17);
+  \draw[edge] (n15) -- (n42);
+  \draw[edge] (n15) -- (n23_l);
+
+  % From Node 11
+  \draw[edge] (n11) -- (n19);
+  \draw[edge] (n11) -- (n16);
+
+  % From Node 28
   \draw[edge] (n28) -- (n30);
 
-  % Swapped Keys path
-  \node[vertex, below left=1.0cm and 1.2cm of n15] (n17) {15};
-  \node[vertex, below=1.2cm of n15] (n42) {42};
-  \node[vertex, below right=1.0cm and 0.4cm of n15] (n23_l) {23};
-  \draw[edge] (n15) -- (n17); \draw[edge] (n15) -- (n42); \draw[edge] (n15) -- (n23_l);
+  % From Node 15
+  \draw[edge] (n17) -- (n21);
+  \draw[edge] (n17) -- (n18);
 
-  \node[vertex, below=0.9cm of n42] (n45) {45};
+  % From Node 42
   \draw[edge] (n42) -- (n45);
 
-  \node[vertex, below left=1.0cm and 0.6cm of n17] (n21) {21};
-  \node[vertex, below=1.1cm of n17] (n18) {18};
-  \draw[edge] (n17) -- (n21); \draw[edge] (n17) -- (n18);
+  % From Node 19
+  \draw[edge] (n19) -- (n20);
 
-  \node[vertex, below=0.9cm of n21] (n25) {25};
+  % From Node 21
   \draw[edge] (n21) -- (n25);
+
+  % From Root 23
+  \draw[edge] (n23_r) -- (n89);
+
 \end{tikzpicture}
 \end{center}
 
@@ -22784,66 +22871,90 @@ Removing the $-\infty$ root exposes its children as independent binomial trees: 
 The only remaining roots in the heap are 33 ($B_0$) and 3 ($B_4$).
 \begin{center}
 \begin{tikzpicture}[
-    scale=0.85, transform shape,
-    >=stealth,
-    vertex/.style={
-      circle, draw=black, ultra thick, minimum size=0.7cm, inner sep=0pt, font=\small
-    },
-    edge/.style={ thick, black }
+    x=1.1cm, y=-1.3cm,
+    thick,
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick},
+    rootarrow/.style={->, thick, dashed, color=black!70}
   ]
-  % Roots
-  \node[vertex] (n33) at (1, 0) {33};
-  \node[vertex] (n3) at (4, 0) {3};
-  \draw[edge] (n33) -- (n3);
 
-  % Children of 3
-  \node[vertex] (n11) at (0, -1.5) {11};
-  \node[vertex] (n15) at (3.5, -1.5) {15};
-  \node[vertex] (n42) at (6, -1.5) {42};
-  \node[vertex] (n23a) at (7.5, -1.5) {23};
+  % =======================
+  % Tree B0 (Root 33)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (0, -0.4) {$B_0$};
+  \node[node] (n33) at (0, 0) {33};
 
+  % =======================
+  % Tree B4 (Root 3)
+  % =======================
+  \node[font=\small\bfseries, color=gray] at (9, -0.4) {$B_4$};
+  \node[node] (n3) at (9, 0) {3};
+
+  % Level 1 (Children of Root 3)
+  \node[node] (n11)  at (5, 1) {11};
+  \node[node] (n15)  at (7, 1) {15};
+  \node[node] (n42)  at (8, 1) {42};
+  \node[node] (n23a) at (9, 1) {23};
+
+  % Level 2
+  % Under 11
+  \node[node] (n23b) at (3, 2) {23};
+  \node[node] (n19)  at (4, 2) {19};
+  \node[node] (n16)  at (5, 2) {16};
+  % Under 15
+  \node[node] (n21)  at (6, 2) {21};
+  \node[node] (n18)  at (7, 2) {18};
+  % Under 42
+  \node[node] (n45)  at (8, 2) {45};
+
+  % Level 3
+  % Under 23b
+  \node[node] (n28)  at (2, 3) {28};
+  \node[node] (n89)  at (3, 3) {89};
+  % Under 19
+  \node[node] (n20)  at (4, 3) {20};
+  % Under 21
+  \node[node] (n25)  at (6, 3) {25};
+
+  % Level 4
+  % Under 28
+  \node[node] (n30)  at (2, 4) {30};
+
+  % =======================
+  % Edges
+  % =======================
+  % Root list link
+  \draw[rootarrow] (n33) -- (n3);
+
+  % From Root 3
   \draw[edge] (n3) -- (n11);
   \draw[edge] (n3) -- (n15);
   \draw[edge] (n3) -- (n42);
   \draw[edge] (n3) -- (n23a);
 
-  % Children of 11
-  \node[vertex] (n23b) at (-2, -3) {23};
-  \node[vertex] (n19) at (0.5, -3) {19};
-  \node[vertex] (n16) at (2, -3) {16};
-
+  % From 11
   \draw[edge] (n11) -- (n23b);
   \draw[edge] (n11) -- (n19);
   \draw[edge] (n11) -- (n16);
 
-  % Children of 15
-  \node[vertex] (n21) at (3.5, -3) {21};
-  \node[vertex] (n18) at (5, -3) {18};
-
+  % From 15
   \draw[edge] (n15) -- (n21);
   \draw[edge] (n15) -- (n18);
 
-  % Child of 42
-  \node[vertex] (n45) at (6, -3) {45};
+  % From 42
   \draw[edge] (n42) -- (n45);
 
-  % Children of 23b
-  \node[vertex] (n28) at (-3, -4.5) {28};
-  \node[vertex] (n89) at (-1, -4.5) {89};
-
+  % From 23b
   \draw[edge] (n23b) -- (n28);
   \draw[edge] (n23b) -- (n89);
 
-  % Child of 19
-  \node[vertex] (n20) at (0.5, -4.5) {20};
+  % From 19
   \draw[edge] (n19) -- (n20);
 
-  % Child of 21
-  \node[vertex] (n25) at (3.5, -4.5) {25};
+  % From 21
   \draw[edge] (n21) -- (n25);
 
-  % Child of 28
-  \node[vertex] (n30) at (-3, -6) {30};
+  % From 28
   \draw[edge] (n28) -- (n30);
 
 \end{tikzpicture}
@@ -22951,7 +23062,7 @@ The total time to sort the array would be exactly $O(n) + O(n) = O(n)$. However,
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Advanced Heaps (Fibonacci Heaps)}{sub:s2-fibheap}
+\subtopic{cB}{Advanced Heaps (Fibonacci Heaps)}\label{sub:s2-fibheap}
 
 \begin{enumerate}
 
@@ -23150,6 +23261,126 @@ We rebuild the root list with nodes 7, 17, and 52. We find the minimum root amon
 \begin{itemize}
 \item \textbf{Time Complexity:} $\mathcal{O}(\log n)$ amortized time. Removing the minimum node takes $\mathcal{O}(1)$ time. Consolidation merges trees and significantly reduces the size of the root list. The maximum degree $D(n)$ is bounded by $\mathcal{O}(\log n)$, yielding an amortized operation cost that is logarithmic.
 \item \textbf{Space Complexity:} $\mathcal{O}(\log n)$ auxiliary space is required for the degree tracking array $A[0..D]$ during the consolidation process.
+\end{itemize}
+
+\end{tcolorbox}
+
+% Q — 2024-25
+\item Draw the maximally damaged tree resulting from $B_6$.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25, 2019--20}
+
+\begin{tcolorbox}[enhanced,breakable,ansbox,colback=cB!4,colframe=cB,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cB]
+
+\subsubsection*{Concept: The Maximally Damaged Tree}
+In the context of advanced data structures like \textbf{Fibonacci Heaps}, a binomial tree $B_k$ becomes "damaged" when nodes are cut from it during `Decrease-Key` operations.
+
+To maintain a bounded maximum degree, Fibonacci heaps enforce a \textit{cascading cut} rule: a non-root node can lose at most \textbf{one} child before it is forcibly cut from its parent. Therefore, a \textbf{maximally damaged tree} of order $k$ (often denoted as $F_k$ or a tree of rank $k$) is formed from $B_k$ under the following worst-case conditions:
+\begin{enumerate}
+\item Every non-root node loses exactly one child (any more would trigger a cascading cut).
+\item To minimize the remaining size of the tree, the lost child is the \textit{heaviest} (highest degree) subtree.
+\item The root maintains its original $k$ children (thus remaining a tree of order/rank $k$).
+\end{enumerate}
+
+\subsubsection*{Deriving the Structure for $B_6$}
+A standard binomial tree $B_6$ has exactly $2^6 = 64$ nodes. The root has 6 children with degrees: $5, 4, 3, 2, 1, 0$.
+Applying the maximum damage rule recursively:
+\begin{itemize}
+\item The child of degree $5$ loses its heaviest child (degree 4), becoming degree $4$.
+\item The child of degree $4$ loses its heaviest child (degree 3), becoming degree $3$.
+\item \dots and so on. The child of degree $0$ cannot lose a child, so it remains degree $0$.
+\end{itemize}
+The new degrees of the root's children become precisely: \textbf{4, 3, 2, 1, 0, 0}.
+
+This recursive "thinning" mimics the Fibonacci sequence. Let $S_k$ be the minimum number of nodes in a maximally damaged tree of rank $k$. The recurrence relation is $S_k = S_{k-2} + S_{k-1}$ (with base cases $S_0 = 1, S_1 = 2$). The total size strictly follows the Fibonacci sequence $S_k = F_{k+2}$ (where $F_1=1, F_2=1, F_3=2, \dots$).
+
+For $B_6$, the maximally damaged tree has exactly $\mathbf{F_8 = 21}$ \textbf{nodes} (a significant reduction from 64).
+
+\vspace{1em}
+
+\vspace{1em}
+
+\subsubsection*{Diagram: Maximally Damaged Tree from $B_6$}
+\textit{Note: The integer inside each node represents its current \textbf{degree} (number of children). The tree is spread horizontally to prevent overlap.}
+
+\begin{center}
+\begin{tikzpicture}[
+    scale=0.9, transform shape,
+    thick,
+    main/.style={circle, draw=cB!80!black, fill=cB!10, minimum size=0.8cm, font=\bfseries},
+    edge/.style={draw=black!70, thick}
+  ]
+
+  % Root Level 0
+  \node[main, fill=cB!30] (root) at (1, 0) {6};
+
+  % Level 1 (Children of Root)
+  \node[main] (c1) at (-4, -1.5) {0};
+  \node[main] (c2) at (-3, -1.5) {0};
+  \node[main] (c3) at (-2, -1.5) {1};
+  \node[main] (c4) at (-0.5, -1.5) {2};
+  \node[main] (c5) at (2, -1.5) {3};
+  \node[main] (c6) at (6, -1.5) {4};
+
+  % Level 2
+  \node[main] (c31) at (-2, -3) {0};
+  \node[main] (c41) at (-1, -3) {0};
+  \node[main] (c42) at (0, -3) {0};
+  \node[main] (c51) at (1, -3) {0};
+  \node[main] (c52) at (2, -3) {0};
+  \node[main] (c53) at (3, -3) {1};
+  \node[main] (c61) at (4.5, -3) {0};
+  \node[main] (c62) at (5.5, -3) {0};
+  \node[main] (c63) at (6.5, -3) {1};
+  \node[main] (c64) at (8, -3) {2};
+
+  % Level 3
+  \node[main] (c531) at (3, -4.5) {0};
+  \node[main] (c631) at (6.5, -4.5) {0};
+  \node[main] (c641) at (7.5, -4.5) {0};
+  \node[main] (c642) at (8.5, -4.5) {0};
+
+  % Edges from Root
+  \draw[edge] (root) -- (c1);
+  \draw[edge] (root) -- (c2);
+  \draw[edge] (root) -- (c3);
+  \draw[edge] (root) -- (c4);
+  \draw[edge] (root) -- (c5);
+  \draw[edge] (root) -- (c6);
+
+  % Edges from Level 1
+  \draw[edge] (c3) -- (c31);
+
+  \draw[edge] (c4) -- (c41);
+  \draw[edge] (c4) -- (c42);
+
+  \draw[edge] (c5) -- (c51);
+  \draw[edge] (c5) -- (c52);
+  \draw[edge] (c5) -- (c53);
+
+  \draw[edge] (c6) -- (c61);
+  \draw[edge] (c6) -- (c62);
+  \draw[edge] (c6) -- (c63);
+  \draw[edge] (c6) -- (c64);
+
+  % Edges from Level 2
+  \draw[edge] (c53) -- (c531);
+
+  \draw[edge] (c63) -- (c631);
+
+  \draw[edge] (c64) -- (c641);
+  \draw[edge] (c64) -- (c642);
+
+\end{tikzpicture}
+\end{center}
+
+\vspace{0.5em}
+
+\vspace{1em}
+
+\subsubsection*{Complexity \& Analytical Properties}
+\begin{itemize}
+\item \textbf{Total Nodes:} Summing the nodes yields $1 \text{ (root)} + 1 + 1 + 2 + 3 + 5 + 8 = \textbf{21}$.
+\item \textbf{Implication on Time Complexity:} Because a tree of order $k$ cannot have fewer than $F_{k+2}$ nodes, and $F_{k+2} \ge \phi^k$ (where $\phi$ is the golden ratio $\approx 1.618$), the maximum degree $D(n)$ of any node in an $n$-node Fibonacci Heap is bounded by $\log_\phi n = \mathcal{O}(\log n)$. This tight mathematical bound is the core reason \texttt{Extract-Min} operates in amortized $\mathcal{O}(\log n)$ time despite extreme potential tree damage.
 \end{itemize}
 
 \end{tcolorbox}
@@ -24241,13 +24472,12 @@ While this is a structural property rather than an algorithm, understanding the 
 \secdivider{Part III}{Hashing}{cC}{cC}{Hash Functions and Collision Resolution}
 
 %% ── S3: Hashing ───────────────────────────────────────────────────────
-\section*{S3 --- Hashing}
-\pdfbookmark[1]{S3: Hashing}{sec:S3}
+\section{S3 --- Hashing}
 \label{sec:S3}
 \markboth{S3 --- Hashing}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Hash Functions and Collision Resolution}{sub:s3-hash}
+\subtopic{cC}{Hash Functions and Collision Resolution}\label{sub:s3-hash}
 
 \begin{enumerate}
 
@@ -26539,13 +26769,12 @@ Below is the visualization of the resulting 13-slot hash table after all inserti
 \secdivider{Part IV}{NP-Completeness}{cD}{cD}{P vs NP Classes, Reductions, NP-hard and NP-complete Problems}
 
 %% ── S4: NP-Completeness ───────────────────────────────────────────────
-\section*{S4 --- NP-Completeness}
-\pdfbookmark[1]{S4: NP-Completeness}{sec:S4}
+\section{S4 --- NP-Completeness}
 \label{sec:S4}
 \markboth{S4 --- NP-Completeness}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{P vs NP Classes}{sub:s4-pvsnp}
+\subtopic{cD}{P vs NP Classes}\label{sub:s4-pvsnp}
 
 \begin{enumerate}
 
@@ -27791,7 +28020,7 @@ Under this assumption, the intersection of $NP$ and $\text{co-}NP$ contains prob
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Reductions}{sub:s4-reductions}
+\subtopic{cD}{Reductions}\label{sub:s4-reductions}
 
 \begin{enumerate}
 
@@ -29339,7 +29568,7 @@ Summing the clauses generated from each step:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{NP-hard and NP-complete Problems}{sub:s4-nphard}
+\subtopic{cD}{NP-hard and NP-complete Problems}\label{sub:s4-nphard}
 
 \begin{enumerate}
 
@@ -30902,13 +31131,12 @@ Since the transformation of computing a complement graph requires $\mathcal{O}(|
 \secdivider{Part V}{Coping with Hardness}{cE}{cE}{Approximation Algorithms, Backtracking, Branch and Bound}
 
 %% ── S5: Coping with Hardness ──────────────────────────────────────────
-\section*{S5 --- Coping with Hardness}
-\pdfbookmark[1]{S5: Coping with Hardness}{sec:S5}
+\section{S5 --- Coping with Hardness}
 \label{sec:S5}
 \markboth{S5 --- Coping with Hardness}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Approximation Algorithms}{sub:s5-approx}
+\subtopic{cE}{Approximation Algorithms}\label{sub:s5-approx}
 
 \begin{enumerate}
 
@@ -33450,7 +33678,7 @@ This confirms that the size of the cover produced by the greedy maximal matching
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Backtracking}{sub:s5-backtrack}
+\subtopic{cE}{Backtracking}\label{sub:s5-backtrack}
 
 \begin{enumerate}
 
@@ -34676,7 +34904,7 @@ Branches leading to immediate conflicts (column or diagonal) are pruned early (m
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Branch and Bound}{sub:s5-branchbound}
+\subtopic{cE}{Branch and Bound}\label{sub:s5-branchbound}
 
 \begin{enumerate}
 
@@ -34705,6 +34933,8 @@ The optimal strategy for the Branch and Bound approach to the 0-1 Knapsack probl
 
 Given the knapsack capacity $W = 10$, we calculate and sort:
 
+\vspace{0.2cm}
+
 \begin{center}
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{|c|c|c|c|c|}
@@ -34721,8 +34951,6 @@ Given the knapsack capacity $W = 10$, we calculate and sort:
 \end{center}
 
 \vspace{0.2cm}
-
-\vspace{0.3cm}
 
 \subsubsection*{2. Bounding Function Definition}
 
@@ -36976,13 +37204,12 @@ The diagram below contrasts how FIFO (BFS) processes the state-space tree compar
 \secdivider{Part VI}{String Matching Algorithms \& Randomized Algorithms}{cG}{cG}{Knuth-Morris-Pratt (KMP) Algorithm, Monte Carlo Algorithms \& Probability Amplification, Las Vegas Algorithms \& Randomized Quick Sort}
 
 %% ── S6: String Matching Algorithms ───────────────────────────────────
-\section*{S6 --- String Matching Algorithms}
-\pdfbookmark[1]{S6: String Matching Algorithms}{sec:S6}
+\section{S6 --- String Matching Algorithms}
 \label{sec:S6}
 \markboth{S6 --- String Matching Algorithms}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Knuth-Morris-Pratt (KMP) Algorithm}{sub:s6-kmp}
+\subtopic{cG}{Knuth-Morris-Pratt (KMP) Algorithm}\label{sub:s6-kmp}
 
 \begin{enumerate}
 
@@ -37173,13 +37400,12 @@ We iterate through the text $T = \texttt{ABABABABC}$ with a pointer $i$, and kee
 
 \end{enumerate}
 
-\section*{S7 --- Randomized Algorithms}
-\pdfbookmark[1]{S7: Randomized Algorithms}{sec:S7}
+\section{S7 --- Randomized Algorithms}
 \label{sec:S7}
 \markboth{S7 --- Randomized Algorithms}{}
 
 
-\subtopic{cG}{Monte Carlo Algorithms \& Probability Amplification}{sub:s7-montecarlo}
+\subtopic{cG}{Monte Carlo Algorithms \& Probability Amplification}\label{sub:s7-montecarlo}
 
 \begin{enumerate}
 \item  Suppose you have designed a Monte Carlo Algorithm for a given problem which succeeds with probability $\ge \frac{1}{n^2}$. However, your boss has asked you to achieve at least $(1 - \frac{1}{n})$ success probability. Explain how you can achieve this.
@@ -37307,7 +37533,7 @@ Let $T(n)$ be the worst-case time complexity of the original Monte Carlo algorit
 
 \end{enumerate}
 
-\subtopic{cG}{Las Vegas Algorithms \& Randomized Quick Sort}{sub:s7-lasvegas}
+\subtopic{cG}{Las Vegas Algorithms \& Randomized Quick Sort}\label{sub:s7-lasvegas}
 
 \begin{enumerate}
 \item Analyze the running time of the randomized quick sort algorithm.

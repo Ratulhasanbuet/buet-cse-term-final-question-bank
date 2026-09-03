@@ -40,14 +40,13 @@
 
 \newcounter{myboxcount}
 
-\BeforeBeginEnvironment{tcolorbox}{%
-  \stepcounter{myboxcount}% বক্স কাউন্টার ১ বাড়াবে
-  \setcounter{equation}{0}% ইকুয়েশন নম্বর ০ করবে (অর্থাৎ ১ থেকে শুরু হবে)
+\BeforeBeginEnvironment{tcolorbox}{
+  \stepcounter{myboxcount}
+  \setcounter{equation}{0}
   
   \renewcommand{\theHequation}{\themyboxcount.\arabic{equation}}%
 }
 
-% enhanced এবং breakable অপশন সচল করার জন্য লাইব্রেরি
 \tcbuselibrary{skins, breakable}
 
 
@@ -405,8 +404,7 @@
 \markboth{S1: Diode Characteristics}{S1: Diode Characteristics}
 \label{sec:S1}
 \titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
-\section*{S1 \quad Diode Characteristics}
-\addcontentsline{toc}{section}{S1: Diode Characteristics}
+\section{S1 \quad Diode Characteristics}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cA}{Diode Circuit Analysis}
@@ -7435,7 +7433,7 @@ Below is the sketch of the output waveform across the load resistor $R$.
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
 
-\section*{1. Silicon Controlled Rectifier (SCR)}
+\section{1. Silicon Controlled Rectifier (SCR)}
 
 \subsection*{1.1 Overview and Operating Principle}
 The Silicon Controlled Rectifier (SCR) is a four-layer ($p\text{-}n\text{-}p\text{-}n$), three-junction, three-terminal unidirectional semiconductor device. The three terminals are the Anode (A), Cathode (K), and Gate (G). It acts as a controlled switch that permits conduction only in the forward direction (from Anode to Cathode) once triggered by a positive gate current pulse.
@@ -7525,7 +7523,7 @@ The current-voltage ($I\text{-}V$) relationship of an SCR consists of three main
 
 \vspace{0.5cm}
 
-\section*{2. TRIAC (Triode for Alternating Current)}
+\section{2. TRIAC (Triode for Alternating Current)}
 
 \subsection*{2.1 Overview and Operating Principle}
 A TRIAC is a bidirectional, three-terminal semiconductor device that can conduct current in both directions when triggered. It can be modeled as two SCRs connected in an inverse-parallel (antiparallel) configuration with a unified gate circuit. The terminals are labeled Main Terminal 1 (MT1), Main Terminal 2 (MT2), and Gate (G). MT1 serves as the measurement reference point.
@@ -7612,7 +7610,7 @@ $\text{III}^{+}$ & III & Negative ($<0$) & Positive ($>0$) & \textbf{Lowest} (Ge
 
 \begin{tcolorbox}[enhanced,breakable,ansbox,colback=cA!4,colframe=cA,boxrule=0.8pt,arc=5pt,title={\textbf{Answer}},fonttitle=\bfseries\color{white},colbacktitle=cA]
 
-\section*{Two-Transistor Model of an SCR}
+\section{Two-Transistor Model of an SCR}
 
 \subsection*{1. Introduction and Conceptual Splitting}
 The operating principle of a Silicon Controlled Rectifier (SCR) can be modeled and analyzed using the **two-transistor analogy**. 
@@ -8131,8 +8129,7 @@ In a digital system, the act of \textbf{rectification is abstracted from physics
 \markboth{S2: Clipping, Clamping circuits}{S4: Clipping, Clamping circuits}
 \label{sec:S2}
 \titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
-\section*{S2 \quad Clipping, Clamping Circuits}
-\addcontentsline{toc}{section}{S2: Clipping, Clamping Circuits}
+\section{S2 \quad Clipping, Clamping Circuits}
 
 
 %%──────────────────────────────────────────────────────────────────────
@@ -10319,8 +10316,7 @@ The designed circuit successfully shifts the input square wave upwards. The nega
 \label{sec:S3}
 
 
-\section*{S3 \quad BJT Characteristics}
-\addcontentsline{toc}{section}{S3: BJT Characteristics}
+\section{S3 \quad BJT Characteristics}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cC}{Energy Band Profile}
@@ -15019,8 +15015,7 @@ If $V_{\text{in}}$ changes, $V_{oQ}$ changes, thereby moving closer to either cu
 \titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
 
 
-\section*{S4 \quad BJT Amplifiers}
-\addcontentsline{toc}{section}{S5: BJT Amplifiers}
+\section{S4 \quad BJT Amplifiers}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cC}{Common Emitter / Trans-conductance Amplifier}
@@ -18289,8 +18284,7 @@ Increase $R_C$    & Unchanged ($V_{CC}$)  & Steeper (Higher Gain) & Unchanged ($
 \markboth{S5: MOSFET Characteristics}{S5: MOSFET Characteristics}
 \label{sec:S5}
 
-\section*{S5 \quad MOSFET Characteristics}
-\addcontentsline{toc}{section}{S5: MOSFET Characteristics}
+\section{S5 \quad MOSFET Characteristics}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cB}{Device Characteristics}
@@ -23058,8 +23052,7 @@ Because it acts as a logical inverter, the output waveform $v_o$ will simply be 
 \markboth{S6: MOSFET Amplifiers}{S6: MOSFET Amplifiers}
 \label{sec:S6}
 
-\section*{S6 \quad MOSFET Amplifiers}
-\addcontentsline{toc}{section}{S6: MOSFET Amplifiers}
+\section{S6 \quad MOSFET Amplifiers}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cB}{Common Gate Amplifier}
@@ -25163,8 +25156,7 @@ $$G_v = \left( \frac{3333}{3333 + 100} \right) (-8.22) = (0.9709) (-8.22) = \mat
 \titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
 
 
-\section*{S7 \quad Operational Amplifiers (Op-Amps)}
-\addcontentsline{toc}{section}{S7: Operational Amplifiers}
+\section{S7 \quad Operational Amplifiers (Op-Amps)}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cE}{Ideal Op-Amp Characteristics}
@@ -33404,8 +33396,7 @@ Substitute these into the equation:
 \titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
 
 
-\section*{S8 \quad Oscillators, Timers \& Function Generators}
-\addcontentsline{toc}{section}{S8: Oscillators, Timers \& Function Generators}
+\section{S8 \quad Oscillators, Timers \& Function Generators}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cF}{Barkhausen Stability Criterion}
@@ -38984,8 +38975,7 @@ While the nominal component values ($R = 2.5\,\text{k}\Omega$, $C = 100\,\text{p
 \label{sec:S9}
 \titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
 
-\section*{S9 \quad Digital Logic \& Sequential Circuits}
-\addcontentsline{toc}{section}{S9: Digital Logic \& Sequential Circuits}
+\section{S9 \quad Digital Logic \& Sequential Circuits}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cD}{CMOS Logic Design and Implementation}
@@ -42342,8 +42332,7 @@ The detailed schematic below shows the 4-bit register using four D flip-flops an
 \label{sec:S10}
 \titleformat{\section}{\large\bfseries\color{cG}}{}{0em}{}[\titlerule]
 
-\section*{S10 \quad Data Converters, PLL \& Memory}
-\addcontentsline{toc}{section}{S10: Data Converters, PLL \& Memory}
+\section{S10 \quad Data Converters, PLL \& Memory}
 
 %%──────────────────────────────────────────────────────────────────────
 \subtopic{cG}{Digital-to-Analog Converter (DAC)}

@@ -143,10 +143,10 @@
   {\footnotesize\textcolor{cG}{\textit{\textbf{[Visual:} #1\textbf{]}}}}}
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
-\newcommand{\subtopic}[3]{%
-  \phantomsection%
-  \label{#3}%
-  \pdfbookmark[2]{#2}{#3}%
+\newcounter{subtopicbm}
+\newcommand{\subtopic}[2]{%
+  \stepcounter{subtopicbm}%
+  \pdfbookmark[2]{#2}{subtopicbm.\thesubtopicbm}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -339,14 +339,12 @@
 \secdivider{Part I}{Graph Algorithms}{cA}{cA}{Shortest Paths, Minimum Spanning Trees, Maximum Flow, Maximum Bipartite Matching, Stable Matching (Gale-Shapley), Graph Traversal \& Properties}
 
 %% ── S1: Graph Algorithms ──────────────────────────────────────────────
-\section*{S1 --- Graph Algorithms}
-\phantomsection
+\section{S1 --- Graph Algorithms}
 \label{sec:S1}
-\pdfbookmark[1]{S1: Graph Algorithms}{sec:S1}
 \markboth{S1 --- Graph Algorithms}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Shortest Paths}{sub:s1-shortestpaths}
+\subtopic{cA}{Shortest Paths}\label{sub:s1-shortestpaths}
 
 \begin{enumerate}
 
@@ -723,7 +721,7 @@ Dijkstra (G)
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Minimum Spanning Trees}{sub:s1-mst}
+\subtopic{cA}{Minimum Spanning Trees}\label{sub:s1-mst}
 
 \begin{enumerate}
 
@@ -1160,7 +1158,7 @@ to all the $n$ houses.\mk{12}
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Maximum Flow}{sub:s1-maxflow}
+\subtopic{cA}{Maximum Flow}\label{sub:s1-maxflow}
 
 \begin{enumerate}
 
@@ -1557,7 +1555,7 @@ H & -  & -  & - & -  & - & -  & -  & - \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Maximum Bipartite Matching}{sub:s1-bipartite}
+\subtopic{cA}{Maximum Bipartite Matching}\label{sub:s1-bipartite}
 
 \begin{enumerate}
 
@@ -1584,7 +1582,7 @@ if and only if there is a maximum flow $f$ in $G'$. \mk{17.5}
 \end{enumerate}
 
 
-\subtopic{cA}{Stable Matching (Gale-Shapley)}{sub:s1-stablematching}
+\subtopic{cA}{Stable Matching (Gale-Shapley)}\label{sub:s1-stablematching}
 
 \begin{enumerate}
   \item In a stable matching problem (\textbf{Gale-Shapley algorithm}) each participant has a true preference order. Now consider a woman $w$. Suppose $w$ prefers man $m$ to $m'$, but both $m$ and $m'$ are low on her list of preferences. Can it be the case that by switching the order of $m$ and $m'$ on her list of preferences (i.e., by falsely claiming that she prefers $m'$ to $m$) and running the algorithm with this false preference list, $w$ will end up with a man $m''$ that she truly prefers to both $m$ and $m'$? Give proof to support your answer.
@@ -1595,7 +1593,7 @@ if and only if there is a maximum flow $f$ in $G'$. \mk{17.5}
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Graph Traversal \& Properties}{sub:s1-traversal}
+\subtopic{cA}{Graph Traversal \& Properties}\label{sub:s1-traversal}
 
 \begin{enumerate}
 
@@ -1913,14 +1911,12 @@ complexity of the algorithm.
 \secdivider{Part II}{Advanced Data Structures}{cB}{cB}{Balanced Binary Search Trees (AVL Trees), Red-Black Trees, Splay Trees, Skip Lists, Advanced Heaps (Binomial Heaps), Advanced Heaps (Fibonacci Heaps)}
 
 %% ── S2: Advanced Data Structures ─────────────────────────────────────
-\section*{S2 --- Advanced Data Structures}
-\phantomsection
+\section{S2 --- Advanced Data Structures}
 \label{sec:S2}
-\pdfbookmark[1]{S2: Advanced Data Structures}{sec:S2}
 \markboth{S2 --- Advanced Data Structures}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Balanced Binary Search Trees (AVL Trees)}{sub:s2-avl}
+\subtopic{cB}{Balanced Binary Search Trees (AVL Trees)}\label{sub:s2-avl}
 
 \begin{enumerate}
 
@@ -2140,7 +2136,7 @@ complexity of the algorithm.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Red-Black Trees}{sub:s2-rbt}
+\subtopic{cB}{Red-Black Trees}\label{sub:s2-rbt}
 
 \begin{enumerate}
 
@@ -2410,7 +2406,7 @@ complexity of the algorithm.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Splay Trees}{sub:s2-splay}
+\subtopic{cB}{Splay Trees}\label{sub:s2-splay}
 
 \begin{enumerate}
 
@@ -2514,7 +2510,7 @@ complexity of the algorithm.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Skip Lists}{sub:s2-skip}
+\subtopic{cB}{Skip Lists}\label{sub:s2-skip}
 
 \begin{enumerate}
 
@@ -2665,18 +2661,13 @@ Perform the following operations on the skip-list and show the procedures:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Advanced Heaps (Binomial Heaps)}{sub:s2-binheap}
+\subtopic{cB}{Advanced Heaps (Binomial Heaps)}\label{sub:s2-binheap}
 
 \begin{enumerate}
 
 %% Q — 2018-19
 \item Prove that there are $\binom{k}{i}$ nodes at depth $i$ in a binomial heap $B_k$ of order $k$.
 \mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25, 2019--20, 2018--19}
-
-
-%% Q — 2024-25
-\item Draw the maximally damaged tree resulting from $B_6$.
-\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25, 2019--20}
 
 
 %% Q — 2024-25
@@ -2881,97 +2872,96 @@ Perform the following operations on the skip-list and show the procedures:
 %% Q — 2019-20
 \item Show the binomial heap that results when the node $X$ with key 17 is deleted from the binomial heap shown in the Figure below. Show the intermediate steps.
 \begin{center}
-  \begin{tikzpicture}[
-        scale=0.85, transform shape,
-        >=stealth,
-        every node/.style={
-            circle,
-            draw=black,
-            ultra thick, 
-            minimum size=0.7cm,
-            inner sep=0pt,
-            font=\small,
-            thick
-        },
-        edge/.style={
-            thick,
-            black
-        },
-        label style/.style={
-            draw=none,
-            font=\large\bfseries,
-            above=2pt
-        }
-    ]
-        % ==========================================
-        % ROOT NODES (Main Backbone)
-        % ==========================================
-        \node (n3) at (5,2) {3};
-        \node[right=3.5cm of n3] (n23_r) {23};
-        
-        % Horizontal root connection
-        \draw[edge] (n3) -- (n23_r);
+\begin{tikzpicture}[
+    x=1.1cm, y=-1.3cm,
+    thick,
+    node/.style={circle, draw=black!80, fill=cyan!15, minimum size=0.75cm, font=\bfseries, inner sep=0pt},
+    edge/.style={draw=black!80, thick},
+    rootarrow/.style={->, thick, dashed, color=black!70}
+  ]
 
-        % Rightmost Branch under root 23
-        \node[below=1.0cm of n23_r] (n89) {89};
-        \draw[edge] (n23_r) -- (n89);
+  % =======================
+  % Tree B4 (Root 3)
+  % =======================
+  \node[node] (n3) at (9, 0) {3};
 
-        % ==========================================
-        % CHILDREN OF ROOT '3'
-        % ==========================================
-        \node[below left=1.0cm and 3.5cm of n3] (n15) {15};
-        \node[below left=1.2cm and 0.8cm of n3] (n11) {11};
-        \node[below=1.2cm of n3] (n28) {28};
-        \node[below right=1.2cm and 0.4cm of n3] (n33) {33};
+  % Level 1 (Children of Root 3)
+  \node[node] (n15) at (5, 1) {15};
+  \node[node] (n11) at (7, 1) {11};
+  \node[node] (n28) at (8, 1) {28};
+  \node[node] (n33) at (9, 1) {33};
 
-        \draw[edge] (n3) -- (n15);
-        \draw[edge] (n3) -- (n11);
-        \draw[edge] (n3) -- (n28);
-        \draw[edge] (n3) -- (n33);
+  % Level 2
+  % Under 15 (Node 17 has 'X' label)
+  \node[node, label={[font=\large\bfseries, black]above:X}] (n17) at (3, 2) {17};
+  \node[node] (n42)    at (4, 2) {42};
+  \node[node] (n23_l)  at (5, 2) {23};
+  % Under 11
+  \node[node] (n19)    at (6, 2) {19};
+  \node[node] (n16)    at (7, 2) {16};
+  % Under 28
+  \node[node] (n30)    at (8, 2) {30};
 
-        % ==========================================
-        % SUBTREE UNDER NODE '11' & '28'
-        % ==========================================
-        \node[below left=0.9cm and 0.5cm of n11] (n19) {19};
-        \node[below right=0.9cm and 0.2cm of n11] (n16) {16};
-        \draw[edge] (n11) -- (n19);
-        \draw[edge] (n11) -- (n16);
+  % Level 3
+  % Under 17
+  \node[node] (n21)  at (2, 3) {21};
+  \node[node] (n18)  at (3, 3) {18};
+  % Under 42
+  \node[node] (n45)  at (4, 3) {45};
+  % Under 19
+  \node[node] (n20)  at (6, 3) {20};
 
-        \node[below=0.9cm of n19] (n20) {20};
-        \draw[edge] (n19) -- (n20);
+  % Level 4
+  % Under 21
+  \node[node] (n25)  at (2, 4) {25};
 
-        \node[below=0.9cm of n28] (n30) {30};
-        \draw[edge] (n28) -- (n30);
+  % =======================
+  % Tree B1 (Root 23)
+  % =======================
+  \node[node] (n23_r) at (11, 0) {23};
+  \node[node] (n89)   at (11, 1) {89};
 
-        % ==========================================
-        % SUBTREE UNDER NODE '15'
-        % ==========================================
-        % Node 17 has a label 'X' on top
-        \node[below left=1.0cm and 1.2cm of n15, label={[label style]above:X}] (n17) {17};
-        \node[below=1.2cm of n15] (n42) {42};
-        \node[below right=1.0cm and 0.4cm of n15] (n23_l) {23};
+  % =======================
+  % Edges
+  % =======================
+  % Root list link
+  \draw[rootarrow] (n3) -- (n23_r);
 
-        \draw[edge] (n15) -- (n17);
-        \draw[edge] (n15) -- (n42);
-        \draw[edge] (n15) -- (n23_l);
+  % From Root 3
+  \draw[edge] (n3) -- (n15);
+  \draw[edge] (n3) -- (n11);
+  \draw[edge] (n3) -- (n28);
+  \draw[edge] (n3) -- (n33);
 
-        % Under 42
-        \node[below=0.9cm of n42] (n45) {45};
-        \draw[edge] (n42) -- (n45);
+  % From 15
+  \draw[edge] (n15) -- (n17);
+  \draw[edge] (n15) -- (n42);
+  \draw[edge] (n15) -- (n23_l);
 
-        % ==========================================
-        % SUBTREE UNDER NODE '17'
-        % ==========================================
-        \node[below left=1.0cm and 0.6cm of n17] (n21) {21};
-        \node[below=1.1cm of n17] (n18) {18};
-        \draw[edge] (n17) -- (n21);
-        \draw[edge] (n17) -- (n18);
+  % From 11
+  \draw[edge] (n11) -- (n19);
+  \draw[edge] (n11) -- (n16);
 
-        % Bottom-most left node
-        \node[below=0.9cm of n21] (n25) {25};
-        \draw[edge] (n21) -- (n25);
+  % From 28
+  \draw[edge] (n28) -- (n30);
 
-    \end{tikzpicture}
+  % From 17
+  \draw[edge] (n17) -- (n21);
+  \draw[edge] (n17) -- (n18);
+
+  % From 42
+  \draw[edge] (n42) -- (n45);
+
+  % From 19
+  \draw[edge] (n19) -- (n20);
+
+  % From 21
+  \draw[edge] (n21) -- (n25);
+
+  % From Root 23
+  \draw[edge] (n23_r) -- (n89);
+
+\end{tikzpicture}
 \end{center}
 
 \mk{17} \yr{CSE 207 | L-2/T-2 | 2019--20}
@@ -3005,7 +2995,7 @@ Perform the following operations on the skip-list and show the procedures:
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Advanced Heaps (Fibonacci Heaps)}{sub:s2-fibheap}
+\subtopic{cB}{Advanced Heaps (Fibonacci Heaps)}\label{sub:s2-fibheap}
 
 \begin{enumerate}
 
@@ -3076,6 +3066,11 @@ Perform the following operations on the skip-list and show the procedures:
 \end{center}
 
 \mk{12} \yr{CSE 207 | L-2/T-1 | 2024--25}
+
+
+%% Q — 2024-25
+\item Draw the maximally damaged tree resulting from $B_6$.
+\mk{8} \yr{CSE 207 | L-2/T-1 | 2024--25, 2019--20}
 
 
 \item Illustrate step by step what happens if the Extract-Min operation is executed on the given Fibonacci heap (nodes with keys 6, 2, 1, 5, 3, 4, 7, 8, 9 where 1 is the minimum).
@@ -3319,14 +3314,12 @@ Here double-circled nodes are marked and single-circled nodes are unmarked.
 \secdivider{Part III}{Hashing}{cC}{cC}{Hash Functions and Collision Resolution}
 
 %% ── S3: Hashing ───────────────────────────────────────────────────────
-\section*{S3 --- Hashing}
-\phantomsection
+\section{S3 --- Hashing}
 \label{sec:S3}
-\pdfbookmark[1]{S3: Hashing}{sec:S3}
 \markboth{S3 --- Hashing}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Hash Functions and Collision Resolution}{sub:s3-hash}
+\subtopic{cC}{Hash Functions and Collision Resolution}\label{sub:s3-hash}
 
 \begin{enumerate}
 
@@ -3459,14 +3452,13 @@ Draw the resulting hash table. \mk{13}
 \secdivider{Part IV}{NP-Completeness}{cD}{cD}{P vs NP Classes, Reductions, NP-hard and NP-complete Problems}
 
 %% ── S4: NP-Completeness ───────────────────────────────────────────────
-\section*{S4 --- NP-Completeness}
-\phantomsection
+\section{S4 --- NP-Completeness}
+ 
 \label{sec:S4}
-\pdfbookmark[1]{S4: NP-Completeness}{sec:S4}
 \markboth{S4 --- NP-Completeness}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{P vs NP Classes}{sub:s4-pvsnp}
+\subtopic{cD}{P vs NP Classes}\label{sub:s4-pvsnp}
 
 \begin{enumerate}
 
@@ -3528,7 +3520,7 @@ Draw the resulting hash table. \mk{13}
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Reductions}{sub:s4-reductions}
+\subtopic{cD}{Reductions}\label{sub:s4-reductions}
 
 \begin{enumerate}
 
@@ -3638,7 +3630,7 @@ Mention the number of boolean variables and clauses in the 3-SAT problem.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{NP-hard and NP-complete Problems}{sub:s4-nphard}
+\subtopic{cD}{NP-hard and NP-complete Problems}\label{sub:s4-nphard}
 
 \begin{enumerate}
 
@@ -3712,14 +3704,13 @@ Prove that the satisfiability of Boolean formulas is NP-complete.\\
 \secdivider{Part V}{Coping with Hardness}{cE}{cE}{Approximation Algorithms, Backtracking, Branch and Bound}
 
 %% ── S5: Coping with Hardness ──────────────────────────────────────────
-\section*{S5 --- Coping with Hardness}
-\phantomsection
+\section{S5 --- Coping with Hardness}
+ 
 \label{sec:S5}
-\pdfbookmark[1]{S5: Coping with Hardness}{sec:S5}
 \markboth{S5 --- Coping with Hardness}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Approximation Algorithms}{sub:s5-approx}
+\subtopic{cE}{Approximation Algorithms}\label{sub:s5-approx}
 
 \begin{enumerate}
 
@@ -3925,7 +3916,7 @@ GreedyVertexCover(G):
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Backtracking}{sub:s5-backtrack}
+\subtopic{cE}{Backtracking}\label{sub:s5-backtrack}
 
 \begin{enumerate}
 
@@ -4033,7 +4024,7 @@ Use the backtracking algorithm to decide whether this is satisfiable or not. You
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Branch and Bound}{sub:s5-branchbound}
+\subtopic{cE}{Branch and Bound}\label{sub:s5-branchbound}
 
 \begin{enumerate}
 
@@ -4246,14 +4237,13 @@ Item & Weight & Value \\
 \secdivider{Part VI}{String Matching Algorithms \& Randomized Algorithms}{cG}{cG}{Knuth-Morris-Pratt (KMP) Algorithm, Monte Carlo Algorithms \& Probability Amplification, Las Vegas Algorithms \& Randomized Quick Sort}
 
 %% ── S6: String Matching Algorithms ───────────────────────────────────
-\section*{S6 --- String Matching Algorithms}
-\phantomsection
+\section{S6 --- String Matching Algorithms}
+ 
 \label{sec:S6}
-\pdfbookmark[1]{S6: String Matching Algorithms}{sec:S6}
 \markboth{S6 --- String Matching Algorithms}{}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Knuth-Morris-Pratt (KMP) Algorithm}{sub:s6-kmp}
+\subtopic{cG}{Knuth-Morris-Pratt (KMP) Algorithm}\label{sub:s6-kmp}
 
 \begin{enumerate}
 
@@ -4263,12 +4253,10 @@ Item & Weight & Value \\
 
 \end{enumerate}
 
-\section*{S7 --- Randomized Algorithms}
-\phantomsection
+\section{S7 --- Randomized Algorithms}
+ 
 \label{sec:S7}
-\pdfbookmark[1]{S7: Randomized Algorithms}{sec:S7}
-
-\subtopic{cG}{Monte Carlo Algorithms \& Probability Amplification}{sub:s7-montecarlo}
+\subtopic{cG}{Monte Carlo Algorithms \& Probability Amplification}\label{sub:s7-montecarlo}
 
 \begin{enumerate}
   \item  Suppose you have designed a Monte Carlo Algorithm for a given problem which succeeds with probability $\ge \frac{1}{n^2}$. However, your boss has asked you to achieve at least $(1 - \frac{1}{n})$ success probability. Explain how you can achieve this.
@@ -4277,7 +4265,7 @@ Item & Weight & Value \\
   
 \end{enumerate}
 
-\subtopic{cG}{Las Vegas Algorithms \& Randomized Quick Sort}{sub:s7-lasvegas}
+\subtopic{cG}{Las Vegas Algorithms \& Randomized Quick Sort}\label{sub:s7-lasvegas}
 
 \begin{enumerate}
   \item Analyze the running time of the randomized quick sort algorithm.

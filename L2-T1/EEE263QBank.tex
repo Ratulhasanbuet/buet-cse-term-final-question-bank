@@ -93,20 +93,12 @@
   {\footnotesize\textit{$\hookrightarrow$ Similar: #1}}}
 \newcommand{\diagram}{\par\vspace{4pt}\textcolor{gray!55}{\small\textit{[Diagram to be added manually]}}}
 
-% Add section entries to the .toc without creating a second PDF bookmark.
-\makeatletter
-\newcommand{\addsectiontoc}[1]{%
-  \addtocontents{toc}{%
-    \protect\contentsline{section}{#1}{\thepage}{\@currentHref}\protected@file@percent
-  }%
-}
-\makeatother
 
 %% ── Subtopic heading macro ────────────────────────────────────────────
-\newcommand{\subtopic}[3]{%
-  \phantomsection
-  \pdfbookmark[2]{#2}{#3}%
-  \label{#3}%
+\newcounter{subtopicbm}
+\newcommand{\subtopic}[2]{%
+  \stepcounter{subtopicbm}%
+  \pdfbookmark[2]{#2}{subtopicbm.\thesubtopicbm}%
   \vspace{10pt}
   \noindent\begin{tcolorbox}[colback=#1!8,colframe=#1,boxrule=0.6pt,arc=4pt,
     left=6pt,right=6pt,top=4pt,bottom=4pt]
@@ -414,15 +406,13 @@
 %%  SECTION 1: IDEAL DIODE CHARACTERISTICS
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S1: Diode Characteristics}{S1: Diode Characteristics}
-\phantomsection
-\pdfbookmark[1]{S1: Diode Characteristics}{sec:S1}
+ 
 \label{sec:S1}
 \titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
-\section*{S1 \quad Diode Characteristics}
-\addsectiontoc{S1: Diode Characteristics}
+\section{S1 \quad Diode Characteristics}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Diode Circuit Analysis}{sub:s1-dc}
+\subtopic{cA}{Diode Circuit Analysis}\label{sub:s1-dc}
 
 \begin{enumerate}
     
@@ -774,7 +764,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Diode Models (Ideal, CVD, Piecewise Linear)}{sub:s1-models}
+\subtopic{cA}{Diode Models (Ideal, CVD, Piecewise Linear)}\label{sub:s1-models}
 
 \begin{enumerate}
     
@@ -823,7 +813,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Small Signal Model}{sub:s1-ssm}
+\subtopic{cA}{Small Signal Model}\label{sub:s1-ssm}
 
 \begin{enumerate}
     
@@ -867,7 +857,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Peak Rectifier}{sub:s1-peak}
+\subtopic{cA}{Peak Rectifier}\label{sub:s1-peak}
 
 \begin{enumerate}
     
@@ -901,7 +891,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{I-V Characteristics \& Waveform Analysis}{sub:s1-iv}
+\subtopic{cA}{I-V Characteristics \& Waveform Analysis}\label{sub:s1-iv}
 
 \begin{enumerate}
     
@@ -1056,7 +1046,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Diode Thermal Characteristics}{sub:s1-thermal}
+\subtopic{cA}{Diode Thermal Characteristics}\label{sub:s1-thermal}
 
 \begin{enumerate}
     
@@ -1074,7 +1064,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Bridge Rectifier}{sub:s1-rectifier}
+\subtopic{cA}{Bridge Rectifier}\label{sub:s1-rectifier}
 
 \begin{enumerate}
     
@@ -1249,7 +1239,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Zener Diode Regulator}{sub:s1-zener}
+\subtopic{cA}{Zener Diode Regulator}\label{sub:s1-zener}
 
 \begin{enumerate}
     
@@ -1540,7 +1530,7 @@
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Battery Charger Circuit}{sub:s1-battery}
+\subtopic{cA}{Battery Charger Circuit}\label{sub:s1-battery}
 
 \begin{enumerate}
     
@@ -1612,7 +1602,7 @@
 
 
 
-\subtopic{cA}{Special Purpose Diodes/Thyristors}{sub:s1-spd}
+\subtopic{cA}{Special Purpose Diodes/Thyristors}\label{sub:s1-spd}
 
 \begin{enumerate}
     
@@ -1742,7 +1732,7 @@
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Miscellaneous}{sub:s1-Miscellaneous}
+\subtopic{cB}{Miscellaneous}\label{sub:s1-Miscellaneous}
 
 \begin{enumerate}
     
@@ -1775,16 +1765,14 @@
 %%  SECTION 4: CLIPPING, CLAMPING & SWITCHING
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S2: Clipping, Clamping circuits}{S4: Clipping, Clamping circuits}
-\phantomsection
-\pdfbookmark[1]{S2: Clipping, Clamping Circuits}{sec:S2}
+ 
 \label{sec:S2}
 \titleformat{\section}{\large\bfseries\color{cA}}{}{0em}{}[\titlerule]
-\section*{S2 \quad Clipping, Clamping Circuits}
-\addsectiontoc{S2: Clipping, Clamping Circuits}
+\section{S2 \quad Clipping, Clamping Circuits}
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Clipping Circuits --- Waveform \& Transfer Characteristics}{sub:s2-clipping}
+\subtopic{cA}{Clipping Circuits --- Waveform \& Transfer Characteristics}\label{sub:s2-clipping}
 
 \begin{enumerate}
     
@@ -2155,7 +2143,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cA}{Clamping Circuits}{sub:s2-clamping}
+\subtopic{cA}{Clamping Circuits}\label{sub:s2-clamping}
 
 \begin{enumerate}
     
@@ -2458,16 +2446,14 @@
 \secdivider{S3 --- BJT Characteristics}{Energy band profiles, DC analysis, biasing stability, circuit design}{cC}
 
 \markboth{S3: BJT Characteristics}{S2: BJT Characteristics}
-\phantomsection
-\pdfbookmark[1]{S3: BJT Characteristics}{sec:S3}
+ 
 \label{sec:S3}
 
 
-\section*{S3 \quad BJT Characteristics}
-\addsectiontoc{S3: BJT Characteristics}
+\section{S3 \quad BJT Characteristics}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Energy Band Profile}{sub:s3-energy}
+\subtopic{cC}{Energy Band Profile}\label{sub:s3-energy}
 
 \begin{enumerate}
     
@@ -2478,7 +2464,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Device Structure and Operating Principle}{sub:s3-structure}
+\subtopic{cC}{Device Structure and Operating Principle}\label{sub:s3-structure}
 
 \begin{enumerate}
     
@@ -2489,7 +2475,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Early Effect}{sub:s3-early}
+\subtopic{cC}{Early Effect}\label{sub:s3-early}
 
 \begin{enumerate}
     
@@ -2508,7 +2494,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{DC Analysis}{sub:s3-dc}
+\subtopic{cC}{DC Analysis}\label{sub:s3-dc}
 
 \begin{enumerate}
     
@@ -2822,7 +2808,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{BJT Saturation Parameters}{sub:s3-saturation}
+\subtopic{cC}{BJT Saturation Parameters}\label{sub:s3-saturation}
 
 \begin{enumerate}
 
@@ -2834,7 +2820,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Multi-BJT Circuit Analysis}{sub:s3-multibjtdc}
+\subtopic{cC}{Multi-BJT Circuit Analysis}\label{sub:s3-multibjtdc}
 
 \begin{enumerate}
     
@@ -3101,7 +3087,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Voltage Transfer Characteristics}{sub:s3-vtc}
+\subtopic{cC}{Voltage Transfer Characteristics}\label{sub:s3-vtc}
 
 \begin{enumerate}
     
@@ -3152,7 +3138,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Operating Mode Design}{sub:s3-opmode}
+\subtopic{cC}{Operating Mode Design}\label{sub:s3-opmode}
 
 \begin{enumerate}
     
@@ -3185,7 +3171,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Biasing and Stability}{sub:s3-biasing}
+\subtopic{cC}{Biasing and Stability}\label{sub:s3-biasing}
 
 \begin{enumerate}
     
@@ -3268,7 +3254,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{BJT Circuit Design}{sub:s3-design}
+\subtopic{cC}{BJT Circuit Design}\label{sub:s3-design}
 
 \begin{enumerate}
     
@@ -3446,7 +3432,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Linear Amplifier Constraints}{sub:s3-linear}
+\subtopic{cC}{Linear Amplifier Constraints}\label{sub:s3-linear}
 
 \begin{enumerate}
     
@@ -3477,7 +3463,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Switching Circuits --- Logic Gates using BJTs}{sub:s3-switching}
+\subtopic{cC}{Switching Circuits --- Logic Gates using BJTs}\label{sub:s3-switching}
 
 \begin{enumerate}
 
@@ -3488,7 +3474,7 @@
 \end{enumerate}
 
 %%─────────────────────────────────────────────────────────────────────
-\subtopic{cC}{BJT Inverter Analysis}{sub:s3-inverter}
+\subtopic{cC}{BJT Inverter Analysis}\label{sub:s3-inverter}
 
 \begin{enumerate}
     
@@ -3592,17 +3578,15 @@
 %%  SECTION 5: BJT AMPLIFIERS
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S4: BJT Amplifiers}{S4: BJT Amplifiers}
-\phantomsection
-\pdfbookmark[1]{S4: BJT Amplifiers}{sec:S4}
+ 
 \label{sec:S4}
 \titleformat{\section}{\large\bfseries\color{cC}}{}{0em}{}[\titlerule]
 
 
-\section*{S4 \quad BJT Amplifiers}
-\addsectiontoc{S4: BJT Amplifiers}
+\section{S4 \quad BJT Amplifiers}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Common Emitter / Trans-conductance Amplifier}{sub:s4-ce}
+\subtopic{cC}{Common Emitter / Trans-conductance Amplifier}\label{sub:s4-ce}
 
 \begin{enumerate}
     
@@ -4109,7 +4093,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Common Base Amplifier}{sub:s4-cb}
+\subtopic{cC}{Common Base Amplifier}\label{sub:s4-cb}
 
 \begin{enumerate}
 \item For a Common Base Amplifier, using the appropriate small-signal equivalent model, derive the expressions of input resistance, output resistance, open-circuit voltage gain, and overall voltage gain.
@@ -4118,7 +4102,7 @@
 
 \end{enumerate}
 
-\subtopic{cC}{Bootstrapped Follower}{sub:s4-bootstrap}
+\subtopic{cC}{Bootstrapped Follower}\label{sub:s4-bootstrap}
 
 \begin{enumerate}
 
@@ -4187,7 +4171,7 @@
 
 \end{enumerate}
 
-\subtopic{cC}{Common Collector (Emitter Follower)}{sub:s4-cc}
+\subtopic{cC}{Common Collector (Emitter Follower)}\label{sub:s4-cc}
 
 \begin{enumerate}
 
@@ -4251,7 +4235,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{Biasing and Input Impedance}{sub:s4-biasimpedance}
+\subtopic{cC}{Biasing and Input Impedance}\label{sub:s4-biasimpedance}
 
 \begin{enumerate}
     
@@ -4294,7 +4278,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cC}{BJT Input-Output Characteristics}{sub:s4-io}
+\subtopic{cC}{BJT Input-Output Characteristics}\label{sub:s4-io}
 
 \begin{enumerate}
 \item For the circuit shown, calculate (i) DC bias points, (ii) small-signal voltage gain, (iii) maximum allowable input AC voltage.
@@ -4399,15 +4383,13 @@
 \titleformat{\section}{\large\bfseries\color{cB}}{}{0em}{}[\titlerule]
 
 \markboth{S5: MOSFET Characteristics}{S5: MOSFET Characteristics}
-\phantomsection
-\pdfbookmark[1]{S5: MOSFET Characteristics}{sec:S5}
+ 
 \label{sec:S5}
 
-\section*{S5 \quad MOSFET Characteristics}
-\addsectiontoc{S5: MOSFET Characteristics}
+\section{S5 \quad MOSFET Characteristics}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Device Characteristics}{sub:s5-devchar}
+\subtopic{cB}{Device Characteristics}\label{sub:s5-devchar}
 
 \begin{enumerate}
     
@@ -4434,7 +4416,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Comparison with BJT}{sub:s5-compare}
+\subtopic{cB}{Comparison with BJT}\label{sub:s5-compare}
 
 \begin{enumerate}
     
@@ -4449,7 +4431,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Threshold Voltage}{sub:s5-threshold}
+\subtopic{cB}{Threshold Voltage}\label{sub:s5-threshold}
 
 \begin{enumerate}
     
@@ -4460,7 +4442,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{DC Analysis \& Transistor Sizing}{sub:s5-dc}
+\subtopic{cB}{DC Analysis \& Transistor Sizing}\label{sub:s5-dc}
 
 \begin{enumerate}
     
@@ -5083,7 +5065,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Multi-stage MOSFET Circuit Design}{sub:s5-multistage}
+\subtopic{cB}{Multi-stage MOSFET Circuit Design}\label{sub:s5-multistage}
 
 \begin{enumerate}
 
@@ -5160,7 +5142,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{MOSFET Transconductance}{sub:s5-gm}
+\subtopic{cB}{MOSFET Transconductance}\label{sub:s5-gm}
 
 \begin{enumerate}
 
@@ -5175,7 +5157,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Voltage Transfer Characteristics}{sub:s5-vtc}
+\subtopic{cB}{Voltage Transfer Characteristics}\label{sub:s5-vtc}
 
 \begin{enumerate}
     
@@ -5186,7 +5168,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{MOSFET as Small-Signal Amplifier}{sub:s5-ssa}
+\subtopic{cB}{MOSFET as Small-Signal Amplifier}\label{sub:s5-ssa}
 
 \begin{enumerate}
 \item Briefly explain the operation of a MOSFET as a small-signal amplifier and deduce its VTC from the $I_D$--$V_{DS}$ graph.
@@ -5196,7 +5178,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Biasing Stability}{sub:s5-biasing}
+\subtopic{cB}{Biasing Stability}\label{sub:s5-biasing}
 
 \begin{enumerate}
     
@@ -5251,7 +5233,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{CMOS Logic Implementation}{sub:s5-cmos}
+\subtopic{cB}{CMOS Logic Implementation}\label{sub:s5-cmos}
 
 \begin{enumerate}
     
@@ -5313,7 +5295,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{CMOS Sizing and Delay}{sub:s5-sizing}
+\subtopic{cB}{CMOS Sizing and Delay}\label{sub:s5-sizing}
 
 \begin{enumerate}
 
@@ -5411,7 +5393,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{NMOS Circuit Design}{sub:s5-nmos}
+\subtopic{cB}{NMOS Circuit Design}\label{sub:s5-nmos}
 
 \begin{enumerate}
 
@@ -5461,7 +5443,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{CMOS Inverter Analysis}{sub:s5-cmos-inverter}
+\subtopic{cB}{CMOS Inverter Analysis}\label{sub:s5-cmos-inverter}
 
 \begin{enumerate}
     
@@ -5575,15 +5557,13 @@
 \secdivider{S6 --- MOSFET Amplifiers}{Common-source configuration, small-signal model, gain derivation}{cB}
 
 \markboth{S6: MOSFET Amplifiers}{S6: MOSFET Amplifiers}
-\phantomsection
-\pdfbookmark[1]{S6: MOSFET Amplifiers}{sec:S6}
+ 
 \label{sec:S6}
 
-\section*{S6 \quad MOSFET Amplifiers}
-\addsectiontoc{S6: MOSFET Amplifiers}
+\section{S6 \quad MOSFET Amplifiers}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Common Gate Amplifier}{sub:s6-cg}
+\subtopic{cB}{Common Gate Amplifier}\label{sub:s6-cg}
 
 \begin{enumerate}
 \item Derive the expression for input resistance, output resistance, and overall voltage gain of a common-gate (CG) amplifier.
@@ -5593,7 +5573,7 @@
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cB}{Common Source Amplifier}{sub:s6-cs}
+\subtopic{cB}{Common Source Amplifier}\label{sub:s6-cs}
 
 \begin{enumerate}
     
@@ -6100,17 +6080,15 @@ Assume $V_t=1\,\text{V}$, $K_n' W/L=2\,\text{mA/V}^2$, $V_A=100\,\text{V}$.
 %%  SECTION 7: OPERATIONAL AMPLIFIERS
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S7: Operational Amplifiers}{S7: Operational Amplifiers}
-\phantomsection
-\pdfbookmark[1]{S7: Operational Amplifiers (Op-Amps)}{sec:S7}
+ 
 \label{sec:S7}
 \titleformat{\section}{\large\bfseries\color{cE}}{}{0em}{}[\titlerule]
 
 
-\section*{S7 \quad Operational Amplifiers (Op-Amps)}
-\addsectiontoc{S7: Operational Amplifiers}
+\section{S7 \quad Operational Amplifiers (Op-Amps)}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Ideal Op-Amp Characteristics}{sub:s7-ideal}
+\subtopic{cE}{Ideal Op-Amp Characteristics}\label{sub:s7-ideal}
 
 \begin{enumerate}
     
@@ -6131,7 +6109,7 @@ Assume $V_t=1\,\text{V}$, $K_n' W/L=2\,\text{mA/V}^2$, $V_A=100\,\text{V}$.
 
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Mathematical Operations}{sub:s7-math}
+\subtopic{cE}{Mathematical Operations}\label{sub:s7-math}
 
 \begin{enumerate}
 
@@ -6491,7 +6469,7 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Logarithmic / Exponential Amplifier}{sub:s7-log}
+\subtopic{cE}{Logarithmic / Exponential Amplifier}\label{sub:s7-log}
 
 
 \begin{enumerate}
@@ -6549,7 +6527,7 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Difference Amplifier}{sub:s7-diff}
+\subtopic{cE}{Difference Amplifier}\label{sub:s7-diff}
 
 \begin{enumerate}
     
@@ -6568,7 +6546,7 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Comparator and Schmitt Trigger}{sub:s7-schmitt}
+\subtopic{cE}{Comparator and Schmitt Trigger}\label{sub:s7-schmitt}
 
 \begin{enumerate}
 
@@ -6645,7 +6623,7 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Waveform Generation}{sub:s7-wave}
+\subtopic{cE}{Waveform Generation}\label{sub:s7-wave}
 
 \begin{enumerate}
 \item Design a circuit using op-amp(s) for given input $v_i(t)$ and output $v_o(t)$ waveforms shown in the figure.
@@ -6775,7 +6753,7 @@ where $V_1$ and $V_2$ are two different input sources.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Analog Computing (Differential Equations)}{sub:s7-analog}
+\subtopic{cE}{Analog Computing (Differential Equations)}\label{sub:s7-analog}
 
 \begin{enumerate}
 \item Design a circuit using op-amps and other passive elements to solve:
@@ -6828,7 +6806,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Multiplier Circuit Design}{sub:s7-mult}
+\subtopic{cE}{Multiplier Circuit Design}\label{sub:s7-mult}
 
 \begin{enumerate}
 \item Suppose you have two input voltages $X_1$ and $X_2$. Design a circuit using Op-Amps that gives output $V_o = 10X_1 X_2$. The diodes available maintain the characteristic equation $I_D = I_s e^{V_D/nV_T}$ where $I_s = 10^{-6}\,\text{A}$. Specify all the values of resistors used.
@@ -6838,7 +6816,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Frequency Multiplier}{sub:s7-freqmult}
+\subtopic{cE}{Frequency Multiplier}\label{sub:s7-freqmult}
 
 \begin{enumerate}
 \item You have two supply voltage sources, $v_1 = \sin(100t)\,\text{V}$ and $v_2 = 1\,\text{V}$. Design a circuit using op-amps that will produce an output voltage $v_o = (\sin(50t))^2\,\text{V}$. Also show that this circuit produces this output.
@@ -6853,7 +6831,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Active Filters}{sub:s7-filters}
+\subtopic{cE}{Active Filters}\label{sub:s7-filters}
 
 \begin{enumerate}
     
@@ -7061,7 +7039,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Voltage-to-Current Converter}{sub:s7-v2i}
+\subtopic{cE}{Voltage-to-Current Converter}\label{sub:s7-v2i}
 
 \begin{enumerate}
 \item The circuit shown in Figure functions as a voltage-to-current converter. The op-amp used in this circuit is biased using $\pm 20\text{ V}$ sources. The overall circuit operates in the linear region as long as $V_{\text{out}}$ stays within the bias voltage range, and the concept of virtual short (i.e. $V_1 = V_2$) can be applied under such circumstances. If $V_{\text{out}}$ attempts to exceed these limits, the amplifier enters saturation, and the virtual short assumption becomes invalid. Given the circuit parameters $R_1 = R_2 = 10\text{ k}\Omega$, $R_3 = R_4 = 1\text{ k}\Omega$ and $R_{\text{L}} = 100\ \Omega$, calculate the load current $i_{\text{L}}$ and output voltage $V_{\text{out}}$ for and input voltage of $V_{\text{in}} = -5\text{ V}$.
@@ -7140,7 +7118,7 @@ where $K$ = last digit of your student ID. Briefly discuss the operation of your
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{System Design (Analog to Digital Interface)}{sub:s7-sysdesign}
+\subtopic{cE}{System Design (Analog to Digital Interface)}\label{sub:s7-sysdesign}
 
 \begin{enumerate}
 
@@ -7231,7 +7209,7 @@ Design a circuit using op-amps and digital circuits (gates, multiplexers) to per
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Waveform Realization}{sub:s7-wavereal}
+\subtopic{cE}{Waveform Realization}\label{sub:s7-wavereal}
 
 \begin{enumerate}
 \item Determine an op-amp circuit realization for given input wave shapes $V_1$ and $V_2$ and output wave shape $V_{out}$.
@@ -7330,7 +7308,7 @@ Design a circuit using op-amps and digital circuits (gates, multiplexers) to per
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Integrator}{sub:s7-integrator}
+\subtopic{cE}{Integrator}\label{sub:s7-integrator}
 
 \begin{enumerate}
     
@@ -7390,7 +7368,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Op-Amp Network Analysis}{sub:s7-network}
+\subtopic{cE}{Op-Amp Network Analysis}\label{sub:s7-network}
 
 \begin{enumerate}
     
@@ -7508,7 +7486,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Op-Amp Practical Imperfections}{sub:s7-imperfections}
+\subtopic{cE}{Op-Amp Practical Imperfections}\label{sub:s7-imperfections}
 
 \begin{enumerate}
     
@@ -7519,7 +7497,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cE}{Dual Slope A/D Converter}{sub:s7-adc}
+\subtopic{cE}{Dual Slope A/D Converter}\label{sub:s7-adc}
 
 \begin{enumerate}
 
@@ -7539,17 +7517,16 @@ Write the final output expression in terms of the circuit components used in you
 %%  SECTION 8: OSCILLATORS, TIMERS & FUNCTION GENERATORS
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S8: Oscillators \& Timers}{S8: Oscillators \& Timers}
-\phantomsection
-\pdfbookmark[1]{S8: Oscillators, Timers \& Function Generators}{sec:S8}
+ 
+
 \label{sec:S8}
 \titleformat{\section}{\large\bfseries\color{cF}}{}{0em}{}[\titlerule]
 
 
-\section*{S8 \quad Oscillators, Timers \& Function Generators}
-\addsectiontoc{S8: Oscillators, Timers \& Function Generators}
+\section{S8 \quad Oscillators, Timers \& Function Generators}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Barkhausen Stability Criterion}{sub:s8-barkhausen}
+\subtopic{cF}{Barkhausen Stability Criterion}\label{sub:s8-barkhausen}
 
 \begin{enumerate}
 \item Write down the Barkhausen criterion.
@@ -7569,7 +7546,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Wien Bridge Oscillator}{sub:s8-wien}
+\subtopic{cF}{Wien Bridge Oscillator}\label{sub:s8-wien}
 
 
 
@@ -7677,7 +7654,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{RC Phase Shift Oscillator}{sub:s8-rcphase}
+\subtopic{cF}{RC Phase Shift Oscillator}\label{sub:s8-rcphase}
 
 \begin{enumerate}
     
@@ -7841,7 +7818,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{LC Oscillator}{sub:s8-lc}
+\subtopic{cF}{LC Oscillator}\label{sub:s8-lc}
 
 \begin{enumerate}
     
@@ -7908,7 +7885,7 @@ Write the final output expression in terms of the circuit components used in you
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Colpitts Oscillator}{sub:s8-colpitts}
+\subtopic{cF}{Colpitts Oscillator}\label{sub:s8-colpitts}
 
 \begin{enumerate}
 \item With an appropriate circuit diagram, describe the operation of an op-amp based Colpitts oscillator. Derive the frequency of oscillation and explain how this circuit satisfies the conditions for sustained oscillation.
@@ -7933,7 +7910,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Crystal Oscillator}{sub:s8-crystal}
+\subtopic{cF}{Crystal Oscillator}\label{sub:s8-crystal}
 
 \begin{enumerate}
 \item Draw the equivalent circuit of a piezoelectric crystal. Qualitatively draw the crystal reactance versus frequency and identify the inductive and capacitive reactance regions.
@@ -7944,7 +7921,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{One-Shot (Monostable) Multivibrator}{sub:s8-oneshot}
+\subtopic{cF}{One-Shot (Monostable) Multivibrator}\label{sub:s8-oneshot}
 
 \begin{enumerate}
 \item Draw a one-shot multivibrator circuit using an op-amp. Explain the operation of the circuit.
@@ -7955,7 +7932,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{555 Timer --- Oscillator Design}{sub:s8-555}
+\subtopic{cF}{555 Timer --- Oscillator Design}\label{sub:s8-555}
 
 \begin{enumerate}
 
@@ -8249,7 +8226,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cF}{Triangular Wave Generator}{sub:s8-triangular}
+\subtopic{cF}{Triangular Wave Generator}\label{sub:s8-triangular}
 
 \begin{enumerate}
 \item Draw and explain the operation of a triangular wave generator circuit using op-amps and a Schmitt trigger. Derive the frequency of oscillation for the circuit.
@@ -8398,16 +8375,14 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 %%  SECTION 9: DIGITAL LOGIC AND SEQUENTIAL CIRCUITS
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S9: Digital Logic \& Sequential Circuits}{S9: Digital Logic \& Sequential Circuits}
-\phantomsection
-\pdfbookmark[1]{S9: Digital Logic \& Sequential Circuits}{sec:S9}
+ 
 \label{sec:S9}
 \titleformat{\section}{\large\bfseries\color{cD}}{}{0em}{}[\titlerule]
 
-\section*{S9 \quad Digital Logic \& Sequential Circuits}
-\addsectiontoc{S9: Digital Logic \& Sequential Circuits}
+\section{S9 \quad Digital Logic \& Sequential Circuits}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{CMOS Logic Design and Implementation}{sub:s9-cmos}
+\subtopic{cD}{CMOS Logic Design and Implementation}\label{sub:s9-cmos}
 
 \begin{enumerate}
 \item Discuss basic operational characteristics and parameters of CMOS and TTL logic families.
@@ -8437,7 +8412,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{CMOS Transistor Sizing}{sub:s9-sizing}
+\subtopic{cD}{CMOS Transistor Sizing}\label{sub:s9-sizing}
 
 \begin{enumerate}
 
@@ -8542,7 +8517,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Inverter Propagation Delay}{sub:s9-delay}
+\subtopic{cD}{Inverter Propagation Delay}\label{sub:s9-delay}
 
 \begin{enumerate}
 \item For the inverter shown with a capacitor $C$ connected between the output node and ground: if at $t=0$ the input goes low to high, find the equation of time for $v_0$ to reach $\frac{1}{2}(V_{OL}+V_{OH})$. Also calculate the high-to-low propagation time for $R=25\,\text{k}\Omega$ and $C=20\,\text{pF}$.
@@ -8588,7 +8563,7 @@ and that $\dfrac{C_1}{C_2} = g_m R$.
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Transmission Gate Implementation}{sub:s9-tg}
+\subtopic{cD}{Transmission Gate Implementation}\label{sub:s9-tg}
 
 \begin{enumerate}
 \item Implement the following function $Y$ using CMOS transmission gate configuration:
@@ -8601,7 +8576,7 @@ Y = AB + \bar{A}C
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{CMOS Flip-Flop Implementation}{sub:s9-ff-cmos}
+\subtopic{cD}{CMOS Flip-Flop Implementation}\label{sub:s9-ff-cmos}
 
 \begin{enumerate}
 \item Show a CMOS implementation of edge-triggered D flip-flops with asynchronous reset.
@@ -8611,7 +8586,7 @@ Y = AB + \bar{A}C
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Flip-Flop Construction}{sub:s9-ff-construction}
+\subtopic{cD}{Flip-Flop Construction}\label{sub:s9-ff-construction}
 
 \begin{enumerate}
 \item Show how D flip-flop and T flip-flop can be constructed from J-K flip-flops.
@@ -8621,7 +8596,7 @@ Y = AB + \bar{A}C
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Counter Design}{sub:s9-counter}
+\subtopic{cD}{Counter Design}\label{sub:s9-counter}
 
 \begin{enumerate}
 \item Design a MOD-3 counter using JK flip-flops and verify the design showing the truth table.
@@ -8639,7 +8614,7 @@ Y = AB + \bar{A}C
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Combinational Logic Design}{sub:s9-combo}
+\subtopic{cD}{Combinational Logic Design}\label{sub:s9-combo}
 
 \begin{enumerate}
     
@@ -8708,7 +8683,7 @@ Y_3 &= \bar{A}C + B\bar{C}A
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Priority Encoder}{sub:s9-encoder}
+\subtopic{cD}{Priority Encoder}\label{sub:s9-encoder}
 
 \begin{enumerate}
     
@@ -8719,7 +8694,7 @@ Y_3 &= \bar{A}C + B\bar{C}A
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{Shift Register Design}{sub:s9-shift}
+\subtopic{cD}{Shift Register Design}\label{sub:s9-shift}
 
 \begin{enumerate}
     
@@ -8750,16 +8725,14 @@ $S_1$ & $S_0$ & \textbf{Register Operation} \\
 %%  SECTION 10: DATA CONVERTERS, PLL & MEMORY
 %% ══════════════════════════════════════════════════════════════════════
 \markboth{S10: Data Converters, PLL \& Memory}{S10: Data Converters, PLL \& Memory}
-\phantomsection
-\pdfbookmark[1]{S10: Data Converters, PLL \& Memory}{sec:S10}
+ 
 \label{sec:S10}
 \titleformat{\section}{\large\bfseries\color{cG}}{}{0em}{}[\titlerule]
 
-\section*{S10 \quad Data Converters, PLL \& Memory}
-\addsectiontoc{S10: Data Converters, PLL \& Memory}
+\section{S10 \quad Data Converters, PLL \& Memory}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Digital-to-Analog Converter (DAC)}{sub:s10-dac}
+\subtopic{cG}{Digital-to-Analog Converter (DAC)}\label{sub:s10-dac}
 
 \begin{enumerate}
 \item What are DAC circuits? How does an R-2R ladder DAC circuit operate? Explain using a circuit diagram and mathematical analysis.
@@ -8769,7 +8742,7 @@ $S_1$ & $S_0$ & \textbf{Register Operation} \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Analog-to-Digital Converter (ADC)}{sub:s10-adc}
+\subtopic{cG}{Analog-to-Digital Converter (ADC)}\label{sub:s10-adc}
 
 \begin{enumerate}
 \item A 6-bit A/D converter has reference voltage $V_{REF}=8\,\text{V}$ and reference count $n_{REF}=2^6$. Values of some consecutive analog sampled voltages $|V_A|$ are: 0\,V, 3\,V, 5.5\,V, 7.125\,V. If these voltages are given as inputs to the converter, find the corresponding digital outputs.
@@ -8779,7 +8752,7 @@ $S_1$ & $S_0$ & \textbf{Register Operation} \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Phase-Locked Loop (PLL)}{sub:s10-pll}
+\subtopic{cG}{Phase-Locked Loop (PLL)}\label{sub:s10-pll}
 
 \begin{enumerate}
 \item Draw a simplified block diagram of a PLL and briefly explain its operation.
@@ -8789,7 +8762,7 @@ $S_1$ & $S_0$ & \textbf{Register Operation} \\
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cG}{Memory: DRAM and Flash}{sub:s10-memory}
+\subtopic{cG}{Memory: DRAM and Flash}\label{sub:s10-memory}
 
 \begin{enumerate}
 \item Explain the read and write operation in a DRAM cell.

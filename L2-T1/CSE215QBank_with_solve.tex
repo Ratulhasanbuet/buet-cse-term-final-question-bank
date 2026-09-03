@@ -4949,7 +4949,7 @@ x=1.5cm, thick ,
 \end{tikzpicture}
 \end{center}
 
-\newpage
+
 \subsection*{5. Relational Schemas}
 
 Below is the complete relational schema mapping for the provided ERDs. Primary keys (PK) are strictly \underline{underlined}, and foreign keys (FK) refer to primary keys in their respective parent relations.
@@ -16407,9 +16407,7 @@ We calculate the closure of $\{A, E\}$:
 \begin{itemize}
     \item Relation Schema: $R(A, B, C, D, E)$
     \item Functional Dependencies (FDs): $A \to B$, $B \to C$, $C \to D$, and $D \to A$.
-\end{itemize}
-
-\vspace{1em}
+\end{itemize}Due to the wiring complexity of dual-direction modulo truncation, the control logic routing
  
 \vspace{1em}
 
@@ -17978,11 +17976,10 @@ To fix the violation in $R_2$, we split it using $AB \to C$:
     \item \textbf{For $R_{2b}(A, B, E)$:} No non-trivial functional dependencies are projected onto this schema. The candidate key is $ABE$. With no dependencies violating the rule, $R_{2b}$ is in \textbf{BCNF}.
 \end{itemize}
 
-
 \vspace{1em}
 \begin{center}
 \begin{tikzpicture}[
-    node distance=1.5cm and 2cm,
+    node distance=1.5cm and 0.1cm,
     box/.style={draw=black, rounded corners=5pt, thick, minimum width=3.5cm, minimum height=1.2cm, align=center, fill=black!5},
     arrow/.style={->, thick, >=stealth}
 ]
@@ -18085,7 +18082,6 @@ The fundamental distinction between 3NF and BCNF lies in how they handle depende
 \begin{center}
 \begin{tikzpicture}[
     scale=0.9,
-    every node/.style={font=\sffamily\bfseries}
 ]
     % Draw nested normal forms
     \draw[thick, fill=blue!5] (0,0) ellipse (5cm and 3cm);
@@ -18101,7 +18097,7 @@ The fundamental distinction between 3NF and BCNF lies in how they handle depende
     \node[text=black] at (0, -0.9) {BCNF};
     
     % Annotation
-    \node[font=\small, text width=4cm, align=left] at (6.5, 0) {
+    \node[font=\small, text width=4cm, align=left] at (7.5, 0) {
         \textbf{Note:}\\
         BCNF is a strict subset\\
         of 3NF. Any relation\\
@@ -18112,6 +18108,7 @@ The fundamental distinction between 3NF and BCNF lies in how they handle depende
     \draw[->, thick, dashed] (4.5, 0) -- (1.8, -0.9);
 \end{tikzpicture}
 \end{center}
+
 \vspace{1em}
 
 \section*{4. Decomposition of Schema $R$ into BCNF}
@@ -26634,13 +26631,13 @@ If a standard \textbf{B$^{+}$-Tree} were used for this query, it would suffer fr
 
 \item The relation \texttt{account} is given in Figure 1. Construct bitmap indices on \texttt{type}, \texttt{branchname} and \texttt{location} attribute. Explain how you can find balance for $\text{branchname} = \text{`B2'}$ and $\text{location} = \text{`L1'}$ and $\text{type} = \text{`D'}$.
 \mk{10} \yr{CSE 303 | L-3/T-1 | 2010--11}
-\textcolor{cG}{No Figure found in PDF }
+\textcolor{cG}{\textit{No Figure found in PDF} }
 
 
 \end{enumerate}
 
 %%──────────────────────────────────────────────────────────────────────
-\subtopic{cD}{B\textsuperscript{+} Tree Index}
+\subtopic{cD}{B$^+$ Tree Index}
 \label{sub:s5-btree}
 
 \begin{enumerate}
@@ -27212,9 +27209,6 @@ The key 315 is inserted into the leaf node containing $[0278, 0350]$.
 \end{center}
 
 ---
-
-\pagebreak
-
 \subsection*{(4) State After Deleting 513}
 \begin{itemize}
     \item Deleting $0513$ from its leaf node makes it empty. Its sibling node contains only one element ($[0527]$), preventing redistribution. 
